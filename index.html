@@ -743,19 +743,66 @@ function txHtml(x, type) {
 // ===== VOICE =====
 let recognition = null;
 function startVoice() {
+  // HTTPS check (Web Speech API requires secure context)
+  if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+    toast('音声入力にはHTTPS接続が必要です');
+    return;
+  }
+
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { toast('音声入力はこのブラウザで使えません'); return; }
+  if (!SR) {
+    toast('このブラウザは音声入力非対応です（Safari推奨）');
+    return;
+  }
+
+  // Stop if already running
   if (recognition) { recognition.stop(); return; }
+
   recognition = new SR();
-  recognition.lang = 'ja-JP'; recognition.continuous = false; recognition.interimResults = false;
-  document.getElementById('voice-btn').classList.add('listening');
-  recognition.start();
+  recognition.lang = 'ja-JP';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  const btn = document.getElementById('voice-btn');
+  btn.classList.add('listening');
+
+  try {
+    recognition.start();
+  } catch(e) {
+    btn.classList.remove('listening');
+    recognition = null;
+    toast('音声入力を開始できませんでした');
+    return;
+  }
+
   recognition.onresult = e => {
-    document.getElementById('voice-input').value = e.results[0][0].transcript;
+    const transcript = e.results[0][0].transcript;
+    document.getElementById('voice-input').value = transcript;
     parseInput();
   };
-  recognition.onend = () => { document.getElementById('voice-btn').classList.remove('listening'); recognition = null; };
-  recognition.onerror = () => { document.getElementById('voice-btn').classList.remove('listening'); recognition = null; toast('音声認識エラー'); };
+
+  recognition.onend = () => {
+    btn.classList.remove('listening');
+    recognition = null;
+  };
+
+  recognition.onerror = e => {
+    btn.classList.remove('listening');
+    recognition = null;
+    const msgs = {
+      'not-allowed':         'マイクの使用が許可されていません\nブラウザの設定でマイクを許可してください',
+      'permission-denied':   'マイクの使用が拒否されています\n設定からマイクを許可してください',
+      'no-speech':           '音声が検出されませんでした\nもう一度話しかけてください',
+      'audio-capture':       'マイクが見つかりません\nマイクが接続されているか確認してください',
+      'network':             'ネットワークエラー\nHTTPS環境またはインターネット接続を確認してください',
+      'aborted':             '音声入力がキャンセルされました',
+      'language-not-supported': '日本語音声認識が利用できません',
+      'service-not-allowed': '音声認識サービスが使用できません',
+    };
+    const msg = msgs[e.error] || `音声認識エラー（${e.error}）`;
+    toast(msg);
+    console.error('SpeechRecognition error:', e.error, e);
+  };
 }
 
 // ===== MODALS =====
