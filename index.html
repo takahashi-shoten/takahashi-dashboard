@@ -80,8 +80,8 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Hiragino San
 
 /* Quick buttons */
 .qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-.qbtn{background:var(--surface);border:1.5px solid var(--g2);border-radius:12px;padding:14px 6px;text-align:center;font-size:12px;font-weight:700;color:var(--text);cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:7px;line-height:1.35}
-.qdot{width:24px;height:24px;border-radius:8px;flex-shrink:0}
+.qbtn{background:var(--surface);border:1.5px solid var(--g2);border-radius:14px;padding:24px 8px;text-align:center;font-size:14px;font-weight:700;color:var(--text);cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:9px;line-height:1.35}
+.qdot{width:30px;height:30px;border-radius:10px;flex-shrink:0}
 .qbtn:active{border-color:var(--accent);background:var(--accent);color:#fff}
 .qbtn:active .qdot{opacity:.7}
 .arow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
@@ -231,11 +231,8 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Hiragino San
           <button class="qbtn" onclick="quickInput('材料費','材料費')"><div class="qdot" style="background:#FFF3E0;border:2px solid #E65100"></div>材料費</button>
           <button class="qbtn" onclick="quickInput('工具・消耗品','消耗品費')"><div class="qdot" style="background:#E8F5E9;border:2px solid #2E7D32"></div>工具・<br>消耗品</button>
           <button class="qbtn" onclick="quickInput('ガソリン','車両費')"><div class="qdot" style="background:#E3F2FD;border:2px solid #1565C0"></div>ガソリン</button>
-          <button class="qbtn" onclick="quickInput('高速・駐車場','旅費交通費')"><div class="qdot" style="background:#E0F7FA;border:2px solid #006064"></div>高速・<br>駐車場</button>
           <button class="qbtn" onclick="quickInput('外注費','外注工賃')"><div class="qdot" style="background:#FCE4EC;border:2px solid #AD1457"></div>外注</button>
           <button class="qbtn" onclick="quickInput('従業員関連','給料賃金')"><div class="qdot" style="background:#FFFDE7;border:2px solid #F57F17"></div>従業員<br>関連</button>
-          <button class="qbtn" onclick="quickInput('不明','不明')"><div class="qdot" style="background:#F5F5F5;border:2px solid #9E9E9E"></div>不明</button>
-          <button class="qbtn" onclick="quickInput('その他','その他')"><div class="qdot" style="background:#FAFAFA;border:2px solid #BDBDBD"></div>その他</button>
         </div>
       </div>
       <div class="card">
@@ -314,6 +311,11 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Hiragino San
 
     <!-- ===== 設定 ===== -->
     <div class="screen" id="screen-settings">
+      <div class="card">
+        <div class="ctitle">手元資金管理</div>
+        <p style="font-size:12px;color:var(--g4);margin-bottom:12px;line-height:1.6">アプリ導入時点の手元現金を入力してください。以降の支出・引き出しは自動計算されます。</p>
+        <div id="cash-settings-item"></div>
+      </div>
       <div class="card">
         <div class="ctitle">口座残高管理</div>
         <p style="font-size:12px;color:var(--g4);margin-bottom:12px;line-height:1.6">各口座の現在残高を入力してください。以降の入出金は自動計算されます。</p>
@@ -425,7 +427,9 @@ const YAYOI = {
 };
 
 const DB = {
-  KA:'taka_accounts_v2', KS:'taka_spend', KW:'taka_withdraw', KD:'taka_deposit', KT:'taka_transfer',
+  KA:'taka_accounts_v2', KS:'taka_spend', KW:'taka_withdraw', KD:'taka_deposit', KT:'taka_transfer', KC:'taka_initial_cash',
+  getInitCash(){ return Number(localStorage.getItem(this.KC))||0; },
+  setInitCash(v){ localStorage.setItem(this.KC,String(Number(v))); },
   getAccounts() {
     try { const s=JSON.parse(localStorage.getItem(this.KA)); if(s&&Array.isArray(s)&&s.length) return s; } catch{}
     return DEFAULT_ACCOUNTS.map(a=>({...a}));
@@ -466,7 +470,8 @@ function resolveAccountId(w){
 }
 
 function calcCash(){
-  return DB.getWithdraws().reduce((s,x)=>s+Number(x.amount),0)
+  return DB.getInitCash()
+       + DB.getWithdraws().reduce((s,x)=>s+Number(x.amount),0)
        - DB.getSpends().reduce((s,x)=>s+Number(x.amount),0);
 }
 function calcAccBal(id){
@@ -692,6 +697,28 @@ function startVoice(){
   };
 }
 
+function startVoiceFor(inputId){
+  if(location.protocol!=='https:'&&location.hostname!=='localhost'&&location.hostname!=='127.0.0.1'){
+    toast('音声入力にはHTTPS接続が必要です'); return;
+  }
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){toast('このブラウザは音声入力非対応です\nSafari推奨');return;}
+  const r=new SR(); r.lang='ja-JP'; r.continuous=false; r.interimResults=false;
+  toast('話してください...');
+  r.start();
+  r.onresult=e=>{
+    const t=e.results[0][0].transcript;
+    const amt=extractAmt(t);
+    const el=document.getElementById(inputId);
+    if(el){ el.value=amt||t; el.focus(); }
+    if(amt) toast(fmtAmt(amt)+'と認識しました');
+  };
+  r.onerror=e=>{
+    const msgs={'not-allowed':'マイクが許可されていません','no-speech':'音声が検出されませんでした','network':'ネットワークエラー'};
+    toast(msgs[e.error]||`音声認識エラー（${e.error}）`);
+  };
+}
+
 function openModal(title,html){
   document.getElementById('modal-title').textContent=title;
   document.getElementById('modal-content').innerHTML=html;
@@ -884,6 +911,8 @@ function renderSummary(){
 }
 
 function renderSettings(){
+  const cashBal=calcCash();
+  document.getElementById('cash-settings-item').innerHTML=`<div class="aci"><div class="acbar" style="background:var(--accent)"></div><div class="acinfo"><div class="acname">手元現金</div><div class="acbal${cashBal<0?' neg':''}">現在残高 ${fmtAmt(cashBal)}</div></div><button class="bsm" onclick="openCashEdit()">設定</button></div>`;
   const accs=DB.getAccounts(); const colors=['#1e88e5','#43a047','#e53935','#f57c00'];
   document.getElementById('account-settings-list').innerHTML=accs.map((a,i)=>{
     const b=calcAccBal(a.id);
@@ -895,13 +924,39 @@ function openAccEdit(id){
   const bal=calcAccBal(id);
   openModal(acc.name+' 残高設定',`
     <p style="font-size:13px;color:var(--g4);margin-bottom:14px;line-height:1.6">アプリ導入時点の残高を入力してください。<br>以降の引き出し・入金・移動は自動計算されます。<br>現在の計算残高: <strong>${fmtAmt(bal)}</strong></p>
-    <div class="fg"><label class="fl">基準残高（円）</label><input class="fi" type="number" id="acc-bal-input" value="${acc.initialBalance||0}" inputmode="numeric" placeholder="例: 500000"></div>
+    <div class="fg"><label class="fl">基準残高（円）</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input class="fi" type="number" id="acc-bal-input" value="${acc.initialBalance||0}" inputmode="numeric" placeholder="例: 500000" style="flex:1">
+        <button onclick="startVoiceFor('acc-bal-input')" style="background:var(--accent);border:none;border-radius:10px;width:46px;height:46px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:#fff">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 1C10.34 1 9 2.34 9 4V12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12V4C15 2.34 13.66 1 12 1Z"/><path fill-rule="evenodd" d="M5 11C5 14.87 8.13 18 12 18C15.87 18 19 14.87 19 11H17C17 13.76 14.76 16 12 16C9.24 16 7 13.76 7 11H5Z"/><rect x="11" y="18" width="2" height="4"/><rect x="8" y="21" width="8" height="2" rx="1"/></svg>
+        </button>
+      </div>
+    </div>
     <button class="bp" onclick="saveAccBal('${id}')">保存する</button>
   `);
 }
 function saveAccBal(id){
   const val=parseInt(document.getElementById('acc-bal-input').value)||0;
   DB.updateAccountBalance(id,val); closeModal(); toast('残高を設定しました'); refreshAll();
+}
+function openCashEdit(){
+  const initCash=DB.getInitCash(); const cashBal=calcCash();
+  openModal('手元現金 残高設定',`
+    <p style="font-size:13px;color:var(--g4);margin-bottom:14px;line-height:1.6">アプリ導入時点の手元現金を入力してください。<br>以降の支出・引き出しは自動計算されます。<br>現在の計算残高: <strong>${fmtAmt(cashBal)}</strong></p>
+    <div class="fg"><label class="fl">基準残高（円）</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input class="fi" type="number" id="cash-bal-input" value="${initCash||0}" inputmode="numeric" placeholder="例: 50000" style="flex:1">
+        <button onclick="startVoiceFor('cash-bal-input')" style="background:var(--accent);border:none;border-radius:10px;width:46px;height:46px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:#fff">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 1C10.34 1 9 2.34 9 4V12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12V4C15 2.34 13.66 1 12 1Z"/><path fill-rule="evenodd" d="M5 11C5 14.87 8.13 18 12 18C15.87 18 19 14.87 19 11H17C17 13.76 14.76 16 12 16C9.24 16 7 13.76 7 11H5Z"/><rect x="11" y="18" width="2" height="4"/><rect x="8" y="21" width="8" height="2" rx="1"/></svg>
+        </button>
+      </div>
+    </div>
+    <button class="bp" onclick="saveCashBal()">保存する</button>
+  `);
+}
+function saveCashBal(){
+  const val=parseInt(document.getElementById('cash-bal-input').value)||0;
+  DB.setInitCash(val); closeModal(); toast('手元現金を設定しました'); refreshAll();
 }
 
 function buildCSV(ym){
