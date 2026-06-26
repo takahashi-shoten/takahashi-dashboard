@@ -210,6 +210,8 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Hiragino San
           <div class="row"><span class="lbl">金額</span><span class="val" id="p-amount"></span></div>
           <div class="row"><span class="lbl">分類・口座</span><span class="val" id="p-cat"></span></div>
           <div class="row"><span class="lbl">相手・店名</span><span class="val" id="p-name"></span></div>
+          <div class="row" id="p-pay-row" style="display:none"><span class="lbl">支払方法</span><span class="val" id="p-pay-method"></span></div>
+          <div class="row" id="p-pay-src-row" style="display:none"><span class="lbl">支払元</span><span class="val" id="p-pay-src"></span></div>
           <button id="confirm-btn" onclick="confirmParsed()">この内容で保存する</button>
         </div>
       </div>
@@ -299,6 +301,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Hiragino San
           <div class="ac-val" id="funds-paypay">¥0</div>
         </div>
       </div>
+      <div class="card" id="jcb-funds-card"></div>
       <div class="card">
         <div class="ctitle">クイックアクション</div>
         <div class="arow">
@@ -321,6 +324,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Hiragino San
         <p style="font-size:12px;color:var(--g4);margin-bottom:12px;line-height:1.6">各口座の現在残高を入力してください。以降の入出金は自動計算されます。</p>
         <div id="account-settings-list"></div>
       </div>
+      <div class="card" id="jcb-settings-card"></div>
       <div class="card">
         <div class="ctitle">データ管理</div>
         <button class="bs" style="margin-bottom:8px;margin-top:0" onclick="exportAllCSV()">全期間CSVエクスポート</button>
@@ -331,7 +335,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Hiragino San
       </div>
       <div class="card">
         <div class="ctitle">このアプリについて</div>
-        <p style="font-size:13px;color:var(--sub);line-height:1.8">高橋商店専用キャッシュ管理アプリ<br>データはこの端末のみに保存されます<br>バージョン 2.1.0</p>
+        <p style="font-size:13px;color:var(--sub);line-height:1.8">高橋商店専用キャッシュ管理アプリ<br>データはこの端末のみに保存されます<br>バージョン 2.2.0</p>
       </div>
     </div>
 
@@ -426,8 +430,16 @@ const YAYOI = {
   'その他':    { d:'雑費',       c:'現金' },
 };
 
+const STORE_DICT = {
+  'コメリ': [{label:'材料費',cat:'材料費'},{label:'工具',cat:'消耗品費'},{label:'消耗品',cat:'消耗品費'}],
+  'セブン': [{label:'飲み物',cat:'事業主貸'},{label:'昼食',cat:'事業主貸'},{label:'コピー',cat:'消耗品費'},{label:'その他',cat:'その他'}],
+  'ツルハ': [{label:'現場用品',cat:'消耗品費'},{label:'生活用品',cat:'事業主貸'}],
+};
+const PAY_METHODS = ['現金','スマホ決済(ID)','PayPay','クレジットカード','銀行振込'];
+const PAY_SOURCES = ['手元現金','北洋銀行','旭川信用金庫','住信SBIネット銀行','PayPay銀行','JCBカード'];
+
 const DB = {
-  KA:'taka_accounts_v2', KS:'taka_spend', KW:'taka_withdraw', KD:'taka_deposit', KT:'taka_transfer', KC:'taka_initial_cash',
+  KA:'taka_accounts_v2', KS:'taka_spend', KW:'taka_withdraw', KD:'taka_deposit', KT:'taka_transfer', KC:'taka_initial_cash', KL:'taka_learn', KJ:'taka_jcb',
   getInitCash(){ return Number(localStorage.getItem(this.KC))||0; },
   setInitCash(v){ localStorage.setItem(this.KC,String(Number(v))); },
   getAccounts() {
@@ -459,6 +471,11 @@ const DB = {
   addTransfer(i){ return this._add(this.KT,i); },
   updateTransfer(id,d){ this._upd(this.KT,id,d); },
   deleteTransfer(id){ this._del(this.KT,id); },
+  getLearn(){ try{return JSON.parse(localStorage.getItem(this.KL)||'{}')}catch{return{};} },
+  setLearn(d){ localStorage.setItem(this.KL,JSON.stringify(d)); },
+  learnStore(storeName,cat){ if(!storeName||!cat) return; const l=this.getLearn(); if(!l[storeName])l[storeName]={}; l[storeName][cat]=(l[storeName][cat]||0)+1; this.setLearn(l); },
+  getJcb(){ try{return JSON.parse(localStorage.getItem(this.KJ)||'{}')}catch{return{};} },
+  setJcb(d){ localStorage.setItem(this.KJ,JSON.stringify(d)); },
 };
 
 function genId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,5); }
@@ -528,9 +545,15 @@ function parseText(raw){
   }
   const r=classify(raw);
   let name=raw.replace(/[\d,，]+万[\d,，]*千?|[\d,，]+千|[\d,，]{4,}|[\d,，]+/g,'').trim();
+  name=name.replace(/\bID\b|アイディー|PayPay|ペイペイ|ペいぺい|JCB|ジェーシービー|現金払?い?|銀行振込|口座振替/gi,'').trim();
   name=name.replace(/に|から|で|を|の|円|¥|￥/g,'').trim();
   const cs=CS[r.cat]||CS['不明'];
-  return {type:'spend',date:today,amount,category:r.cat,catBg:cs.bg,catText:cs.text,catI:cs.i,name,receipt:false,memo:raw};
+  let payMethod='現金',paySource='手元現金';
+  if(/jcb|ジェーシービー/i.test(raw)){payMethod='クレジットカード';paySource='JCBカード';}
+  else if(/paypay|ペイペイ|ペいぺい/i.test(raw)){payMethod='PayPay';paySource='PayPay銀行';}
+  else if(/\bID\b|アイディー/i.test(raw)){payMethod='スマホ決済(ID)';paySource='住信SBIネット銀行';}
+  else if(/銀行振込|口座振替/.test(raw)){payMethod='銀行振込';paySource='';}
+  return {type:'spend',date:today,amount,category:r.cat,catBg:cs.bg,catText:cs.text,catI:cs.i,name,receipt:false,memo:raw,payMethod,paySource};
 }
 
 function todayStr(){ return new Date().toISOString().slice(0,10); }
@@ -576,6 +599,11 @@ function renderFunds(){
     const b=calcAccBal(id); const el=document.getElementById('funds-'+id);
     if(el){el.textContent=fmtAmt(b); el.className='ac-val'+(b<0?' neg':'');}
   });
+  const jcbCard=document.getElementById('jcb-funds-card');
+  if(jcbCard){
+    const jcb=DB.getJcb(); const jbal=jcb.balance||0; const jsch=jcb.scheduled||0;
+    jcbCard.innerHTML=`<div class="ctitle">クレジットカード（参考）</div><div style="background:#FFF5F5;border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:12px;color:var(--g4);font-weight:700;margin-bottom:4px">JCB 未払カード残高</div><div style="font-size:10px;color:var(--g3)">総事業資金には含まれません</div></div><div style="font-size:20px;font-weight:700;color:var(--red)">${fmtAmt(jbal)}</div></div>${jsch?`<div style="font-size:12px;color:var(--sub);margin-top:8px">引落予定: ${fmtAmt(jsch)}${jcb.scheduledDate?' ('+jcb.scheduledDate+')':''}</div>`:''}`;
+  }
 }
 
 function showAccDetail(id){
@@ -602,11 +630,63 @@ function openWithdraw(){ openWithdrawModal({}); }
 function openDeposit(){ openDepositModal({}); }
 function openTransfer(){ openTransferModal({}); }
 
+function onPayMethodChange(){
+  const m=document.getElementById('m-pay-method')?.value;
+  const s=document.getElementById('m-pay-source'); if(!s) return;
+  if(m==='現金')s.value='手元現金';
+  else if(m==='スマホ決済(ID)')s.value='住信SBIネット銀行';
+  else if(m==='PayPay')s.value='PayPay銀行';
+  else if(m==='クレジットカード')s.value='JCBカード';
+}
+function updateStoreCandidates(storeName){
+  const el=document.getElementById('store-candidates'); if(!el) return;
+  const name=storeName.trim();
+  if(!name){el.innerHTML='';return;}
+  let candidates=null;
+  for(const [k,v] of Object.entries(STORE_DICT)){
+    if(name.includes(k)||k.includes(name)){candidates=v;break;}
+  }
+  if(!candidates){el.innerHTML='';return;}
+  const learn=DB.getLearn();
+  const lk=Object.keys(learn).find(k=>name.includes(k)||k.includes(name));
+  const sl=lk?learn[lk]:{};
+  const sorted=[...candidates].sort((a,b)=>(sl[b.cat]||0)-(sl[a.cat]||0));
+  el.innerHTML=sorted.map(c=>`<button type="button" onclick="selectCategory('${c.cat}')" style="background:var(--g1);border:1.5px solid var(--g2);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy)">${c.label}</button>`).join('');
+}
+function selectCategory(cat){const el=document.getElementById('m-cat');if(el)el.value=cat;}
+function openJcbEdit(){
+  const jcb=DB.getJcb();
+  const micBtn=id=>`<button onclick="startVoiceFor('${id}')" style="background:var(--accent);border:none;border-radius:10px;width:46px;height:46px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:#fff"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 1C10.34 1 9 2.34 9 4V12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12V4C15 2.34 13.66 1 12 1Z"/><path fill-rule="evenodd" d="M5 11C5 14.87 8.13 18 12 18C15.87 18 19 14.87 19 11H17C17 13.76 14.76 16 12 16C9.24 16 7 13.76 7 11H5Z"/><rect x="11" y="18" width="2" height="4"/><rect x="8" y="21" width="8" height="2" rx="1"/></svg></button>`;
+  openModal('JCBカード設定',`
+    <p style="font-size:13px;color:var(--g4);margin-bottom:14px;line-height:1.6">JCBカードの利用残高と引落予定を入力してください。<br>総事業資金の計算には含まれません。</p>
+    <div class="fg"><label class="fl">利用残高（円）</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input class="fi" type="number" id="jcb-balance" value="${jcb.balance||0}" inputmode="numeric" placeholder="例: 35000" style="flex:1">
+        ${micBtn('jcb-balance')}
+      </div></div>
+    <div class="fg"><label class="fl">引落予定額（円）</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input class="fi" type="number" id="jcb-scheduled" value="${jcb.scheduled||0}" inputmode="numeric" placeholder="例: 35000" style="flex:1">
+        ${micBtn('jcb-scheduled')}
+      </div></div>
+    <div class="fg"><label class="fl">引落予定日</label><input class="fi" type="date" id="jcb-date" value="${jcb.scheduledDate||''}"></div>
+    <button class="bp" onclick="saveJcbEdit()">保存する</button>
+  `);
+}
+function saveJcbEdit(){
+  const balance=parseInt(document.getElementById('jcb-balance').value)||0;
+  const scheduled=parseInt(document.getElementById('jcb-scheduled').value)||0;
+  const scheduledDate=document.getElementById('jcb-date').value;
+  DB.setJcb({balance,scheduled,scheduledDate});
+  closeModal(); toast('JCBカード情報を更新しました'); refreshAll();
+}
+
 function parseInput(){
   const text=document.getElementById('voice-input').value.trim();
   if(!text){toast('テキストを入力してください');return;}
   parsedData=parseText(text);
   const pp=document.getElementById('pp'); pp.style.display='block';
+  ['p-pay-row','p-pay-src-row'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
   const tl={spend:'現金使用',withdraw:'現金引き出し',deposit:'口座へ入金',transfer:'口座間移動'};
   document.getElementById('p-type').textContent=tl[parsedData.type]||parsedData.type;
   document.getElementById('p-date').textContent=parsedData.date;
@@ -614,6 +694,10 @@ function parseInput(){
   if(parsedData.type==='spend'){
     document.getElementById('p-cat').textContent=parsedData.category;
     document.getElementById('p-name').textContent=parsedData.name||'—';
+    const pr=document.getElementById('p-pay-row'),pe=document.getElementById('p-pay-method');
+    const sr=document.getElementById('p-pay-src-row'),se=document.getElementById('p-pay-src');
+    if(pr)pr.style.display=''; if(pe)pe.textContent=parsedData.payMethod||'現金';
+    if(sr)sr.style.display=''; if(se)se.textContent=parsedData.paySource||'手元現金';
   } else if(parsedData.type==='withdraw'){
     document.getElementById('p-cat').textContent=parsedData.bank||'（口座未検出）';
     document.getElementById('p-name').textContent='—';
@@ -732,17 +816,24 @@ function bankOpts(sel){
 }
 
 function openSpendModal(pre={}){
+  const preMethod=pre.payMethod||'現金';
+  const preSrc=pre.paySource||'手元現金';
   openModal('現金使用の記録',`
     <div class="fg"><label class="fl">日付</label><input class="fi" type="date" id="m-date" value="${pre.date||todayStr()}"></div>
     <div class="fg"><label class="fl">金額（円）</label><input class="fi" type="number" id="m-amount" placeholder="例: 18500" value="${pre.amount||''}" inputmode="numeric"></div>
+    <div class="fg"><label class="fl">支払方法</label><select class="fi fsel" id="m-pay-method" onchange="onPayMethodChange()">${PAY_METHODS.map(m=>`<option${m===preMethod?' selected':''}>${m}</option>`).join('')}</select></div>
+    <div class="fg"><label class="fl">支払元</label><select class="fi fsel" id="m-pay-source">${PAY_SOURCES.map(s=>`<option${s===preSrc?' selected':''}>${s}</option>`).join('')}</select></div>
     <div class="fg"><label class="fl">分類</label><select class="fi fsel" id="m-cat">${CATEGORIES.map(c=>`<option${c===pre.category?' selected':''}>${c}</option>`).join('')}</select></div>
-    <div class="fg"><label class="fl">相手・店名</label><input class="fi" type="text" id="m-name" placeholder="例: コメリ、鈴木さん" value="${pre.name||''}"></div>
+    <div class="fg"><label class="fl">相手・店名</label><input class="fi" type="text" id="m-name" placeholder="例: コメリ、鈴木さん" value="${pre.name||''}" oninput="updateStoreCandidates(this.value)">
+      <div id="store-candidates" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:6px"></div>
+    </div>
     <div class="fg"><label class="fl">領収書</label><div class="rgrp"><div class="ropt${pre.receipt?' selected':''}" id="r-yes" onclick="selRcpt(true)">あり</div><div class="ropt${!pre.receipt?' selected':''}" id="r-no" onclick="selRcpt(false)">なし</div></div></div>
     <div class="fg"><label class="fl">メモ</label><input class="fi" type="text" id="m-memo" placeholder="任意" value="${pre.memo||''}"></div>
     <button class="bp" onclick="saveSpend(${pre.id?`'${pre.id}'`:'null'})">保存する</button>
     ${pre.id?`<button class="bd" onclick="deleteSpend('${pre.id}')">削除する</button>`:''}
   `);
   window._rcpt=!!pre.receipt;
+  if(pre.name) updateStoreCandidates(pre.name);
 }
 function selRcpt(v){window._rcpt=v;document.getElementById('r-yes').classList.toggle('selected',v);document.getElementById('r-no').classList.toggle('selected',!v);}
 function saveSpend(id){
@@ -752,10 +843,13 @@ function saveSpend(id){
   const name=document.getElementById('m-name').value.trim();
   const receipt=window._rcpt||false;
   const memo=document.getElementById('m-memo').value.trim();
+  const payMethod=document.getElementById('m-pay-method')?.value||'現金';
+  const paySource=document.getElementById('m-pay-source')?.value||'手元現金';
   if(!date||!amount){toast('日付と金額は必須です');return;}
   const cs=catS(category);
-  const item={date,amount,category,name,receipt,memo,catBg:cs.bg,catText:cs.text,catI:cs.i};
+  const item={date,amount,category,name,receipt,memo,catBg:cs.bg,catText:cs.text,catI:cs.i,payMethod,paySource};
   if(id){DB.updateSpend(id,item);toast('更新しました');}else{DB.addSpend(item);toast('記録しました');}
+  if(name&&category) DB.learnStore(name,category);
   closeModal(); refreshAll();
 }
 function editSpend(id){const x=DB.getSpends().find(x=>x.id===id);if(x)openSpendModal(x);}
@@ -918,6 +1012,11 @@ function renderSettings(){
     const b=calcAccBal(a.id);
     return `<div class="aci"><div class="acbar" style="background:${colors[i]||'#999'}"></div><div class="acinfo"><div class="acname">${a.name}</div><div class="acbal${b<0?' neg':''}">現在残高 ${fmtAmt(b)}</div></div><button class="bsm" onclick="openAccEdit('${a.id}')">設定</button></div>`;
   }).join('');
+  const jcbCard=document.getElementById('jcb-settings-card');
+  if(jcbCard){
+    const jcb=DB.getJcb(); const jbal=jcb.balance||0; const jsch=jcb.scheduled||0;
+    jcbCard.innerHTML=`<div class="ctitle">JCBカード管理</div><p style="font-size:12px;color:var(--g4);margin-bottom:12px;line-height:1.6">クレジットカードの利用残高と引落予定を管理します。総事業資金の計算には含まれません。</p><div class="aci"><div class="acbar" style="background:#B71C1C"></div><div class="acinfo"><div class="acname">JCBカード</div><div class="acbal">利用残高 ${fmtAmt(jbal)}${jsch?' / 引落予定 '+fmtAmt(jsch)+(jcb.scheduledDate?' ('+jcb.scheduledDate+')':''):''}</div></div><button class="bsm" onclick="openJcbEdit()">設定</button></div>`;
+  }
 }
 function openAccEdit(id){
   const acc=DB.getAccounts().find(a=>a.id===id); if(!acc) return;
