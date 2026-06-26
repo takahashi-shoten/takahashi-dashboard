@@ -6,169 +6,170 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="現金管理">
-<meta name="theme-color" content="#1e3a5f">
+<meta name="theme-color" content="#0D1F35">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>高橋商店 現金管理</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --navy:#1e3a5f;--navy-dark:#162c49;--navy-light:#2d5380;
-  --accent:#e8a020;--accent-light:#f5c660;
-  --bg:#f5f7fa;--white:#ffffff;
-  --gray-1:#f0f2f5;--gray-2:#e2e6ea;--gray-3:#adb5bd;--gray-4:#6c757d;
-  --text:#212529;--text-light:#495057;
-  --red:#dc3545;--green:#28a745;--blue:#1565c0;
-  --radius:12px;--shadow:0 2px 12px rgba(0,0,0,0.08);--shadow-lg:0 4px 24px rgba(0,0,0,0.12);
+  --navy:#0D1F35;--navy-mid:#1A3355;--navy-light:#2C4F7A;
+  --accent:#1858D6;--accent-lt:#4F88FF;
+  --bg:#F0F2F5;--surface:#FFFFFF;
+  --g1:#F8F9FA;--g2:#E4E7ED;--g3:#B0B8C4;--g4:#6B7A8D;
+  --text:#0D1F35;--sub:#4A5568;
+  --red:#D93025;--green:#1A7F4B;
+  --r:14px;--sh:0 1px 8px rgba(13,31,53,0.08);--shm:0 4px 20px rgba(13,31,53,0.12);
 }
 html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;font-size:16px;color:var(--text);background:var(--bg);overscroll-behavior:none}
 #app{display:flex;flex-direction:column;height:100vh;height:100dvh}
-#header{background:var(--navy);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;padding-top:max(12px,env(safe-area-inset-top))}
-#header h1{font-size:17px;font-weight:700;letter-spacing:0.5px}
-#header .hdr-bal{font-size:12px;opacity:0.85;text-align:right}
-#header .hdr-bal strong{font-size:17px;font-weight:700;display:block;color:var(--accent-light)}
-#main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:max(80px,calc(70px + env(safe-area-inset-bottom)))}
-#nav{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--gray-2);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:100;box-shadow:0 -2px 10px rgba(0,0,0,0.06)}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 4px 8px;border:none;background:none;color:var(--gray-4);font-size:10px;cursor:pointer;transition:color 0.15s;gap:4px}
-.nav-btn svg{width:22px;height:22px;stroke-width:1.8}
-.nav-btn.active{color:var(--navy)}
-.nav-btn.active svg{stroke-width:2.2}
+#header{background:var(--navy);color:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;padding-top:max(14px,env(safe-area-inset-top))}
+.hdr-title{font-size:17px;font-weight:700;letter-spacing:.5px}
+.hdr-cash-label{font-size:10px;opacity:.6;letter-spacing:.3px;text-align:right}
+.hdr-cash-val{font-size:19px;font-weight:700;color:#A8C8FF;letter-spacing:-.5px;text-align:right}
+#main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:max(84px,calc(70px + env(safe-area-inset-bottom)))}
+#nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--g2);display:grid;grid-template-columns:repeat(6,1fr);padding-bottom:env(safe-area-inset-bottom);z-index:100;box-shadow:0 -1px 12px rgba(13,31,53,0.08)}
+.nb{display:flex;flex-direction:column;align-items:center;padding:9px 2px 7px;border:none;background:none;color:var(--g4);font-size:9px;font-weight:600;cursor:pointer;transition:color .15s;gap:3px;letter-spacing:.2px}
+.nb svg{width:20px;height:20px}
+.nb.active{color:var(--accent)}
 .screen{display:none;padding:16px}
 .screen.active{display:block}
 
-/* Balance section */
-.bal-total{background:var(--navy);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
-.bal-total-left{font-size:12px;color:rgba(255,255,255,0.75);font-weight:600}
-.bal-total-val{font-size:28px;font-weight:700;color:var(--accent-light);text-align:right}
-.bal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.bal-card{background:var(--white);border-radius:10px;box-shadow:var(--shadow);padding:12px 14px;border-left:4px solid var(--gray-3);cursor:pointer;transition:transform 0.1s}
-.bal-card:active{transform:scale(0.97)}
-.bal-label{font-size:11px;font-weight:600;color:var(--gray-4);margin-bottom:4px}
-.bal-val{font-size:20px;font-weight:700;color:var(--navy)}
-.bal-val.neg{color:var(--red)}
-.bal-card.c-cash{border-left-color:var(--accent)}
-.bal-card.c-1{border-left-color:#1e88e5}
-.bal-card.c-2{border-left-color:#43a047}
-.bal-card.c-3{border-left-color:#e53935}
-.bal-card.c-4{border-left-color:#f57c00}
-
 /* Cards */
-.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:12px}
-.card-title{font-size:12px;font-weight:600;color:var(--gray-4);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px}
+.card{background:var(--surface);border-radius:var(--r);box-shadow:var(--sh);padding:16px;margin-bottom:12px}
+.ctitle{font-size:11px;font-weight:700;color:var(--g4);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.shdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.shdr h2{font-size:15px;font-weight:700;color:var(--navy)}
+
+/* Total card */
+.total-card{background:var(--navy);border-radius:var(--r);padding:18px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.tc-label{font-size:11px;color:rgba(255,255,255,.6);font-weight:600;letter-spacing:.5px;margin-bottom:4px}
+.tc-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px}
+.tc-val{font-size:32px;font-weight:700;color:#A8C8FF}
+
+/* Account cards */
+.acc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.ac{background:var(--surface);border-radius:12px;box-shadow:var(--sh);padding:12px 14px;border-left:3px solid var(--g3);cursor:pointer;transition:transform .1s,box-shadow .1s}
+.ac:active{transform:scale(.97);box-shadow:none}
+.ac-label{font-size:10px;font-weight:700;color:var(--g4);margin-bottom:4px;letter-spacing:.3px}
+.ac-val{font-size:19px;font-weight:700;color:var(--navy)}
+.ac-val.neg{color:var(--red)}
+
+/* Voice screen */
+.voice-hero{display:flex;flex-direction:column;align-items:center;padding:20px 0 14px}
+.mic-big{width:80px;height:80px;border-radius:50%;background:var(--accent);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s,background .15s;box-shadow:0 4px 20px rgba(24,88,214,.35)}
+.mic-big:active{transform:scale(.93)}
+.mic-big.listening{background:var(--red);animation:mic-pulse 1s infinite;box-shadow:0 4px 20px rgba(217,48,37,.4)}
+.mic-big svg{width:36px;height:36px}
+.mic-hint{font-size:12px;color:var(--g4);margin-top:10px;text-align:center;line-height:1.65}
+.vi-wrap{position:relative;display:flex;align-items:center;margin-top:4px}
+.vi-wrap input{flex:1;border:2px solid var(--g2);border-radius:12px;padding:12px 48px 12px 14px;font-size:16px;outline:none;transition:border-color .15s;background:#fff;color:var(--text)}
+.vi-wrap input:focus{border-color:var(--accent)}
+.mic-sm{position:absolute;right:8px;background:none;border:none;color:var(--g3);padding:6px;cursor:pointer;display:flex;align-items:center;border-radius:8px;transition:color .15s}
+.mic-sm:active{color:var(--accent)}
+.mic-sm svg{width:20px;height:20px}
+#parse-btn{width:100%;background:var(--navy);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px;transition:background .15s}
+#parse-btn:active{background:var(--navy-mid)}
+#pp{display:none;background:var(--g1);border-radius:12px;padding:14px;margin-top:10px;border:1.5px solid var(--g2)}
+#pp .row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--g2);font-size:14px}
+#pp .row:last-child{border:none}
+#pp .lbl{color:var(--g4);font-weight:500}
+#pp .val{font-weight:700;color:var(--navy)}
+#confirm-btn{width:100%;background:var(--green);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px}
+@keyframes mic-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.85;transform:scale(.97)}}
 
 /* Quick buttons */
-.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-.quick-btn{background:var(--white);border:2px solid var(--gray-2);border-radius:10px;padding:14px 8px;text-align:center;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;transition:all 0.15s;display:flex;flex-direction:column;align-items:center;gap:6px;line-height:1.3}
-.quick-btn .icon{font-size:22px}
-.quick-btn:active{background:var(--navy);border-color:var(--navy);color:#fff}
-.action-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.action-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
-
-/* Voice */
-.voice-box{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:12px}
-.voice-row{display:flex;gap:10px;align-items:center}
-#voice-input{flex:1;border:2px solid var(--gray-2);border-radius:10px;padding:12px 14px;font-size:16px;outline:none;transition:border-color 0.15s;background:var(--gray-1)}
-#voice-input:focus{border-color:var(--navy);background:#fff}
-#voice-btn{background:var(--navy);border:none;border-radius:10px;padding:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;width:48px;height:48px;transition:background 0.15s}
-#voice-btn svg{width:22px;height:22px;color:#fff;stroke-width:2}
-#voice-btn.listening{background:var(--red);animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}
-#parse-btn{width:100%;background:var(--navy);color:#fff;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px;transition:background 0.15s}
-#parse-btn:active{background:var(--navy-dark)}
-#parsed-preview{display:none;background:var(--gray-1);border-radius:10px;padding:14px;margin-top:10px}
-#parsed-preview .row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--gray-2);font-size:14px}
-#parsed-preview .row:last-child{border:none}
-#parsed-preview .label{color:var(--gray-4);font-weight:500}
-#parsed-preview .value{font-weight:600;color:var(--navy)}
-#confirm-btn{width:100%;background:var(--green);color:#fff;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px}
+.qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.qbtn{background:var(--surface);border:1.5px solid var(--g2);border-radius:12px;padding:14px 6px;text-align:center;font-size:12px;font-weight:700;color:var(--text);cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:7px;line-height:1.35}
+.qdot{width:24px;height:24px;border-radius:8px;flex-shrink:0}
+.qbtn:active{border-color:var(--accent);background:var(--accent);color:#fff}
+.qbtn:active .qdot{opacity:.7}
+.arow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
 
 /* Forms */
-.form-group{margin-bottom:14px}
-.form-label{display:block;font-size:13px;font-weight:600;color:var(--text-light);margin-bottom:6px}
-.form-input{width:100%;border:2px solid var(--gray-2);border-radius:10px;padding:12px 14px;font-size:16px;outline:none;transition:border-color 0.15s;background:#fff}
-.form-input:focus{border-color:var(--navy)}
-.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
-.radio-group{display:flex;gap:8px}
-.radio-opt{flex:1;text-align:center;border:2px solid var(--gray-2);border-radius:10px;padding:10px;cursor:pointer;font-size:14px;font-weight:600;color:var(--gray-4);transition:all 0.15s}
-.radio-opt.selected{border-color:var(--navy);background:var(--navy);color:#fff}
-.btn-primary{width:100%;background:var(--navy);color:#fff;border:none;border-radius:10px;padding:16px;font-size:16px;font-weight:700;cursor:pointer;transition:background 0.15s;margin-top:8px}
-.btn-primary:active{background:var(--navy-dark)}
-.btn-secondary{background:var(--gray-1);color:var(--text);border:2px solid var(--gray-2);border-radius:10px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;width:100%;margin-top:8px}
-.btn-sm{background:var(--gray-1);color:var(--text-light);border:none;border-radius:8px;padding:8px 12px;font-size:13px;font-weight:600;cursor:pointer}
-.btn-danger{background:var(--red);color:#fff;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;width:100%;margin-top:8px}
+.fg{margin-bottom:14px}
+.fl{display:block;font-size:12px;font-weight:700;color:var(--sub);margin-bottom:6px;letter-spacing:.2px}
+.fi{width:100%;border:2px solid var(--g2);border-radius:12px;padding:12px 14px;font-size:16px;outline:none;transition:border-color .15s;background:#fff;color:var(--text);-webkit-appearance:none}
+.fi:focus{border-color:var(--accent)}
+.fsel{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7A8D' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-color:#fff;padding-right:40px}
+.rgrp{display:flex;gap:8px}
+.ropt{flex:1;text-align:center;border:2px solid var(--g2);border-radius:12px;padding:10px;cursor:pointer;font-size:14px;font-weight:700;color:var(--g4);transition:all .15s}
+.ropt.selected{border-color:var(--accent);background:var(--accent);color:#fff}
+.bp{width:100%;background:var(--navy);color:#fff;border:none;border-radius:12px;padding:16px;font-size:16px;font-weight:700;cursor:pointer;transition:background .15s;margin-top:8px}
+.bp:active{background:var(--navy-mid)}
+.bs{background:var(--g1);color:var(--text);border:1.5px solid var(--g2);border-radius:12px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;width:100%;margin-top:8px;transition:all .15s}
+.bs:active{background:var(--g2)}
+.bsm{background:var(--g1);color:var(--sub);border:1.5px solid var(--g2);border-radius:8px;padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer}
+.bsm:active{background:var(--g2)}
+.bd{background:var(--red);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;width:100%;margin-top:8px}
 
-/* Transaction list */
-.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.section-header h2{font-size:15px;font-weight:700;color:var(--navy)}
-.tx-list{display:flex;flex-direction:column;gap:8px}
-.tx-item{background:var(--white);border-radius:10px;box-shadow:var(--shadow);padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:transform 0.1s}
-.tx-item:active{transform:scale(0.98)}
-.tx-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.tx-body{flex:1;min-width:0}
-.tx-top{display:flex;justify-content:space-between;align-items:center}
-.tx-name{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}
-.tx-amount{font-weight:700;font-size:16px;flex-shrink:0}
-.tx-amount.out{color:var(--red)}
-.tx-amount.in{color:var(--green)}
-.tx-amount.move{color:var(--blue)}
-.tx-bottom{display:flex;justify-content:space-between;margin-top:3px;align-items:center}
-.tx-cat{font-size:11px;color:var(--gray-4);background:var(--gray-1);padding:2px 8px;border-radius:20px;display:inline-block}
-.tx-date{font-size:11px;color:var(--gray-3)}
-.tx-receipt{font-size:10px;color:var(--green);margin-left:4px}
-.badge{border-radius:6px;font-size:11px;font-weight:700;padding:2px 8px;display:inline-block}
-.badge-blue{background:#e3f2fd;color:#1565c0}
-.badge-green{background:#e8f5e9;color:#2e7d32}
-.badge-orange{background:#fff3e0;color:#e65100}
+/* TX list */
+.txl{display:flex;flex-direction:column;gap:8px}
+.txi{background:var(--surface);border-radius:12px;box-shadow:var(--sh);padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:transform .1s}
+.txi:active{transform:scale(.98)}
+.txbadge{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;letter-spacing:-.5px}
+.txbody{flex:1;min-width:0}
+.txtop{display:flex;justify-content:space-between;align-items:center}
+.txname{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.txamt{font-weight:700;font-size:15px;flex-shrink:0}
+.txamt.out{color:var(--red)}
+.txamt.in{color:var(--green)}
+.txamt.mv{color:var(--accent)}
+.txbot{display:flex;justify-content:space-between;margin-top:3px;align-items:center}
+.txtag{font-size:10px;color:var(--g4);background:var(--g1);padding:2px 8px;border-radius:20px;display:inline-flex;align-items:center;font-weight:600;border:1px solid var(--g2)}
+.txdate{font-size:11px;color:var(--g3);font-weight:500}
+.cdot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;flex-shrink:0}
 
 /* Summary */
-.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.summary-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;text-align:center}
-.summary-card .s-label{font-size:11px;color:var(--gray-4);font-weight:600;margin-bottom:6px}
-.summary-card .s-val{font-size:20px;font-weight:700;color:var(--navy)}
-.summary-card .s-val.red{color:var(--red)}
-.summary-card .s-val.green{color:var(--green)}
-.summary-card.full{grid-column:1/-1;background:var(--navy);color:#fff}
-.summary-card.full .s-label{color:rgba(255,255,255,0.7)}
-.summary-card.full .s-val{font-size:26px;color:var(--accent-light)}
-.month-picker{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:16px}
-.month-btn{background:var(--gray-1);border:none;border-radius:8px;padding:8px 14px;font-size:18px;cursor:pointer;color:var(--text)}
-.month-label{font-size:17px;font-weight:700;color:var(--navy);min-width:110px;text-align:center}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.scard{background:var(--surface);border-radius:var(--r);box-shadow:var(--sh);padding:14px;text-align:center}
+.scard .slbl{font-size:11px;color:var(--g4);font-weight:700;margin-bottom:6px;letter-spacing:.3px}
+.scard .sval{font-size:20px;font-weight:700;color:var(--navy)}
+.scard .sval.red{color:var(--red)}
+.scard .sval.green{color:var(--green)}
+.scard.full{grid-column:1/-1;background:var(--navy);color:#fff}
+.scard.full .slbl{color:rgba(255,255,255,.65)}
+.scard.full .sval{font-size:26px;color:#A8C8FF}
+.mpick{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:16px}
+.mbtn{background:var(--g1);border:1.5px solid var(--g2);border-radius:10px;padding:8px 16px;font-size:16px;cursor:pointer;color:var(--text);font-weight:700}
+.mlbl{font-size:17px;font-weight:700;color:var(--navy);min-width:110px;text-align:center}
 
 /* Tabs & Filters */
-.tabs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.tab{flex-shrink:0;text-align:center;padding:10px 14px;border:2px solid var(--gray-2);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;color:var(--gray-4);transition:all 0.15s;white-space:nowrap}
+.tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+.tab{flex-shrink:0;text-align:center;padding:9px 14px;border:1.5px solid var(--g2);border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;color:var(--g4);transition:all .15s;white-space:nowrap;background:var(--surface)}
 .tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
-.filter-row{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
-.filter-chip{flex-shrink:0;padding:6px 14px;border-radius:20px;border:1.5px solid var(--gray-2);font-size:12px;font-weight:600;cursor:pointer;color:var(--gray-4);background:var(--white);white-space:nowrap}
-.filter-chip.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.frow{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.fchip{flex-shrink:0;padding:5px 12px;border-radius:20px;border:1.5px solid var(--g2);font-size:11px;font-weight:700;cursor:pointer;color:var(--g4);background:var(--surface);white-space:nowrap}
+.fchip.active{background:var(--navy);color:#fff;border-color:var(--navy)}
 
-/* Account settings */
-.acc-item{display:flex;align-items:center;padding:14px 0;border-bottom:1px solid var(--gray-2)}
-.acc-item:last-child{border-bottom:none}
-.acc-dot{width:12px;height:12px;border-radius:50%;margin-right:12px;flex-shrink:0}
-.acc-info{flex:1}
-.acc-name{font-size:14px;font-weight:700}
-.acc-bal{font-size:13px;font-weight:600;color:var(--navy);margin-top:2px}
-.acc-bal.neg{color:var(--red)}
+/* Settings account list */
+.aci{display:flex;align-items:center;padding:14px 0;border-bottom:1px solid var(--g2)}
+.aci:last-child{border-bottom:none}
+.acbar{width:4px;height:36px;border-radius:2px;margin-right:12px;flex-shrink:0}
+.acinfo{flex:1}
+.acname{font-size:14px;font-weight:700;color:var(--text)}
+.acbal{font-size:12px;font-weight:600;color:var(--navy-light);margin-top:2px}
+.acbal.neg{color:var(--red)}
 
 /* Toast */
-#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:600;z-index:999;opacity:0;transition:opacity 0.3s;white-space:nowrap;pointer-events:none}
-#toast.show{opacity:1}
+#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(13,31,53,.92);color:#fff;padding:11px 22px;border-radius:30px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:opacity .25s,transform .25s;white-space:pre-line;pointer-events:none;text-align:center;max-width:80vw}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* Modal */
-#modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:flex-end;justify-content:center}
-#modal-overlay.open{display:flex}
-#modal-box{background:#fff;border-radius:20px 20px 0 0;padding:24px 20px;width:100%;max-height:88vh;overflow-y:auto;padding-bottom:max(24px,env(safe-area-inset-bottom))}
-#modal-box h3{font-size:18px;font-weight:700;margin-bottom:16px;color:var(--navy)}
-.modal-close{float:right;background:var(--gray-1);border:none;border-radius:8px;padding:6px 12px;font-size:14px;cursor:pointer;color:var(--gray-4)}
+#mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
+#mo.open{display:flex}
+#mb{background:#fff;border-radius:24px 24px 0 0;padding:24px 20px;width:100%;max-height:90vh;overflow-y:auto;padding-bottom:max(24px,env(safe-area-inset-bottom))}
+#mb h3{font-size:18px;font-weight:700;margin-bottom:16px;color:var(--navy)}
+.mclose{float:right;background:var(--g1);border:none;border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--g4);font-weight:600}
 
 /* Empty */
-.empty{text-align:center;padding:40px 20px;color:var(--gray-3)}
-.empty .emoji{font-size:48px;margin-bottom:12px}
-.empty p{font-size:14px}
+.empty{text-align:center;padding:40px 20px;color:var(--g3)}
+.empty-icon{width:48px;height:48px;margin:0 auto 12px;opacity:.35}
+.empty p{font-size:14px;font-weight:500}
 
-/* CSV btn */
-.csv-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;width:100%;margin-top:4px}
+/* CSV */
+.csvbtn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;width:100%;margin-top:4px;transition:background .15s}
+.csvbtn:active{background:#1346B4}
 
 @media(min-width:600px){
   #app{max-width:500px;margin:0 auto;box-shadow:0 0 40px rgba(0,0,0,0.15)}
@@ -178,102 +179,76 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Hiragino San
 <body>
 <div id="app">
   <div id="header">
-    <h1>🏗 高橋商店</h1>
-    <div class="hdr-bal">手元現金<strong id="hdr-balance">¥0</strong></div>
+    <div class="hdr-title">高橋商店</div>
+    <div>
+      <div class="hdr-cash-label">手元現金</div>
+      <div class="hdr-cash-val" id="hdr-balance">¥0</div>
+    </div>
   </div>
 
   <div id="main">
 
-    <!-- ===== HOME ===== -->
-    <div class="screen active" id="screen-home">
-
-      <!-- Balance overview -->
-      <div class="bal-total">
-        <div>
-          <div class="bal-total-left">総事業資金</div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.55)">現金＋全口座合計</div>
+    <!-- ===== 音声入力 ===== -->
+    <div class="screen active" id="screen-voice">
+      <div class="card" style="padding:20px">
+        <div class="voice-hero">
+          <button class="mic-big" id="voice-mic-btn" onclick="startVoice()">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1C10.34 1 9 2.34 9 4V12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12V4C15 2.34 13.66 1 12 1Z"/><path fill-rule="evenodd" d="M5 11C5 14.87 8.13 18 12 18C15.87 18 19 14.87 19 11H17C17 13.76 14.76 16 12 16C9.24 16 7 13.76 7 11H5Z"/><rect x="11" y="18" width="2" height="4"/><rect x="8" y="21" width="8" height="2" rx="1"/></svg>
+          </button>
+          <div class="mic-hint">タップして話してください<br>「コメリ18500」「嫁に5万」「北洋から10万」</div>
         </div>
-        <div class="bal-total-val" id="total-funds">¥0</div>
-      </div>
-      <div class="bal-grid" style="margin-bottom:12px">
-        <div class="bal-card c-cash">
-          <div class="bal-label">💴 手元現金</div>
-          <div class="bal-val" id="b-cash">¥0</div>
-        </div>
-        <div class="bal-card c-1" onclick="showAccountDetail('hokkaido')">
-          <div class="bal-label">🏦 北洋銀行</div>
-          <div class="bal-val" id="b-hokkaido">¥0</div>
-        </div>
-        <div class="bal-card c-2" onclick="showAccountDetail('asahikawa')">
-          <div class="bal-label">🏦 旭川信金</div>
-          <div class="bal-val" id="b-asahikawa">¥0</div>
-        </div>
-        <div class="bal-card c-3" onclick="showAccountDetail('sbi')">
-          <div class="bal-label">💻 住信SBI</div>
-          <div class="bal-val" id="b-sbi">¥0</div>
-        </div>
-        <div class="bal-card c-4" onclick="showAccountDetail('paypay')">
-          <div class="bal-label">📱 PayPay銀行</div>
-          <div class="bal-val" id="b-paypay">¥0</div>
-        </div>
-        <div class="bal-card" onclick="showScreen('settings',document.querySelectorAll(\'.nav-btn\')[3])" style="border-left-color:var(--gray-3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
-          <div style="font-size:22px">⚙️</div>
-          <div style="font-size:11px;font-weight:600;color:var(--gray-4)">残高設定</div>
-        </div>
-      </div>
-
-      <!-- Voice input -->
-      <div class="voice-box">
-        <div style="font-size:13px;font-weight:600;color:var(--gray-4);margin-bottom:8px">🎤 音声 or テキストで入力</div>
-        <div class="voice-row">
-          <input type="text" id="voice-input" placeholder="例: 嫁に5万　コメリ18500　北洋から10万" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="off">
-          <button id="voice-btn" onclick="startVoice()" title="音声入力">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 0 1 6 0v8.25a3 3 0 0 1-3 3Z"/></svg>
+        <div class="vi-wrap">
+          <input type="text" id="voice-input" placeholder="または文字で入力" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="off">
+          <button class="mic-sm" onclick="startVoice()">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1C10.34 1 9 2.34 9 4V12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12V4C15 2.34 13.66 1 12 1Z"/><path fill-rule="evenodd" d="M5 11C5 14.87 8.13 18 12 18C15.87 18 19 14.87 19 11H17C17 13.76 14.76 16 12 16C9.24 16 7 13.76 7 11H5Z"/><rect x="11" y="18" width="2" height="4"/><rect x="8" y="21" width="8" height="2" rx="1"/></svg>
           </button>
         </div>
-        <button id="parse-btn" onclick="parseInput()">自動解析して入力 →</button>
-        <div id="parsed-preview">
-          <div class="row"><span class="label">種別</span><span class="value" id="p-type"></span></div>
-          <div class="row"><span class="label">日付</span><span class="value" id="p-date"></span></div>
-          <div class="row"><span class="label">金額</span><span class="value" id="p-amount"></span></div>
-          <div class="row"><span class="label">分類・口座</span><span class="value" id="p-cat"></span></div>
-          <div class="row"><span class="label">相手・店名</span><span class="value" id="p-name"></span></div>
-          <button id="confirm-btn" onclick="confirmParsed()">✓ この内容で保存する</button>
+        <button id="parse-btn" onclick="parseInput()">自動解析して入力</button>
+        <div id="pp">
+          <div class="row"><span class="lbl">種別</span><span class="val" id="p-type"></span></div>
+          <div class="row"><span class="lbl">日付</span><span class="val" id="p-date"></span></div>
+          <div class="row"><span class="lbl">金額</span><span class="val" id="p-amount"></span></div>
+          <div class="row"><span class="lbl">分類・口座</span><span class="val" id="p-cat"></span></div>
+          <div class="row"><span class="lbl">相手・店名</span><span class="val" id="p-name"></span></div>
+          <button id="confirm-btn" onclick="confirmParsed()">この内容で保存する</button>
         </div>
       </div>
-
-      <!-- Quick buttons -->
       <div class="card">
-        <div class="card-title">よく使うボタン</div>
-        <div class="quick-grid">
-          <button class="quick-btn" onclick="quickInput('家族・生活費','👩‍👧‍👦','事業主貸')"><span class="icon">👩‍👧‍👦</span>嫁に<br>生活費</button>
-          <button class="quick-btn" onclick="quickInput('材料費','🪵','材料費')"><span class="icon">🪵</span>材料</button>
-          <button class="quick-btn" onclick="quickInput('工具・消耗品','🔧','消耗品費')"><span class="icon">🔧</span>工具・<br>消耗品</button>
-          <button class="quick-btn" onclick="quickInput('ガソリン','⛽','車両費')"><span class="icon">⛽</span>ガソリン</button>
-          <button class="quick-btn" onclick="quickInput('高速・駐車場','🛣️','旅費交通費')"><span class="icon">🛣️</span>高速・<br>駐車場</button>
-          <button class="quick-btn" onclick="quickInput('外注費','🤝','外注工賃')"><span class="icon">🤝</span>外注</button>
-          <button class="quick-btn" onclick="quickInput('従業員関連','👷','給料賃金')"><span class="icon">👷</span>従業員<br>関連</button>
-          <button class="quick-btn" onclick="quickInput('不明','❓','不明')"><span class="icon">❓</span>不明</button>
-          <button class="quick-btn" onclick="quickInput('その他','📝','その他')"><span class="icon">📝</span>その他</button>
-        </div>
-        <div class="action-row">
-          <button class="btn-secondary" style="margin-top:0" onclick="openWithdraw()">🏦 現金引き出し</button>
-          <button class="btn-secondary" style="margin-top:0;color:#2e7d32;border-color:#a5d6a7" onclick="openDeposit()">📥 口座へ入金</button>
-        </div>
-        <button class="btn-secondary" style="margin-top:0" onclick="openTransfer()">↔️ 口座間資金移動</button>
-      </div>
-
-      <!-- Today -->
-      <div class="card">
-        <div class="section-header">
+        <div class="shdr">
           <h2>本日の記録</h2>
-          <span id="today-count" style="font-size:12px;color:var(--gray-4)"></span>
+          <span id="today-count" style="font-size:12px;color:var(--g4)"></span>
         </div>
-        <div id="today-list" class="tx-list"></div>
+        <div id="today-list" class="txl"></div>
       </div>
     </div>
 
-    <!-- ===== LIST ===== -->
+    <!-- ===== 手入力 ===== -->
+    <div class="screen" id="screen-manual">
+      <div class="card">
+        <div class="ctitle">現金使用</div>
+        <div class="qgrid">
+          <button class="qbtn" onclick="quickInput('家族・生活費','事業主貸')"><div class="qdot" style="background:#EDE7F6;border:2px solid #6A1B9A"></div>家族・<br>生活費</button>
+          <button class="qbtn" onclick="quickInput('材料費','材料費')"><div class="qdot" style="background:#FFF3E0;border:2px solid #E65100"></div>材料費</button>
+          <button class="qbtn" onclick="quickInput('工具・消耗品','消耗品費')"><div class="qdot" style="background:#E8F5E9;border:2px solid #2E7D32"></div>工具・<br>消耗品</button>
+          <button class="qbtn" onclick="quickInput('ガソリン','車両費')"><div class="qdot" style="background:#E3F2FD;border:2px solid #1565C0"></div>ガソリン</button>
+          <button class="qbtn" onclick="quickInput('高速・駐車場','旅費交通費')"><div class="qdot" style="background:#E0F7FA;border:2px solid #006064"></div>高速・<br>駐車場</button>
+          <button class="qbtn" onclick="quickInput('外注費','外注工賃')"><div class="qdot" style="background:#FCE4EC;border:2px solid #AD1457"></div>外注</button>
+          <button class="qbtn" onclick="quickInput('従業員関連','給料賃金')"><div class="qdot" style="background:#FFFDE7;border:2px solid #F57F17"></div>従業員<br>関連</button>
+          <button class="qbtn" onclick="quickInput('不明','不明')"><div class="qdot" style="background:#F5F5F5;border:2px solid #9E9E9E"></div>不明</button>
+          <button class="qbtn" onclick="quickInput('その他','その他')"><div class="qdot" style="background:#FAFAFA;border:2px solid #BDBDBD"></div>その他</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ctitle">入出金・移動</div>
+        <div class="arow">
+          <button class="bs" style="margin-top:0" onclick="openWithdraw()">現金引き出し</button>
+          <button class="bs" style="margin-top:0;color:var(--green);border-color:#A5D6A7" onclick="openDeposit()">口座へ入金</button>
+        </div>
+        <button class="bs" style="margin-top:0" onclick="openTransfer()">口座間資金移動</button>
+      </div>
+    </div>
+
+    <!-- ===== 一覧 ===== -->
     <div class="screen" id="screen-list">
       <div class="tabs" id="list-tabs">
         <div class="tab active" onclick="switchListTab('spend')">現金使用</div>
@@ -281,67 +256,116 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Hiragino San
         <div class="tab" onclick="switchListTab('deposit')">入金</div>
         <div class="tab" onclick="switchListTab('transfer')">口座移動</div>
       </div>
-      <div class="filter-row" id="cat-filters"></div>
-      <div id="list-content" class="tx-list"></div>
+      <div class="frow" id="cat-filters"></div>
+      <div id="list-content" class="txl"></div>
     </div>
 
-    <!-- ===== SUMMARY ===== -->
+    <!-- ===== 集計 ===== -->
     <div class="screen" id="screen-summary">
-      <div class="month-picker">
-        <button class="month-btn" onclick="changeMonth(-1)">◀</button>
-        <span class="month-label" id="month-label"></span>
-        <button class="month-btn" onclick="changeMonth(1)">▶</button>
+      <div class="mpick">
+        <button class="mbtn" onclick="changeMonth(-1)">◀</button>
+        <span class="mlbl" id="month-label"></span>
+        <button class="mbtn" onclick="changeMonth(1)">▶</button>
       </div>
       <div id="summary-content"></div>
-      <button class="csv-btn" onclick="exportCSV()">📥 この月のCSVダウンロード</button>
+      <button class="csvbtn" onclick="exportCSV()">この月のCSVダウンロード</button>
     </div>
 
-    <!-- ===== SETTINGS ===== -->
+    <!-- ===== 資金状況 ===== -->
+    <div class="screen" id="screen-funds">
+      <div class="total-card">
+        <div>
+          <div class="tc-label">総事業資金</div>
+          <div class="tc-sub">現金＋全口座合計</div>
+        </div>
+        <div class="tc-val" id="funds-total">¥0</div>
+      </div>
+      <div class="acc-grid">
+        <div class="ac" style="border-left-color:var(--accent)">
+          <div class="ac-label">手元現金</div>
+          <div class="ac-val" id="funds-cash">¥0</div>
+        </div>
+        <div class="ac" style="border-left-color:#1E88E5" onclick="showAccDetail('hokkaido')">
+          <div class="ac-label">北洋銀行</div>
+          <div class="ac-val" id="funds-hokkaido">¥0</div>
+        </div>
+        <div class="ac" style="border-left-color:#43A047" onclick="showAccDetail('asahikawa')">
+          <div class="ac-label">旭川信金</div>
+          <div class="ac-val" id="funds-asahikawa">¥0</div>
+        </div>
+        <div class="ac" style="border-left-color:#E53935" onclick="showAccDetail('sbi')">
+          <div class="ac-label">住信SBI</div>
+          <div class="ac-val" id="funds-sbi">¥0</div>
+        </div>
+        <div class="ac" style="border-left-color:#F57C00" onclick="showAccDetail('paypay')">
+          <div class="ac-label">PayPay銀行</div>
+          <div class="ac-val" id="funds-paypay">¥0</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ctitle">クイックアクション</div>
+        <div class="arow">
+          <button class="bs" style="margin-top:0" onclick="openWithdraw()">現金引き出し</button>
+          <button class="bs" style="margin-top:0;color:var(--green);border-color:#A5D6A7" onclick="openDeposit()">口座へ入金</button>
+        </div>
+        <button class="bs" style="margin-top:0" onclick="openTransfer()">口座間資金移動</button>
+      </div>
+    </div>
+
+    <!-- ===== 設定 ===== -->
     <div class="screen" id="screen-settings">
       <div class="card">
-        <div class="card-title">口座残高管理</div>
-        <p style="font-size:12px;color:var(--gray-4);margin-bottom:12px;line-height:1.6">各口座の現在残高を入力してください。以降の入出金は自動計算されます。</p>
+        <div class="ctitle">口座残高管理</div>
+        <p style="font-size:12px;color:var(--g4);margin-bottom:12px;line-height:1.6">各口座の現在残高を入力してください。以降の入出金は自動計算されます。</p>
         <div id="account-settings-list"></div>
       </div>
       <div class="card">
-        <div class="card-title">データ管理</div>
-        <button class="btn-secondary" style="margin-bottom:8px;margin-top:0" onclick="exportAllCSV()">📥 全期間CSVエクスポート</button>
-        <button class="btn-secondary" style="margin-bottom:8px;margin-top:0;color:var(--gray-4)" onclick="exportJSON()">💾 バックアップ（JSON）</button>
-        <button class="btn-secondary" style="margin-bottom:8px;margin-top:0;color:var(--gray-4)" onclick="importJSON()">📂 バックアップから復元</button>
+        <div class="ctitle">データ管理</div>
+        <button class="bs" style="margin-bottom:8px;margin-top:0" onclick="exportAllCSV()">全期間CSVエクスポート</button>
+        <button class="bs" style="margin-bottom:8px;margin-top:0" onclick="exportJSON()">バックアップ（JSON）</button>
+        <button class="bs" style="margin-bottom:8px;margin-top:0" onclick="importJSON()">バックアップから復元</button>
         <input type="file" id="import-file" accept=".json" style="display:none" onchange="doImport(this)">
-        <button style="width:100%;background:none;border:2px solid var(--red);color:var(--red);border-radius:10px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;margin-top:8px" onclick="clearAll()">⚠️ 全データ削除</button>
+        <button style="width:100%;background:none;border:1.5px solid var(--red);color:var(--red);border-radius:12px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;margin-top:8px" onclick="clearAll()">全データ削除</button>
       </div>
       <div class="card">
-        <div class="card-title">このアプリについて</div>
-        <p style="font-size:13px;color:var(--text-light);line-height:1.7">高橋商店専用キャッシュ管理アプリ<br>データはこの端末のみに保存されます<br>バージョン 2.0.0</p>
+        <div class="ctitle">このアプリについて</div>
+        <p style="font-size:13px;color:var(--sub);line-height:1.8">高橋商店専用キャッシュ管理アプリ<br>データはこの端末のみに保存されます<br>バージョン 2.1.0</p>
       </div>
     </div>
 
-  </div><!-- /main -->
+  </div>
 
   <nav id="nav">
-    <button class="nav-btn active" onclick="showScreen('home',this)">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
-      ホーム
+    <button class="nb active" onclick="showScreen('voice',this)">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1C10.34 1 9 2.34 9 4V12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12V4C15 2.34 13.66 1 12 1Z"/><path fill-rule="evenodd" d="M5 11C5 14.87 8.13 18 12 18C15.87 18 19 14.87 19 11H17C17 13.76 14.76 16 12 16C9.24 16 7 13.76 7 11H5Z"/><rect x="11" y="18" width="2" height="4"/><rect x="8" y="21" width="8" height="2" rx="1"/></svg>
+      音声入力
     </button>
-    <button class="nav-btn" onclick="showScreen('list',this)">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/></svg>
+    <button class="nb" onclick="showScreen('manual',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      手入力
+    </button>
+    <button class="nb" onclick="showScreen('list',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
       一覧
     </button>
-    <button class="nav-btn" onclick="showScreen('summary',this)">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"/></svg>
+    <button class="nb" onclick="showScreen('summary',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
       集計
     </button>
-    <button class="nav-btn" onclick="showScreen('settings',this)">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
+    <button class="nb" onclick="showScreen('funds',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      資金状況
+    </button>
+    <button class="nb" onclick="showScreen('settings',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
       設定
     </button>
   </nav>
 </div>
 
-<div id="modal-overlay" onclick="closeModal(event)">
-  <div id="modal-box">
-    <button class="modal-close" onclick="closeModal()">✕ 閉じる</button>
+<div id="mo" onclick="closeModal(event)">
+  <div id="mb">
+    <button class="mclose" onclick="closeModal()">閉じる</button>
     <h3 id="modal-title">入力</h3>
     <div id="modal-content"></div>
   </div>
@@ -349,929 +373,591 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Hiragino San
 <div id="toast"></div>
 
 <script>
-// ===== CONSTANTS =====
 const DEFAULT_ACCOUNTS = [
-  { id:'hokkaido',  name:'北洋銀行',        initialBalance:0, color:'#1e88e5' },
-  { id:'asahikawa', name:'旭川信用金庫',     initialBalance:0, color:'#43a047' },
+  { id:'hokkaido',  name:'北洋銀行',         initialBalance:0, color:'#1e88e5' },
+  { id:'asahikawa', name:'旭川信用金庫',      initialBalance:0, color:'#43a047' },
   { id:'sbi',       name:'住信SBIネット銀行', initialBalance:0, color:'#e53935' },
-  { id:'paypay',    name:'PayPay銀行',      initialBalance:0, color:'#f57c00' },
+  { id:'paypay',    name:'PayPay銀行',       initialBalance:0, color:'#f57c00' },
 ];
 
 const BANK_NAME_MAP = {
   '北洋銀行':'hokkaido','北洋':'hokkaido',
   '旭川信用金庫':'asahikawa','旭川信金':'asahikawa','旭信':'asahikawa','旭川信':'asahikawa',
-  '住信sbiネット銀行':'sbi','住信SBIネット銀行':'sbi','住信SBI':'sbi','住信sbi':'sbi',
-  'sbi':'sbi','住信':'sbi',
+  '住信sbiネット銀行':'sbi','住信SBIネット銀行':'sbi','住信SBI':'sbi','住信sbi':'sbi','sbi':'sbi','住信':'sbi',
   'PayPay銀行':'paypay','paypay銀行':'paypay','paypay':'paypay','ペイペイ':'paypay',
 };
 
 const CATEGORIES = ['材料費','消耗品費','車両費','旅費交通費','外注工賃','給料賃金','事業主貸','その他','不明'];
 
+const CS = {
+  '事業主貸':  { bg:'#EDE7F6', text:'#6A1B9A', i:'貸' },
+  '材料費':    { bg:'#FFF3E0', text:'#E65100', i:'材' },
+  '消耗品費':  { bg:'#E8F5E9', text:'#2E7D32', i:'消' },
+  '車両費':    { bg:'#E3F2FD', text:'#1565C0', i:'車' },
+  '旅費交通費':{ bg:'#E0F7FA', text:'#006064', i:'旅' },
+  '外注工賃':  { bg:'#FCE4EC', text:'#AD1457', i:'外' },
+  '給料賃金':  { bg:'#FFFDE7', text:'#F57F17', i:'給' },
+  '不明':      { bg:'#F5F5F5', text:'#757575', i:'不' },
+  'その他':    { bg:'#FAFAFA', text:'#9E9E9E', i:'他' },
+};
+
 const RULES = [
-  { keywords:['嫁','妻','生活費','家族','子供'], cat:'事業主貸', icon:'👩‍👧‍👦', color:'#e8d5f5' },
-  { keywords:['コメリ','ホーマック','建デポ','建材','資材','材料','合板','木材','鉄筋','ベニヤ','ボード','石膏','断熱'], cat:'材料費', icon:'🪵', color:'#fde8c8' },
-  { keywords:['工具','ビス','ネジ','手袋','作業着','安全靴','ヘルメット','軍手','カッター','テープ','コーキング','消耗'], cat:'消耗品費', icon:'🔧', color:'#d4edda' },
-  { keywords:['eneos','エネオス','出光','イデミツ','cosmo','コスモ','ガソリン','軽油','給油','セルフ'], cat:'車両費', icon:'⛽', color:'#cce5ff' },
-  { keywords:['高速','etc','駐車','パーキング','交通','バス','電車'], cat:'旅費交通費', icon:'🛣️', color:'#d1ecf1' },
-  { keywords:['応援','外注','職人','手間'], cat:'外注工賃', icon:'🤝', color:'#f8d7da' },
-  { keywords:['給料','賃金','従業員','アルバイト','パート','社員','バイト'], cat:'給料賃金', icon:'👷', color:'#fff3cd' },
-  { keywords:['自分','小遣い','個人'], cat:'事業主貸', icon:'💴', color:'#e8d5f5' },
+  { kw:['嫁','妻','生活費','家族','子供'],                                                      cat:'事業主貸' },
+  { kw:['コメリ','ホーマック','建デポ','建材','資材','材料','合板','木材','鉄筋','ベニヤ','ボード','石膏','断熱'], cat:'材料費' },
+  { kw:['工具','ビス','ネジ','手袋','作業着','安全靴','ヘルメット','軍手','カッター','テープ','コーキング','消耗'], cat:'消耗品費' },
+  { kw:['eneos','エネオス','出光','イデミツ','cosmo','コスモ','ガソリン','軽油','給油','セルフ'],  cat:'車両費' },
+  { kw:['高速','etc','駐車','パーキング','交通','バス','電車'],                                  cat:'旅費交通費' },
+  { kw:['応援','外注','職人','手間'],                                                            cat:'外注工賃' },
+  { kw:['給料','賃金','従業員','アルバイト','パート','社員','バイト'],                             cat:'給料賃金' },
+  { kw:['自分','小遣い','個人'],                                                                 cat:'事業主貸' },
 ];
 
-const YAYOI_MAP = {
-  '材料費':    { debit:'仕入高',     credit:'現金' },
-  '消耗品費':  { debit:'消耗品費',   credit:'現金' },
-  '車両費':    { debit:'車両費',     credit:'現金' },
-  '旅費交通費':{ debit:'旅費交通費', credit:'現金' },
-  '外注工賃':  { debit:'外注費',     credit:'現金' },
-  '給料賃金':  { debit:'給料賃金',   credit:'現金' },
-  '事業主貸':  { debit:'事業主貸',   credit:'現金' },
-  '不明':      { debit:'雑費',       credit:'現金' },
-  'その他':    { debit:'雑費',       credit:'現金' },
+const YAYOI = {
+  '材料費':    { d:'仕入高',     c:'現金' },
+  '消耗品費':  { d:'消耗品費',   c:'現金' },
+  '車両費':    { d:'車両費',     c:'現金' },
+  '旅費交通費':{ d:'旅費交通費', c:'現金' },
+  '外注工賃':  { d:'外注費',     c:'現金' },
+  '給料賃金':  { d:'給料賃金',   c:'現金' },
+  '事業主貸':  { d:'事業主貸',   c:'現金' },
+  '不明':      { d:'雑費',       c:'現金' },
+  'その他':    { d:'雑費',       c:'現金' },
 };
 
-// ===== DATA LAYER =====
 const DB = {
-  KEY_ACCOUNTS: 'taka_accounts_v2',
-  KEY_SPEND:    'taka_spend',
-  KEY_WITHDRAW: 'taka_withdraw',
-  KEY_DEPOSIT:  'taka_deposit',
-  KEY_TRANSFER: 'taka_transfer',
-
+  KA:'taka_accounts_v2', KS:'taka_spend', KW:'taka_withdraw', KD:'taka_deposit', KT:'taka_transfer',
   getAccounts() {
-    try {
-      const s = JSON.parse(localStorage.getItem(this.KEY_ACCOUNTS));
-      if (s && Array.isArray(s) && s.length) return s;
-    } catch {}
-    return DEFAULT_ACCOUNTS.map(a => ({...a}));
+    try { const s=JSON.parse(localStorage.getItem(this.KA)); if(s&&Array.isArray(s)&&s.length) return s; } catch{}
+    return DEFAULT_ACCOUNTS.map(a=>({...a}));
   },
-  saveAccounts(arr) { localStorage.setItem(this.KEY_ACCOUNTS, JSON.stringify(arr)); },
-  updateAccountBalance(id, val) {
-    const arr = this.getAccounts();
-    const i = arr.findIndex(a => a.id === id);
-    if (i >= 0) { arr[i].initialBalance = Number(val); this.saveAccounts(arr); }
-  },
-
-  _getList(key) { try { return JSON.parse(localStorage.getItem(key)||'[]'); } catch { return []; } },
-  _saveList(key, arr) { localStorage.setItem(key, JSON.stringify(arr)); },
-  _add(key, item) {
-    const arr = this._getList(key);
-    item.id = genId(); item.createdAt = new Date().toISOString();
-    arr.unshift(item); this._saveList(key, arr); return item;
-  },
-  _update(key, id, data) {
-    const arr = this._getList(key);
-    const i = arr.findIndex(x => x.id === id);
-    if (i >= 0) { arr[i] = {...arr[i], ...data}; this._saveList(key, arr); }
-  },
-  _delete(key, id) { this._saveList(key, this._getList(key).filter(x => x.id !== id)); },
-
-  getSpends()    { return this._getList(this.KEY_SPEND); },
-  addSpend(i)    { return this._add(this.KEY_SPEND, i); },
-  updateSpend(id,d) { this._update(this.KEY_SPEND, id, d); },
-  deleteSpend(id) { this._delete(this.KEY_SPEND, id); },
-  saveSpends(arr) { this._saveList(this.KEY_SPEND, arr); },
-
-  getWithdraws()    { return this._getList(this.KEY_WITHDRAW); },
-  addWithdraw(i)    { return this._add(this.KEY_WITHDRAW, i); },
-  updateWithdraw(id,d) { this._update(this.KEY_WITHDRAW, id, d); },
-  deleteWithdraw(id) { this._delete(this.KEY_WITHDRAW, id); },
-  saveWithdraws(arr) { this._saveList(this.KEY_WITHDRAW, arr); },
-
-  getDeposits()    { return this._getList(this.KEY_DEPOSIT); },
-  addDeposit(i)    { return this._add(this.KEY_DEPOSIT, i); },
-  updateDeposit(id,d) { this._update(this.KEY_DEPOSIT, id, d); },
-  deleteDeposit(id) { this._delete(this.KEY_DEPOSIT, id); },
-
-  getTransfers()    { return this._getList(this.KEY_TRANSFER); },
-  addTransfer(i)    { return this._add(this.KEY_TRANSFER, i); },
-  updateTransfer(id,d) { this._update(this.KEY_TRANSFER, id, d); },
-  deleteTransfer(id) { this._delete(this.KEY_TRANSFER, id); },
+  saveAccounts(arr){ localStorage.setItem(this.KA,JSON.stringify(arr)); },
+  updateAccountBalance(id,val){ const arr=this.getAccounts(); const i=arr.findIndex(a=>a.id===id); if(i>=0){arr[i].initialBalance=Number(val);this.saveAccounts(arr);} },
+  _get(k){ try{return JSON.parse(localStorage.getItem(k)||'[]');}catch{return[];} },
+  _save(k,arr){ localStorage.setItem(k,JSON.stringify(arr)); },
+  _add(k,item){ const arr=this._get(k); item.id=genId(); item.createdAt=new Date().toISOString(); arr.unshift(item); this._save(k,arr); return item; },
+  _upd(k,id,d){ const arr=this._get(k); const i=arr.findIndex(x=>x.id===id); if(i>=0){arr[i]={...arr[i],...d};this._save(k,arr);} },
+  _del(k,id){ this._save(k,this._get(k).filter(x=>x.id!==id)); },
+  getSpends(){ return this._get(this.KS); },
+  addSpend(i){ return this._add(this.KS,i); },
+  updateSpend(id,d){ this._upd(this.KS,id,d); },
+  deleteSpend(id){ this._del(this.KS,id); },
+  saveSpends(arr){ this._save(this.KS,arr); },
+  getWithdraws(){ return this._get(this.KW); },
+  addWithdraw(i){ return this._add(this.KW,i); },
+  updateWithdraw(id,d){ this._upd(this.KW,id,d); },
+  deleteWithdraw(id){ this._del(this.KW,id); },
+  saveWithdraws(arr){ this._save(this.KW,arr); },
+  getDeposits(){ return this._get(this.KD); },
+  addDeposit(i){ return this._add(this.KD,i); },
+  updateDeposit(id,d){ this._upd(this.KD,id,d); },
+  deleteDeposit(id){ this._del(this.KD,id); },
+  getTransfers(){ return this._get(this.KT); },
+  addTransfer(i){ return this._add(this.KT,i); },
+  updateTransfer(id,d){ this._upd(this.KT,id,d); },
+  deleteTransfer(id){ this._del(this.KT,id); },
 };
 
-// ===== BALANCE ENGINE =====
-function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,5); }
+function genId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,5); }
 
-function resolveAccountId(w) {
-  if (w.accountId) return w.accountId;
-  const name = w.bank || w.bankName || '';
-  return BANK_NAME_MAP[name] || BANK_NAME_MAP[name.toLowerCase()] || null;
+function resolveAccountId(w){
+  if(w.accountId) return w.accountId;
+  const name=w.bank||w.bankName||'';
+  return BANK_NAME_MAP[name]||BANK_NAME_MAP[name.toLowerCase()]||null;
 }
 
-function calcCashBalance() {
-  const inflow  = DB.getWithdraws().reduce((s,x) => s + Number(x.amount), 0);
-  const outflow = DB.getSpends().reduce((s,x) => s + Number(x.amount), 0);
-  return inflow - outflow;
+function calcCash(){
+  return DB.getWithdraws().reduce((s,x)=>s+Number(x.amount),0)
+       - DB.getSpends().reduce((s,x)=>s+Number(x.amount),0);
 }
-
-function calcAccountBalance(accountId) {
-  const accs = DB.getAccounts();
-  const acc = accs.find(a => a.id === accountId);
-  if (!acc) return 0;
-  let bal = Number(acc.initialBalance) || 0;
-  DB.getWithdraws().forEach(w => { if (resolveAccountId(w) === accountId) bal -= Number(w.amount); });
-  DB.getDeposits().forEach(d => { if (resolveAccountId(d) === accountId) bal += Number(d.amount); });
-  DB.getTransfers().forEach(t => {
-    if (t.fromId === accountId) bal -= Number(t.amount);
-    if (t.toId   === accountId) bal += Number(t.amount);
-  });
-  return bal;
+function calcAccBal(id){
+  const acc=DB.getAccounts().find(a=>a.id===id); if(!acc) return 0;
+  let b=Number(acc.initialBalance)||0;
+  DB.getWithdraws().forEach(w=>{ if(resolveAccountId(w)===id) b-=Number(w.amount); });
+  DB.getDeposits().forEach(d=>{ if(resolveAccountId(d)===id) b+=Number(d.amount); });
+  DB.getTransfers().forEach(t=>{ if(t.fromId===id) b-=Number(t.amount); if(t.toId===id) b+=Number(t.amount); });
+  return b;
 }
+function calcTotal(){ return calcCash()+DB.getAccounts().reduce((s,a)=>s+calcAccBal(a.id),0); }
 
-function calcTotalFunds() {
-  return calcCashBalance() + DB.getAccounts().reduce((s,a) => s + calcAccountBalance(a.id), 0);
+function classify(text){
+  const t=text.toLowerCase();
+  for(const r of RULES){ if(r.kw.some(k=>t.includes(k.toLowerCase()))) return r; }
+  return {cat:'不明'};
 }
-
-// ===== CLASSIFICATION =====
-function classify(text) {
-  const t = text.toLowerCase();
-  for (const r of RULES) {
-    if (r.keywords.some(k => t.includes(k.toLowerCase()))) return r;
-  }
-  return { cat:'不明', icon:'❓', color:'#f0f2f5' };
-}
-
-function extractAmount(text) {
-  const pats = [
-    [/(\d+(?:\.\d+)?)万(\d+)千/, m => Math.round(parseFloat(m[1])*10000 + parseFloat(m[2])*1000)],
-    [/(\d+(?:\.\d+)?)万/,        m => Math.round(parseFloat(m[1])*10000)],
-    [/(\d+(?:\.\d+)?)千/,        m => Math.round(parseFloat(m[1])*1000)],
-    [/([1-9]\d{0,2}(?:,\d{3})+)/, m => parseInt(m[1].replace(/,/g,''))],
-    [/(\d{3,})/,                  m => parseInt(m[1])],
+function extractAmt(text){
+  const ps=[
+    [/(\d+(?:\.\d+)?)万(\d+)千/,m=>Math.round(parseFloat(m[1])*10000+parseFloat(m[2])*1000)],
+    [/(\d+(?:\.\d+)?)万/,m=>Math.round(parseFloat(m[1])*10000)],
+    [/(\d+(?:\.\d+)?)千/,m=>Math.round(parseFloat(m[1])*1000)],
+    [/([1-9]\d{0,2}(?:,\d{3})+)/,m=>parseInt(m[1].replace(/,/g,''))],
+    [/(\d{3,})/,m=>parseInt(m[1])],
   ];
-  for (const [p, fn] of pats) { const m = text.match(p); if (m) return fn(m); }
+  for(const [p,fn] of ps){const m=text.match(p);if(m) return fn(m);}
   return 0;
 }
-
-function detectBank(text) {
-  const t = text.toLowerCase();
-  for (const [k, id] of Object.entries(BANK_NAME_MAP)) {
-    if (t.includes(k.toLowerCase())) {
-      const acc = DB.getAccounts().find(a => a.id === id);
-      return { id, name: acc ? acc.name : k };
+function detectBank(text){
+  const t=text.toLowerCase();
+  for(const [k,id] of Object.entries(BANK_NAME_MAP)){
+    if(t.includes(k.toLowerCase())){
+      const acc=DB.getAccounts().find(a=>a.id===id);
+      return {id,name:acc?acc.name:k};
     }
   }
   return null;
 }
-
-function parseText(raw) {
-  const today = todayStr();
-  const t = raw.toLowerCase();
-  const amount = extractAmount(raw);
-
-  // Transfer: "北洋から旭川へ移動" or "北洋→旭川"
-  const trPats = [/(.+?)から(.+?)(?:へ|に)(?:振|移動|送金|送)/, /(.+?)→(.+)/];
-  for (const p of trPats) {
-    const m = raw.match(p);
-    if (m) {
-      const from = detectBank(m[1]), to = detectBank(m[2]);
-      if (from && to && from.id !== to.id) {
-        return { type:'transfer', date:today, amount, fromId:from.id, fromName:from.name, toId:to.id, toName:to.name, memo:raw };
-      }
-    }
+function parseText(raw){
+  const today=todayStr(); const t=raw.toLowerCase(); const amount=extractAmt(raw);
+  const trP=[/(.+?)から(.+?)(?:へ|に)(?:振|移動|送金|送)/,/(.+?)→(.+)/];
+  for(const p of trP){
+    const m=raw.match(p);
+    if(m){const from=detectBank(m[1]),to=detectBank(m[2]);
+      if(from&&to&&from.id!==to.id) return {type:'transfer',date:today,amount,fromId:from.id,fromName:from.name,toId:to.id,toName:to.name,memo:raw};}
   }
-
-  // Deposit: "旭川信金に5万入金"
-  if (/に入金|に振込|へ入金|へ振込/.test(t)) {
-    const bank = detectBank(raw);
-    return { type:'deposit', date:today, amount, accountId:bank?.id||'', bankName:bank?.name||'', memo:raw };
+  if(/に入金|に振込|へ入金|へ振込/.test(t)){
+    const b=detectBank(raw);
+    return {type:'deposit',date:today,amount,accountId:b?.id||'',bankName:b?.name||'',memo:raw};
   }
-
-  // Withdraw: "北洋から10万下ろした"
-  if (/下ろ|おろし|引き出|atm/.test(t)) {
-    const bank = detectBank(raw);
-    return { type:'withdraw', date:today, amount, accountId:bank?.id||'', bank:bank?.name||'', memo:raw };
+  if(/下ろ|おろし|引き出|atm/.test(t)){
+    const b=detectBank(raw);
+    return {type:'withdraw',date:today,amount,accountId:b?.id||'',bank:b?.name||'',memo:raw};
   }
-
-  // Spend
-  const rule = classify(raw);
-  let name = raw.replace(/[\d,，]+万[\d,，]*千?|[\d,，]+千|[\d,，]{4,}|[\d,，]+/g,'').trim();
-  name = name.replace(/に|から|で|を|の|円|¥|￥/g,'').trim();
-  return { type:'spend', date:today, amount, category:rule.cat, icon:rule.icon, color:rule.color, name, receipt:false, memo:raw };
+  const r=classify(raw);
+  let name=raw.replace(/[\d,，]+万[\d,，]*千?|[\d,，]+千|[\d,，]{4,}|[\d,，]+/g,'').trim();
+  name=name.replace(/に|から|で|を|の|円|¥|￥/g,'').trim();
+  const cs=CS[r.cat]||CS['不明'];
+  return {type:'spend',date:today,amount,category:r.cat,catBg:cs.bg,catText:cs.text,catI:cs.i,name,receipt:false,memo:raw};
 }
 
-// ===== HELPERS =====
-function todayStr() { return new Date().toISOString().slice(0,10); }
-function fmtDate(s) { const d = new Date(s+'T00:00:00'); return `${d.getMonth()+1}/${d.getDate()}`; }
-function fmtAmt(n)  { return '¥' + Number(n).toLocaleString('ja-JP'); }
-function fmtMonth(ym) { return ym.replace('-','年') + '月'; }
-function catInfo(cat) { return RULES.find(r=>r.cat===cat) || { icon:'📝', color:'#f0f2f5' }; }
-function accountName(id) { return DB.getAccounts().find(a=>a.id===id)?.name || id; }
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+function fmtDate(s){ const d=new Date(s+'T00:00:00'); return `${d.getMonth()+1}/${d.getDate()}`; }
+function fmtAmt(n){ return '¥'+Number(n).toLocaleString('ja-JP'); }
+function fmtMonth(ym){ return ym.replace('-','年')+'月'; }
+function catS(cat){ return CS[cat]||{bg:'#F5F5F5',text:'#757575',i:'?'}; }
+function accName(id){ return DB.getAccounts().find(a=>a.id===id)?.name||id; }
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2400);
 }
-function refreshAll() {
+function refreshAll(){
   renderBalances(); renderToday();
-  if (document.getElementById('screen-list').classList.contains('active')) renderList();
-  if (document.getElementById('screen-summary').classList.contains('active')) renderSummary();
-  if (document.getElementById('screen-settings').classList.contains('active')) renderSettings();
+  if(document.getElementById('screen-list').classList.contains('active')) renderList();
+  if(document.getElementById('screen-summary').classList.contains('active')) renderSummary();
+  if(document.getElementById('screen-funds').classList.contains('active')) renderFunds();
+  if(document.getElementById('screen-settings').classList.contains('active')) renderSettings();
 }
 
-// ===== NAV =====
-function showScreen(name, btn) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('screen-' + name).classList.add('active');
-  if (btn) btn.classList.add('active');
-  if (name === 'home')     renderBalances(), renderToday();
-  if (name === 'list')     renderList();
-  if (name === 'summary')  renderSummary();
-  if (name === 'settings') renderSettings();
+function showScreen(name,btn){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(name==='voice')    renderToday();
+  if(name==='list')     renderList();
+  if(name==='summary')  renderSummary();
+  if(name==='funds')    renderFunds();
+  if(name==='settings') renderSettings();
 }
 
-// ===== BALANCES =====
-function renderBalances() {
-  const cash = calcCashBalance();
-  const total = calcTotalFunds();
-  document.getElementById('hdr-balance').textContent = fmtAmt(cash);
-  document.getElementById('total-funds').textContent = fmtAmt(total);
-  document.getElementById('b-cash').textContent = fmtAmt(cash);
-  document.getElementById('b-cash').className = 'bal-val' + (cash < 0 ? ' neg' : '');
-  ['hokkaido','asahikawa','sbi','paypay'].forEach(id => {
-    const b = calcAccountBalance(id);
-    const el = document.getElementById('b-' + id);
-    if (el) { el.textContent = fmtAmt(b); el.className = 'bal-val' + (b < 0 ? ' neg' : ''); }
+function renderBalances(){
+  document.getElementById('hdr-balance').textContent=fmtAmt(calcCash());
+}
+function renderFunds(){
+  const cash=calcCash(); const total=calcTotal();
+  document.getElementById('funds-total').textContent=fmtAmt(total);
+  const ce=document.getElementById('funds-cash');
+  ce.textContent=fmtAmt(cash); ce.className='ac-val'+(cash<0?' neg':'');
+  ['hokkaido','asahikawa','sbi','paypay'].forEach(id=>{
+    const b=calcAccBal(id); const el=document.getElementById('funds-'+id);
+    if(el){el.textContent=fmtAmt(b); el.className='ac-val'+(b<0?' neg':'');}
   });
 }
 
-function showAccountDetail(accountId) {
-  const acc = DB.getAccounts().find(a => a.id === accountId);
-  if (!acc) return;
-  const bal = calcAccountBalance(accountId);
-  const draws = DB.getWithdraws().filter(w => resolveAccountId(w) === accountId).slice(0,5);
-  const deps  = DB.getDeposits().filter(d => resolveAccountId(d) === accountId).slice(0,5);
-  const transOut = DB.getTransfers().filter(t => t.fromId === accountId).slice(0,3);
-  const transIn  = DB.getTransfers().filter(t => t.toId   === accountId).slice(0,3);
-
-  const txRows = r => r.length ? r.map(x =>
-    `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--gray-2);font-size:13px">
-      <span style="color:var(--text-light)">${fmtDate(x.date)} ${x.memo||x.name||''}</span>
-      <span style="font-weight:700;color:var(--navy)">${fmtAmt(x.amount)}</span>
-    </div>`).join('') : '<p style="color:var(--gray-3);font-size:13px;padding:8px 0">記録なし</p>';
-
-  openModal(acc.name, `
-    <div style="text-align:center;background:var(--gray-1);border-radius:10px;padding:14px;margin-bottom:16px">
-      <div style="font-size:12px;color:var(--gray-4);margin-bottom:4px">現在残高</div>
-      <div style="font-size:28px;font-weight:700;color:${bal<0?'var(--red)':'var(--navy)'}">${fmtAmt(bal)}</div>
+function showAccDetail(id){
+  const acc=DB.getAccounts().find(a=>a.id===id); if(!acc) return;
+  const bal=calcAccBal(id);
+  const draws=DB.getWithdraws().filter(w=>resolveAccountId(w)===id).slice(0,5);
+  const deps=DB.getDeposits().filter(d=>resolveAccountId(d)===id).slice(0,5);
+  const rows=r=>r.length?r.map(x=>`<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--g2);font-size:13px"><span style="color:var(--sub)">${fmtDate(x.date)} ${x.memo||x.name||''}</span><span style="font-weight:700;color:var(--navy)">${fmtAmt(x.amount)}</span></div>`).join(''):'<p style="color:var(--g3);font-size:13px;padding:8px 0">記録なし</p>';
+  openModal(acc.name,`
+    <div style="text-align:center;background:var(--g1);border-radius:12px;padding:16px;margin-bottom:16px">
+      <div style="font-size:11px;color:var(--g4);font-weight:700;letter-spacing:.5px;margin-bottom:6px">現在残高</div>
+      <div style="font-size:30px;font-weight:700;color:${bal<0?'var(--red)':'var(--navy)'}">${fmtAmt(bal)}</div>
     </div>
-    <div style="font-size:13px;font-weight:700;color:var(--text-light);margin-bottom:6px">最近の引き出し</div>
-    ${txRows(draws)}
-    <div style="font-size:13px;font-weight:700;color:var(--text-light);margin:12px 0 6px">最近の入金</div>
-    ${txRows(deps)}
-    <button class="btn-secondary" style="margin-top:12px" onclick="openAccountEdit('${accountId}');closeModal()">残高を編集する</button>
+    <div style="font-size:12px;font-weight:700;color:var(--sub);margin-bottom:6px">最近の引き出し</div>${rows(draws)}
+    <div style="font-size:12px;font-weight:700;color:var(--sub);margin:14px 0 6px">最近の入金</div>${rows(deps)}
+    <button class="bs" style="margin-top:12px" onclick="openAccEdit('${id}');closeModal()">残高を編集する</button>
   `);
 }
 
-// ===== HOME / TODAY =====
-let parsedData = null;
+let parsedData=null;
 
-function quickInput(name, icon, cat) {
-  const rule = catInfo(cat);
-  openSpendModal({ name, category:cat, icon:rule.icon||icon, color:rule.color });
-}
-function openWithdraw() { openWithdrawModal({}); }
-function openDeposit()  { openDepositModal({}); }
-function openTransfer() { openTransferModal({}); }
+function quickInput(name,cat){ openSpendModal({name,category:cat}); }
+function openWithdraw(){ openWithdrawModal({}); }
+function openDeposit(){ openDepositModal({}); }
+function openTransfer(){ openTransferModal({}); }
 
-function parseInput() {
-  const text = document.getElementById('voice-input').value.trim();
-  if (!text) { toast('テキストを入力してください'); return; }
-  parsedData = parseText(text);
-  const p = document.getElementById('parsed-preview');
-  p.style.display = 'block';
-  const typeLabels = { spend:'現金使用', withdraw:'現金引き出し', deposit:'口座へ入金', transfer:'口座間移動' };
-  document.getElementById('p-type').textContent = typeLabels[parsedData.type] || parsedData.type;
-  document.getElementById('p-date').textContent = parsedData.date;
-  document.getElementById('p-amount').textContent = parsedData.amount ? fmtAmt(parsedData.amount) : '（未検出）';
-  if (parsedData.type === 'spend') {
-    document.getElementById('p-cat').textContent = parsedData.category;
-    document.getElementById('p-name').textContent = parsedData.name || '—';
-  } else if (parsedData.type === 'withdraw') {
-    document.getElementById('p-cat').textContent = parsedData.bank || '（口座未検出）';
-    document.getElementById('p-name').textContent = '—';
-  } else if (parsedData.type === 'deposit') {
-    document.getElementById('p-cat').textContent = parsedData.bankName || '（口座未検出）';
-    document.getElementById('p-name').textContent = '—';
-  } else if (parsedData.type === 'transfer') {
-    document.getElementById('p-cat').textContent = parsedData.fromName + ' → ' + parsedData.toName;
-    document.getElementById('p-name').textContent = '—';
+function parseInput(){
+  const text=document.getElementById('voice-input').value.trim();
+  if(!text){toast('テキストを入力してください');return;}
+  parsedData=parseText(text);
+  const pp=document.getElementById('pp'); pp.style.display='block';
+  const tl={spend:'現金使用',withdraw:'現金引き出し',deposit:'口座へ入金',transfer:'口座間移動'};
+  document.getElementById('p-type').textContent=tl[parsedData.type]||parsedData.type;
+  document.getElementById('p-date').textContent=parsedData.date;
+  document.getElementById('p-amount').textContent=parsedData.amount?fmtAmt(parsedData.amount):'（未検出）';
+  if(parsedData.type==='spend'){
+    document.getElementById('p-cat').textContent=parsedData.category;
+    document.getElementById('p-name').textContent=parsedData.name||'—';
+  } else if(parsedData.type==='withdraw'){
+    document.getElementById('p-cat').textContent=parsedData.bank||'（口座未検出）';
+    document.getElementById('p-name').textContent='—';
+  } else if(parsedData.type==='deposit'){
+    document.getElementById('p-cat').textContent=parsedData.bankName||'（口座未検出）';
+    document.getElementById('p-name').textContent='—';
+  } else if(parsedData.type==='transfer'){
+    document.getElementById('p-cat').textContent=(parsedData.fromName||'')+' → '+(parsedData.toName||'');
+    document.getElementById('p-name').textContent='—';
   }
 }
 
-function confirmParsed() {
-  if (!parsedData) return;
-  if (!parsedData.amount) {
-    toast('金額が検出できませんでした。手動で入力してください');
-    const fns = { spend:openSpendModal, withdraw:openWithdrawModal, deposit:openDepositModal, transfer:openTransferModal };
-    (fns[parsedData.type] || openSpendModal)(parsedData);
-    return;
+function confirmParsed(){
+  if(!parsedData) return;
+  if(!parsedData.amount){
+    toast('金額が検出できませんでした\n手動で入力してください');
+    const fns={spend:openSpendModal,withdraw:openWithdrawModal,deposit:openDepositModal,transfer:openTransferModal};
+    (fns[parsedData.type]||openSpendModal)(parsedData); return;
   }
-  if (parsedData.type === 'withdraw') { DB.addWithdraw(parsedData); toast('🏦 引き出しを記録しました'); }
-  else if (parsedData.type === 'deposit')  { DB.addDeposit(parsedData);  toast('📥 入金を記録しました'); }
-  else if (parsedData.type === 'transfer') { DB.addTransfer(parsedData); toast('↔️ 資金移動を記録しました'); }
-  else { DB.addSpend(parsedData); toast('✓ 記録しました'); }
-  document.getElementById('voice-input').value = '';
-  document.getElementById('parsed-preview').style.display = 'none';
-  parsedData = null;
-  refreshAll();
+  if(parsedData.type==='withdraw'){DB.addWithdraw(parsedData);toast('引き出しを記録しました');}
+  else if(parsedData.type==='deposit'){DB.addDeposit(parsedData);toast('入金を記録しました');}
+  else if(parsedData.type==='transfer'){DB.addTransfer(parsedData);toast('資金移動を記録しました');}
+  else{DB.addSpend(parsedData);toast('記録しました');}
+  document.getElementById('voice-input').value='';
+  document.getElementById('pp').style.display='none';
+  parsedData=null; refreshAll();
 }
 
-function renderToday() {
-  const today = todayStr();
-  const spends    = DB.getSpends().filter(x => x.date === today);
-  const draws     = DB.getWithdraws().filter(x => x.date === today);
-  const deposits  = DB.getDeposits().filter(x => x.date === today);
-  const transfers = DB.getTransfers().filter(x => x.date === today);
-  const all = [
-    ...spends.map(x => ({...x, _t:'spend'})),
-    ...draws.map(x => ({...x, _t:'withdraw'})),
-    ...deposits.map(x => ({...x, _t:'deposit'})),
-    ...transfers.map(x => ({...x, _t:'transfer'})),
-  ].sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||''));
-
-  const el = document.getElementById('today-list');
-  document.getElementById('today-count').textContent = all.length ? `${all.length}件` : '';
-  if (!all.length) {
-    el.innerHTML = '<div class="empty"><div class="emoji">📋</div><p>本日の記録はまだありません</p></div>';
-    return;
-  }
-  el.innerHTML = all.map(x => txHtml(x, x._t)).join('');
+function renderToday(){
+  const today=todayStr();
+  const all=[
+    ...DB.getSpends().filter(x=>x.date===today).map(x=>({...x,_t:'spend'})),
+    ...DB.getWithdraws().filter(x=>x.date===today).map(x=>({...x,_t:'withdraw'})),
+    ...DB.getDeposits().filter(x=>x.date===today).map(x=>({...x,_t:'deposit'})),
+    ...DB.getTransfers().filter(x=>x.date===today).map(x=>({...x,_t:'transfer'})),
+  ].sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
+  const el=document.getElementById('today-list');
+  document.getElementById('today-count').textContent=all.length?`${all.length}件`:'';
+  el.innerHTML=all.length?all.map(x=>txHtml(x,x._t)).join(''):`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg><p>本日の記録はまだありません</p></div>`;
 }
 
-function txHtml(x, type) {
-  if (type === 'withdraw') {
-    const bankName = x.bank || (x.accountId ? accountName(x.accountId) : '銀行');
-    return `<div class="tx-item" onclick="editWithdraw('${x.id}')">
-      <div class="tx-icon" style="background:#e3f2fd">🏦</div>
-      <div class="tx-body">
-        <div class="tx-top"><span class="tx-name">${bankName} 引き出し</span><span class="tx-amount in">${fmtAmt(x.amount)}</span></div>
-        <div class="tx-bottom"><span class="badge badge-blue">引き出し</span><span class="tx-date">${fmtDate(x.date)}</span></div>
-      </div></div>`;
+function txHtml(x,type){
+  if(type==='withdraw'){
+    const bn=x.bank||(x.accountId?accName(x.accountId):'銀行');
+    return `<div class="txi" onclick="editWithdraw('${x.id}')"><div class="txbadge" style="background:#DBEAFE;color:#1D4ED8">引出</div><div class="txbody"><div class="txtop"><span class="txname">${bn} 引き出し</span><span class="txamt in">${fmtAmt(x.amount)}</span></div><div class="txbot"><span class="txtag">現金引き出し</span><span class="txdate">${fmtDate(x.date)}</span></div></div></div>`;
   }
-  if (type === 'deposit') {
-    const bName = x.bankName || (x.accountId ? accountName(x.accountId) : '口座');
-    return `<div class="tx-item" onclick="editDeposit('${x.id}')">
-      <div class="tx-icon" style="background:#e8f5e9">📥</div>
-      <div class="tx-body">
-        <div class="tx-top"><span class="tx-name">${bName} 入金</span><span class="tx-amount in">${fmtAmt(x.amount)}</span></div>
-        <div class="tx-bottom"><span class="badge badge-green">入金</span><span class="tx-date">${fmtDate(x.date)}</span></div>
-      </div></div>`;
+  if(type==='deposit'){
+    const bn=x.bankName||(x.accountId?accName(x.accountId):'口座');
+    return `<div class="txi" onclick="editDeposit('${x.id}')"><div class="txbadge" style="background:#D1FAE5;color:#065F46">入金</div><div class="txbody"><div class="txtop"><span class="txname">${bn} 入金</span><span class="txamt in">${fmtAmt(x.amount)}</span></div><div class="txbot"><span class="txtag">口座入金</span><span class="txdate">${fmtDate(x.date)}</span></div></div></div>`;
   }
-  if (type === 'transfer') {
-    return `<div class="tx-item" onclick="editTransfer('${x.id}')">
-      <div class="tx-icon" style="background:#e8eaf6">↔️</div>
-      <div class="tx-body">
-        <div class="tx-top"><span class="tx-name">${x.fromName||''}→${x.toName||''}</span><span class="tx-amount move">${fmtAmt(x.amount)}</span></div>
-        <div class="tx-bottom"><span class="badge badge-blue">口座移動</span><span class="tx-date">${fmtDate(x.date)}</span></div>
-      </div></div>`;
+  if(type==='transfer'){
+    return `<div class="txi" onclick="editTransfer('${x.id}')"><div class="txbadge" style="background:#EDE9FE;color:#5B21B6">移動</div><div class="txbody"><div class="txtop"><span class="txname">${x.fromName||''}→${x.toName||''}</span><span class="txamt mv">${fmtAmt(x.amount)}</span></div><div class="txbot"><span class="txtag">口座移動</span><span class="txdate">${fmtDate(x.date)}</span></div></div></div>`;
   }
-  // spend
-  const ci = catInfo(x.category);
-  return `<div class="tx-item" onclick="editSpend('${x.id}')">
-    <div class="tx-icon" style="background:${x.color||ci.color}">${x.icon||ci.icon}</div>
-    <div class="tx-body">
-      <div class="tx-top"><span class="tx-name">${x.name||x.category}</span><span class="tx-amount out">-${fmtAmt(x.amount)}</span></div>
-      <div class="tx-bottom">
-        <span class="tx-cat">${x.category}</span>
-        <span class="tx-date">${fmtDate(x.date)}${x.receipt?'<span class="tx-receipt"> 🧾</span>':''}</span>
-      </div>
-    </div></div>`;
+  const cs=catS(x.category);
+  const bg=x.catBg||cs.bg; const col=x.catText||cs.text; const ini=x.catI||cs.i;
+  return `<div class="txi" onclick="editSpend('${x.id}')"><div class="txbadge" style="background:${bg};color:${col}">${ini}</div><div class="txbody"><div class="txtop"><span class="txname">${x.name||x.category}</span><span class="txamt out">-${fmtAmt(x.amount)}</span></div><div class="txbot"><span class="txtag"><span class="cdot" style="background:${col}"></span>${x.category}</span><span class="txdate">${fmtDate(x.date)}${x.receipt?' 領収書あり':''}</span></div></div></div>`;
 }
 
-// ===== VOICE =====
-let recognition = null;
-function startVoice() {
-  // HTTPS check (Web Speech API requires secure context)
-  if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
-    toast('音声入力にはHTTPS接続が必要です');
-    return;
+let recognition=null;
+function startVoice(){
+  if(location.protocol!=='https:'&&location.hostname!=='localhost'&&location.hostname!=='127.0.0.1'){
+    toast('音声入力にはHTTPS接続が必要です'); return;
   }
-
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) {
-    toast('このブラウザは音声入力非対応です（Safari推奨）');
-    return;
-  }
-
-  // Stop if already running
-  if (recognition) { recognition.stop(); return; }
-
-  recognition = new SR();
-  recognition.lang = 'ja-JP';
-  recognition.continuous = false;
-  recognition.interimResults = false;
-
-  const btn = document.getElementById('voice-btn');
-  btn.classList.add('listening');
-
-  try {
-    recognition.start();
-  } catch(e) {
-    btn.classList.remove('listening');
-    recognition = null;
-    toast('音声入力を開始できませんでした');
-    return;
-  }
-
-  recognition.onresult = e => {
-    const transcript = e.results[0][0].transcript;
-    document.getElementById('voice-input').value = transcript;
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){toast('このブラウザは音声入力非対応です\nSafari推奨');return;}
+  if(recognition){recognition.stop();return;}
+  recognition=new SR();
+  recognition.lang='ja-JP'; recognition.continuous=false; recognition.interimResults=false;
+  const bigBtn=document.getElementById('voice-mic-btn');
+  if(bigBtn) bigBtn.classList.add('listening');
+  try{recognition.start();}catch(e){if(bigBtn)bigBtn.classList.remove('listening');recognition=null;toast('音声入力を開始できませんでした');return;}
+  recognition.onresult=e=>{
+    document.getElementById('voice-input').value=e.results[0][0].transcript;
     parseInput();
   };
-
-  recognition.onend = () => {
-    btn.classList.remove('listening');
-    recognition = null;
-  };
-
-  recognition.onerror = e => {
-    btn.classList.remove('listening');
-    recognition = null;
-    const msgs = {
-      'not-allowed':         'マイクの使用が許可されていません\nブラウザの設定でマイクを許可してください',
-      'permission-denied':   'マイクの使用が拒否されています\n設定からマイクを許可してください',
-      'no-speech':           '音声が検出されませんでした\nもう一度話しかけてください',
-      'audio-capture':       'マイクが見つかりません\nマイクが接続されているか確認してください',
-      'network':             'ネットワークエラー\nHTTPS環境またはインターネット接続を確認してください',
-      'aborted':             '音声入力がキャンセルされました',
-      'language-not-supported': '日本語音声認識が利用できません',
-      'service-not-allowed': '音声認識サービスが使用できません',
-    };
-    const msg = msgs[e.error] || `音声認識エラー（${e.error}）`;
-    toast(msg);
-    console.error('SpeechRecognition error:', e.error, e);
+  recognition.onend=()=>{if(bigBtn)bigBtn.classList.remove('listening');recognition=null;};
+  recognition.onerror=e=>{
+    if(bigBtn)bigBtn.classList.remove('listening'); recognition=null;
+    const msgs={'not-allowed':'マイクが許可されていません\n設定からマイクを許可してください','permission-denied':'マイクが拒否されています\n設定から許可してください','no-speech':'音声が検出されませんでした\nもう一度話しかけてください','audio-capture':'マイクが見つかりません','network':'ネットワークエラー\nHTTPS接続を確認してください','aborted':'音声入力がキャンセルされました','language-not-supported':'日本語音声認識が利用できません','service-not-allowed':'音声認識サービスが使用できません'};
+    toast(msgs[e.error]||`音声認識エラー（${e.error}）`);
   };
 }
 
-// ===== MODALS =====
-function openModal(title, html) {
-  document.getElementById('modal-title').textContent = title;
-  document.getElementById('modal-content').innerHTML = html;
-  document.getElementById('modal-overlay').classList.add('open');
+function openModal(title,html){
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-content').innerHTML=html;
+  document.getElementById('mo').classList.add('open');
 }
-function closeModal(e) {
-  if (!e || e.target === document.getElementById('modal-overlay'))
-    document.getElementById('modal-overlay').classList.remove('open');
+function closeModal(e){
+  if(!e||e.target===document.getElementById('mo')) document.getElementById('mo').classList.remove('open');
 }
-
-function bankOptions(selectedId) {
-  return DB.getAccounts().map(a =>
-    `<option value="${a.id}"${a.id===selectedId?' selected':''}>${a.name}</option>`
-  ).join('');
-}
-function bankOptionsFrom(selectedId, excludeId) {
-  return DB.getAccounts().filter(a => a.id !== excludeId).map(a =>
-    `<option value="${a.id}"${a.id===selectedId?' selected':''}>${a.name}</option>`
-  ).join('');
+function bankOpts(sel){
+  return DB.getAccounts().map(a=>`<option value="${a.id}"${a.id===sel?' selected':''}>${a.name}</option>`).join('');
 }
 
-// ===== SPEND MODAL =====
-function openSpendModal(pre={}) {
-  openModal('現金使用の記録', `
-    <div class="form-group"><label class="form-label">日付</label>
-      <input class="form-input" type="date" id="m-date" value="${pre.date||todayStr()}"></div>
-    <div class="form-group"><label class="form-label">金額（円）</label>
-      <input class="form-input" type="number" id="m-amount" placeholder="例: 18500" value="${pre.amount||''}" inputmode="numeric"></div>
-    <div class="form-group"><label class="form-label">分類</label>
-      <select class="form-input form-select" id="m-cat">
-        ${CATEGORIES.map(c => `<option${c===pre.category?' selected':''}>${c}</option>`).join('')}
-      </select></div>
-    <div class="form-group"><label class="form-label">相手・店名</label>
-      <input class="form-input" type="text" id="m-name" placeholder="例: コメリ、鈴木さん" value="${pre.name||''}"></div>
-    <div class="form-group"><label class="form-label">領収書</label>
-      <div class="radio-group">
-        <div class="radio-opt${pre.receipt?' selected':''}" id="r-yes" onclick="selReceipt(true)">あり ✓</div>
-        <div class="radio-opt${!pre.receipt?' selected':''}" id="r-no" onclick="selReceipt(false)">なし</div>
-      </div></div>
-    <div class="form-group"><label class="form-label">メモ</label>
-      <input class="form-input" type="text" id="m-memo" placeholder="任意" value="${pre.memo||''}"></div>
-    <button class="btn-primary" onclick="saveSpend(${pre.id?`'${pre.id}'`:'null'})">保存する</button>
-    ${pre.id ? `<button class="btn-danger" onclick="deleteSpend('${pre.id}')">削除する</button>` : ''}
+function openSpendModal(pre={}){
+  openModal('現金使用の記録',`
+    <div class="fg"><label class="fl">日付</label><input class="fi" type="date" id="m-date" value="${pre.date||todayStr()}"></div>
+    <div class="fg"><label class="fl">金額（円）</label><input class="fi" type="number" id="m-amount" placeholder="例: 18500" value="${pre.amount||''}" inputmode="numeric"></div>
+    <div class="fg"><label class="fl">分類</label><select class="fi fsel" id="m-cat">${CATEGORIES.map(c=>`<option${c===pre.category?' selected':''}>${c}</option>`).join('')}</select></div>
+    <div class="fg"><label class="fl">相手・店名</label><input class="fi" type="text" id="m-name" placeholder="例: コメリ、鈴木さん" value="${pre.name||''}"></div>
+    <div class="fg"><label class="fl">領収書</label><div class="rgrp"><div class="ropt${pre.receipt?' selected':''}" id="r-yes" onclick="selRcpt(true)">あり</div><div class="ropt${!pre.receipt?' selected':''}" id="r-no" onclick="selRcpt(false)">なし</div></div></div>
+    <div class="fg"><label class="fl">メモ</label><input class="fi" type="text" id="m-memo" placeholder="任意" value="${pre.memo||''}"></div>
+    <button class="bp" onclick="saveSpend(${pre.id?`'${pre.id}'`:'null'})">保存する</button>
+    ${pre.id?`<button class="bd" onclick="deleteSpend('${pre.id}')">削除する</button>`:''}
   `);
-  window._receipt = !!pre.receipt;
+  window._rcpt=!!pre.receipt;
 }
-function selReceipt(v) {
-  window._receipt = v;
-  document.getElementById('r-yes').classList.toggle('selected', v);
-  document.getElementById('r-no').classList.toggle('selected', !v);
-}
-function saveSpend(id) {
-  const date = document.getElementById('m-date').value;
-  const amount = parseInt(document.getElementById('m-amount').value);
-  const category = document.getElementById('m-cat').value;
-  const name = document.getElementById('m-name').value.trim();
-  const receipt = window._receipt || false;
-  const memo = document.getElementById('m-memo').value.trim();
-  if (!date || !amount) { toast('日付と金額は必須です'); return; }
-  const ci = catInfo(category);
-  const item = { date, amount, category, name, receipt, memo, icon:ci.icon, color:ci.color };
-  if (id) { DB.updateSpend(id, item); toast('✓ 更新しました'); }
-  else     { DB.addSpend(item);        toast('✓ 記録しました'); }
+function selRcpt(v){window._rcpt=v;document.getElementById('r-yes').classList.toggle('selected',v);document.getElementById('r-no').classList.toggle('selected',!v);}
+function saveSpend(id){
+  const date=document.getElementById('m-date').value;
+  const amount=parseInt(document.getElementById('m-amount').value);
+  const category=document.getElementById('m-cat').value;
+  const name=document.getElementById('m-name').value.trim();
+  const receipt=window._rcpt||false;
+  const memo=document.getElementById('m-memo').value.trim();
+  if(!date||!amount){toast('日付と金額は必須です');return;}
+  const cs=catS(category);
+  const item={date,amount,category,name,receipt,memo,catBg:cs.bg,catText:cs.text,catI:cs.i};
+  if(id){DB.updateSpend(id,item);toast('更新しました');}else{DB.addSpend(item);toast('記録しました');}
   closeModal(); refreshAll();
 }
-function editSpend(id)   { const x = DB.getSpends().find(x=>x.id===id); if(x) openSpendModal(x); }
-function deleteSpend(id) {
-  if (!confirm('削除しますか？')) return;
-  DB.deleteSpend(id); closeModal(); toast('削除しました'); refreshAll();
-}
+function editSpend(id){const x=DB.getSpends().find(x=>x.id===id);if(x)openSpendModal(x);}
+function deleteSpend(id){if(!confirm('削除しますか？'))return;DB.deleteSpend(id);closeModal();toast('削除しました');refreshAll();}
 
-// ===== WITHDRAW MODAL =====
-function openWithdrawModal(pre={}) {
-  openModal('現金引き出し', `
-    <div class="form-group"><label class="form-label">日付</label>
-      <input class="form-input" type="date" id="w-date" value="${pre.date||todayStr()}"></div>
-    <div class="form-group"><label class="form-label">口座</label>
-      <select class="form-input form-select" id="w-account">${bankOptions(pre.accountId||'')}</select></div>
-    <div class="form-group"><label class="form-label">金額（円）</label>
-      <input class="form-input" type="number" id="w-amount" placeholder="例: 100000" value="${pre.amount||''}" inputmode="numeric"></div>
-    <div class="form-group"><label class="form-label">メモ</label>
-      <input class="form-input" type="text" id="w-memo" placeholder="任意" value="${pre.memo||''}"></div>
-    <button class="btn-primary" onclick="saveWithdraw(${pre.id?`'${pre.id}'`:'null'})">保存する</button>
-    ${pre.id ? `<button class="btn-danger" onclick="deleteWithdraw('${pre.id}')">削除する</button>` : ''}
+function openWithdrawModal(pre={}){
+  openModal('現金引き出し',`
+    <div class="fg"><label class="fl">日付</label><input class="fi" type="date" id="w-date" value="${pre.date||todayStr()}"></div>
+    <div class="fg"><label class="fl">口座</label><select class="fi fsel" id="w-account">${bankOpts(pre.accountId||'')}</select></div>
+    <div class="fg"><label class="fl">金額（円）</label><input class="fi" type="number" id="w-amount" placeholder="例: 100000" value="${pre.amount||''}" inputmode="numeric"></div>
+    <div class="fg"><label class="fl">メモ</label><input class="fi" type="text" id="w-memo" placeholder="任意" value="${pre.memo||''}"></div>
+    <button class="bp" onclick="saveWithdraw(${pre.id?`'${pre.id}'`:'null'})">保存する</button>
+    ${pre.id?`<button class="bd" onclick="deleteWithdraw('${pre.id}')">削除する</button>`:''}
   `);
 }
-function saveWithdraw(id) {
-  const date = document.getElementById('w-date').value;
-  const accountId = document.getElementById('w-account').value;
-  const amount = parseInt(document.getElementById('w-amount').value);
-  const memo = document.getElementById('w-memo').value.trim();
-  if (!date || !amount) { toast('日付と金額は必須です'); return; }
-  const acc = DB.getAccounts().find(a => a.id === accountId);
-  const item = { date, accountId, bank: acc?.name||'', amount, memo };
-  if (id) { DB.updateWithdraw(id, item); toast('✓ 更新しました'); }
-  else     { DB.addWithdraw(item);        toast('🏦 引き出しを記録しました'); }
+function saveWithdraw(id){
+  const date=document.getElementById('w-date').value;
+  const accountId=document.getElementById('w-account').value;
+  const amount=parseInt(document.getElementById('w-amount').value);
+  const memo=document.getElementById('w-memo').value.trim();
+  if(!date||!amount){toast('日付と金額は必須です');return;}
+  const acc=DB.getAccounts().find(a=>a.id===accountId);
+  const item={date,accountId,bank:acc?.name||'',amount,memo};
+  if(id){DB.updateWithdraw(id,item);toast('更新しました');}else{DB.addWithdraw(item);toast('引き出しを記録しました');}
   closeModal(); refreshAll();
 }
-function editWithdraw(id)   { const x = DB.getWithdraws().find(x=>x.id===id); if(x) openWithdrawModal(x); }
-function deleteWithdraw(id) {
-  if (!confirm('削除しますか？')) return;
-  DB.deleteWithdraw(id); closeModal(); toast('削除しました'); refreshAll();
-}
+function editWithdraw(id){const x=DB.getWithdraws().find(x=>x.id===id);if(x)openWithdrawModal(x);}
+function deleteWithdraw(id){if(!confirm('削除しますか？'))return;DB.deleteWithdraw(id);closeModal();toast('削除しました');refreshAll();}
 
-// ===== DEPOSIT MODAL =====
-function openDepositModal(pre={}) {
-  openModal('口座へ入金', `
-    <p style="font-size:13px;color:var(--gray-4);margin-bottom:14px">売上入金・振込受取などを記録します</p>
-    <div class="form-group"><label class="form-label">日付</label>
-      <input class="form-input" type="date" id="d-date" value="${pre.date||todayStr()}"></div>
-    <div class="form-group"><label class="form-label">入金先口座</label>
-      <select class="form-input form-select" id="d-account">${bankOptions(pre.accountId||'')}</select></div>
-    <div class="form-group"><label class="form-label">金額（円）</label>
-      <input class="form-input" type="number" id="d-amount" placeholder="例: 50000" value="${pre.amount||''}" inputmode="numeric"></div>
-    <div class="form-group"><label class="form-label">メモ</label>
-      <input class="form-input" type="text" id="d-memo" placeholder="例: 〇〇様から売上" value="${pre.memo||''}"></div>
-    <button class="btn-primary" onclick="saveDeposit(${pre.id?`'${pre.id}'`:'null'})">保存する</button>
-    ${pre.id ? `<button class="btn-danger" onclick="deleteDeposit('${pre.id}')">削除する</button>` : ''}
+function openDepositModal(pre={}){
+  openModal('口座へ入金',`
+    <p style="font-size:13px;color:var(--g4);margin-bottom:14px">売上入金・振込受取などを記録します</p>
+    <div class="fg"><label class="fl">日付</label><input class="fi" type="date" id="d-date" value="${pre.date||todayStr()}"></div>
+    <div class="fg"><label class="fl">入金先口座</label><select class="fi fsel" id="d-account">${bankOpts(pre.accountId||'')}</select></div>
+    <div class="fg"><label class="fl">金額（円）</label><input class="fi" type="number" id="d-amount" placeholder="例: 50000" value="${pre.amount||''}" inputmode="numeric"></div>
+    <div class="fg"><label class="fl">メモ</label><input class="fi" type="text" id="d-memo" placeholder="例: 〇〇様から売上" value="${pre.memo||''}"></div>
+    <button class="bp" onclick="saveDeposit(${pre.id?`'${pre.id}'`:'null'})">保存する</button>
+    ${pre.id?`<button class="bd" onclick="deleteDeposit('${pre.id}')">削除する</button>`:''}
   `);
 }
-function saveDeposit(id) {
-  const date = document.getElementById('d-date').value;
-  const accountId = document.getElementById('d-account').value;
-  const amount = parseInt(document.getElementById('d-amount').value);
-  const memo = document.getElementById('d-memo').value.trim();
-  if (!date || !amount) { toast('日付と金額は必須です'); return; }
-  const acc = DB.getAccounts().find(a => a.id === accountId);
-  const item = { date, accountId, bankName: acc?.name||'', amount, memo };
-  if (id) { DB.updateDeposit(id, item); toast('✓ 更新しました'); }
-  else     { DB.addDeposit(item);        toast('📥 入金を記録しました'); }
+function saveDeposit(id){
+  const date=document.getElementById('d-date').value;
+  const accountId=document.getElementById('d-account').value;
+  const amount=parseInt(document.getElementById('d-amount').value);
+  const memo=document.getElementById('d-memo').value.trim();
+  if(!date||!amount){toast('日付と金額は必須です');return;}
+  const acc=DB.getAccounts().find(a=>a.id===accountId);
+  const item={date,accountId,bankName:acc?.name||'',amount,memo};
+  if(id){DB.updateDeposit(id,item);toast('更新しました');}else{DB.addDeposit(item);toast('入金を記録しました');}
   closeModal(); refreshAll();
 }
-function editDeposit(id)   { const x = DB.getDeposits().find(x=>x.id===id); if(x) openDepositModal(x); }
-function deleteDeposit(id) {
-  if (!confirm('削除しますか？')) return;
-  DB.deleteDeposit(id); closeModal(); toast('削除しました'); refreshAll();
-}
+function editDeposit(id){const x=DB.getDeposits().find(x=>x.id===id);if(x)openDepositModal(x);}
+function deleteDeposit(id){if(!confirm('削除しますか？'))return;DB.deleteDeposit(id);closeModal();toast('削除しました');refreshAll();}
 
-// ===== TRANSFER MODAL =====
-function openTransferModal(pre={}) {
-  const accs = DB.getAccounts();
-  const fromId = pre.fromId || accs[0]?.id;
-  const toId   = pre.toId   || accs[1]?.id;
-  openModal('口座間資金移動', `
-    <div class="form-group"><label class="form-label">日付</label>
-      <input class="form-input" type="date" id="tr-date" value="${pre.date||todayStr()}"></div>
-    <div class="form-group"><label class="form-label">移動元口座</label>
-      <select class="form-input form-select" id="tr-from">${bankOptions(fromId)}</select></div>
-    <div class="form-group"><label class="form-label">移動先口座</label>
-      <select class="form-input form-select" id="tr-to">${bankOptions(toId)}</select></div>
-    <div class="form-group"><label class="form-label">金額（円）</label>
-      <input class="form-input" type="number" id="tr-amount" placeholder="例: 50000" value="${pre.amount||''}" inputmode="numeric"></div>
-    <div class="form-group"><label class="form-label">メモ</label>
-      <input class="form-input" type="text" id="tr-memo" placeholder="任意" value="${pre.memo||''}"></div>
-    <button class="btn-primary" onclick="saveTransfer(${pre.id?`'${pre.id}'`:'null'})">保存する</button>
-    ${pre.id ? `<button class="btn-danger" onclick="deleteTransfer('${pre.id}')">削除する</button>` : ''}
+function openTransferModal(pre={}){
+  const accs=DB.getAccounts();
+  const fromId=pre.fromId||accs[0]?.id; const toId=pre.toId||accs[1]?.id;
+  openModal('口座間資金移動',`
+    <div class="fg"><label class="fl">日付</label><input class="fi" type="date" id="tr-date" value="${pre.date||todayStr()}"></div>
+    <div class="fg"><label class="fl">移動元口座</label><select class="fi fsel" id="tr-from">${bankOpts(fromId)}</select></div>
+    <div class="fg"><label class="fl">移動先口座</label><select class="fi fsel" id="tr-to">${bankOpts(toId)}</select></div>
+    <div class="fg"><label class="fl">金額（円）</label><input class="fi" type="number" id="tr-amount" placeholder="例: 50000" value="${pre.amount||''}" inputmode="numeric"></div>
+    <div class="fg"><label class="fl">メモ</label><input class="fi" type="text" id="tr-memo" placeholder="任意" value="${pre.memo||''}"></div>
+    <button class="bp" onclick="saveTransfer(${pre.id?`'${pre.id}'`:'null'})">保存する</button>
+    ${pre.id?`<button class="bd" onclick="deleteTransfer('${pre.id}')">削除する</button>`:''}
   `);
 }
-function saveTransfer(id) {
-  const date   = document.getElementById('tr-date').value;
-  const fromId = document.getElementById('tr-from').value;
-  const toId   = document.getElementById('tr-to').value;
-  const amount = parseInt(document.getElementById('tr-amount').value);
-  const memo   = document.getElementById('tr-memo').value.trim();
-  if (!date || !amount) { toast('日付と金額は必須です'); return; }
-  if (fromId === toId)   { toast('移動元と移動先が同じです'); return; }
-  const accs = DB.getAccounts();
-  const fromAcc = accs.find(a => a.id === fromId);
-  const toAcc   = accs.find(a => a.id === toId);
-  const item = { date, fromId, fromName:fromAcc?.name||fromId, toId, toName:toAcc?.name||toId, amount, memo };
-  if (id) { DB.updateTransfer(id, item); toast('✓ 更新しました'); }
-  else     { DB.addTransfer(item);        toast('↔️ 資金移動を記録しました'); }
+function saveTransfer(id){
+  const date=document.getElementById('tr-date').value;
+  const fromId=document.getElementById('tr-from').value;
+  const toId=document.getElementById('tr-to').value;
+  const amount=parseInt(document.getElementById('tr-amount').value);
+  const memo=document.getElementById('tr-memo').value.trim();
+  if(!date||!amount){toast('日付と金額は必須です');return;}
+  if(fromId===toId){toast('移動元と移動先が同じです');return;}
+  const accs=DB.getAccounts();
+  const fromAcc=accs.find(a=>a.id===fromId); const toAcc=accs.find(a=>a.id===toId);
+  const item={date,fromId,fromName:fromAcc?.name||fromId,toId,toName:toAcc?.name||toId,amount,memo};
+  if(id){DB.updateTransfer(id,item);toast('更新しました');}else{DB.addTransfer(item);toast('資金移動を記録しました');}
   closeModal(); refreshAll();
 }
-function editTransfer(id)   { const x = DB.getTransfers().find(x=>x.id===id); if(x) openTransferModal(x); }
-function deleteTransfer(id) {
-  if (!confirm('削除しますか？')) return;
-  DB.deleteTransfer(id); closeModal(); toast('削除しました'); refreshAll();
-}
+function editTransfer(id){const x=DB.getTransfers().find(x=>x.id===id);if(x)openTransferModal(x);}
+function deleteTransfer(id){if(!confirm('削除しますか？'))return;DB.deleteTransfer(id);closeModal();toast('削除しました');refreshAll();}
 
-// ===== LIST SCREEN =====
-let listTab = 'spend';
-let listFilter = 'all';
-
-function switchListTab(tab) {
-  listTab = tab; listFilter = 'all';
-  document.querySelectorAll('.tab').forEach((t,i) => {
-    t.classList.toggle('active', ['spend','withdraw','deposit','transfer'][i] === tab);
+let listTab='spend'; let listFilter='all';
+function switchListTab(tab){
+  listTab=tab; listFilter='all';
+  document.querySelectorAll('#list-tabs .tab').forEach((t,i)=>{
+    t.classList.toggle('active',['spend','withdraw','deposit','transfer'][i]===tab);
   });
   renderList();
 }
-
-function renderList() {
-  const fc = document.getElementById('cat-filters');
-  const lc = document.getElementById('list-content');
-
-  if (listTab === 'spend') {
-    const spends = DB.getSpends();
-    const cats = ['all', ...new Set(spends.map(x=>x.category))];
-    fc.innerHTML = cats.map(c => `<div class="filter-chip${c===listFilter?' active':''}" onclick="setFilter('${c}')">${c==='all'?'すべて':c}</div>`).join('');
-    const filtered = listFilter==='all' ? spends : spends.filter(x=>x.category===listFilter);
-    lc.innerHTML = filtered.length
-      ? filtered.map(x=>txHtml(x,'spend')).join('')
-      : '<div class="empty"><div class="emoji">📭</div><p>記録がありません</p></div>';
-  } else if (listTab === 'withdraw') {
-    fc.innerHTML = '';
-    const arr = DB.getWithdraws();
-    lc.innerHTML = arr.length
-      ? arr.map(x=>txHtml(x,'withdraw')).join('')
-      : '<div class="empty"><div class="emoji">🏦</div><p>引き出し記録がありません</p></div>';
-  } else if (listTab === 'deposit') {
-    fc.innerHTML = '';
-    const arr = DB.getDeposits();
-    lc.innerHTML = arr.length
-      ? arr.map(x=>txHtml(x,'deposit')).join('')
-      : '<div class="empty"><div class="emoji">📥</div><p>入金記録がありません</p></div>';
-  } else if (listTab === 'transfer') {
-    fc.innerHTML = '';
-    const arr = DB.getTransfers();
-    lc.innerHTML = arr.length
-      ? arr.map(x=>txHtml(x,'transfer')).join('')
-      : '<div class="empty"><div class="emoji">↔️</div><p>資金移動記録がありません</p></div>';
+function renderList(){
+  const fc=document.getElementById('cat-filters'); const lc=document.getElementById('list-content');
+  const emp=`<div class="empty"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg><p>記録がありません</p></div>`;
+  if(listTab==='spend'){
+    const sp=DB.getSpends();
+    const cats=['all',...new Set(sp.map(x=>x.category))];
+    fc.innerHTML=cats.map(c=>`<div class="fchip${c===listFilter?' active':''}" onclick="setFilter('${c}')">${c==='all'?'すべて':c}</div>`).join('');
+    const fi=listFilter==='all'?sp:sp.filter(x=>x.category===listFilter);
+    lc.innerHTML=fi.length?fi.map(x=>txHtml(x,'spend')).join(''):emp;
+  } else {
+    fc.innerHTML='';
+    const map={withdraw:DB.getWithdraws,deposit:DB.getDeposits,transfer:DB.getTransfers};
+    const arr=(map[listTab]||DB.getWithdraws).call(DB);
+    lc.innerHTML=arr.length?arr.map(x=>txHtml(x,listTab)).join(''):emp;
   }
 }
+function setFilter(cat){listFilter=cat;renderList();}
 
-function setFilter(cat) { listFilter = cat; renderList(); }
-
-// ===== SUMMARY SCREEN =====
-let summaryYM = todayStr().slice(0,7);
-
-function changeMonth(d) {
-  const [y,m] = summaryYM.split('-').map(Number);
-  const nd = new Date(y, m-1+d, 1);
-  summaryYM = `${nd.getFullYear()}-${String(nd.getMonth()+1).padStart(2,'0')}`;
+let summaryYM=todayStr().slice(0,7);
+function changeMonth(d){
+  const [y,m]=summaryYM.split('-').map(Number);
+  const nd=new Date(y,m-1+d,1);
+  summaryYM=`${nd.getFullYear()}-${String(nd.getMonth()+1).padStart(2,'0')}`;
   renderSummary();
 }
-
-function renderSummary() {
-  document.getElementById('month-label').textContent = fmtMonth(summaryYM);
-  const spends    = DB.getSpends().filter(x    => x.date.startsWith(summaryYM));
-  const draws     = DB.getWithdraws().filter(x => x.date.startsWith(summaryYM));
-  const deposits  = DB.getDeposits().filter(x  => x.date.startsWith(summaryYM));
-  const transfers = DB.getTransfers().filter(x => x.date.startsWith(summaryYM));
-
-  const totalDraw = draws.reduce((s,x)=>s+Number(x.amount),0);
-  const totalSpend = spends.reduce((s,x)=>s+Number(x.amount),0);
-  const totalDep  = deposits.reduce((s,x)=>s+Number(x.amount),0);
-
-  const catTotals = {};
-  for (const x of spends) catTotals[x.category] = (catTotals[x.category]||0) + Number(x.amount);
-
-  const noReceipt = spends.filter(x=>!x.receipt).reduce((s,x)=>s+Number(x.amount),0);
-  const unknown   = spends.filter(x=>x.category==='不明').reduce((s,x)=>s+Number(x.amount),0);
-
-  const cats = [
-    ['事業主貸','👩‍👧‍👦'],['材料費','🪵'],['消耗品費','🔧'],['車両費','⛽'],
-    ['旅費交通費','🛣️'],['外注工賃','🤝'],['給料賃金','👷'],['その他','📝'],['不明','❓']
-  ];
-  const catRows = cats.filter(([c])=>catTotals[c]).map(([c,icon]) =>
-    `<div class="summary-card">
-      <div class="s-label">${icon} ${c}</div>
-      <div class="s-val">${fmtAmt(catTotals[c]||0)}</div>
-    </div>`).join('');
-
-  // Account balances at end of month
-  const accCards = DB.getAccounts().map(a => {
-    const b = calcAccountBalance(a.id);
-    return `<div class="summary-card">
-      <div class="s-label">🏦 ${a.name}</div>
-      <div class="s-val ${b<0?'red':''}">${fmtAmt(b)}</div>
-    </div>`;
+function renderSummary(){
+  document.getElementById('month-label').textContent=fmtMonth(summaryYM);
+  const sp=DB.getSpends().filter(x=>x.date.startsWith(summaryYM));
+  const dr=DB.getWithdraws().filter(x=>x.date.startsWith(summaryYM));
+  const dep=DB.getDeposits().filter(x=>x.date.startsWith(summaryYM));
+  const tDr=dr.reduce((s,x)=>s+Number(x.amount),0);
+  const tSp=sp.reduce((s,x)=>s+Number(x.amount),0);
+  const tDep=dep.reduce((s,x)=>s+Number(x.amount),0);
+  const catT={};
+  for(const x of sp) catT[x.category]=(catT[x.category]||0)+Number(x.amount);
+  const noRcpt=sp.filter(x=>!x.receipt).reduce((s,x)=>s+Number(x.amount),0);
+  const unk=sp.filter(x=>x.category==='不明').reduce((s,x)=>s+Number(x.amount),0);
+  const catRows=CATEGORIES.filter(c=>catT[c]).map(c=>{
+    const cs=catS(c);
+    return `<div class="scard"><div class="slbl"><span class="cdot" style="background:${cs.text}"></span>${c}</div><div class="sval">${fmtAmt(catT[c])}</div></div>`;
   }).join('');
-
-  const cashBal = calcCashBalance();
-  const totalFunds = calcTotalFunds();
-
-  document.getElementById('summary-content').innerHTML = `
-    <div class="summary-grid">
-      <div class="summary-card full">
-        <div class="s-label">総事業資金（月末時点）</div>
-        <div class="s-val">${fmtAmt(totalFunds)}</div>
-      </div>
-      <div class="summary-card">
-        <div class="s-label">💴 手元現金</div>
-        <div class="s-val ${cashBal<0?'red':'green'}">${fmtAmt(cashBal)}</div>
-      </div>
-      <div class="summary-card">
-        <div class="s-label">💸 支出合計</div>
-        <div class="s-val red">${fmtAmt(totalSpend)}</div>
-      </div>
-      <div class="summary-card">
-        <div class="s-label">🏦 現金引出合計</div>
-        <div class="s-val green">${fmtAmt(totalDraw)}</div>
-      </div>
-      <div class="summary-card">
-        <div class="s-label">📥 入金合計</div>
-        <div class="s-val green">${fmtAmt(totalDep)}</div>
-      </div>
+  const accCards=DB.getAccounts().map(a=>{
+    const b=calcAccBal(a.id);
+    return `<div class="scard"><div class="slbl">${a.name}</div><div class="sval ${b<0?'red':''}">${fmtAmt(b)}</div></div>`;
+  }).join('');
+  const cash=calcCash(); const total=calcTotal();
+  document.getElementById('summary-content').innerHTML=`
+    <div class="sgrid">
+      <div class="scard full"><div class="slbl">総事業資金</div><div class="sval">${fmtAmt(total)}</div></div>
+      <div class="scard"><div class="slbl">手元現金</div><div class="sval ${cash<0?'red':'green'}">${fmtAmt(cash)}</div></div>
+      <div class="scard"><div class="slbl">支出合計</div><div class="sval red">${fmtAmt(tSp)}</div></div>
+      <div class="scard"><div class="slbl">現金引出合計</div><div class="sval green">${fmtAmt(tDr)}</div></div>
+      <div class="scard"><div class="slbl">入金合計</div><div class="sval green">${fmtAmt(tDep)}</div></div>
       ${catRows}
-      <div class="summary-card">
-        <div class="s-label">🧾 領収書なし</div>
-        <div class="s-val red">${fmtAmt(noReceipt)}</div>
-      </div>
-      <div class="summary-card">
-        <div class="s-label">❓ 不明金</div>
-        <div class="s-val red">${fmtAmt(unknown)}</div>
-      </div>
+      <div class="scard"><div class="slbl">領収書なし</div><div class="sval red">${fmtAmt(noRcpt)}</div></div>
+      <div class="scard"><div class="slbl">不明金</div><div class="sval red">${fmtAmt(unk)}</div></div>
     </div>
-    <div class="card-title" style="margin:16px 0 8px;font-size:12px;font-weight:700;color:var(--gray-4);letter-spacing:0.8px;text-transform:uppercase">口座残高（現在）</div>
-    <div class="summary-grid">${accCards}</div>
+    <div class="ctitle" style="margin:16px 0 8px">口座残高（現在）</div>
+    <div class="sgrid">${accCards}</div>
   `;
 }
 
-// ===== SETTINGS SCREEN =====
-function renderSettings() {
-  const list = document.getElementById('account-settings-list');
-  const accs = DB.getAccounts();
-  const colors = ['#1e88e5','#43a047','#e53935','#f57c00'];
-  list.innerHTML = accs.map((a, i) => {
-    const bal = calcAccountBalance(a.id);
-    return `<div class="acc-item">
-      <div class="acc-dot" style="background:${colors[i]||'#999'}"></div>
-      <div class="acc-info">
-        <div class="acc-name">${a.name}</div>
-        <div class="acc-bal${bal<0?' neg':''}">現在残高 ${fmtAmt(bal)}</div>
-      </div>
-      <button class="btn-sm" onclick="openAccountEdit('${a.id}')">設定</button>
-    </div>`;
+function renderSettings(){
+  const accs=DB.getAccounts(); const colors=['#1e88e5','#43a047','#e53935','#f57c00'];
+  document.getElementById('account-settings-list').innerHTML=accs.map((a,i)=>{
+    const b=calcAccBal(a.id);
+    return `<div class="aci"><div class="acbar" style="background:${colors[i]||'#999'}"></div><div class="acinfo"><div class="acname">${a.name}</div><div class="acbal${b<0?' neg':''}">現在残高 ${fmtAmt(b)}</div></div><button class="bsm" onclick="openAccEdit('${a.id}')">設定</button></div>`;
   }).join('');
 }
-
-function openAccountEdit(id) {
-  const accs = DB.getAccounts();
-  const acc = accs.find(a => a.id === id);
-  if (!acc) return;
-  const bal = calcAccountBalance(id);
-  openModal(acc.name + ' 残高設定', `
-    <p style="font-size:13px;color:var(--gray-4);margin-bottom:14px;line-height:1.6">
-      アプリ導入時点の残高を入力してください。<br>
-      以降の引き出し・入金・移動は自動計算されます。<br>
-      現在の計算残高: <strong>${fmtAmt(bal)}</strong>
-    </p>
-    <div class="form-group">
-      <label class="form-label">基準残高（円）</label>
-      <input class="form-input" type="number" id="acc-bal-input" value="${acc.initialBalance||0}" inputmode="numeric" placeholder="例: 500000">
-    </div>
-    <button class="btn-primary" onclick="saveAccountBalance('${id}')">保存する</button>
+function openAccEdit(id){
+  const acc=DB.getAccounts().find(a=>a.id===id); if(!acc) return;
+  const bal=calcAccBal(id);
+  openModal(acc.name+' 残高設定',`
+    <p style="font-size:13px;color:var(--g4);margin-bottom:14px;line-height:1.6">アプリ導入時点の残高を入力してください。<br>以降の引き出し・入金・移動は自動計算されます。<br>現在の計算残高: <strong>${fmtAmt(bal)}</strong></p>
+    <div class="fg"><label class="fl">基準残高（円）</label><input class="fi" type="number" id="acc-bal-input" value="${acc.initialBalance||0}" inputmode="numeric" placeholder="例: 500000"></div>
+    <button class="bp" onclick="saveAccBal('${id}')">保存する</button>
   `);
 }
-
-function saveAccountBalance(id) {
-  const val = parseInt(document.getElementById('acc-bal-input').value) || 0;
-  DB.updateAccountBalance(id, val);
-  closeModal(); toast('✓ 残高を設定しました'); refreshAll();
+function saveAccBal(id){
+  const val=parseInt(document.getElementById('acc-bal-input').value)||0;
+  DB.updateAccountBalance(id,val); closeModal(); toast('残高を設定しました'); refreshAll();
 }
 
-// ===== CSV EXPORT =====
-function buildCSVRows(ym) {
-  const filter = x => !ym || x.date.startsWith(ym);
-  const spends    = DB.getSpends().filter(filter);
-  const draws     = DB.getWithdraws().filter(filter);
-  const deposits  = DB.getDeposits().filter(filter);
-  const transfers = DB.getTransfers().filter(filter);
-
-  const rows = [['日付','借方科目','貸方科目','金額','摘要','分類','口座','領収書','メモ']];
-
-  for (const x of draws) {
-    const bankName = x.bank || (x.accountId ? accountName(x.accountId) : '');
-    rows.push([x.date,'現金','預金',x.amount,`${bankName}から引き出し`,'現金引き出し',bankName,'',x.memo||'']);
-  }
-  for (const x of deposits) {
-    const bName = x.bankName || (x.accountId ? accountName(x.accountId) : '');
-    rows.push([x.date,'預金','売上高',x.amount,`${bName}へ入金`,'入金',bName,'',x.memo||'']);
-  }
-  for (const x of transfers) {
-    rows.push([x.date,'預金','預金',x.amount,`${x.fromName||''}→${x.toName||''}`,
-      '口座間移動',`${x.fromName||''}→${x.toName||''}`,'',x.memo||'']);
-  }
-  for (const x of spends) {
-    const m = YAYOI_MAP[x.category] || { debit:'雑費', credit:'現金' };
-    rows.push([x.date,m.debit,m.credit,x.amount,x.name||x.memo||x.category,
-      x.category,'',x.receipt?'あり':'なし',x.memo||'']);
-  }
-  return rows.sort((a,b) => String(a[0]).localeCompare(String(b[0])));
+function buildCSV(ym){
+  const f=x=>!ym||x.date.startsWith(ym);
+  const sp=DB.getSpends().filter(f); const dr=DB.getWithdraws().filter(f);
+  const dep=DB.getDeposits().filter(f); const tr=DB.getTransfers().filter(f);
+  const rows=[['日付','借方科目','貸方科目','金額','摘要','分類','口座','領収書','メモ']];
+  for(const x of dr){const bn=x.bank||(x.accountId?accName(x.accountId):'');rows.push([x.date,'現金','預金',x.amount,`${bn}から引き出し`,'現金引き出し',bn,'',x.memo||'']);}
+  for(const x of dep){const bn=x.bankName||(x.accountId?accName(x.accountId):'');rows.push([x.date,'預金','売上高',x.amount,`${bn}へ入金`,'入金',bn,'',x.memo||'']);}
+  for(const x of tr){rows.push([x.date,'預金','預金',x.amount,`${x.fromName||''}→${x.toName||''}`,'口座間移動',`${x.fromName||''}→${x.toName||''}`,'',x.memo||'']);}
+  for(const x of sp){const m=YAYOI[x.category]||{d:'雑費',c:'現金'};rows.push([x.date,m.d,m.c,x.amount,x.name||x.memo||x.category,x.category,'',x.receipt?'あり':'なし',x.memo||'']);}
+  return rows.sort((a,b)=>String(a[0]).localeCompare(String(b[0])));
 }
-
-function rowsToCSV(rows) {
-  return rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+function toCSV(rows){return rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');}
+function dlCSV(name,content){
+  const blob=new Blob(['﻿'+content],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a');
+  a.href=url; a.download=name; a.click(); URL.revokeObjectURL(url);
 }
-
-function downloadCSV(filename, content) {
-  const blob = new Blob(['﻿'+content], { type:'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href=url; a.download=filename; a.click();
-  URL.revokeObjectURL(url);
-}
-
-function exportCSV() {
-  const rows = buildCSVRows(summaryYM);
-  if (rows.length<=1) { toast('この月のデータがありません'); return; }
-  downloadCSV(`高橋商店_${summaryYM}.csv`, rowsToCSV(rows));
-  toast('CSVをダウンロードしました');
-}
-
-function exportAllCSV() {
-  const rows = buildCSVRows(null);
-  if (rows.length<=1) { toast('データがありません'); return; }
-  downloadCSV(`高橋商店_全期間.csv`, rowsToCSV(rows));
-  toast('CSVをダウンロードしました');
-}
-
-function exportJSON() {
-  const data = {
-    accounts: DB.getAccounts(),
-    spends: DB.getSpends(),
-    withdraws: DB.getWithdraws(),
-    deposits: DB.getDeposits(),
-    transfers: DB.getTransfers(),
-    exportedAt: new Date().toISOString(),
-    version: '2.0'
-  };
-  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href=url; a.download=`高橋商店バックアップ_${todayStr()}.json`; a.click();
-  URL.revokeObjectURL(url);
+function exportCSV(){const r=buildCSV(summaryYM);if(r.length<=1){toast('この月のデータがありません');return;}dlCSV(`高橋商店_${summaryYM}.csv`,toCSV(r));toast('CSVをダウンロードしました');}
+function exportAllCSV(){const r=buildCSV(null);if(r.length<=1){toast('データがありません');return;}dlCSV('高橋商店_全期間.csv',toCSV(r));toast('CSVをダウンロードしました');}
+function exportJSON(){
+  const data={accounts:DB.getAccounts(),spends:DB.getSpends(),withdraws:DB.getWithdraws(),deposits:DB.getDeposits(),transfers:DB.getTransfers(),exportedAt:new Date().toISOString(),version:'2.1'};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a');
+  a.href=url; a.download=`高橋商店バックアップ_${todayStr()}.json`; a.click(); URL.revokeObjectURL(url);
   toast('バックアップを保存しました');
 }
-
-function importJSON() { document.getElementById('import-file').click(); }
-
-function doImport(input) {
-  const file = input.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const data = JSON.parse(e.target.result);
-      if (!Array.isArray(data.spends) || !Array.isArray(data.withdraws)) throw new Error('invalid');
-      if (!confirm(`${data.spends.length}件の支出と${data.withdraws.length}件の引き出しを復元します。現在のデータは上書きされます。よろしいですか？`)) return;
-      DB.saveSpends(data.spends);
-      DB.saveWithdraws(data.withdraws);
-      if (data.deposits)  DB._saveList(DB.KEY_DEPOSIT, data.deposits);
-      if (data.transfers) DB._saveList(DB.KEY_TRANSFER, data.transfers);
-      if (data.accounts)  DB.saveAccounts(data.accounts);
-      refreshAll();
-      toast('復元しました');
-    } catch { toast('ファイルが正しくありません'); }
+function importJSON(){document.getElementById('import-file').click();}
+function doImport(input){
+  const file=input.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!Array.isArray(data.spends)||!Array.isArray(data.withdraws)) throw new Error('invalid');
+      if(!confirm(`${data.spends.length}件の支出と${data.withdraws.length}件の引き出しを復元します。現在のデータは上書きされます。`)) return;
+      DB.saveSpends(data.spends); DB.saveWithdraws(data.withdraws);
+      if(data.deposits) DB._save(DB.KD,data.deposits);
+      if(data.transfers) DB._save(DB.KT,data.transfers);
+      if(data.accounts) DB.saveAccounts(data.accounts);
+      refreshAll(); toast('復元しました');
+    }catch{toast('ファイルが正しくありません');}
   };
-  reader.readAsText(file);
-  input.value = '';
+  reader.readAsText(file); input.value='';
+}
+function clearAll(){
+  if(!confirm('全データを削除しますか？この操作は元に戻せません。')) return;
+  if(!confirm('本当によろしいですか？')) return;
+  [DB.KS,DB.KW,DB.KD,DB.KT,DB.KA].forEach(k=>localStorage.removeItem(k));
+  refreshAll(); toast('データを削除しました');
 }
 
-function clearAll() {
-  if (!confirm('全データを削除しますか？この操作は元に戻せません。')) return;
-  if (!confirm('本当によろしいですか？')) return;
-  [DB.KEY_SPEND, DB.KEY_WITHDRAW, DB.KEY_DEPOSIT, DB.KEY_TRANSFER, DB.KEY_ACCOUNTS].forEach(k => localStorage.removeItem(k));
-  refreshAll();
-  toast('データを削除しました');
-}
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
 
-// ===== PWA =====
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
-
-// ===== INIT =====
-summaryYM = todayStr().slice(0,7);
+summaryYM=todayStr().slice(0,7);
 renderBalances();
 renderToday();
 </script>
