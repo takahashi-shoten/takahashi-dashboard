@@ -167,3 +167,21 @@ def test_ai_signal():
     assert analyze.ai_signal(row) == "keyword"
     row = dict(synthetic_media=1, title="x", description="", tags_json="[]")
     assert analyze.ai_signal(row) == "declared"
+
+
+def test_legacy_v2_analyze_case_ported(env):
+    """Same expectation as legacy youtube_audit_v2/test_analyze.py: views 1000/60000/100000 -> median 60000, 2 hits."""
+    con, fake, yt = env
+    fake.channels.clear(); fake.videos.clear()
+    fake.add_channel("DEMO", 1000, 400, 3, [1_000, 60_000, 100_000])
+    Cycle(con, yt, 1).run(searches=1, audit_reserve=0)
+    analyze.compute_channel_metrics(con)
+    r = con.execute("SELECT * FROM channel_metrics WHERE channel_id='DEMO'").fetchone()
+    assert r["long_median"] == 60_000 and r["hits_n"] == 2 and abs(r["hit_share"] - 2 / 3) < 1e-9
+    assert r["replicable"] == 0     # only 3 mature uploads < REPL_MIN_UPLOADS: one strong month is not proof
+
+
+def test_seed_queries_include_legacy():
+    legacy = {"雑学 なぜ", "都市伝説 考察", "AI cinematic story", "world maps explained"}
+    assert legacy <= {q for *_, q in topics.SEEDS}
+    assert len({(q, l, r) for _, l, r, q in topics.SEEDS}) == len(topics.SEEDS)  # no duplicate seeds

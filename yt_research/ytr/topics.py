@@ -53,6 +53,15 @@ SEEDS = [
     ("relaxing_visual", "en", "US", "relaxing nature 4k no music"), ("asmr_process", "en", "US", "satisfying factory process"),
     ("indonesia_misc", "id", "ID", "kisah nyata animasi"), ("korea_misc", "ko", "KR", "역사 이야기"),
     ("de_misc", "de", "DE", "dokumentation geschichte"), ("fr_misc", "fr", "FR", "documentaire histoire"),
+    # carried over verbatim from the legacy youtube_research_prototype QUERIES (for continuity)
+    ("science", "ja", "JP", "科学 解説"), ("trivia", "ja", "JP", "雑学 なぜ"), ("drama_story", "ja", "JP", "短編ドラマ"),
+    ("horror_mystery", "ja", "JP", "都市伝説 考察"), ("ai_film", "ja", "JP", "AI アニメ"), ("economics", "ja", "JP", "経済 解説"),
+    ("cooking", "ja", "JP", "料理 科学"), ("gaming_lore", "ja", "JP", "ゲーム 解説"), ("biology_nature", "ja", "JP", "動物 生態"),
+    ("science", "en", "US", "science explained"), ("scifi_story", "en", "US", "short film story"),
+    ("history", "en", "US", "history animation"), ("tech_explain", "en", "US", "future technology"),
+    ("horror_mystery", "en", "US", "mystery documentary"), ("maps_geo", "en", "US", "world maps explained"),
+    ("infrastructure", "en", "US", "engineering explained"), ("biology_nature", "en", "US", "wildlife documentary"),
+    ("ai_film", "en", "US", "AI cinematic story"),
 ]
 
 MIN_RERUN_DAYS = 3
