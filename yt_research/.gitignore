@@ -1,0 +1,4 @@
+data/*.sqlite*
+reports/
+__pycache__/
+.pytest_cache/
