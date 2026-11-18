@@ -53,6 +53,8 @@ CREATE TABLE IF NOT EXISTS hypothesis_log(
   id INTEGER PRIMARY KEY AUTOINCREMENT, hyp_id TEXT, ts TEXT, old_status TEXT, new_status TEXT, evidence_json TEXT);
 CREATE TABLE IF NOT EXISTS seed_cases(
   video_id TEXT PRIMARY KEY, label TEXT, reported_views TEXT, verified_at TEXT, verification TEXT);
+CREATE TABLE IF NOT EXISTS date_samples(
+  video_id TEXT, topic_id INTEGER, first_run_id INTEGER, sampled_at TEXT, PRIMARY KEY(video_id, topic_id));
 CREATE INDEX IF NOT EXISTS ix_videos_channel ON videos(channel_id);
 CREATE INDEX IF NOT EXISTS ix_videos_pub ON videos(published_at);
 CREATE INDEX IF NOT EXISTS ix_api_day ON api_calls(quota_day);
@@ -76,10 +78,26 @@ def connect(path: Path | str) -> sqlite3.Connection:
     con = sqlite3.connect(str(path))
     con.row_factory = sqlite3.Row
     con.executescript(SCHEMA)
+    _migrate(con)
     from .analyze import CHANNEL_METRICS_CREATE
     con.executescript(CHANNEL_METRICS_CREATE)
     con.executescript(LATEST_VIDEO_VIEW)
     return con
+
+
+MIGRATIONS = [
+    ("topics", "date_sampled_at", "TEXT"),
+    ("search_runs", "mode", "TEXT DEFAULT 'top'"),
+]
+
+
+def _migrate(con):
+    """Additive column migrations so existing databases keep working."""
+    for table, col, decl in MIGRATIONS:
+        cols = {r[1] for r in con.execute(f"PRAGMA table_info({table})")}
+        if col not in cols:
+            con.execute(f"ALTER TABLE {table} ADD COLUMN {col} {decl}")
+    con.commit()
 
 
 def log_error(con, run_id, stage, detail):

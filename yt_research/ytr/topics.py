@@ -151,3 +151,15 @@ def expand_from_hits(con, max_new=5):
         if added >= max_new:
             break
     return added
+
+
+def select_date_sample_topics(con, n):
+    """Topics for unbiased-ish sampling: least recently date-sampled first, spread over genres."""
+    rows = con.execute("""SELECT * FROM topics WHERE status IN ('active','paused')
+                          ORDER BY (date_sampled_at IS NOT NULL), date_sampled_at, topic_id""").fetchall()
+    seen, out = set(), []
+    for r in rows:                      # one per genre first
+        if r["genre"] not in seen:
+            seen.add(r["genre"]); out.append(r)
+    out += [r for r in rows if r not in out]
+    return out[:n]

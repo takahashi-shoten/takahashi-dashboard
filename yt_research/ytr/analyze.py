@@ -88,8 +88,33 @@ def compute_channel_metrics(con, now=None):
     con.commit()
 
 
+def base_rates(con):
+    """Per genre, from order=date samples: what a *typical* recent upload achieves."""
+    out = defaultdict(lambda: dict(base_videos=0, base_hit_rate=None, base_median=None,
+                                   base_channels=0, base_channel_hit_rate=None))
+    rows = con.execute("""SELECT t.genre, v.video_id, v.channel_id, v.view_count FROM date_samples d
+        JOIN topics t ON t.topic_id=d.topic_id JOIN v_latest v ON v.video_id=d.video_id
+        WHERE v.category_id!='10' AND v.unavailable_at IS NULL""").fetchall()
+    by = defaultdict(dict)
+    for r in rows:
+        by[r["genre"]][r["video_id"]] = r      # dedupe a video sampled via several topics
+    for g, vids in by.items():
+        vs = list(vids.values())
+        chans = defaultdict(list)
+        for r in vs:
+            chans[r["channel_id"]].append(r["view_count"])
+        out[g] = dict(
+            base_videos=len(vs),
+            base_hit_rate=sum(r["view_count"] >= config.MIN_VIEWS for r in vs) / len(vs),
+            base_median=median([r["view_count"] for r in vs]),
+            base_channels=len(chans),
+            base_channel_hit_rate=sum(max(x) >= config.MIN_VIEWS for x in chans.values()) / len(chans))
+    return out
+
+
 def compute_genre_metrics(con):
     out = {}
+    br = base_rates(con)
     rows = con.execute("SELECT * FROM channel_metrics WHERE genre IS NOT NULL").fetchall()
     by = defaultdict(list)
     for r in rows:
@@ -116,7 +141,13 @@ def compute_genre_metrics(con):
             median_uploads_per_week=median([r["uploads_per_week"] for r in audited]),
             ai_signal_channels=sum(1 for r in with_hits if (r["ai_signal_share"] or 0) >= 0.5),
             langs=dict(Counter(r["main_lang"] for r in with_hits).most_common(5)),
+            **br[g],
         )
+    for g, b in br.items():          # genres seen only through date samples
+        out.setdefault(g, dict(genre=g, channels_with_hits=0, audited_channels=0, replicable_channels=0,
+                               replicable_rate=None, replicable_new_channels=0, replicable_small_channels=0,
+                               top3_share=None, hhi=None, median_long_median=None, median_short_median=None,
+                               median_uploads_per_week=None, ai_signal_channels=0, langs={}, **b))
     return out
 
 
@@ -126,7 +157,8 @@ def compute_genre_metrics(con):
 #         "support_metric": <genre metric>, "min_support": n}
 METRICS = ["channels_with_hits", "audited_channels", "replicable_channels", "replicable_rate",
            "replicable_new_channels", "replicable_small_channels", "top3_share", "hhi",
-           "median_long_median", "median_short_median", "median_uploads_per_week", "ai_signal_channels"]
+           "median_long_median", "median_short_median", "median_uploads_per_week", "ai_signal_channels",
+           "base_videos", "base_hit_rate", "base_median", "base_channels", "base_channel_hit_rate"]
 
 RULE_TEMPLATES = [
     ("entry", "新規チャンネル(開設365日以内)でも再現性ある成功が複数存在する",
@@ -135,6 +167,8 @@ RULE_TEMPLATES = [
      dict(metric="top3_share", op="<=", threshold=0.6, support_metric="channels_with_hits", min_support=8)),
     ("repl", "監査済みヒットチャンネルの25%以上が単発でなく再現性を持つ",
      dict(metric="replicable_rate", op=">=", threshold=0.25, support_metric="audited_channels", min_support=8)),
+    ("base", "新着投稿の標本(生存者バイアス補正)でも、5万再生に届くチャンネルが10%以上ある",
+     dict(metric="base_channel_hit_rate", op=">=", threshold=0.10, support_metric="base_channels", min_support=30)),
 ]
 
 

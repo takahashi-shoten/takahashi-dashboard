@@ -38,3 +38,10 @@ NEW_CHANNEL_DAYS = 365
 SMALL_CHANNEL_SUBS = 100_000
 
 ANTHROPIC_MODEL = os.environ.get("YTR_CLAUDE_MODEL", "claude-opus-5-5")
+
+# Survivorship-bias control: a share of searches use order=date (newest uploads that are
+# already 14-60 days old) instead of order=viewCount, so that failed / average uploads in a
+# genre are observed too, not only winners.
+DATE_SAMPLE_SHARE = float(os.environ.get("YTR_DATE_SAMPLE_SHARE", 0.25))
+DATE_SAMPLE_MIN_AGE_DAYS = 14
+DATE_SAMPLE_MAX_AGE_DAYS = 60

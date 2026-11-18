@@ -92,9 +92,12 @@ class YouTubeClient:
         raise ApiError(f"gave up after retries: {last}")
 
     # -- endpoints -----------------------------------------------------------
-    def search_videos(self, q, published_after, lang=None, region=None, order="viewCount", max_results=50):
+    def search_videos(self, q, published_after, lang=None, region=None, order="viewCount", max_results=50,
+                      published_before=None):
         p = dict(part="id", type="video", q=q, publishedAfter=published_after, order=order,
                  maxResults=max_results, safeSearch="none")
+        if published_before:
+            p["publishedBefore"] = published_before
         if lang:
             p["relevanceLanguage"] = lang
         if region:

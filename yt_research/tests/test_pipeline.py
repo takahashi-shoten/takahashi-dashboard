@@ -132,7 +132,7 @@ def test_budget_stops_cycle_cleanly(env):
     con, fake, yt = env
     yt.budget = 150
     stats = Cycle(con, yt, 1).run(searches=5, audit_reserve=0)
-    assert stats["searches"] == 1 and yt.spent <= 150
+    assert stats["searches"] + stats["date_samples"] == 1 and yt.spent <= 150
 
 
 def test_hypothesis_lifecycle(env):
@@ -185,3 +185,28 @@ def test_seed_queries_include_legacy():
     legacy = {"雑学 なぜ", "都市伝説 考察", "AI cinematic story", "world maps explained"}
     assert legacy <= {q for *_, q in topics.SEEDS}
     assert len({(q, l, r) for _, l, r, q in topics.SEEDS}) == len(topics.SEEDS)  # no duplicate seeds
+
+
+def test_date_sampling_base_rates(env):
+    con, fake, yt = env
+    stats = Cycle(con, yt, 1).run(searches=4, audit_reserve=0)
+    assert stats["date_samples"] == 1 and stats["date_sample_videos"] > 0
+    assert con.execute("SELECT COUNT(*) FROM search_runs WHERE mode='date'").fetchone()[0] == 1
+    analyze.compute_channel_metrics(con)
+    gm = analyze.compute_genre_metrics(con)
+    g = next(m for m in gm.values() if m["base_videos"])
+    # fake world: 3 channels, NEWHIT/BIG reach 50k, ONEHIT has one 2M video -> all 3 channels "reach"
+    assert g["base_channels"] == 3 and g["base_channel_hit_rate"] == 1.0
+    assert 0 < g["base_hit_rate"] < 1
+
+
+def test_migration_on_old_db(tmp_path):
+    import sqlite3
+    p = tmp_path / "old.sqlite"
+    c = sqlite3.connect(p)
+    c.execute("CREATE TABLE topics(topic_id INTEGER PRIMARY KEY AUTOINCREMENT, query TEXT, lang TEXT, region TEXT,"
+              " genre TEXT, source TEXT, status TEXT DEFAULT 'active', created_at TEXT, runs INTEGER DEFAULT 0,"
+              " last_run_at TEXT, yield_score REAL, notes TEXT, UNIQUE(query, lang, region))")
+    c.commit(); c.close()
+    con = connect(p)
+    assert "date_sampled_at" in {r[1] for r in con.execute("PRAGMA table_info(topics)")}

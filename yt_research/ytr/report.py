@@ -74,15 +74,18 @@ def write(con, run_summary, genre_metrics, changes, seed_results=None, llm_resul
     L += ["", "### 今回の実行", "", "```", json.dumps(run_summary, ensure_ascii=False, indent=1, default=str), "```", ""]
     L += ["## データ項目の確認状況", "", FIELD_STATUS, ""]
     L += ["## ジャンル別 (観測サンプル)", "",
-          "| ジャンル | ヒットch | 監査済 | 再現性ch | 再現率 | 新規ch再現 | 小規模ch再現 | 上位3占有 | 長尺中央値の中央値 | 週投稿中央値 | AIシグナルch | 言語 |",
-          "|---|---|---|---|---|---|---|---|---|---|---|---|"]
+          "| ジャンル | ヒットch | 監査済 | 再現性ch | 再現率 | 新規ch再現 | 小規模ch再現 | 上位3占有 | 長尺中央値の中央値 | 週投稿中央値 | AIシグナルch | 新着標本ch | 新着標本で5万到達ch率 | 新着標本中央値 | 言語 |",
+          "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for g, m in sorted(genre_metrics.items(), key=lambda x: -(x[1]["replicable_channels"] or 0)):
         L.append(f"| {g} | {m['channels_with_hits']} | {m['audited_channels']} | {m['replicable_channels']} | "
                  f"{fmt(m['replicable_rate'], True)} | {m['replicable_new_channels']} | {m['replicable_small_channels']} | "
                  f"{fmt(m['top3_share'], True)} | {fmt(m['median_long_median'])} | {fmt(m['median_uploads_per_week'])} | "
-                 f"{m['ai_signal_channels']} | {m['langs']} |")
+                 f"{m['ai_signal_channels']} | {m.get('base_channels', 0)} | {fmt(m.get('base_channel_hit_rate'), True)} | "
+                 f"{fmt(m.get('base_median'))} | {m['langs']} |")
     L += ["", f"再現性の定義: 監査済み・成熟投稿(公開14日以上){config.REPL_MIN_UPLOADS}本以上・中央値{config.REPL_MIN_MEDIAN:,}以上・"
-          f"{config.MIN_VIEWS:,}以上割合{config.REPL_MIN_HIT_SHARE:.0%}以上", ""]
+          f"{config.MIN_VIEWS:,}以上割合{config.REPL_MIN_HIT_SHARE:.0%}以上",
+          f"新着標本: 検索の{config.DATE_SAMPLE_SHARE:.0%}を新着順(公開{config.DATE_SAMPLE_MIN_AGE_DAYS}〜{config.DATE_SAMPLE_MAX_AGE_DAYS}日)に充て、"
+          "伸びなかった投稿も含む典型的な成果を観測(人気順検索だけでは成功例しか見えないため)。", ""]
     L += ["## 再現性のある新興・小規模チャンネル (監査済み)", "",
           "| チャンネル | ジャンル | 登録者(現在) | 開設日数 | 90日投稿 | 週投稿 | 長尺中央値 | Shorts中央値 | 5万以上割合 | 中央値再生/日 | AIシグナル | 言語 |",
           "|---|---|---|---|---|---|---|---|---|---|---|---|"]

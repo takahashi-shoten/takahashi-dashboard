@@ -14,7 +14,7 @@ class Cycle:
         self.con, self.yt, self.run_id = con, client, run_id
         self.stats = dict(searches=0, search_results=0, new_videos=0, duplicate_videos=0,
                           new_channels=0, channels_audited=0, audit_videos=0, refreshed=0,
-                          music_excluded=0, errors=0, stopped_by=None)
+                          music_excluded=0, date_samples=0, date_sample_videos=0, errors=0, stopped_by=None)
 
     def _err(self, stage, e):
         self.stats["errors"] += 1
@@ -98,6 +98,30 @@ class Cycle:
         self.stats["duplicate_videos"] += len(ids) - len(new_ids)
         self.stats["music_excluded"] += music
 
+    def date_sample_topic(self, t):
+        """order=date search over a matured window: observes typical outcomes, not just winners."""
+        now = utcnow()
+        after = iso(window_start(config.DATE_SAMPLE_MAX_AGE_DAYS, now))
+        before = iso(window_start(config.DATE_SAMPLE_MIN_AGE_DAYS, now))
+        ids = self.yt.search_videos(t["query"], after, lang=t["lang"], region=t["region"],
+                                    order="date", published_before=before)
+        known = {r[0] for r in self.con.execute(
+            f"SELECT video_id FROM videos WHERE video_id IN ({','.join('?' * len(ids))})", ids)} if ids else set()
+        new_ids = [v for v in ids if v not in known]
+        if new_ids:
+            self.hydrate(new_ids)
+        ts = iso(now)
+        for vid in ids:
+            self.con.execute("INSERT OR IGNORE INTO date_samples VALUES(?,?,?,?)", (vid, t["topic_id"], self.run_id, ts))
+        self.con.execute("""INSERT INTO search_runs(run_id, topic_id, executed_at, published_after, result_count,
+            new_videos, duplicate_videos, new_channels, hits, music_excluded, mode) VALUES(?,?,?,?,?,?,?,?,?,?, 'date')""",
+                         (self.run_id, t["topic_id"], ts, after, len(ids), len(new_ids), len(ids) - len(new_ids), 0, 0, 0))
+        self.con.execute("UPDATE topics SET date_sampled_at=? WHERE topic_id=?", (ts, t["topic_id"]))
+        self.con.commit()
+        self.stats["date_samples"] += 1
+        self.stats["date_sample_videos"] += len(ids)
+        self.stats["duplicate_videos"] += len(ids) - len(new_ids)
+
     def channels_to_audit(self):
         """Channels with >=1 non-music hit in the window, not audited recently. Small/new first."""
         since = iso(window_start(config.WINDOW_DAYS))
@@ -133,7 +157,18 @@ class Cycle:
                 return self.stats
             except Exception as e:  # noqa: BLE001 - keep cycle alive
                 self._err(stage, e)
-        for t in topics.select_topics(self.con, searches):
+        n_date = int(round(searches * config.DATE_SAMPLE_SHARE))
+        for t in topics.select_date_sample_topics(self.con, n_date):
+            if not self.yt.can_spend(config.COST["search"] + 4 + audit_reserve):
+                break
+            try:
+                self.date_sample_topic(t)
+            except (QuotaExceeded, BudgetExhausted) as e:
+                self.stats["stopped_by"] = f"date_sample: {e}"
+                return self.stats
+            except Exception as e:  # noqa: BLE001
+                self._err(f"date_sample:{t['topic_id']}", e)
+        for t in topics.select_topics(self.con, searches - n_date):
             if not self.yt.can_spend(config.COST["search"] + 4 + audit_reserve):
                 break
             try:
