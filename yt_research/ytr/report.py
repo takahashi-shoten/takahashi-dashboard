@@ -73,6 +73,17 @@ def write(con, run_summary, genre_metrics, changes, seed_results=None, llm_resul
         L.append(f"| {names[k]} | {v:,} |")
     L += ["", "### 今回の実行", "", "```", json.dumps(run_summary, ensure_ascii=False, indent=1, default=str), "```", ""]
     L += ["## データ項目の確認状況", "", FIELD_STATUS, ""]
+    L += ["## ジャンル別の調査の進み具合(判定には監査済みチャンネル8以上が必要)", "",
+          "| ジャンル | テーマ数 | 実行済み検索 | 監査済みチャンネル | 判定可能まで |", "|---|---|---|---|---|"]
+    cov = {r["genre"]: r for r in con.execute("""
+        SELECT t.genre, COUNT(*) AS topics, SUM(t.runs) AS searches FROM topics t GROUP BY t.genre""")}
+    aud = {r[0]: r[1] for r in con.execute(
+        "SELECT genre, COUNT(*) FROM channel_metrics WHERE audited=1 AND hits_n>0 AND genre IS NOT NULL GROUP BY genre")}
+    for g, r in sorted(cov.items(), key=lambda x: (aud.get(x[0], 0), x[0])):
+        n = aud.get(g, 0)
+        status = "判定可能" if n >= 8 else ("検索未実施(次回以降)" if not r["searches"] else f"あと{8 - n}チャンネル")
+        L.append(f"| {g} | {r['topics']} | {r['searches'] or 0} | {n} | {status} |")
+    L += [""]
     L += ["## ジャンル別 (観測サンプル)", "",
           "| ジャンル | ヒットch | 監査済 | 再現性ch | 再現率 | 新規ch再現 | 小規模ch再現 | 上位3占有 | 長尺中央値の中央値 | 週投稿中央値 | AIシグナルch | 新着標本ch | 新着標本で5万到達ch率 | 新着標本中央値 | 言語 |",
           "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]

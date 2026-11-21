@@ -112,12 +112,17 @@ def select_topics(con, n: int, now=None):
         ucb = (r["yield_score"] or 0) + 0.5 * math.sqrt(math.log(total_runs) / r["runs"])
         scored.append((ucb, r))
     # round-robin genres among fresh topics so one genre cannot eat the budget
+    from . import config
+    searched = {r[0]: r[1] for r in con.execute("SELECT genre, SUM(runs) FROM topics GROUP BY genre")}
     by_genre = {}
     for r in sorted(fresh, key=lambda r: r["topic_id"]):
         by_genre.setdefault(r["genre"], []).append(r)
+    # priority genres first, then the genres searched least so far -> every genre reaches the
+    # support threshold (8 audited channels) as early as the quota allows
+    genre_order = sorted(by_genre, key=lambda g: (g not in config.PRIORITY_GENRES, searched.get(g) or 0, g))
     ordered = []
     while any(by_genre.values()):
-        for g in list(by_genre):
+        for g in genre_order:
             if by_genre[g]:
                 ordered.append(by_genre[g].pop(0))
     ordered += [r for _, r in sorted(scored, key=lambda x: -x[0])]

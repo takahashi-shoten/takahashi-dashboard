@@ -210,3 +210,19 @@ def test_migration_on_old_db(tmp_path):
     c.commit(); c.close()
     con = connect(p)
     assert "date_sampled_at" in {r[1] for r in con.execute("PRAGMA table_info(topics)")}
+
+
+def test_priority_genres_searched_first(env):
+    con, *_ = env
+    sel = topics.select_topics(con, 9)
+    assert {r["genre"] for r in sel} <= set(config.PRIORITY_GENRES)
+    assert len({r["genre"] for r in sel}) == 9      # still one per genre
+
+
+def test_report_has_coverage_section(env):
+    con, fake, yt = env
+    Cycle(con, yt, 1).run(searches=2, audit_reserve=0)
+    analyze.compute_channel_metrics(con)
+    gms = analyze.compute_genre_metrics(con)
+    text = report.write(con, {}, gms, [])
+    assert "調査の進み具合" in text and "検索未実施" in text
