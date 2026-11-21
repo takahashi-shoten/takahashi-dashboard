@@ -63,6 +63,13 @@ class Cycle:
         published_after = iso(window_start(config.WINDOW_DAYS))
         ids = self.yt.search_videos(t["query"], published_after, lang=t["lang"], region=t["region"])
         self.stats["searches"] += 1
+        if not ids:
+            # 0 results is not evidence of "no demand": retry once without language/region bias
+            # and log it, so empty topics are visible instead of silently counted as dead.
+            self.stats["zero_result_retries"] = self.stats.get("zero_result_retries", 0) + 1
+            ids = self.yt.search_videos(t["query"], published_after)
+            log_error(self.con, self.run_id, f"zero_result:{t['topic_id']}",
+                      f"query={t['query']!r} lang={t['lang']} region={t['region']} retry_without_bias={len(ids)} results")
         self.stats["search_results"] += len(ids)
         known = {r[0] for r in self.con.execute(
             f"SELECT video_id FROM videos WHERE video_id IN ({','.join('?' * len(ids))})", ids)} if ids else set()
