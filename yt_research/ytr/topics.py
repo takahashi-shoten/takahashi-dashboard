@@ -62,6 +62,11 @@ SEEDS = [
     ("grooming_men", "en", "US", "men over 40 grooming style"), ("midlife_men", "ja", "JP", "中年 男性 孤独 趣味"),
     ("aga_hair", "ja", "JP", "薄毛 AGA 対策"), ("sleep_health", "ja", "JP", "睡眠 改善 中年"),
     ("side_income", "ja", "JP", "副業 おすすめ 会社員"), ("asset_building", "ja", "JP", "新NISA 資産形成 40代"),
+    # "hee~" trivia about sex/body/culture, tasteful and non-explicit (history, biology, psychology, myth-busting)
+    ("sex_trivia_edu", "ja", "JP", "性の雑学 歴史 文化"), ("sex_trivia_edu", "ja", "JP", "江戸時代 性文化 解説"),
+    ("sex_trivia_edu", "ja", "JP", "人体 不思議 雑学 男性"), ("sex_trivia_edu", "ja", "JP", "恋愛 心理学 雑学"),
+    ("sex_trivia_edu", "en", "US", "weird facts about the human body"), ("sex_trivia_edu", "en", "US", "history of sex culture explained"),
+    ("sex_trivia_edu", "en", "US", "animal mating behavior facts"), ("sex_trivia_edu", "en", "US", "sex myths debunked doctor"),
     # carried over verbatim from the legacy youtube_research_prototype QUERIES (for continuity)
     ("science", "ja", "JP", "科学 解説"), ("trivia", "ja", "JP", "雑学 なぜ"), ("drama_story", "ja", "JP", "短編ドラマ"),
     ("horror_mystery", "ja", "JP", "都市伝説 考察"), ("ai_film", "ja", "JP", "AI アニメ"), ("economics", "ja", "JP", "経済 解説"),
