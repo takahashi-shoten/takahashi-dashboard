@@ -53,6 +53,15 @@ SEEDS = [
     ("relaxing_visual", "en", "US", "relaxing nature 4k no music"), ("asmr_process", "en", "US", "satisfying factory process"),
     ("indonesia_misc", "id", "ID", "kisah nyata animasi"), ("korea_misc", "ko", "KR", "역사 이야기"),
     ("de_misc", "de", "DE", "dokumentation geschichte"), ("fr_misc", "fr", "FR", "documentaire histoire"),
+    # adult-adjacent, non-explicit demand (men's health, relationships, dating). Platform-compliant themes only.
+    ("mens_sexual_health", "ja", "JP", "ED 原因 対策 解説"), ("mens_sexual_health", "ja", "JP", "精力 テストステロン 男性ホルモン"),
+    ("mens_sexual_health", "en", "US", "testosterone low symptoms explained"), ("mens_sexual_health", "en", "US", "men's sexual health doctor explains"),
+    ("relationships_dating", "ja", "JP", "婚活 中年 男性"), ("relationships_dating", "ja", "JP", "恋愛 モテる 40代"),
+    ("relationships_dating", "ja", "JP", "セックスレス 夫婦 解説"), ("relationships_dating", "en", "US", "dating over 40 men advice"),
+    ("relationships_dating", "en", "US", "relationship psychology attraction explained"), ("grooming_men", "ja", "JP", "40代 男 清潔感 身だしなみ"),
+    ("grooming_men", "en", "US", "men over 40 grooming style"), ("midlife_men", "ja", "JP", "中年 男性 孤独 趣味"),
+    ("aga_hair", "ja", "JP", "薄毛 AGA 対策"), ("sleep_health", "ja", "JP", "睡眠 改善 中年"),
+    ("side_income", "ja", "JP", "副業 おすすめ 会社員"), ("asset_building", "ja", "JP", "新NISA 資産形成 40代"),
     # carried over verbatim from the legacy youtube_research_prototype QUERIES (for continuity)
     ("science", "ja", "JP", "科学 解説"), ("trivia", "ja", "JP", "雑学 なぜ"), ("drama_story", "ja", "JP", "短編ドラマ"),
     ("horror_mystery", "ja", "JP", "都市伝説 考察"), ("ai_film", "ja", "JP", "AI アニメ"), ("economics", "ja", "JP", "経済 解説"),
