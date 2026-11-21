@@ -1,0 +1,71 @@
+name: yt-research
+
+on:
+  schedule:
+    # Daily, shortly after the YouTube API quota reset (midnight US Pacific).
+    - cron: "17 8 * * *"
+  workflow_dispatch:
+    inputs:
+      cmd:
+        description: "run | verify-seeds | analyze"
+        default: "run"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: yt-research
+  cancel-in-progress: false
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore database from ytr-data branch
+        run: |
+          git fetch origin ytr-data:ytr-data || true
+          mkdir -p yt_research/data yt_research/reports
+          if git rev-parse --verify ytr-data >/dev/null 2>&1; then
+            mkdir -p /tmp/ytr-data
+            git archive ytr-data | tar -x -C /tmp/ytr-data
+            cp -r /tmp/ytr-data/data/. yt_research/data/ 2>/dev/null || true
+          fi
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install -r yt_research/requirements.txt pytest
+
+      - name: Tests
+        working-directory: yt_research
+        run: python -m pytest -q tests
+
+      - name: Research cycle
+        working-directory: yt_research
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python -m ytr ${{ github.event.inputs.cmd || 'run' }}
+
+      - name: Persist database and reports to ytr-data branch
+        if: always()
+        run: |
+          set -e
+          python -c "import sqlite3,glob; [sqlite3.connect(p).execute('PRAGMA wal_checkpoint(TRUNCATE)') for p in glob.glob('yt_research/data/*.sqlite')]"
+          rm -rf /tmp/out && mkdir -p /tmp/out
+          cp -r yt_research/data /tmp/out/data
+          cp -r yt_research/reports /tmp/out/reports
+          cd /tmp/out
+          git init -q -b ytr-data
+          git config user.name "ytr-bot"
+          git config user.email "ytr-bot@users.noreply.github.com"
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git fetch -q origin ytr-data && git reset -q --soft FETCH_HEAD || true
+          git add -A
+          git commit -qm "ytr data $(date -u +%FT%TZ)" || exit 0
+          git push -q origin HEAD:ytr-data
