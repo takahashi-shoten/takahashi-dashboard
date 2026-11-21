@@ -118,7 +118,7 @@ def upsert_video(con, item: dict, observed_at: str) -> bool:
     synth = st.get("containsSyntheticMedia")
     row = dict(
         video_id=vid, channel_id=sn.get("channelId"), title=sn.get("title"),
-        description=(sn.get("description") or "")[:5000], published_at=sn.get("publishedAt"),
+        description=(sn.get("description") or "")[:400], published_at=sn.get("publishedAt"),
         duration_s=dur, format_class=format_class(dur), category_id=sn.get("categoryId"),
         default_language=sn.get("defaultLanguage"), default_audio_language=sn.get("defaultAudioLanguage"),
         tags_json=json.dumps(sn.get("tags", []), ensure_ascii=False),
