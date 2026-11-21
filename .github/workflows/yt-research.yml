@@ -55,14 +55,27 @@ jobs:
         run: python -m ytr ${{ github.event.inputs.cmd || 'run' }}
 
       - name: Pack database
+        id: pack
         if: always()
         run: |
           set -e
+          # Never ship a missing/empty/corrupt DB: abort here so the previous snapshot stays untouched.
+          python - <<'PY'
+          import sqlite3, sys
+          c = sqlite3.connect("yt_research/data/ytr.sqlite")
+          assert c.execute("PRAGMA integrity_check").fetchone()[0] == "ok", "integrity_check failed"
+          n = c.execute("SELECT COUNT(*) FROM topics").fetchone()[0]
+          assert n > 0, "empty database"
+          PY
           python -c "import sqlite3,glob; [(c:=sqlite3.connect(p)).execute('PRAGMA wal_checkpoint(TRUNCATE)') and c.execute('VACUUM') for p in glob.glob('yt_research/data/*.sqlite')]"
           rm -rf /tmp/out && mkdir -p /tmp/out/data
           gzip -9 -c yt_research/data/ytr.sqlite > /tmp/out/data/ytr.sqlite.gz
           cp -r yt_research/reports /tmp/out/reports
-          ls -la /tmp/out/data
+          gzip -t /tmp/out/data/ytr.sqlite.gz
+          SIZE=$(stat -c %s /tmp/out/data/ytr.sqlite.gz)
+          echo "packed size: $SIZE bytes"
+          # GitHub rejects files > 100MB; fail loudly well before that so the artifact backup still works.
+          [ "$SIZE" -lt 90000000 ] || { echo "::error::snapshot too large for git ($SIZE bytes)"; exit 1; }
 
       - name: Backup as workflow artifact
         if: always()
@@ -70,10 +83,11 @@ jobs:
         with:
           name: ytr-data
           path: /tmp/out
+          if-no-files-found: ignore
           retention-days: 30
 
       - name: Persist to ytr-data branch (latest snapshot only)
-        if: always()
+        if: always() && steps.pack.outcome == 'success'
         run: |
           set -e
           cd /tmp/out
