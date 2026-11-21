@@ -14,7 +14,7 @@ MUSIC_CATEGORY_ID = "10"                                        # excluded from 
 
 # YouTube Data API v3 default quota is 10,000 units/day, reset at midnight Pacific.
 DAILY_QUOTA = int(os.environ.get("YTR_DAILY_QUOTA", 10_000))
-RUN_BUDGET = int(os.environ.get("YTR_RUN_BUDGET", 8_000))       # leave headroom
+RUN_BUDGET = int(os.environ.get("YTR_RUN_BUDGET", 9_000))       # leave ~1,000 units headroom
 QUOTA_TZ = "America/Los_Angeles"
 
 # Official costs (units) per call. https://developers.google.com/youtube/v3/determine_quota_cost
@@ -45,3 +45,7 @@ ANTHROPIC_MODEL = os.environ.get("YTR_CLAUDE_MODEL", "claude-opus-5-5")
 DATE_SAMPLE_SHARE = float(os.environ.get("YTR_DATE_SAMPLE_SHARE", 0.25))
 DATE_SAMPLE_MIN_AGE_DAYS = 14
 DATE_SAMPLE_MAX_AGE_DAYS = 60
+
+# Genres to cover first (owner's current interest). Others follow, least-covered first.
+PRIORITY_GENRES = ("mens_sexual_health", "relationships_dating", "sex_trivia_edu", "grooming_men",
+                   "midlife_men", "aga_hair", "sleep_health", "side_income", "asset_building")
