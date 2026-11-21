@@ -21,7 +21,7 @@ QUOTA_TZ = "America/Los_Angeles"
 COST = {"search": 100, "videos": 1, "channels": 1, "playlistItems": 1, "videoCategories": 1}
 
 # Cycle tuning
-SEARCHES_PER_RUN = int(os.environ.get("YTR_SEARCHES_PER_RUN", 40))
+SEARCHES_PER_RUN = int(os.environ.get("YTR_SEARCHES_PER_RUN", 52))
 CHANNEL_AUDIT_MAX_PAGES = 4          # 4 x 50 uploads per channel max
 CHANNEL_REAUDIT_DAYS = 7
 REFRESH_MAX_VIDEOS = 2_500           # 50 per unit -> <=50 units

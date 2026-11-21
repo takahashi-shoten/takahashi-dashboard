@@ -226,3 +226,21 @@ def test_report_has_coverage_section(env):
     gms = analyze.compute_genre_metrics(con)
     text = report.write(con, {}, gms, [])
     assert "調査の進み具合" in text and "検索未実施" in text
+
+
+def test_zero_result_retry_without_bias(env):
+    con, fake, yt = env
+    calls = []
+    orig = fake.get
+
+    def spy(url, params=None, headers=None, timeout=None):
+        if url.endswith("search"):
+            calls.append(dict(params))
+            if "relevanceLanguage" in params:      # biased search returns nothing
+                return Resp(200, {"items": []})
+        return orig(url, params, headers, timeout)
+    fake.get = spy
+    stats = Cycle(con, yt, 1).run(searches=1, audit_reserve=0)
+    assert stats["zero_result_retries"] == 1 and stats["new_videos"] > 0
+    assert "relevanceLanguage" not in calls[1]
+    assert con.execute("SELECT COUNT(*) FROM errors WHERE stage LIKE 'zero_result:%'").fetchone()[0] == 1
