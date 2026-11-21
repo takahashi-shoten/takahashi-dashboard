@@ -31,7 +31,9 @@ jobs:
           if git rev-parse --verify ytr-data >/dev/null 2>&1; then
             mkdir -p /tmp/ytr-data
             git archive ytr-data | tar -x -C /tmp/ytr-data
-            cp -r /tmp/ytr-data/data/. yt_research/data/ 2>/dev/null || true
+            if [ -f /tmp/ytr-data/data/ytr.sqlite.gz ]; then
+              gunzip -c /tmp/ytr-data/data/ytr.sqlite.gz > yt_research/data/ytr.sqlite
+            fi
           fi
 
       - uses: actions/setup-python@v5
@@ -52,20 +54,33 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python -m ytr ${{ github.event.inputs.cmd || 'run' }}
 
-      - name: Persist database and reports to ytr-data branch
+      - name: Pack database
         if: always()
         run: |
           set -e
-          python -c "import sqlite3,glob; [sqlite3.connect(p).execute('PRAGMA wal_checkpoint(TRUNCATE)') for p in glob.glob('yt_research/data/*.sqlite')]"
-          rm -rf /tmp/out && mkdir -p /tmp/out
-          cp -r yt_research/data /tmp/out/data
+          python -c "import sqlite3,glob; [(c:=sqlite3.connect(p)).execute('PRAGMA wal_checkpoint(TRUNCATE)') and c.execute('VACUUM') for p in glob.glob('yt_research/data/*.sqlite')]"
+          rm -rf /tmp/out && mkdir -p /tmp/out/data
+          gzip -9 -c yt_research/data/ytr.sqlite > /tmp/out/data/ytr.sqlite.gz
           cp -r yt_research/reports /tmp/out/reports
+          ls -la /tmp/out/data
+
+      - name: Backup as workflow artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ytr-data
+          path: /tmp/out
+          retention-days: 30
+
+      - name: Persist to ytr-data branch (latest snapshot only)
+        if: always()
+        run: |
+          set -e
           cd /tmp/out
           git init -q -b ytr-data
           git config user.name "ytr-bot"
           git config user.email "ytr-bot@users.noreply.github.com"
           git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
-          git fetch -q origin ytr-data && git reset -q --soft FETCH_HEAD || true
           git add -A
-          git commit -qm "ytr data $(date -u +%FT%TZ)" || exit 0
-          git push -q origin HEAD:ytr-data
+          git commit -qm "ytr data $(date -u +%FT%TZ)"
+          git push -q --force origin HEAD:ytr-data
