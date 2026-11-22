@@ -17,12 +17,13 @@ SCHEMA = {
             "properties": {"heading": {"type": "string"}, "narration": {"type": "string"},
                            "visual_prompt": {"type": "string"}, "seconds": {"type": "integer"}},
             "required": ["heading", "narration", "visual_prompt", "seconds"], "additionalProperties": False}},
+        "thumbnail_text": {"type": "string"},
         "description": {"type": "string"},
         "tags": {"type": "array", "items": {"type": "string"}},
         "fact_claims_to_verify": {"type": "array", "items": {"type": "string"}},
         "ai_disclosure_needed": {"type": "boolean"},
     },
-    "required": ["title_options", "original_angle", "hook", "sections", "description", "tags",
+    "required": ["title_options", "original_angle", "hook", "sections", "thumbnail_text", "description", "tags",
                  "fact_claims_to_verify", "ai_disclosure_needed"],
     "additionalProperties": False,
 }
@@ -37,6 +38,7 @@ SYSTEM = """You write scripts for a faceless, AI-assisted video channel. Rules:
 - No sexually explicit content, nothing involving minors, no real people's likenesses, no medical promises or cures.
 - visual_prompt describes an original illustration/animation shot, never a copyrighted character or a real person.
 - Set ai_disclosure_needed=true when visuals or voice are synthetic and realistic.
+- thumbnail_text: the 8-14 character (ja) or 2-5 word (en) punchy line for the thumbnail: a concrete promise, a surprise or a tension, never the full title.
 - LENGTH IS A HARD REQUIREMENT: the total number of characters in all `narration` fields must be within 10% of `target_narration_chars`
   (count characters, not words). Do not summarize or stop early; develop each section fully with examples and concrete detail.
   Set each section's `seconds` to its narration characters divided by `chars_per_second`, rounded."""

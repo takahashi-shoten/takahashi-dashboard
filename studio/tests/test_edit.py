@@ -1,4 +1,5 @@
 import json
+import re
 import subprocess
 import sys
 import time
@@ -156,3 +157,11 @@ def test_equal_split_without_storyboard(tmp_path):
     assert abs(_dur(final) - edit.span(2)) < 0.1
     a = _frame_mean(final, 0.3, p / "f.png"); b = _frame_mean(final, 2.1, p / "f.png")
     assert a[0] > a[2] and b[2] > b[0]
+
+
+def test_subtitle_lines_never_start_with_a_closing_mark_and_thumbnail_text():
+    lines = edit.split_lines("「お仕事は？」「休日は？」「ご出身は？」と聞いていませんか。")
+    assert lines and all(not re.match(r"^[」』）、。！？]", l) for l in lines)
+    assert "".join(lines).replace("。", "") .startswith("「お仕事は？」")
+    t = edit.thumbnail_text_from_title("初対面の会話が「面接」になる男性へ｜40代50代60代の婚活で二回目がない本当の理由")
+    assert "｜" not in t and 6 <= len(t) <= 16

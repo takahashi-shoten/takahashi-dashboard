@@ -77,17 +77,13 @@ def produce(con, project_id, lang, client, voice_provider, image_provider, revie
     paths = storyboard.render_beats(d, image_provider)
     stage("visuals", "real" if imd["status"] == "done" else "mock", f"{len(paths)} images; {imd.get('note', '')}")
     model = getattr(image_provider, "model", "")
-    tok = 0
-    uf = d / "visuals" / "usage.json"
-    if uf.exists():
-        for u in json.loads(uf.read_text()):
-            tok += int((u or {}).get("output_tokens", 0))
+    tok = sum(int(u.get("output_tokens", 0)) for u in getattr(image_provider, "usage", []))     # thread-safe per-image usage
     price = IMAGE_USD_PER_M_TOKENS.get(model)
     ledger.record_usage(con, project_id, "images", "gemini", model or "?", 0, tok, None if price is None else tok * price / 1e6)
 
     edit.assemble(d)
     edit.make_shorts(d)
-    edit.make_thumbnail(d, data["title_options"][0])
+    edit.make_thumbnail(d, data["title_options"][0], data.get("thumbnail_text"))
     edit.make_preview(d)
     stage("edit", "real", "ffmpeg assembly")
 

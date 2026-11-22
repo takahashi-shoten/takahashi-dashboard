@@ -48,11 +48,19 @@ def split_lines(text):
     text = " ".join(text.split())
     if _is_ja(text):
         lines = []
-        for piece in re.findall(r"[^、。！？!?]+[、。！？!?]*", text.replace(" ", "")):
+        for piece in re.findall(r"[^、。！？!?]+[、。！？!?]*[」』）)]*", text.replace(" ", "")):
             n = -(-len(piece) // JA_MAX)          # even split of over-long pieces
             size = -(-len(piece) // n)
             lines += [piece[i:i + size] for i in range(0, len(piece), size)]
-        return [l.rstrip("。") or l for l in lines if l]
+        fixed = []
+        for l in lines:
+            m = re.match(r"^([」』）)、。！？]+)(.*)$", l)          # never start a line with a closing mark: move it to the previous line
+            if m and fixed:
+                fixed[-1] += m.group(1)
+                l = m.group(2)
+            if l:
+                fixed.append(l)
+        return [l.rstrip("。") or l for l in fixed]
     lines, cur = [], ""
     for w in text.split():
         if cur and len(cur) + 1 + len(w) > EN_MAX:
@@ -241,7 +249,17 @@ def _wrap(draw, text, font, max_w):
     return lines + ([cur.strip()] if cur.strip() else [])
 
 
-def make_thumbnail(project_dir, title: str) -> Path:
+def thumbnail_text_from_title(title: str, max_chars: int = 16) -> str:
+    """Fallback when the script has no `thumbnail_text`: the first segment of the title, trimmed at a natural break."""
+    seg = re.split(r"[｜|]", title)[0].strip()
+    if len(seg) <= max_chars:
+        return seg
+    cut = max(seg.rfind(c, 0, max_chars + 1) for c in "、， ,")
+    return seg[:cut] if cut >= 6 else seg[:max_chars]
+
+
+def make_thumbnail(project_dir, title: str, text: str = None) -> Path:
+    """1280x720 thumbnail: a SHORT punchy line (<= 2 lines, large) at the bottom over a dark gradient so faces stay visible."""
     project_dir = Path(project_dir)
     vis = project_dir / "visuals"
     allp = sorted(vis.glob("section_*.png"))
@@ -250,24 +268,24 @@ def make_thumbnail(project_dir, title: str) -> Path:
     src = cand if cand.exists() else (find_beats(project_dir, first) or allp)[0]   # else its first beat
     W, H = 1280, 720
     img = Image.open(src).convert("RGB")
-    s = max(W / img.width, H / img.height)
-    img = img.resize((round(img.width * s), round(img.height * s)), Image.LANCZOS)
+    sc = max(W / img.width, H / img.height)
+    img = img.resize((round(img.width * sc), round(img.height * sc)), Image.LANCZOS)
     left, top = (img.width - W) // 2, (img.height - H) // 2
     img = img.crop((left, top, left + W, top + H))
     grad = Image.linear_gradient("L").resize((W, H))           # 0 top -> 255 bottom
-    img = Image.composite(Image.new("RGB", (W, H), "black"), img, grad.point(lambda v: int(40 + v * 0.62)))
-    draw, margin = ImageDraw.Draw(img), 70
-    for size in range(150, 39, -4):                            # auto-fit: largest size giving <=3 lines that fit
+    img = Image.composite(Image.new("RGB", (W, H), "black"), img, grad.point(lambda v: 0 if v < 110 else int((v - 110) * 1.6)))
+    draw, margin = ImageDraw.Draw(img), 60
+    line = (text or thumbnail_text_from_title(title)).strip()
+    for size in range(150, 49, -4):                            # largest size that fits in <= 2 lines within 90% of the width
         font = ImageFont.truetype(FONT, size)
-        lines = _wrap(draw, title, font, W - 2 * margin)
-        lh = int(size * 1.2)
-        if len(lines) <= 3 and len(lines) * lh <= H - 2 * margin:
+        lines = _wrap(draw, line, font, int(W * 0.9) - margin)
+        lh = int(size * 1.15)
+        if len(lines) <= 2:
             break
     stroke = max(4, size // 9)
-    y = (H - len(lines) * lh) // 2
+    y = H - margin - len(lines) * lh
     for l in lines:
-        w = draw.textlength(l, font=font)
-        draw.text(((W - w) / 2, y), l, font=font, fill="#FFE600", stroke_width=stroke, stroke_fill="black")
+        draw.text((margin, y), l, font=font, fill="#FFE600", stroke_width=stroke, stroke_fill="black")
         y += lh
     out = project_dir / "thumbnail.png"
     img.save(out)
