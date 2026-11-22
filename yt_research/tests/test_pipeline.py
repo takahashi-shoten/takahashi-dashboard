@@ -257,3 +257,9 @@ def test_empty_topic_retries_next_day_but_good_topic_waits(env):
     con.commit()
     ids = {r["topic_id"] for r in topics.select_topics(con, 200, now=NOW)}
     assert t[0][0] in ids and t[1][0] not in ids
+
+
+def test_date_sample_topics_start_with_priority_genres(env):
+    con, *_ = env
+    sel = topics.select_date_sample_topics(con, 9)
+    assert {r["genre"] for r in sel} <= set(config.PRIORITY_GENRES)

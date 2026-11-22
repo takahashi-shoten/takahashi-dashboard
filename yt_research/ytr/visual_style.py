@@ -25,6 +25,7 @@ PRICE = {"claude-haiku-5-5": (0.10, 0.50)}
 THUMB_URL = "https://i.ytimg.com/vi/{video_id}/hqdefault.jpg"
 FETCH_TIMEOUT = 15
 MIN_GROUP = 20          # below this a group is "insufficient data"
+BASELINE_SOURCE = {}    # genre -> description of where the baseline group came from (shown in the report)
 MIN_BASE_COUNT = 3      # baseline count needed for a value's lift
 BASELINE_MIN_AGE_DAYS = 14
 MAX_WORKERS = 4
@@ -78,6 +79,20 @@ def select_groups(con, genre, limit=40, now=None, seed=0):
         WHERE t.genre=? AND COALESCE(v.category_id,'')!=? AND v.published_at<=?
           AND v.unavailable_at IS NULL""", (genre, config.MUSIC_CATEGORY_ID, cut))} - set(hits))
     random.Random(f"{seed}:{genre}").shuffle(base)
+    BASELINE_SOURCE[genre] = "新着順の標本(date_samples)"
+    if len(base) < MIN_GROUP:
+        # Fallback when the genre has too few date-sampled videos: non-hit uploads of the channels that produced this genre's hits
+        # (same channels, same period). It controls for the channel, but is NOT a random sample of the genre: stated in the report.
+        extra = sorted({r[0] for r in con.execute("""SELECT v2.video_id FROM v_latest v2
+            WHERE v2.channel_id IN (SELECT DISTINCT v.channel_id FROM v_latest v JOIN discoveries d ON d.video_id=v.video_id
+                                    JOIN topics t ON t.topic_id=d.topic_id WHERE t.genre=? AND v.view_count>=?)
+              AND COALESCE(v2.category_id,'')!=? AND v2.published_at>=? AND v2.published_at<=? AND v2.view_count<?
+              AND v2.unavailable_at IS NULL""", (genre, config.MIN_VIEWS, config.MUSIC_CATEGORY_ID, since, cut, config.MIN_VIEWS))}
+            - set(hits) - set(base))
+        random.Random(f"{seed}:{genre}:fb").shuffle(extra)
+        base = base + extra
+        if extra:
+            BASELINE_SOURCE[genre] = "同じチャンネルの、ヒットに届かなかった投稿(ランダム標本ではありません)"
     return hits, base[:limit]
 
 
@@ -226,7 +241,8 @@ def render_report(results, stats):
     L += ["## 注意事項(必ずお読みください)", ""] + [f"- {c}" for c in CAVEATS] + [""]
     for r in results:
         L += [f"## ジャンル: {r['genre']}", "",
-              f"ヒット群 n={r['hit_n']}(選定 {r['hits_selected']}) / ベースライン群 n={r['base_n']}(選定 {r['base_selected']})", ""]
+              f"ヒット群 n={r['hit_n']}(選定 {r['hits_selected']}) / ベースライン群 n={r['base_n']}(選定 {r['base_selected']})",
+              f"比較の対象(ベースライン): {BASELINE_SOURCE.get(r['genre'], '不明')}", ""]
         if r["insufficient"]:
             names = {"hit": "ヒット群", "baseline": "ベースライン群"}
             L += [f"**データ不足**: {'・'.join(names[g] for g in r['insufficient'])}が {MIN_GROUP} 本未満のため、リフトは計算していません。", ""]
