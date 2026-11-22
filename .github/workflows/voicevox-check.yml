@@ -1,0 +1,56 @@
+name: voicevox-check
+
+# Manual only. Proves VoicevoxVoice works against a real VOICEVOX engine
+# and prints measured facts (version, speakers, duration, real-time factor, chars/sec).
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      voicevox:
+        image: voicevox/voicevox_engine:cpu-latest
+        ports:
+          - 50021:50021
+    env:
+      VOICEVOX_URL: http://127.0.0.1:50021
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Wait for VOICEVOX engine (up to 120 s)
+        run: |
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:50021/version; then
+              echo
+              echo "engine ready after about $((i*2)) s"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "VOICEVOX engine did not become ready within 120 s" >&2
+          exit 1
+
+      - name: Install dependencies
+        run: pip install requests pytest
+
+      - name: Live test against real engine
+        working-directory: studio
+        run: python -m studio.voice_live_test
+
+      - name: Upload work directory
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: voicevox-live-work
+          path: studio/work
+          retention-days: 14
+          if-no-files-found: ignore
