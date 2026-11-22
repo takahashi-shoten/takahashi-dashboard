@@ -63,7 +63,7 @@ jobs:
           names = [(m["name"].split("/")[-1], m.get("supportedGenerationMethods", [])) for m in data.get("models", [])]
           print("model_count:", len(names))
           for n, meth in names:
-              if re.search(r"image|imagen|flash|pro", n) and "embedding" not in n:
+              if re.search(r"veo|video|omni|lyria|imagen|live|music|animate|i2v", n):
                   print("model:", n, meth)
           PY
 
