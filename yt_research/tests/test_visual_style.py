@@ -66,7 +66,7 @@ def add_video(con, vid, topic_id, pub_days, views, cat="27", kind="disc"):
     con.execute("INSERT OR REPLACE INTO video_snapshots VALUES(?,?,?,?,?)", (vid, ago(0), views, 0, 0))
     if kind == "disc":
         con.execute("INSERT OR IGNORE INTO discoveries(video_id, topic_id) VALUES(?,?)", (vid, topic_id))
-    else:
+    elif kind == "date":
         con.execute("INSERT OR IGNORE INTO date_samples VALUES(?,?,?,?)", (vid, topic_id, 1, ago(0)))
 
 
@@ -217,3 +217,19 @@ def test_schema_shape():
     assert set(vs.SCHEMA["required"]) == set(vs.SCHEMA["properties"]) == {
         "medium", "ai_look", "mood", "palette", "subject", "face_present", "text_overlay", "emotion"}
     assert vs.PRICE["claude-haiku-5-5"] == (0.10, 0.50)
+
+
+def test_baseline_falls_back_to_same_channel_non_hits_and_is_labelled(tmp_path):
+    con = build(n_hit=25, n_base=0)                      # no date-sampled baseline at all
+    for i in range(30):                                  # same channel "c": uploads that did not reach the hit threshold
+        add_video(con, f"nonhit{i}", 1, 25 + i, 2000 + i, kind="none")
+    add_video(con, "nonhit_young", 1, 3, 50, kind="none")        # too young: excluded
+    add_video(con, "nonhit_music", 1, 30, 50, cat="10", kind="none")
+    con.commit()
+    hits, base = vs.select_groups(con, "g1", limit=25)
+    assert len(hits) == 25 and len(base) == 25
+    assert all(b.startswith("nonhit") for b in base) and "nonhit_young" not in base and "nonhit_music" not in base
+    assert not set(hits) & set(base)
+    assert "同じチャンネル" in vs.BASELINE_SOURCE["g1"]
+    hits2, base2 = vs.select_groups(build(n_hit=25, n_base=25), "g1", limit=25)
+    assert "date_samples" in vs.BASELINE_SOURCE["g1"] and all(b.startswith("base") for b in base2)

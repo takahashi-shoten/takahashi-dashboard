@@ -185,8 +185,10 @@ def expand_from_hits(con, max_new=5):
 
 def select_date_sample_topics(con, n):
     """Topics for unbiased-ish sampling: least recently date-sampled first, spread over genres."""
+    from . import config
     rows = con.execute("""SELECT * FROM topics WHERE status IN ('active','paused')
                           ORDER BY (date_sampled_at IS NOT NULL), date_sampled_at, topic_id""").fetchall()
+    rows = sorted(rows, key=lambda r: r["genre"] not in config.PRIORITY_GENRES)   # owner's priority genres get their baseline first (stable sort)
     seen, out = set(), []
     for r in rows:                      # one per genre first
         if r["genre"] not in seen:
