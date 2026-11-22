@@ -100,3 +100,42 @@ jobs:
           path: studio/work/gemini_live
           if-no-files-found: ignore
           retention-days: 14
+
+  produce:
+    if: github.event.inputs.task == 'produce'
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore research database
+        run: |
+          git fetch origin ytr-data:ytr-data
+          mkdir -p /tmp/ytr && git archive ytr-data | tar -x -C /tmp/ytr
+          gunzip -c /tmp/ytr/data/ytr.sqlite.gz > /tmp/ytr.sqlite
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install ffmpeg and a Japanese font
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-ipafont-gothic
+      - run: pip install requests pillow anthropic
+      - name: Produce one video (real providers)
+        working-directory: studio
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python -m studio.produce --ytr-db /tmp/ytr.sqlite --genre relationships_dating --lang ja --voice Iapetus --target-seconds 480
+      - name: Publish review files to studio-output branch
+        if: always()
+        run: |
+          mkdir -p /tmp/out
+          W=$(ls -d studio/work/*/ 2>/dev/null | head -1); echo "work dir: $W"; ls -la "$W" || true
+          for f in preview.mp4 shorts.mp4 thumbnail.png final.srt script.json storyboard.json qa.json report.json; do
+            [ -f "$W$f" ] && [ "$(stat -c %s "$W$f")" -lt 90000000 ] && cp "$W$f" /tmp/out/ || echo "skip $f"
+          done
+          cp -r "$W"visuals /tmp/out/visuals_sample 2>/dev/null && find /tmp/out/visuals_sample -name '*.png' | sort | sed -n '4,$p' | xargs -r rm -f || true
+          cd /tmp/out && ls -la
+          git init -q -b studio-output && git config user.name ytr-bot && git config user.email ytr-bot@users.noreply.github.com
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git add -A && git commit -qm "studio output $(date -u +%FT%TZ)" && git push -q --force origin HEAD:studio-output
