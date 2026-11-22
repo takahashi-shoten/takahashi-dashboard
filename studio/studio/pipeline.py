@@ -4,10 +4,10 @@ from . import ledger
 STAGES = [
     ("brief", "done-when: research brief stored"),
     ("script", "Claude API (needs ANTHROPIC_API_KEY)"),
-    ("voice", "text-to-speech provider: NOT connected"),
-    ("visuals", "image/video generation provider: NOT connected"),
-    ("edit", "assembly/editing (ffmpeg): NOT built"),
-    ("qa", "fact check + policy check: NOT built"),
+    ("voice", "VOICEVOX adapter written, NOT run against a real engine; mock works"),
+    ("visuals", "image provider NOT connected; mock works"),
+    ("edit", "ffmpeg assembly/subtitles/shorts/thumbnail: built and tested"),
+    ("qa", "rule checks built; needs 2 REAL reviewers (Claude + Gemini) to pass; Gemini NOT connected"),
     ("approval", "owner approval gate (publish is never automatic)"),
 ]
 
@@ -16,7 +16,7 @@ def status(con, project_id):
     out = []
     for stage, note in STAGES:
         r = con.execute("SELECT status FROM steps WHERE project_id=? AND stage=? ORDER BY id DESC LIMIT 1", (project_id, stage)).fetchone()
-        s = r["status"] if r else ("pending" if stage in ("brief", "script", "approval") else "not_connected")
+        s = r["status"] if r else ("pending" if stage in ("brief", "script", "approval", "edit") else "not_connected")
         out.append((stage, s, note))
     return out
 

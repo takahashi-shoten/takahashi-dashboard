@@ -7,7 +7,7 @@ from . import brief, ledger, pipeline, script
 
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="studio")
-    ap.add_argument("cmd", choices=["brief", "script", "status", "profit"])
+    ap.add_argument("cmd", choices=["brief", "script", "status", "profit", "demo"])
     ap.add_argument("--ytr-db"); ap.add_argument("--genre"); ap.add_argument("--lang", default="ja")
     ap.add_argument("--project", type=int)
     a = ap.parse_args(argv)
@@ -20,6 +20,9 @@ def main(argv=None):
         d = script.write_script(con, anthropic.Anthropic(), a.project)
         print(json.dumps(d, ensure_ascii=False, indent=1)[:3000] if d else "no script")
         print(ledger.profit(con, a.project))
+    elif a.cmd == "demo":
+        from . import run
+        print(json.dumps(run.demo(), ensure_ascii=False, indent=1))
     elif a.cmd == "status":
         for stage, s, note in pipeline.status(con, a.project):
             print(f"{stage:9} {s:14} {note}")
