@@ -174,22 +174,31 @@ class WebClaudeReviewer(ClaudeReviewer):
 
 
 class GeminiReviewer:
-    """Independent second opinion via google-genai. NOT implemented/verified: needs a real key and current docs."""
+    """Independent second opinion: Gemini with Google Search grounding, over REST. Verified only by studio/gemini_live_test.py."""
     name = "gemini"
 
+    def __init__(self, model=None, session=None):
+        self.model = model or os.environ.get("STUDIO_GEMINI_REVIEW_MODEL", "gemini-pro-latest")
+        self.session = session
+
     def describe(self):
-        return dict(stage="qa", status="not_connected", note="Gemini reviewer: needs GEMINI_API_KEY + google-genai; call not implemented")
+        ok = bool(os.environ.get("GEMINI_API_KEY"))
+        return dict(stage="qa", status="done" if ok else "not_connected",
+                    note=f"Gemini reviewer {self.model} with Google Search" + ("" if ok else " (needs GEMINI_API_KEY)"))
 
     def review(self, script, lang):
+        from . import gemini
+        body = {"systemInstruction": {"parts": [{"text": WEB_REVIEW_SYSTEM.replace("web search tool", "Google Search tool")}]},
+                "contents": [{"parts": [{"text": json.dumps({"lang": lang, "script": script}, ensure_ascii=False)}]}],
+                "tools": [{"google_search": {}}]}
+        resp = gemini.generate_content(self.model, body, self.session)
+        u = gemini.usage(resp)
+        usage = {"input_tokens": u["input_tokens"], "output_tokens": u["output_tokens"] + u["thought_tokens"]}
         try:
-            from google import genai  # noqa: F401  (lazy: optional package)
-        except ImportError:
-            genai = None
-        if not os.environ.get("GEMINI_API_KEY") or genai is None:
-            raise NotConnected("set GEMINI_API_KEY and install google-genai")
-        # TODO: verify client/model/structured-output API against current google-genai docs with a real key,
-        # then send REVIEW_SYSTEM + the script and map the JSON reply to _result() incl. usage for the ledger.
-        raise NotConnected("Gemini call not implemented: verify the google-genai API with a real key first")
+            d = _extract_json(gemini.text_of(resp))
+            return _result(self.name, d["verdict"], d["issues"], d["unverified_claims"], usage, self.model)
+        except (ValueError, KeyError, json.JSONDecodeError):
+            return _result(self.name, "revise", ["reviewer reply was not valid JSON"], [], usage, self.model)
 
 
 class MockReviewer:

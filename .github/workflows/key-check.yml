@@ -3,12 +3,17 @@ name: key-check
 # Diagnoses the ANTHROPIC_API_KEY secret WITHOUT printing it: only its shape and whether the API accepts it.
 on:
   workflow_dispatch:
+    inputs:
+      task:
+        description: "keys (default) or gemini (live image + review test)"
+        default: "keys"
 
 permissions:
   contents: read
 
 jobs:
   check:
+    if: github.event.inputs.task != 'gemini' && github.event.inputs.task != 'imagecompare'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -38,3 +43,60 @@ jobs:
           print("models_with_x-api-key:", call({"x-api-key": kk, "anthropic-version": "2023-06-01"}))
           print("models_with_bearer:", call({"Authorization": "Bearer " + kk, "anthropic-version": "2023-06-01"}))
           PY
+
+      - name: Check Gemini key and list models
+        env:
+          G: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python3 - <<'PY'
+          import os, json, re, urllib.request, urllib.error
+          k = os.environ.get("G", "").strip()
+          print("gemini_secret_present:", bool(k), "| length:", len(k), "| starts_with:", k[:4], "| has_whitespace:", bool(re.search(r"\s", k)))
+          req = urllib.request.Request("https://generativelanguage.googleapis.com/v1beta/models?pageSize=200", headers={"x-goog-api-key": k})
+          try:
+              with urllib.request.urlopen(req, timeout=30) as r:
+                  data = json.load(r)
+                  print("models_list_status:", r.status)
+          except urllib.error.HTTPError as e:
+              print("models_list_status:", e.code, "| reason:", (e.read().decode()[:200]).replace(chr(10), " "))
+              raise SystemExit(0)
+          names = [(m["name"].split("/")[-1], m.get("supportedGenerationMethods", [])) for m in data.get("models", [])]
+          print("model_count:", len(names))
+          for n, meth in names:
+              if re.search(r"image|imagen|flash|pro", n) and "embedding" not in n:
+                  print("model:", n, meth)
+          PY
+
+  gemini-live:
+    if: github.event.inputs.task == 'gemini' || github.event.inputs.task == 'imagecompare'
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests pillow
+      - name: Gemini live test (one image + one grounded review)
+        working-directory: studio
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          STUDIO_GEMINI_REVIEW_MODEL: gemini-3.8-flash
+        run: python -m studio.${{ github.event.inputs.task == 'imagecompare' && 'image_compare' || 'gemini_live_test' }}
+      - name: Publish sample image to studio-samples branch (so it can be viewed)
+        if: always()
+        run: |
+          cd studio/work/gemini_live && ls
+          git init -q -b studio-samples && git config user.name ytr-bot && git config user.email ytr-bot@users.noreply.github.com
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git add -A && git commit -qm "gemini live sample $(date -u +%FT%TZ)" && git push -q --force origin HEAD:studio-samples
+      - name: Upload sample image
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini-live
+          path: studio/work/gemini_live
+          if-no-files-found: ignore
+          retention-days: 14

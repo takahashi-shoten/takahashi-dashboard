@@ -59,8 +59,50 @@ class _KeyedStub:
         return dict(stage="visuals", status="not_connected", note=f"{self.name}: stub, needs {self.env} and an implementation")
 
 
-class GeminiImage(_KeyedStub):
-    env, name = "GEMINI_API_KEY", "GeminiImage"
+class GeminiImage:
+    """Gemini image generation over REST (model ids come from the live models list; see key-check workflow output).
+    Verified only by studio/gemini_live_test.py with a real key. Records token usage in `last_usage` (price: check the Google pricing page)."""
+    name = "GeminiImage"
+
+    STYLES = {
+        "illustration": "Original illustration. No text, letters, logos or watermarks. No real people.",
+        "photo": ("Photorealistic photograph, natural lighting, realistic skin texture and proportions. Fictional people only (not any real person's "
+                  "likeness). No text, letters, logos or watermarks."),
+    }
+
+    def __init__(self, model=None, session=None, style="illustration"):
+        self.model = model or os.environ.get("STUDIO_GEMINI_IMAGE_MODEL", "gemini-3.1-flash-image")
+        self.session, self.last_usage, self.style = session, None, style
+
+    def generate(self, prompt, out_path, size=(1920, 1080)):
+        import io
+        from PIL import Image, ImageOps
+        from . import gemini
+        text = f"{prompt}\n\n{self.STYLES[self.style]}"
+        attempts = [{"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": "16:9"}}, {"responseModalities": ["TEXT", "IMAGE"]}]
+        last = None
+        for cfg in attempts:                      # some models need TEXT+IMAGE or reject imageConfig: try the simplest alternative once
+            try:
+                resp = gemini.generate_content(self.model, {"contents": [{"parts": [{"text": text}]}], "generationConfig": cfg}, self.session)
+            except gemini.GeminiError as e:
+                last = e
+                if "HTTP 400" in str(e):
+                    continue
+                raise
+            img = gemini.first_image(resp)
+            if img:
+                self.last_usage = gemini.usage(resp)
+                im = ImageOps.fit(Image.open(io.BytesIO(img[1])).convert("RGB"), size, method=Image.LANCZOS)
+                Path(out_path).parent.mkdir(parents=True, exist_ok=True)
+                im.save(out_path, "PNG")
+                return
+            last = gemini.GeminiError("response contained no image")
+        raise last
+
+    def describe(self):
+        ok = bool(os.environ.get("GEMINI_API_KEY"))
+        return dict(stage="visuals", status="done" if ok else "not_connected",
+                    note=f"GeminiImage {self.model} via REST" + ("" if ok else " (needs GEMINI_API_KEY)"))
 
 
 class OpenAIImage(_KeyedStub):
