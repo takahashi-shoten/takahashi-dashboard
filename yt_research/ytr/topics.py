@@ -67,6 +67,13 @@ SEEDS = [
     ("sex_trivia_edu", "ja", "JP", "人体 不思議 雑学 男性"), ("sex_trivia_edu", "ja", "JP", "恋愛 心理学 雑学"),
     ("sex_trivia_edu", "en", "US", "weird facts about the human body"), ("sex_trivia_edu", "en", "US", "history of sex culture explained"),
     ("sex_trivia_edu", "en", "US", "animal mating behavior facts"), ("sex_trivia_edu", "en", "US", "sex myths debunked doctor"),
+    # short (1-2 token) queries: long Japanese multi-token queries returned 0-6 results on 2026-11-21/22,
+    # which reflects the search engine's AND matching, not absence of demand.
+    ("mens_sexual_health", "ja", "JP", "テストステロン"), ("mens_sexual_health", "ja", "JP", "ED 治療"),
+    ("mens_sexual_health", "ja", "JP", "男性ホルモン"), ("mens_sexual_health", "en", "US", "testosterone"),
+    ("sex_trivia_edu", "ja", "JP", "性の雑学"), ("sex_trivia_edu", "ja", "JP", "春画"), ("sex_trivia_edu", "ja", "JP", "性教育"),
+    ("sex_trivia_edu", "en", "US", "sex facts"), ("midlife_men", "ja", "JP", "中年 趣味"), ("midlife_men", "ja", "JP", "おじさん 孤独"),
+    ("sleep_health", "ja", "JP", "睡眠 改善"), ("grooming_men", "ja", "JP", "メンズ 身だしなみ"),
     # carried over verbatim from the legacy youtube_research_prototype QUERIES (for continuity)
     ("science", "ja", "JP", "科学 解説"), ("trivia", "ja", "JP", "雑学 なぜ"), ("drama_story", "ja", "JP", "短編ドラマ"),
     ("horror_mystery", "ja", "JP", "都市伝説 考察"), ("ai_film", "ja", "JP", "AI アニメ"), ("economics", "ja", "JP", "経済 解説"),
@@ -108,7 +115,11 @@ def select_topics(con, n: int, now=None):
             fresh.append(r)
             continue
         if r["last_run_at"] and (now - parse_iso(r["last_run_at"])).days < MIN_RERUN_DAYS:
-            continue
+            # topics that returned (almost) nothing may retry next day: their result was likely a query problem
+            last = con.execute("SELECT result_count FROM search_runs WHERE topic_id=? AND mode='top' ORDER BY id DESC LIMIT 1",
+                               (r["topic_id"],)).fetchone()
+            if not (last and last[0] < 10 and (now - parse_iso(r["last_run_at"])).days >= 1):
+                continue
         ucb = (r["yield_score"] or 0) + 0.5 * math.sqrt(math.log(total_runs) / r["runs"])
         scored.append((ucb, r))
     # round-robin genres among fresh topics so one genre cannot eat the budget

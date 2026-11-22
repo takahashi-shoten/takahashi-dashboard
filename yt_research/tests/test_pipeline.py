@@ -244,3 +244,16 @@ def test_zero_result_retry_without_bias(env):
     assert stats["zero_result_retries"] == 1 and stats["new_videos"] > 0
     assert "relevanceLanguage" not in calls[1]
     assert con.execute("SELECT COUNT(*) FROM errors WHERE stage LIKE 'zero_result:%'").fetchone()[0] == 1
+
+
+def test_empty_topic_retries_next_day_but_good_topic_waits(env):
+    from datetime import timedelta
+    con, *_ = env
+    t = con.execute("SELECT topic_id FROM topics ORDER BY topic_id LIMIT 2").fetchall()
+    ago2 = iso(NOW - timedelta(days=2))
+    for tid, rc in ((t[0][0], 0), (t[1][0], 50)):
+        con.execute("UPDATE topics SET runs=1,last_run_at=?,yield_score=0.5 WHERE topic_id=?", (ago2, tid))
+        con.execute("INSERT INTO search_runs(run_id,topic_id,executed_at,result_count,mode) VALUES(1,?,?,?, 'top')", (tid, ago2, rc))
+    con.commit()
+    ids = {r["topic_id"] for r in topics.select_topics(con, 200, now=NOW)}
+    assert t[0][0] in ids and t[1][0] not in ids
