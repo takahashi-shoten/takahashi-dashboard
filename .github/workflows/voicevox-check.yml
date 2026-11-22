@@ -4,9 +4,17 @@ name: voicevox-check
 # and prints measured facts (version, speakers, duration, real-time factor, chars/sec).
 on:
   workflow_dispatch:
+    inputs:
+      task:
+        description: "check = live test, pick = make male voice samples and publish to branch voice-samples"
+        default: check
+        type: choice
+        options:
+          - check
+          - pick
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   live:
@@ -47,8 +55,26 @@ jobs:
         run: pip install requests pytest
 
       - name: Live test against real engine
+        if: ${{ inputs.task != 'pick' }}
         working-directory: studio
         run: python -m studio.voice_live_test
+
+      - name: Make voice samples
+        if: ${{ inputs.task == 'pick' }}
+        working-directory: studio
+        run: python -m studio.voice_pick
+
+      - name: Publish samples to branch voice-samples
+        if: ${{ inputs.task == 'pick' }}
+        run: |
+          set -e
+          cd studio/work/voice_samples
+          git init -q -b voice-samples
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "voice samples"
+          git push --force "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" voice-samples
 
       - name: Upload work directory
         if: always()
