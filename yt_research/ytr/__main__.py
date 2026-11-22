@@ -38,13 +38,28 @@ def do_analyze(con, use_llm):
     return gms, changes, llm_result, expanded
 
 
+def _visual_style(a):
+    from . import visual_style
+    if not a.genre:
+        raise SystemExit("visual-style: --genre is required")
+    con = connect(config.DB_PATH)
+    _, stats = visual_style.run(con, a.genre, limit=a.limit, max_images=a.max_images)
+    print(json.dumps(stats, indent=1))
+    return 0
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="ytr")
-    ap.add_argument("cmd", choices=["run", "verify-seeds", "analyze", "status"])
+    ap.add_argument("cmd", choices=["run", "verify-seeds", "analyze", "status", "visual-style"])
+    ap.add_argument("--genre", action="append", default=[])
+    ap.add_argument("--limit", type=int, default=40)
+    ap.add_argument("--max-images", type=int, default=200)
     ap.add_argument("--budget", type=int, default=config.RUN_BUDGET)
     ap.add_argument("--searches", type=int, default=config.SEARCHES_PER_RUN)
     ap.add_argument("--no-llm", action="store_true")
     a = ap.parse_args(argv)
+    if a.cmd == "visual-style":
+        return _visual_style(a)
     con = connect(config.DB_PATH)
     topics.ensure_seeds(con)
 
