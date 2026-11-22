@@ -17,12 +17,13 @@ SCHEMA = {
             "properties": {"heading": {"type": "string"}, "narration": {"type": "string"},
                            "visual_prompt": {"type": "string"}, "seconds": {"type": "integer"}},
             "required": ["heading", "narration", "visual_prompt", "seconds"], "additionalProperties": False}},
+        "thumbnail_text": {"type": "string"},
         "description": {"type": "string"},
         "tags": {"type": "array", "items": {"type": "string"}},
         "fact_claims_to_verify": {"type": "array", "items": {"type": "string"}},
         "ai_disclosure_needed": {"type": "boolean"},
     },
-    "required": ["title_options", "original_angle", "hook", "sections", "description", "tags",
+    "required": ["title_options", "original_angle", "hook", "sections", "thumbnail_text", "description", "tags",
                  "fact_claims_to_verify", "ai_disclosure_needed"],
     "additionalProperties": False,
 }
@@ -37,6 +38,7 @@ SYSTEM = """You write scripts for a faceless, AI-assisted video channel. Rules:
 - No sexually explicit content, nothing involving minors, no real people's likenesses, no medical promises or cures.
 - visual_prompt describes an original illustration/animation shot, never a copyrighted character or a real person.
 - Set ai_disclosure_needed=true when visuals or voice are synthetic and realistic.
+- thumbnail_text: the 8-14 character (ja) or 2-5 word (en) punchy line for the thumbnail: a concrete promise, a surprise or a tension, never the full title.
 - LENGTH IS A HARD REQUIREMENT: the total number of characters in all `narration` fields must be within 10% of `target_narration_chars`
   (count characters, not words). Do not summarize or stop early; develop each section fully with examples and concrete detail.
   Set each section's `seconds` to its narration characters divided by `chars_per_second`, rounded."""
@@ -69,11 +71,11 @@ def _normalize_seconds(data, rate):
     return data
 
 
-def write_script(con, client, project_id, target_seconds=480, max_fixes=2):
+def write_script(con, client, project_id, target_seconds=480, max_fixes=2, chars_per_sec=None):
     """Writes the script, then re-prompts (up to `max_fixes` times) while its spoken length misses the target by > tolerance."""
     p = con.execute("SELECT brief_json FROM projects WHERE project_id=?", (project_id,)).fetchone()
     brief = json.loads(p["brief_json"])
-    rate = CHARS_PER_SEC.get(brief.get("lang"), 5.5)
+    rate = chars_per_sec or CHARS_PER_SEC.get(brief.get("lang"), 5.5)
     target = int(target_seconds * rate)
     data, total = _call(con, client, project_id, "script", SYSTEM,
                         {"brief": brief, "target_seconds": target_seconds, "target_narration_chars": target, "chars_per_second": rate})
@@ -98,9 +100,9 @@ def write_script(con, client, project_id, target_seconds=480, max_fixes=2):
     return data
 
 
-def revise_with_feedback(con, client, project_id, data, issues, unverified_claims, lang="ja"):
+def revise_with_feedback(con, client, project_id, data, issues, unverified_claims, lang="ja", chars_per_sec=None):
     """Applies QA feedback: removes or softens claims that cannot be verified, keeps the length."""
-    rate = CHARS_PER_SEC.get(lang, 5.5)
+    rate = chars_per_sec or CHARS_PER_SEC.get(lang, 5.5)
     n = narration_chars(data)
     revised, _ = _call(con, client, project_id, "script_revise", REVISE_SYSTEM, {
         "instruction": ("Fix the reviewer's issues. For every unverified claim: remove it, or rewrite it as a clearly hedged general statement "

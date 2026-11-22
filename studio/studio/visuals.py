@@ -73,6 +73,7 @@ class GeminiImage:
     def __init__(self, model=None, session=None, style="illustration"):
         self.model = model or os.environ.get("STUDIO_GEMINI_IMAGE_MODEL", "gemini-3.1-flash-image")
         self.session, self.last_usage, self.style = session, None, style
+        self.usage = []     # one entry per generated image (list.append is thread-safe)
 
     def generate(self, prompt, out_path, size=(1920, 1080)):
         import io
@@ -92,6 +93,7 @@ class GeminiImage:
             img = gemini.first_image(resp)
             if img:
                 self.last_usage = gemini.usage(resp)
+                self.usage.append(self.last_usage)
                 im = ImageOps.fit(Image.open(io.BytesIO(img[1])).convert("RGB"), size, method=Image.LANCZOS)
                 Path(out_path).parent.mkdir(parents=True, exist_ok=True)
                 im.save(out_path, "PNG")

@@ -103,6 +103,54 @@ class EnglishVoice:
         return dict(stage="voice", status="not_connected", note="EnglishVoice: stub, set OPENAI_API_KEY or ELEVENLABS_API_KEY")
 
 
+class GeminiVoice:
+    """Gemini text-to-speech (prebuilt voice + style direction). Chosen by the owner after listening (Iapetus, Alnilam, Charon).
+    Voices can drift a little between calls; every call gets the identical direction."""
+    name = "GeminiVoice"
+    chars_per_sec = {"ja": 5.5, "en": 14.0}      # "warm" direction measured 5.4-5.7 chars/s (ja) on a 90-char passage; 5.5 is conservative
+    STYLE = {"ja": ("Read the following Japanese text as a middle-aged Japanese male narrator talking to a friend. "
+                    "Natural spoken Japanese, no announcer tone, no theatrical acting. "
+                    "Warm and friendly, a faint smile in the voice, relaxed conversational pace, like talking over coffee."),
+             "en": ("Read the following as a calm, warm, trustworthy middle-aged male narrator talking naturally to a friend. "
+                    "Moderately slow pace, natural pauses, gentle intonation, no theatrical acting.")}
+
+    def __init__(self, voice="Iapetus", model=None, style=None, session=None, retries=3, sleep=None):
+        import os
+        import time
+        self.voice = voice
+        self.model = model or os.environ.get("STUDIO_GEMINI_TTS_MODEL", "gemini-3.8-flash-tts")
+        self.style, self.session, self.retries = style, session, retries
+        self.sleep = sleep or time.sleep
+        self.usage = []
+
+    def synthesize(self, text, lang, out_path):
+        import wave
+        from . import gemini
+        style = self.style or self.STYLE.get(lang, self.STYLE["en"])
+        last = None
+        for attempt in range(self.retries + 1):
+            try:
+                pcm, rate, u = gemini.tts(self.model, text, self.voice, style, self.session)
+                break
+            except gemini.GeminiError as e:
+                last = e
+                if not any(c in str(e) for c in ("HTTP 429", "HTTP 500", "HTTP 502", "HTTP 503", "HTTP 504", "no audio")) or attempt == self.retries:
+                    raise
+                self.sleep(2 ** attempt * 3)
+        else:  # pragma: no cover
+            raise last
+        Path(out_path).parent.mkdir(parents=True, exist_ok=True)
+        with wave.open(str(out_path), "wb") as w:
+            w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate); w.writeframes(pcm)
+        self.usage.append(u)
+        return len(pcm) / 2 / rate
+
+    def describe(self):
+        import os
+        ok = bool(os.environ.get("GEMINI_API_KEY"))
+        return dict(stage="voice", status="done" if ok else "not_connected", note=f"GeminiVoice {self.model} voice={self.voice}")
+
+
 def render_voice(project_dir: Path, provider: VoiceProvider, lang: str) -> dict:
     project_dir = Path(project_dir)
     script = json.loads((project_dir / "script.json").read_text(encoding="utf-8"))

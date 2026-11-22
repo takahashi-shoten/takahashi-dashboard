@@ -54,3 +54,21 @@ def first_image(resp):
         if d and d.get("data"):
             return d.get("mimeType") or d.get("mime_type") or "image/png", base64.b64decode(d["data"])
     return None
+
+
+def tts(model, text, voice, style="", session=None, timeout=180):
+    """Gemini text-to-speech. Returns (pcm16_mono_bytes, sample_rate, usage). `style` is a natural-language direction (English works best)."""
+    prompt = f"{style}\n\n{text}" if style else text
+    body = {"contents": [{"parts": [{"text": prompt}]}],
+            "generationConfig": {"responseModalities": ["AUDIO"],
+                                 "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": voice}}}}}
+    resp = generate_content(model, body, session, timeout)
+    for p in _parts(resp):
+        d = p.get("inlineData") or p.get("inline_data")
+        if d and d.get("data"):
+            mime = d.get("mimeType") or d.get("mime_type") or ""
+            rate = 24000
+            if "rate=" in mime:
+                rate = int(mime.split("rate=")[1].split(";")[0])
+            return base64.b64decode(d["data"]), rate, usage(resp)
+    raise GeminiError("response contained no audio")
