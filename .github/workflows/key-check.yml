@@ -81,6 +81,7 @@ jobs:
         working-directory: studio
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          STUDIO_GEMINI_REVIEW_MODEL: gemini-3.8-flash
         run: python -m studio.gemini_live_test
       - name: Upload sample image
         if: always()
