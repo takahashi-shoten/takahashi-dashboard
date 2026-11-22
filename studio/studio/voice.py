@@ -111,11 +111,9 @@ class GeminiVoice:
     STYLE = {"ja": ("Read the following Japanese text as a middle-aged Japanese male narrator talking to a friend. "
                     "Natural spoken Japanese, no announcer tone, no theatrical acting. "
                     "Warm and friendly, a faint smile in the voice, relaxed conversational pace, like talking over coffee."),
-             "en": ("Read the following as a warm, natural male narrator telling a friend an interesting fact. "
-                    "Relaxed but clearly moving conversational pace, no theatrical acting.")}
-    STYLE_SHORT = {"en": ("Read the following as an engaged, natural male narrator telling a friend a surprising fact in a short video. "
-                          "Brisk conversational pace, about 165 words per minute, short natural pauses only between sentences, "
-                          "no theatrical acting, no announcer tone."),
+             # English: a LONG direction made Gemini TTS read ~2.5x too slowly (measured 2026-11-22: 5.4 vs 13.5 chars/s), so none for long-form
+             "en": ""}
+    STYLE_SHORT = {"en": "Say quickly and energetically:",      # short direction measured at 12.7 chars/s
                    "ja": ("Read the following Japanese text as a natural male narrator telling a friend a surprising fact in a short video. "
                           "Brisk conversational pace, short natural pauses only between sentences, no theatrical acting, no announcer tone.")}
 
@@ -131,7 +129,7 @@ class GeminiVoice:
     def synthesize(self, text, lang, out_path):
         import wave
         from . import gemini
-        style = self.style or self.STYLE.get(lang, self.STYLE["en"])
+        style = self.style if self.style is not None else self.STYLE.get(lang, self.STYLE["en"])
         last = None
         for attempt in range(self.retries + 1):
             try:
