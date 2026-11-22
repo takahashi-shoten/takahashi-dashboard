@@ -143,6 +143,7 @@ def produce_short(con, project_id, lang, client, voice_provider, image_provider,
     stage("storyboard", "real", f"beats={len(sb['beats'])} (one image per narration beat)")
     vd = voice_provider.describe()
     durations = voice.render_voice(d, voice_provider, lang)
+    durations = voice.fit_to_total(d, durations, 59.0)      # safety net: up to x1.3 speed-up, else ValueError (shorten the script)
     stage("voice", "real" if vd["status"] == "done" else "mock", vd.get("note", ""))
     for u in getattr(voice_provider, "usage", []):
         ledger.record_usage(con, project_id, "voice", "gemini", getattr(voice_provider, "model", "tts"), u["input_tokens"], u["output_tokens"])
@@ -192,7 +193,8 @@ def main(argv=None):
     pid = brief.create_project(con, b)
     client = anthropic.Anthropic()
     run = produce_short if a.format == "short" else produce
-    rep = run(con, pid, a.lang, client, voice.GeminiVoice(voice=a.voice), visuals.GeminiImage(style="photo"),
+    vstyle = voice.GeminiVoice.STYLE_SHORT.get(a.lang) if a.format == "short" else None     # brisk pace for Shorts
+    rep = run(con, pid, a.lang, client, voice.GeminiVoice(voice=a.voice, style=vstyle), visuals.GeminiImage(style="photo"),
               [qa.WebClaudeReviewer(client), qa.GeminiReviewer()], a.target_seconds or (50 if a.format == "short" else 480))
     short = {k: rep.get(k) for k in ("project_id", "title_options", "narration_seconds", "final_seconds", "measured_usd_claude",
                                     "image_output_tokens", "image_usd_estimate", "is_mock", "ready_to_publish", "voice_credit", "stopped")}

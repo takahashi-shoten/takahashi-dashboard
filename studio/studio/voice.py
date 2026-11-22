@@ -111,8 +111,13 @@ class GeminiVoice:
     STYLE = {"ja": ("Read the following Japanese text as a middle-aged Japanese male narrator talking to a friend. "
                     "Natural spoken Japanese, no announcer tone, no theatrical acting. "
                     "Warm and friendly, a faint smile in the voice, relaxed conversational pace, like talking over coffee."),
-             "en": ("Read the following as a calm, warm, trustworthy middle-aged male narrator talking naturally to a friend. "
-                    "Moderately slow pace, natural pauses, gentle intonation, no theatrical acting.")}
+             "en": ("Read the following as a warm, natural male narrator telling a friend an interesting fact. "
+                    "Relaxed but clearly moving conversational pace, no theatrical acting.")}
+    STYLE_SHORT = {"en": ("Read the following as an engaged, natural male narrator telling a friend a surprising fact in a short video. "
+                          "Brisk conversational pace, about 165 words per minute, short natural pauses only between sentences, "
+                          "no theatrical acting, no announcer tone."),
+                   "ja": ("Read the following Japanese text as a natural male narrator telling a friend a surprising fact in a short video. "
+                          "Brisk conversational pace, short natural pauses only between sentences, no theatrical acting, no announcer tone.")}
 
     def __init__(self, voice="Iapetus", model=None, style=None, session=None, retries=3, sleep=None):
         import os
@@ -166,3 +171,24 @@ def render_voice(project_dir: Path, provider: VoiceProvider, lang: str) -> dict:
 
 def describe(provider: VoiceProvider) -> dict:
     return provider.describe()
+
+
+def fit_to_total(project_dir: Path, durations: dict, max_total: float, pause: float = 0.2, max_factor: float = 1.3) -> dict:
+    """Safety net for Shorts: if narration + pauses exceed `max_total`, speed every section up with ffmpeg `atempo` (pitch preserved).
+    Raises ValueError when more than `max_factor` would be needed (the script, not the audio, must then be shortened)."""
+    project_dir = Path(project_dir)
+    total = sum(durations.values()) + pause * len(durations)
+    if total <= max_total:
+        return durations
+    factor = (sum(durations.values())) / (max_total - pause * len(durations) - 0.05)
+    if factor > max_factor:
+        raise ValueError(f"narration {sum(durations.values()):.1f}s needs x{factor:.2f} speed-up to fit {max_total}s; shorten the script")
+    out = {}
+    for key, d in durations.items():
+        f = project_dir / "voice" / f"section_{key}.wav"
+        tmp = f.with_suffix(".fast.wav")
+        _run(["ffmpeg", "-y", "-v", "error", "-i", str(f), "-filter:a", f"atempo={factor:.4f}", str(tmp)])
+        tmp.replace(f)
+        out[key] = probe_duration(f)
+    (project_dir / "voice" / "durations.json").write_text(json.dumps(out, indent=1))
+    return out

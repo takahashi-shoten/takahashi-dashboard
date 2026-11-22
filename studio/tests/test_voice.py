@@ -80,3 +80,20 @@ def test_english_stub():
     with pytest.raises(NotConnected, match="OPENAI_API_KEY"):
         voice.EnglishVoice().synthesize("hi", "en", Path("x.wav"))
     assert voice.EnglishVoice().describe()["status"] == "not_connected"
+
+
+def test_fit_to_total_speeds_up_within_limit_and_refuses_beyond(tmp_path):
+    import subprocess
+    vd = tmp_path / "voice"; vd.mkdir()
+    for k in ("01", "02"):
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "sine=frequency=300:duration=35", "-ar", "24000", "-ac", "1", str(vd / f"section_{k}.wav")], check=True)
+    d = {"01": 35.0, "02": 35.0}                       # 70 s + 0.4 > 59: needs ~x1.19
+    out = voice.fit_to_total(tmp_path, d, 59.0)
+    assert sum(out.values()) + 0.4 <= 59.0 + 0.1 and out["01"] < 35.0
+    d2 = {"01": 100.0, "02": 100.0}
+    try:
+        voice.fit_to_total(tmp_path, d2, 59.0)
+        assert False, "must refuse a x3 speed-up"
+    except ValueError:
+        pass
+    assert voice.GeminiVoice.STYLE_SHORT["en"] != voice.GeminiVoice.STYLE["en"]
