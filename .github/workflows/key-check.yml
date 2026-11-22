@@ -68,7 +68,7 @@ jobs:
           PY
 
   gemini-live:
-    if: github.event.inputs.task == 'gemini' || github.event.inputs.task == 'imagecompare' || github.event.inputs.task == 'ttscompare'
+    if: github.event.inputs.task == 'gemini' || github.event.inputs.task == 'imagecompare' || github.event.inputs.task == 'ttscompare' || github.event.inputs.task == 'ttsvariants'
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -84,7 +84,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           STUDIO_GEMINI_REVIEW_MODEL: gemini-3.8-flash
-        run: python -m studio.${{ github.event.inputs.task == 'imagecompare' && 'image_compare' || github.event.inputs.task == 'ttscompare' && 'tts_compare' || 'gemini_live_test' }}
+        run: python -m studio.${{ github.event.inputs.task == 'imagecompare' && 'image_compare' || github.event.inputs.task == 'ttscompare' && 'tts_compare' || github.event.inputs.task == 'ttsvariants' && 'tts_variants' || 'gemini_live_test' }}
       - name: Publish sample image to studio-samples branch (so it can be viewed)
         if: always()
         run: |

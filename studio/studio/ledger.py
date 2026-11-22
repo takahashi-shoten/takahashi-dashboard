@@ -72,3 +72,10 @@ def profit(con, project_id):
     c = con.execute("SELECT COALESCE(SUM(usd),0) FROM costs WHERE project_id=?", (project_id,)).fetchone()[0]
     r = con.execute("SELECT COALESCE(SUM(usd),0) FROM revenue WHERE project_id=?", (project_id,)).fetchone()[0]
     return dict(cost_usd=c, revenue_usd=r, profit_usd=r - c)
+
+
+def record_usage(con, project_id, stage, provider, model, input_tokens, output_tokens, usd=None):
+    """For providers whose price table we do not hold (usd=None stays None, never guessed)."""
+    con.execute("INSERT INTO costs(project_id,stage,provider,model,input_tokens,output_tokens,usd,created_at) VALUES(?,?,?,?,?,?,?,?)",
+                (project_id, stage, provider, model, input_tokens, output_tokens, usd, now()))
+    con.commit()
