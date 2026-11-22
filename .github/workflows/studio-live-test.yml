@@ -1,0 +1,45 @@
+name: studio-live-test
+
+# One real Claude run of the production pipeline's script + QA stages on research data. Prints measured cost; uploads outputs.
+on:
+  workflow_dispatch:
+    inputs:
+      genre:
+        description: "ytr genre id"
+        default: "relationships_dating"
+      lang:
+        description: "ja or en"
+        default: "ja"
+
+permissions:
+  contents: read
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore research database
+        run: |
+          git fetch origin ytr-data:ytr-data
+          mkdir -p /tmp/ytr && git archive ytr-data | tar -x -C /tmp/ytr
+          gunzip -c /tmp/ytr/data/ytr.sqlite.gz > /tmp/ytr.sqlite
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install -r yt_research/requirements.txt pytest pillow
+      - name: Run live test
+        working-directory: studio
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python -m studio.live_test /tmp/ytr.sqlite "${{ github.event.inputs.genre }}" "${{ github.event.inputs.lang }}"
+      - name: Upload outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio-live-test
+          path: studio/work
+          if-no-files-found: ignore
+          retention-days: 14
