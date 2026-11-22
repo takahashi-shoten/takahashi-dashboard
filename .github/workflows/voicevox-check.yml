@@ -39,6 +39,9 @@ jobs:
           echo "VOICEVOX engine did not become ready within 120 s" >&2
           exit 1
 
+      - name: Install ffmpeg (not preinstalled on the runner; the 2026-11-22 run failed with FileNotFoundError: ffmpeg)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+
       - name: Install dependencies
         run: pip install requests pytest
 
