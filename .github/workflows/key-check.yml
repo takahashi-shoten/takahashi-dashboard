@@ -1,0 +1,40 @@
+name: key-check
+
+# Diagnoses the ANTHROPIC_API_KEY secret WITHOUT printing it: only its shape and whether the API accepts it.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check secret shape and validity
+        env:
+          K: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python3 - <<'PY'
+          import os, re, urllib.request, urllib.error
+          k = os.environ.get("K", "")
+          print("secret_present:", bool(k))
+          print("length:", len(k))
+          print("has_whitespace_or_newline:", bool(re.search(r"\s", k)), "| stripped_length:", len(k.strip()))
+          parts = k.strip().split("-")
+          print("shape (first 3 segments only):", "-".join(p if i < 3 else "…" for i, p in enumerate(parts[:4])) if parts else "")
+          print("segments:", len(parts), "| non_ascii:", any(ord(c) > 127 for c in k))
+          def call(headers):
+              req = urllib.request.Request("https://api.anthropic.com/v1/models?limit=1", headers=headers)
+              try:
+                  with urllib.request.urlopen(req, timeout=20) as r:
+                      return r.status
+              except urllib.error.HTTPError as e:
+                  return e.code
+              except Exception as e:
+                  return f"error:{type(e).__name__}"
+          kk = k.strip()
+          print("models_with_x-api-key:", call({"x-api-key": kk, "anthropic-version": "2023-06-01"}))
+          print("models_with_bearer:", call({"Authorization": "Bearer " + kk, "anthropic-version": "2023-06-01"}))
+          PY
