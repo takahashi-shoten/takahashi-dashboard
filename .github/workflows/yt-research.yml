@@ -2,8 +2,10 @@ name: yt-research
 
 on:
   schedule:
-    # Daily, shortly after the YouTube API quota reset (midnight US Pacific).
-    - cron: "17 8 * * *"
+    # Twice daily. GitHub often delays scheduled runs by hours, so the second slot is a safety net.
+    # Quota is tracked in the DB (per US-Pacific day), so a second run only spends what is left.
+    - cron: "17 8 * * *"      # shortly after the YouTube API quota reset (midnight US Pacific)
+    - cron: "17 12 * * *"
   workflow_dispatch:
     inputs:
       cmd:
