@@ -38,3 +38,26 @@ jobs:
           print("models_with_x-api-key:", call({"x-api-key": kk, "anthropic-version": "2023-06-01"}))
           print("models_with_bearer:", call({"Authorization": "Bearer " + kk, "anthropic-version": "2023-06-01"}))
           PY
+
+      - name: Check Gemini key and list models
+        env:
+          G: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python3 - <<'PY'
+          import os, json, re, urllib.request, urllib.error
+          k = os.environ.get("G", "").strip()
+          print("gemini_secret_present:", bool(k), "| length:", len(k), "| starts_with:", k[:4], "| has_whitespace:", bool(re.search(r"\s", k)))
+          req = urllib.request.Request("https://generativelanguage.googleapis.com/v1beta/models?pageSize=200", headers={"x-goog-api-key": k})
+          try:
+              with urllib.request.urlopen(req, timeout=30) as r:
+                  data = json.load(r)
+                  print("models_list_status:", r.status)
+          except urllib.error.HTTPError as e:
+              print("models_list_status:", e.code, "| reason:", (e.read().decode()[:200]).replace(chr(10), " "))
+              raise SystemExit(0)
+          names = [(m["name"].split("/")[-1], m.get("supportedGenerationMethods", [])) for m in data.get("models", [])]
+          print("model_count:", len(names))
+          for n, meth in names:
+              if re.search(r"image|imagen|flash|pro", n) and "embedding" not in n:
+                  print("model:", n, meth)
+          PY
