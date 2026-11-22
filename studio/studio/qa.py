@@ -1,0 +1,177 @@
+"""QA stage: deterministic rule checks + independent LLM reviewers -> qa.json with a conservative decision.
+
+A mock-only run can never produce "pass": that needs two non-mock reviewers agreeing, no rule blocks
+and no unverified claims. Everything else is "needs_human" or "blocked". Nothing here publishes.
+"""
+import json
+import os
+import re
+from difflib import SequenceMatcher
+from pathlib import Path
+from typing import Protocol
+
+from .errors import NotConnected
+
+MODEL = os.environ.get("STUDIO_QA_MODEL", "claude-opus-5-5")
+
+# Small, conservative term lists (lowercase for en). Not exhaustive: the reviewers cover the rest.
+BLOCK_TERMS = {
+    "unsafe_content": [
+        "ポルノ", "セックスの描写", "性行為の描写", "キチガイ", "ガイジ", "自殺の方法", "死に方を教", "自殺しよう",
+        "porn", "explicit sex", "nigger", "faggot", "how to kill yourself", "how to commit suicide", "ways to self-harm",
+    ],
+    "medical_claim": ["必ず治る", "確実に治る", "100%効果", "１００％効果", "完治します", "cures ", "guaranteed results", "guaranteed cure", "100% effective"],
+    "investment_promise": ["絶対儲かる", "絶対に儲かる", "元本保証", "確実に儲かる", "guaranteed profit", "guaranteed returns", "risk-free returns"],
+}
+NUM_RE = re.compile(r"\d|[０-９]|%|％")
+
+
+def _f(id_, severity, message):
+    return {"id": id_, "severity": severity, "message": message}
+
+
+def _norm(t):
+    return re.sub(r"[\W_]+", "", t.lower())
+
+
+def rule_checks(script: dict, lang: str, reference_titles=None) -> list[dict]:
+    out = []
+    sections = script.get("sections", [])
+    narration = "\n".join(s.get("narration", "") for s in sections)
+    blob = (narration + "\n" + script.get("description", "")).lower() + " "
+    for id_, terms in BLOCK_TERMS.items():
+        hits = [t.strip() for t in terms if t.lower() in blob]
+        if hits:
+            out.append(_f(id_, "block", f"{id_} phrase(s) found: {', '.join(hits)}"))
+    if not script.get("fact_claims_to_verify") and NUM_RE.search(narration):
+        out.append(_f("unlisted_numbers", "warn", "narration has numbers/percentages/years but fact_claims_to_verify is empty"))
+    if "ai_disclosure_needed" not in script:
+        out.append(_f("ai_disclosure_missing", "block", "ai_disclosure_needed is missing"))
+    total = sum(int(s.get("seconds", 0)) for s in sections)
+    if not 60 <= total <= 900:
+        out.append(_f("duration", "warn", f"total {total}s is outside 60..900"))
+    titles = script.get("title_options") or []
+    if reference_titles and titles:
+        refs = [_norm(r) for r in reference_titles]
+        if all(any(SequenceMatcher(None, _norm(t), r).ratio() >= 0.8 for r in refs) for t in titles):
+            out.append(_f("title_copy", "warn", "every title option is a near-duplicate of a reference title"))
+    for i, s in enumerate(sections, 1):
+        n = s.get("narration", "")
+        if (len(n.strip()) < 40) if lang == "ja" else (len(n.split()) < 15):
+            out.append(_f("short_section", "warn", f"section {i} narration is too short"))
+    return out
+
+
+class Reviewer(Protocol):
+    def review(self, script: dict, lang: str) -> dict: ...
+
+
+def _result(name, verdict, issues, unverified, usage=None, model=None):
+    # "model" is an extra key beyond the spec so the caller can price usage in the ledger.
+    return {"reviewer": name, "verdict": verdict, "issues": issues, "unverified_claims": unverified, "usage": usage, "model": model}
+
+
+REVIEW_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "verdict": {"type": "string", "enum": ["pass", "revise", "block"]},
+        "issues": {"type": "array", "items": {"type": "string"}},
+        "unverified_claims": {"type": "array", "items": {"type": "string"}},
+    },
+    "required": ["verdict", "issues", "unverified_claims"],
+    "additionalProperties": False,
+}
+
+REVIEW_SYSTEM = """You are a skeptical fact-checker and platform-policy reviewer for a faceless AI-assisted video channel.
+Review the script for: factual accuracy, advertiser-friendly platform rules, medical or financial claims and promises,
+originality (not a paraphrase of someone else's video), minors, sexual content, and real-person likeness or defamation.
+You have NO web access. If you cannot verify a claim, say so plainly: put it in unverified_claims and do not assume it is true.
+Never pass a script merely because nothing looks wrong; pass only if you positively see no problem AND no claim is unverified.
+verdict: "block" for policy violations or harmful/false claims, "revise" for fixable issues, "pass" otherwise.
+issues: short concrete problems. Reply in English."""
+
+
+class ClaudeReviewer:
+    name = "claude"
+
+    def __init__(self, client, model=MODEL):
+        self.client, self.model = client, model
+
+    def describe(self):
+        return dict(stage="qa", status="done", note=f"Claude reviewer {self.model} (no web access; cannot verify facts)")
+
+    def review(self, script, lang):
+        user = json.dumps({"lang": lang, "script": script}, ensure_ascii=False)
+        resp = self.client.beta.messages.create(
+            model=self.model, max_tokens=8000,
+            betas=["server-side-fallback-2026-07-01"], fallbacks="default",
+            thinking={"type": "adaptive"},
+            output_config={"effort": "medium", "format": {"type": "json_schema", "schema": REVIEW_SCHEMA}},
+            system=REVIEW_SYSTEM, messages=[{"role": "user", "content": user}])
+        usage = {"input_tokens": resp.usage.input_tokens, "output_tokens": resp.usage.output_tokens}
+        model = getattr(resp, "model", None) or self.model
+        if resp.stop_reason == "refusal":  # a refusing reviewer is never a pass
+            return _result(self.name, "revise", ["reviewer refused to review"], [], usage, model)
+        d = json.loads(next(b.text for b in resp.content if b.type == "text"))
+        return _result(self.name, d["verdict"], d["issues"], d["unverified_claims"], usage, model)
+
+
+class GeminiReviewer:
+    """Independent second opinion via google-genai. NOT implemented/verified: needs a real key and current docs."""
+    name = "gemini"
+
+    def describe(self):
+        return dict(stage="qa", status="not_connected", note="Gemini reviewer: needs GEMINI_API_KEY + google-genai; call not implemented")
+
+    def review(self, script, lang):
+        try:
+            from google import genai  # noqa: F401  (lazy: optional package)
+        except ImportError:
+            genai = None
+        if not os.environ.get("GEMINI_API_KEY") or genai is None:
+            raise NotConnected("set GEMINI_API_KEY and install google-genai")
+        # TODO: verify client/model/structured-output API against current google-genai docs with a real key,
+        # then send REVIEW_SYSTEM + the script and map the JSON reply to _result() incl. usage for the ledger.
+        raise NotConnected("Gemini call not implemented: verify the google-genai API with a real key first")
+
+
+class MockReviewer:
+    name = "mock"
+
+    def describe(self):
+        return dict(stage="qa", status="mock", note="MOCK reviewer: always passes, never counts toward approval")
+
+    def review(self, script, lang):
+        return _result(self.name, "pass", ["mock"], [])
+
+
+def describe():
+    return dict(stage="qa", status="mock",
+                note="rule checks are real; LLM reviewers need ANTHROPIC_API_KEY / GEMINI_API_KEY; pass requires 2 non-mock reviewers")
+
+
+def decide(rule_findings, reviews):
+    reasons = [f"rule {f['id']}: {f['message']}" for f in rule_findings if f["severity"] == "block"]
+    reasons += [f"{r['reviewer']} blocked" for r in reviews if r["verdict"] == "block"]
+    if reasons:
+        return "blocked", reasons
+    real_pass = [r for r in reviews if r["reviewer"] != "mock" and r["verdict"] == "pass"]
+    unverified = [c for r in reviews for c in r["unverified_claims"]]
+    if len(real_pass) < 2:
+        reasons.append(f"only {len(real_pass)} non-mock reviewer(s) passed (need 2)")
+    reasons += [f"{r['reviewer']} asks for revision" for r in reviews if r["verdict"] == "revise"]
+    if unverified:
+        reasons.append(f"{len(unverified)} unverified claim(s)")
+    return ("needs_human", reasons) if reasons else ("pass", ["2+ non-mock reviewers passed, no blocks, no unverified claims"])
+
+
+def run_qa(project_dir: Path, lang: str, reviewers: list, reference_titles=None) -> dict:
+    project_dir = Path(project_dir)
+    script = json.loads((project_dir / "script.json").read_text(encoding="utf-8"))
+    findings = rule_checks(script, lang, reference_titles)
+    reviews = [r.review(script, lang) for r in reviewers]
+    decision, reasons = decide(findings, reviews)
+    unverified = list(dict.fromkeys(c for r in reviews for c in r["unverified_claims"]))
+    out = {"decision": decision, "rule_findings": findings, "reviews": reviews, "unverified_claims": unverified, "reasons": reasons}
+    (project_dir / "qa.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+    return out
