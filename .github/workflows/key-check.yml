@@ -3,12 +3,17 @@ name: key-check
 # Diagnoses the ANTHROPIC_API_KEY secret WITHOUT printing it: only its shape and whether the API accepts it.
 on:
   workflow_dispatch:
+    inputs:
+      task:
+        description: "keys (default) or gemini (live image + review test)"
+        default: "keys"
 
 permissions:
   contents: read
 
 jobs:
   check:
+    if: github.event.inputs.task != 'gemini'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -61,3 +66,27 @@ jobs:
               if re.search(r"image|imagen|flash|pro", n) and "embedding" not in n:
                   print("model:", n, meth)
           PY
+
+  gemini-live:
+    if: github.event.inputs.task == 'gemini'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests pillow
+      - name: Gemini live test (one image + one grounded review)
+        working-directory: studio
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python -m studio.gemini_live_test
+      - name: Upload sample image
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini-live
+          path: studio/work/gemini_live
+          if-no-files-found: ignore
+          retention-days: 14
