@@ -49,7 +49,7 @@ def test_script_cost_is_measured_and_logged(tmp_path):
     con = ledger.connect(":memory:")
     pid = brief.create_project(con, brief.make_brief(str(db), "cozy_life", "en"))
     fake = FakeClient()
-    data = script.write_script(con, fake, pid)
+    data = script.write_script(con, fake, pid, max_fixes=0)
     assert data["title_options"] == ["T1"]
     k = fake.calls[0]
     assert k["model"] == "claude-opus-5-5" and k["fallbacks"] == "default" and "temperature" not in k
@@ -65,3 +65,29 @@ def test_status_is_honest_and_publish_needs_approval(tmp_path):
     assert not pipeline.is_publish_approved(con, pid)
     pipeline.approve_publish(con, pid, "owner")
     assert pipeline.is_publish_approved(con, pid)
+
+
+def test_script_length_is_corrected_by_reprompting(tmp_path):
+    db = tmp_path / "ytr.sqlite"; make_ytr(db)
+    con = ledger.connect(":memory:")
+    pid = brief.create_project(con, brief.make_brief(str(db), "cozy_life", "ja"))
+
+    def script_with(n):
+        return dict(title_options=["T"], original_angle="a", hook="h", description="d", tags=["x"], fact_claims_to_verify=[],
+                    ai_disclosure_needed=True, sections=[dict(heading="s", narration="あ" * n, visual_prompt="v", seconds=1)])
+
+    sizes = iter([1000, 3000])          # first too short (target 3120), then within tolerance
+    calls = []
+
+    class C(FakeClient):
+        def _create(self, **kw):
+            calls.append(kw)
+            r = super()._create(**kw)
+            r.content[0].text = json.dumps(script_with(next(sizes)))
+            return r
+    c = C()
+    data = script.write_script(con, c, pid, target_seconds=480)
+    assert len(calls) == 2 and "EXPAND" in calls[1]["messages"][0]["content"]
+    assert abs(script.narration_chars(data) - 3120) / 3120 <= 0.15
+    assert data["sections"][0]["seconds"] == round(3000 / 6.5)
+    assert ledger.profit(con, pid)["cost_usd"] > 0.2           # two calls were paid for and recorded
