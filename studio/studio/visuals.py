@@ -35,8 +35,9 @@ class MockImage:
         for y in range(ht):
             t = y / max(1, ht - 1)
             d.line([(0, y), (w, y)], fill=tuple(int(a + (b - a) * t) for a, b in zip(c1, c2)))
-        d.text((w // 2, ht // 2), "MOCK", font=_font(ht // 4), fill=(255, 255, 255), anchor="mm", stroke_width=6, stroke_fill=(0, 0, 0))
-        d.text((40, ht - 40), prompt[:60], font=_font(ht // 22), fill=(255, 255, 255), anchor="ls", stroke_width=2, stroke_fill=(0, 0, 0))
+        m = min(w, ht)
+        d.text((w // 2, ht // 2), "MOCK", font=_font(m // 4), fill=(255, 255, 255), anchor="mm", stroke_width=6, stroke_fill=(0, 0, 0))
+        d.text((40, ht - 40), prompt[:60], font=_font(m // 22), fill=(255, 255, 255), anchor="ls", stroke_width=2, stroke_fill=(0, 0, 0))
         Path(out_path).parent.mkdir(parents=True, exist_ok=True)
         img.save(out_path, "PNG")
 
@@ -57,6 +58,12 @@ class _KeyedStub:
 
     def describe(self):
         return dict(stage="visuals", status="not_connected", note=f"{self.name}: stub, needs {self.env} and an implementation")
+
+
+def aspect_ratio(size):
+    """Gemini imageConfig.aspectRatio for a pixel size: 16:9 landscape, 9:16 portrait, 1:1 square."""
+    w, h = size
+    return "16:9" if w > h else "9:16" if h > w else "1:1"
 
 
 class GeminiImage:
@@ -80,7 +87,7 @@ class GeminiImage:
         from PIL import Image, ImageOps
         from . import gemini
         text = f"{prompt}\n\n{self.STYLES[self.style]}"
-        attempts = [{"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": "16:9"}}, {"responseModalities": ["TEXT", "IMAGE"]}]
+        attempts = [{"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": aspect_ratio(size)}}, {"responseModalities": ["TEXT", "IMAGE"]}]
         last = None
         for cfg in attempts:                      # some models need TEXT+IMAGE or reject imageConfig: try the simplest alternative once
             try:

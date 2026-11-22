@@ -34,7 +34,7 @@ def _norm(t):
     return re.sub(r"[\W_]+", "", t.lower())
 
 
-def rule_checks(script: dict, lang: str, reference_titles=None) -> list[dict]:
+def rule_checks(script: dict, lang: str, reference_titles=None, short=False) -> list[dict]:
     out = []
     sections = script.get("sections", [])
     narration = "\n".join(s.get("narration", "") for s in sections)
@@ -48,8 +48,9 @@ def rule_checks(script: dict, lang: str, reference_titles=None) -> list[dict]:
     if "ai_disclosure_needed" not in script:
         out.append(_f("ai_disclosure_missing", "block", "ai_disclosure_needed is missing"))
     total = sum(int(s.get("seconds", 0)) for s in sections)
-    if not 60 <= total <= 900:
-        out.append(_f("duration", "warn", f"total {total}s is outside 60..900"))
+    lo, hi = (30, 60) if short else (60, 900)     # Shorts are 45-60 s
+    if not lo <= total <= hi:
+        out.append(_f("duration", "warn", f"total {total}s is outside {lo}..{hi}"))
     titles = script.get("title_options") or []
     if reference_titles and titles:
         refs = [_norm(r) for r in reference_titles]
@@ -57,7 +58,7 @@ def rule_checks(script: dict, lang: str, reference_titles=None) -> list[dict]:
             out.append(_f("title_copy", "warn", "every title option is a near-duplicate of a reference title"))
     for i, s in enumerate(sections, 1):
         n = s.get("narration", "")
-        if (len(n.strip()) < 40) if lang == "ja" else (len(n.split()) < 15):
+        if (len(n.strip()) < (10 if short else 40)) if lang == "ja" else (len(n.split()) < (4 if short else 15)):
             out.append(_f("short_section", "warn", f"section {i} narration is too short"))
     return out
 
@@ -232,10 +233,10 @@ def decide(rule_findings, reviews):
     return ("needs_human", reasons) if reasons else ("pass", ["2+ non-mock reviewers passed, no blocks, no unverified claims"])
 
 
-def run_qa(project_dir: Path, lang: str, reviewers: list, reference_titles=None) -> dict:
+def run_qa(project_dir: Path, lang: str, reviewers: list, reference_titles=None, short=False) -> dict:
     project_dir = Path(project_dir)
     script = json.loads((project_dir / "script.json").read_text(encoding="utf-8"))
-    findings = rule_checks(script, lang, reference_titles)
+    findings = rule_checks(script, lang, reference_titles, short)
     reviews = [r.review(script, lang) for r in reviewers]
     decision, reasons = decide(findings, reviews)
     unverified = list(dict.fromkeys(c for r in reviews for c in r["unverified_claims"]))

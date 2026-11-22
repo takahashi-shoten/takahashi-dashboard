@@ -97,7 +97,10 @@ def split_beats(narration, lang, target_chars=None):
     return beats
 
 
-def _plan_beats(script, lang):
+def _plan_beats(script, lang, beats_per_section=None):
+    """beats_per_section=1: every section is exactly one beat (Shorts: one image per narration beat, no further splitting)."""
+    if beats_per_section == 1:
+        return [{"section": si, "beat": 1, "narration": sec["narration"]} for si, sec in enumerate(script["sections"], 1) if sec["narration"].strip()]
     return [{"section": si, "beat": bi, "narration": b}
             for si, sec in enumerate(script["sections"], 1)
             for bi, b in enumerate(split_beats(sec["narration"], lang), 1)]
@@ -118,14 +121,16 @@ def _call(con, client, project_id, model, payload):
     return json.loads(next(b.text for b in resp.content if b.type == "text"))
 
 
-def make_storyboard(con, client, project_id, project_dir, lang, style="photo", model=None):
+def make_storyboard(con, client, project_id, project_dir, lang, style="photo", model=None, beats_per_section=None, vertical=False):
     project_dir = Path(project_dir)
     model = model or MODEL
     script = json.loads((project_dir / "script.json").read_text(encoding="utf-8"))
-    plan = _plan_beats(script, lang)
+    plan = _plan_beats(script, lang, beats_per_section)
     if not plan:
         raise ValueError("script has no narration to storyboard")
     payload = {"lang": lang, "style": style, "beats": plan}
+    if vertical:
+        payload["frame"] = "vertical 9:16 (1080x1920) frames for a YouTube Short: compose for portrait, subject centered, keep the lower third calm for captions"
     want = [(b["section"], b["beat"]) for b in plan]
     data, got = None, []
     for _ in range(2):
@@ -158,7 +163,7 @@ def final_prompt(bible, beat):
     return "\n".join(parts)
 
 
-def render_beats(project_dir, image_provider, max_workers=3):
+def render_beats(project_dir, image_provider, max_workers=3, size=(1920, 1080)):
     project_dir = Path(project_dir)
     sb = json.loads((project_dir / "storyboard.json").read_text(encoding="utf-8"))
     out = project_dir / "visuals"
@@ -173,7 +178,7 @@ def render_beats(project_dir, image_provider, max_workers=3):
         path, prompt, b = job
         if path.exists():
             return
-        image_provider.generate(prompt, path, (1920, 1080))
+        image_provider.generate(prompt, path, size)
         # best effort: last_usage lives on the shared provider, so with several workers it can be overwritten by another
         # thread between generate() and this read; treat the per-image attribution as approximate.
         u = getattr(image_provider, "last_usage", None)
