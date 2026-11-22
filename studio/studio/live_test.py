@@ -43,7 +43,8 @@ def main(ytr_db, genre, lang):
             print("  issue:", it[:200])
         for it in r["unverified_claims"][:6]:
             print("  unverified:", it[:200])
-    if res["decision"] != "pass":
+    needs_fix = any(r["verdict"] == "revise" for r in res["reviews"]) or bool(res["unverified_claims"])
+    if needs_fix:      # revising costs money: only when the reviewers actually found something to fix
         issues = [i for r in res["reviews"] for i in r["issues"]]
         data2 = script.revise_with_feedback(con, anthropic.Anthropic(), pid, data, issues, res["unverified_claims"], lang)
         (d / "script.json").write_text(json.dumps(data2, ensure_ascii=False, indent=1), encoding="utf-8")
