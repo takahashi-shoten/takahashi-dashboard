@@ -1,0 +1,134 @@
+{
+ "text": "お相手の話に、ゆっくりと耳を傾けてみましょう。言葉の合間にある小さな間や笑顔が、二人の距離を少しずつ近づけてくれます。",
+ "samples": [
+  {
+   "speaker": "青山龍星",
+   "style": "ノーマル",
+   "id": 13,
+   "file": "01_青山龍星_ノーマル.mp3",
+   "seconds": 9.003,
+   "credit": "VOICEVOX:青山龍星"
+  },
+  {
+   "speaker": "青山龍星",
+   "style": "熱血",
+   "id": 81,
+   "file": "02_青山龍星_熱血.mp3",
+   "seconds": 9.173,
+   "credit": "VOICEVOX:青山龍星"
+  },
+  {
+   "speaker": "玄野武宏",
+   "style": "ノーマル",
+   "id": 11,
+   "file": "03_玄野武宏_ノーマル.mp3",
+   "seconds": 8.619,
+   "credit": "VOICEVOX:玄野武宏"
+  },
+  {
+   "speaker": "玄野武宏",
+   "style": "喜び",
+   "id": 39,
+   "file": "04_玄野武宏_喜び.mp3",
+   "seconds": 8.053,
+   "credit": "VOICEVOX:玄野武宏"
+  },
+  {
+   "speaker": "白上虎太郎",
+   "style": "ふつう",
+   "id": 12,
+   "file": "05_白上虎太郎_ふつう.mp3",
+   "seconds": 9.792,
+   "credit": "VOICEVOX:白上虎太郎"
+  },
+  {
+   "speaker": "白上虎太郎",
+   "style": "わーい",
+   "id": 32,
+   "file": "06_白上虎太郎_わーい.mp3",
+   "seconds": 9.92,
+   "credit": "VOICEVOX:白上虎太郎"
+  },
+  {
+   "speaker": "雀松朱司",
+   "style": "ノーマル",
+   "id": 52,
+   "file": "07_雀松朱司_ノーマル.mp3",
+   "seconds": 9.003,
+   "credit": "VOICEVOX:雀松朱司"
+  },
+  {
+   "speaker": "麒ヶ島宗麟",
+   "style": "ノーマル",
+   "id": 53,
+   "file": "08_麒ヶ島宗麟_ノーマル.mp3",
+   "seconds": 8.683,
+   "credit": "VOICEVOX:麒ヶ島宗麟"
+  },
+  {
+   "speaker": "剣崎雌雄",
+   "style": "ノーマル",
+   "id": 21,
+   "file": "09_剣崎雌雄_ノーマル.mp3",
+   "seconds": 9.312,
+   "credit": "VOICEVOX:剣崎雌雄"
+  },
+  {
+   "speaker": "後鬼",
+   "style": "人間ver.",
+   "id": 27,
+   "file": "10_後鬼_人間ver.mp3",
+   "seconds": 11.947,
+   "credit": "VOICEVOX:後鬼"
+  },
+  {
+   "speaker": "後鬼",
+   "style": "ぬいぐるみver.",
+   "id": 28,
+   "file": "11_後鬼_ぬいぐるみver.mp3",
+   "seconds": 14.805,
+   "credit": "VOICEVOX:後鬼"
+  },
+  {
+   "speaker": "No.7",
+   "style": "ノーマル",
+   "id": 29,
+   "file": "12_No.7_ノーマル.mp3",
+   "seconds": 9.024,
+   "credit": "VOICEVOX:No.7"
+  },
+  {
+   "speaker": "No.7",
+   "style": "アナウンス",
+   "id": 30,
+   "file": "13_No.7_アナウンス.mp3",
+   "seconds": 8.917,
+   "credit": "VOICEVOX:No.7"
+  },
+  {
+   "speaker": "黒沢冴白",
+   "style": "ノーマル",
+   "id": 100,
+   "file": "14_黒沢冴白_ノーマル.mp3",
+   "seconds": 10.283,
+   "credit": "VOICEVOX:黒沢冴白"
+  },
+  {
+   "speaker": "離途",
+   "style": "ノーマル",
+   "id": 99,
+   "file": "15_離途_ノーマル.mp3",
+   "seconds": 9.067,
+   "credit": "VOICEVOX:離途"
+  },
+  {
+   "speaker": "離途",
+   "style": "シリアス",
+   "id": 101,
+   "file": "16_離途_シリアス.mp3",
+   "seconds": 10.144,
+   "credit": "VOICEVOX:離途"
+  }
+ ],
+ "failures": []
+}
