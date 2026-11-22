@@ -1,0 +1,70 @@
+name: visual-style
+
+on:
+  workflow_dispatch:
+    inputs:
+      genres:
+        description: "Space-separated genres"
+        default: "relationships_dating asset_building cozy_life"
+      limit:
+        description: "Videos per group (hits / baseline)"
+        default: "40"
+
+permissions:
+  contents: write
+
+# Same group as yt-research so the two never run at the same time (the DB is read from ytr-data).
+concurrency:
+  group: yt-research
+  cancel-in-progress: false
+
+jobs:
+  visual-style:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore database from ytr-data branch
+        run: |
+          git fetch origin ytr-data:ytr-data || true
+          mkdir -p yt_research/data yt_research/reports
+          if git rev-parse --verify ytr-data >/dev/null 2>&1; then
+            mkdir -p /tmp/ytr-data
+            git archive ytr-data | tar -x -C /tmp/ytr-data
+            if [ -f /tmp/ytr-data/data/ytr.sqlite.gz ]; then
+              gunzip -c /tmp/ytr-data/data/ytr.sqlite.gz > yt_research/data/ytr.sqlite
+            fi
+          fi
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install -r yt_research/requirements.txt
+
+      - name: Visual style analysis
+        working-directory: yt_research
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GENRES: ${{ github.event.inputs.genres || 'relationships_dating asset_building cozy_life' }}
+          LIMIT: ${{ github.event.inputs.limit || '40' }}
+        run: |
+          ARGS=""
+          for g in $GENRES; do ARGS="$ARGS --genre $g"; done
+          python -m ytr visual-style $ARGS --limit "$LIMIT"
+
+      - name: Publish report to visual-style-reports branch (report only, no database)
+        run: |
+          set -e
+          rm -rf /tmp/vs-out && mkdir -p /tmp/vs-out
+          cp yt_research/reports/visual_style.md /tmp/vs-out/visual_style.md
+          cd /tmp/vs-out
+          git init -q -b visual-style-reports
+          git config user.name "ytr-bot"
+          git config user.email "ytr-bot@users.noreply.github.com"
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git add visual_style.md
+          git commit -qm "visual style report $(date -u +%FT%TZ)"
+          git push -q --force origin HEAD:visual-style-reports
