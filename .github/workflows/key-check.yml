@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   check:
-    if: github.event.inputs.task != 'gemini'
+    if: github.event.inputs.task != 'gemini' && github.event.inputs.task != 'imagecompare'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -68,7 +68,7 @@ jobs:
           PY
 
   gemini-live:
-    if: github.event.inputs.task == 'gemini'
+    if: github.event.inputs.task == 'gemini' || github.event.inputs.task == 'imagecompare'
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -84,7 +84,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           STUDIO_GEMINI_REVIEW_MODEL: gemini-3.8-flash
-        run: python -m studio.gemini_live_test
+        run: python -m studio.${{ github.event.inputs.task == 'imagecompare' && 'image_compare' || 'gemini_live_test' }}
       - name: Publish sample image to studio-samples branch (so it can be viewed)
         if: always()
         run: |
