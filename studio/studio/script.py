@@ -27,7 +27,7 @@ SCHEMA = {
     "additionalProperties": False,
 }
 
-CHARS_PER_SEC = {"ja": 6.5, "en": 15.0}   # speaking speed assumption; recalibrated from measured VOICEVOX output later
+CHARS_PER_SEC = {"ja": 5.5, "en": 15.0}   # ja measured 2026-11-22 with real VOICEVOX (speaker 3, ノーマル): 5.50 chars/s; en still an assumption
 LENGTH_TOLERANCE = 0.15
 
 SYSTEM = """You write scripts for a faceless, AI-assisted video channel. Rules:
@@ -73,7 +73,7 @@ def write_script(con, client, project_id, target_seconds=480, max_fixes=2):
     """Writes the script, then re-prompts (up to `max_fixes` times) while its spoken length misses the target by > tolerance."""
     p = con.execute("SELECT brief_json FROM projects WHERE project_id=?", (project_id,)).fetchone()
     brief = json.loads(p["brief_json"])
-    rate = CHARS_PER_SEC.get(brief.get("lang"), 6.5)
+    rate = CHARS_PER_SEC.get(brief.get("lang"), 5.5)
     target = int(target_seconds * rate)
     data, total = _call(con, client, project_id, "script", SYSTEM,
                         {"brief": brief, "target_seconds": target_seconds, "target_narration_chars": target, "chars_per_second": rate})
@@ -100,7 +100,7 @@ def write_script(con, client, project_id, target_seconds=480, max_fixes=2):
 
 def revise_with_feedback(con, client, project_id, data, issues, unverified_claims, lang="ja"):
     """Applies QA feedback: removes or softens claims that cannot be verified, keeps the length."""
-    rate = CHARS_PER_SEC.get(lang, 6.5)
+    rate = CHARS_PER_SEC.get(lang, 5.5)
     n = narration_chars(data)
     revised, _ = _call(con, client, project_id, "script_revise", REVISE_SYSTEM, {
         "instruction": ("Fix the reviewer's issues. For every unverified claim: remove it, or rewrite it as a clearly hedged general statement "

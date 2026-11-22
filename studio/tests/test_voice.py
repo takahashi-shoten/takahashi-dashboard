@@ -18,8 +18,8 @@ def project(tmp_path, narrations):
 
 def test_mock_voice_length_scales_and_is_mock(tmp_path):
     v = voice.MockVoice()
-    d1 = v.synthesize("あ" * 65, "ja", tmp_path / "a.wav")
-    d2 = v.synthesize("あ" * 130, "ja", tmp_path / "b.wav")
+    d1 = v.synthesize("あ" * 55, "ja", tmp_path / "a.wav")      # 5.5 chars/s (measured with real VOICEVOX)
+    d2 = v.synthesize("あ" * 110, "ja", tmp_path / "b.wav")
     assert abs(d1 - 10) < 0.1 and abs(d2 - 20) < 0.1
     assert abs(v.synthesize("x" * 150, "en", tmp_path / "c.wav") - 10) < 0.1
     assert v.describe()["status"] == "mock"

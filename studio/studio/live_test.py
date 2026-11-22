@@ -25,7 +25,7 @@ def main(ytr_db, genre, lang):
     print("sections:", len(data["sections"]), "narration_chars:", sum(len(s["narration"]) for s in data["sections"]),
           "planned_seconds:", sum(s["seconds"] for s in data["sections"]))
     print("claims_to_verify:", len(data["fact_claims_to_verify"]), "ai_disclosure_needed:", data["ai_disclosure_needed"])
-    print("narration_chars:", script.narration_chars(data), "-> est_audio_seconds:", round(script.narration_chars(data) / script.CHARS_PER_SEC.get(lang, 6.5)))
+    print("narration_chars:", script.narration_chars(data), "-> est_audio_seconds:", round(script.narration_chars(data) / script.CHARS_PER_SEC.get(lang, 5.5)))
     print("HOOK:", data["hook"][:200])
     for i, sec in enumerate(data["sections"], 1):
         print(f"SECTION {i}: {sec['heading']} | {len(sec['narration'])}字 | {sec['narration'][:90]}...")
