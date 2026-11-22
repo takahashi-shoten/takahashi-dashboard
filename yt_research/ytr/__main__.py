@@ -43,23 +43,36 @@ def _visual_style(a):
     if not a.genre:
         raise SystemExit("visual-style: --genre is required")
     con = connect(config.DB_PATH)
-    _, stats = visual_style.run(con, a.genre, limit=a.limit, max_images=a.max_images)
+    _, stats = visual_style.run(con, a.genre, limit=a.limit or 40, max_images=a.max_images)
+    print(json.dumps(stats, indent=1))
+    return 0
+
+
+def _title_anatomy(a):
+    from . import title_anatomy
+    if not a.genre:
+        raise SystemExit("title-anatomy: --genre is required")
+    con = connect(config.DB_PATH)
+    _, stats = title_anatomy.run(con, a.genre, limit=a.limit or 60, max_calls=a.max_calls)
     print(json.dumps(stats, indent=1))
     return 0
 
 
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="ytr")
-    ap.add_argument("cmd", choices=["run", "verify-seeds", "analyze", "status", "visual-style"])
+    ap.add_argument("cmd", choices=["run", "verify-seeds", "analyze", "status", "visual-style", "title-anatomy"])
     ap.add_argument("--genre", action="append", default=[])
-    ap.add_argument("--limit", type=int, default=40)
+    ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--max-images", type=int, default=200)
+    ap.add_argument("--max-calls", type=int, default=40)
     ap.add_argument("--budget", type=int, default=config.RUN_BUDGET)
     ap.add_argument("--searches", type=int, default=config.SEARCHES_PER_RUN)
     ap.add_argument("--no-llm", action="store_true")
     a = ap.parse_args(argv)
     if a.cmd == "visual-style":
         return _visual_style(a)
+    if a.cmd == "title-anatomy":
+        return _title_anatomy(a)
     con = connect(config.DB_PATH)
     topics.ensure_seeds(con)
 
