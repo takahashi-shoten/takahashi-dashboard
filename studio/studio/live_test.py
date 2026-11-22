@@ -29,7 +29,7 @@ def main(ytr_db, genre, lang):
     print("HOOK:", data["hook"][:200])
     for i, sec in enumerate(data["sections"], 1):
         print(f"SECTION {i}: {sec['heading']} | {len(sec['narration'])}字 | {sec['narration'][:90]}...")
-    rev = qa.ClaudeReviewer(anthropic.Anthropic())
+    rev = qa.WebClaudeReviewer(anthropic.Anthropic())
     res = qa.run_qa(d, lang, [rev], reference_titles=[h["title"] for h in b["reference_hits"]])
     print("qa_decision:", res["decision"], "| reasons:", res["reasons"][:3])
     for r in res["reviews"]:
@@ -37,12 +37,17 @@ def main(ytr_db, genre, lang):
         if u:
             m = r.get("model") if r.get("model") in ledger.PRICES else "claude-opus-5-5"
             ledger.record_cost(con, pid, "qa", "anthropic", m, u["input_tokens"], u["output_tokens"])
-        print("review:", r["reviewer"], r["verdict"], "issues:", len(r["issues"]), "unverified:", len(r["unverified_claims"]))
+        print("review:", r["reviewer"], r["verdict"], "issues:", len(r["issues"]), "unverified:", len(r["unverified_claims"]),
+              "web_searches:", (u or {}).get("web_searches"))
+        for it in r["issues"][:6]:
+            print("  issue:", it[:200])
+        for it in r["unverified_claims"][:6]:
+            print("  unverified:", it[:200])
     if res["decision"] != "pass":
         issues = [i for r in res["reviews"] for i in r["issues"]]
         data2 = script.revise_with_feedback(con, anthropic.Anthropic(), pid, data, issues, res["unverified_claims"], lang)
         (d / "script.json").write_text(json.dumps(data2, ensure_ascii=False, indent=1), encoding="utf-8")
-        res2 = qa.run_qa(d, lang, [qa.ClaudeReviewer(anthropic.Anthropic())], reference_titles=[h["title"] for h in b["reference_hits"]])
+        res2 = qa.run_qa(d, lang, [qa.WebClaudeReviewer(anthropic.Anthropic())], reference_titles=[h["title"] for h in b["reference_hits"]])
         for r in res2["reviews"]:
             u = r.get("usage")
             if u:
