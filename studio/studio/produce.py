@@ -143,7 +143,7 @@ def produce_short(con, project_id, lang, client, voice_provider, image_provider,
     stage("storyboard", "real", f"beats={len(sb['beats'])} (one image per narration beat)")
     vd = voice_provider.describe()
     durations = voice.render_voice(d, voice_provider, lang)
-    durations = voice.fit_to_total(d, durations, 59.0)      # safety net: up to x1.3 speed-up, else ValueError (shorten the script)
+    durations = voice.fit_to_total(d, durations, 57.5)      # safety net: up to x1.3 speed-up, else ValueError (shorten the script)
     stage("voice", "real" if vd["status"] == "done" else "mock", vd.get("note", ""))
     for u in getattr(voice_provider, "usage", []):
         ledger.record_usage(con, project_id, "voice", "gemini", getattr(voice_provider, "model", "tts"), u["input_tokens"], u["output_tokens"])

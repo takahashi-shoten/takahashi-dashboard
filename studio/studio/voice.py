@@ -107,7 +107,7 @@ class GeminiVoice:
     """Gemini text-to-speech (prebuilt voice + style direction). Chosen by the owner after listening (Iapetus, Alnilam, Charon).
     Voices can drift a little between calls; every call gets the identical direction."""
     name = "GeminiVoice"
-    chars_per_sec = {"ja": 5.5, "en": 14.0}      # "warm" direction measured 5.4-5.7 chars/s (ja) on a 90-char passage; 5.5 is conservative
+    chars_per_sec = {"ja": 5.5, "en": 12.5}      # ja: "warm" direction measured 5.4-5.7; en: plain/short direction measured 12.7-13.5 chars/s on an 89-char sample, 12.5 is conservative
     STYLE = {"ja": ("Read the following Japanese text as a middle-aged Japanese male narrator talking to a friend. "
                     "Natural spoken Japanese, no announcer tone, no theatrical acting. "
                     "Warm and friendly, a faint smile in the voice, relaxed conversational pace, like talking over coffee."),
