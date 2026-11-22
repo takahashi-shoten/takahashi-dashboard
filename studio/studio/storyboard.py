@@ -131,13 +131,18 @@ def make_storyboard(con, client, project_id, project_dir, lang, style="photo", m
     payload = {"lang": lang, "style": style, "beats": plan}
     if vertical:
         payload["frame"] = "vertical 9:16 (1080x1920) frames for a YouTube Short: compose for portrait, subject centered, keep the lower third calm for captions"
+    payload["instruction"] = (f"Return EXACTLY {len(plan)} beats, one for each input beat, with the same section and beat numbers. "
+                              "Do not add, split, merge or skip beats.")
     want = [(b["section"], b["beat"]) for b in plan]
     data, got = None, []
     for _ in range(2):
         cand = _call(con, client, project_id, model, payload)
+        by_key = {}
+        for b in cand["beats"]:
+            by_key.setdefault((b["section"], b["beat"]), b)       # keep the first entry for a key; extras and duplicates are ignored
         got = [(b["section"], b["beat"]) for b in cand["beats"]]
-        if got == want:
-            data = cand
+        if all(k in by_key for k in want):
+            data = dict(cand, beats=[by_key[k] for k in want])    # exactly the wanted beats, in order
             break
     if data is None:
         raise ValueError(f"storyboard beats mismatch: expected {len(want)} beats in order, model returned {len(got)} (after one retry)")

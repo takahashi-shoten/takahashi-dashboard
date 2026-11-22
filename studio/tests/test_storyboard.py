@@ -163,3 +163,14 @@ def test_usage_collected(tmp_path):
 
     storyboard.render_beats(d, P(), max_workers=1)
     assert json.loads((d / "visuals" / "usage.json").read_text())[0]["usage"] == {"tokens": 1}
+
+
+def test_extra_and_duplicate_beats_from_the_model_are_ignored(tmp_path):
+    con, d = setup(tmp_path)
+    good = reply_for(d)
+    extra = json.loads(json.dumps(good))
+    extra["beats"] = extra["beats"] + [dict(extra["beats"][0], beat=99), dict(extra["beats"][1])]   # an extra beat and a duplicate
+    fc = FakeClient(extra)
+    sb = storyboard.make_storyboard(con, fc, 1, d, "ja")
+    assert len(fc.calls) == 1 and len(sb["beats"]) == len(good["beats"])
+    assert [(b["section"], b["beat"]) for b in sb["beats"]] == [(b["section"], b["beat"]) for b in good["beats"]]
