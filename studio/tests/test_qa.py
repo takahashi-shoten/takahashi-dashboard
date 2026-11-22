@@ -152,3 +152,44 @@ def test_rule_block_overrides_passing_reviewers(tmp_path):
 
 def test_describe():
     assert qa.describe()["stage"] == "qa" and qa.describe()["status"] == "mock"
+
+
+def test_web_reviewer_resumes_paused_turn_and_parses_json():
+    from types import SimpleNamespace as NS
+    calls = []
+
+    class C:
+        def __init__(self):
+            self.beta = NS(messages=NS(create=self.create))
+
+        def create(self, **kw):
+            calls.append(kw)
+            if len(calls) == 1:
+                return NS(stop_reason="pause_turn", model="claude-opus-5-5", content=[NS(type="server_tool_use")],
+                          usage=NS(input_tokens=100, output_tokens=10, server_tool_use=NS(web_search_requests=3)))
+            return NS(stop_reason="end_turn", model="claude-opus-5-5",
+                      content=[NS(type="text", text='Findings:\n{"verdict":"pass","issues":[],"unverified_claims":["x"]}')],
+                      usage=NS(input_tokens=50, output_tokens=20, server_tool_use=NS(web_search_requests=2)))
+    r = qa.WebClaudeReviewer(C()).review(make_script(), "ja")
+    assert len(calls) == 2 and calls[0]["tools"][0]["type"] == "web_search_20260209"
+    assert calls[1]["messages"][-1]["role"] == "assistant"              # resumed with the paused content, no extra user text
+    assert r["usage"] == {"input_tokens": 150, "output_tokens": 30, "web_searches": 5}
+    assert r["verdict"] == "pass" and r["unverified_claims"] == ["x"] and r["reviewer"] == "claude_web"
+
+
+def test_web_reviewer_never_passes_on_bad_json():
+    from types import SimpleNamespace as NS
+
+    class C:
+        def __init__(self):
+            self.beta = NS(messages=NS(create=lambda **kw: NS(stop_reason="end_turn", model="claude-opus-5-5", content=[NS(type="text", text="all good")],
+                                                              usage=NS(input_tokens=1, output_tokens=1))))
+    assert qa.WebClaudeReviewer(C()).review(make_script(), "ja")["verdict"] == "revise"
+
+
+def test_same_vendor_reviewers_do_not_count_as_two():
+    ok = {"verdict": "pass", "issues": [], "unverified_claims": [], "usage": None, "model": None}
+    dec, reasons = qa.decide([], [dict(ok, reviewer="claude"), dict(ok, reviewer="claude_web")])
+    assert dec == "needs_human" and "independent" in reasons[0]
+    dec, _ = qa.decide([], [dict(ok, reviewer="claude_web"), dict(ok, reviewer="gemini")])
+    assert dec == "pass"

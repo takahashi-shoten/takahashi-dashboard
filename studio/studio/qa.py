@@ -116,6 +116,63 @@ class ClaudeReviewer:
         return _result(self.name, d["verdict"], d["issues"], d["unverified_claims"], usage, model)
 
 
+WEB_REVIEW_SYSTEM = REVIEW_SYSTEM.replace(
+    "You have NO web access. If you cannot verify a claim, say so plainly: put it in unverified_claims and do not assume it is true.",
+    "You HAVE a web search tool: use it to check every concrete factual claim (numbers, studies, laws, named facts) against reputable sources "
+    "before judging. Only claims you could not confirm after searching go in unverified_claims; claims you confirmed or found contradicted go in "
+    "issues (contradicted) or nothing (confirmed). Do not assume anything is true without a source.\n"
+    "Reply with ONLY one JSON object, no prose: {\"verdict\": \"pass\"|\"revise\"|\"block\", \"issues\": [str], \"unverified_claims\": [str]}.")
+
+
+def _extract_json(text):
+    a, b = text.find("{"), text.rfind("}")
+    if a < 0 or b < a:
+        raise ValueError("reviewer returned no JSON object")
+    return json.loads(text[a:b + 1])
+
+
+class WebClaudeReviewer(ClaudeReviewer):
+    """Claude with the server-side web search tool, so claims can actually be checked. Still the SAME vendor as ClaudeReviewer:
+    it is not an independent second opinion. Web search is billed per search on top of tokens (check the usage page; price not hardcoded)."""
+    name = "claude_web"
+
+    def __init__(self, client, model=MODEL, max_searches=8, max_resumes=4):
+        super().__init__(client, model)
+        self.max_searches, self.max_resumes = max_searches, max_resumes
+
+    def describe(self):
+        return dict(stage="qa", status="done", note=f"Claude reviewer {self.model} with web search (max {self.max_searches} searches)")
+
+    def review(self, script, lang):
+        messages = [{"role": "user", "content": json.dumps({"lang": lang, "script": script}, ensure_ascii=False)}]
+        tin = tout = searches = 0
+        resp = None
+        for _ in range(self.max_resumes + 1):
+            resp = self.client.beta.messages.create(
+                model=self.model, max_tokens=12000,
+                betas=["server-side-fallback-2026-07-01"], fallbacks="default",
+                thinking={"type": "adaptive"}, output_config={"effort": "medium"},
+                tools=[{"type": "web_search_20260209", "name": "web_search", "max_uses": self.max_searches}],
+                system=WEB_REVIEW_SYSTEM, messages=messages)
+            tin += resp.usage.input_tokens
+            tout += resp.usage.output_tokens
+            st = getattr(resp.usage, "server_tool_use", None)
+            searches += int(getattr(st, "web_search_requests", 0) or 0) if st is not None else 0
+            if resp.stop_reason != "pause_turn":
+                break
+            messages = messages + [{"role": "assistant", "content": resp.content}]   # server resumes on the trailing server_tool_use block
+        usage = {"input_tokens": tin, "output_tokens": tout, "web_searches": searches}
+        model = getattr(resp, "model", None) or self.model
+        if resp.stop_reason in ("refusal", "pause_turn"):    # refusal or never finished: never a pass
+            return _result(self.name, "revise", [f"reviewer did not finish ({resp.stop_reason})"], [], usage, model)
+        text = "".join(b.text for b in resp.content if b.type == "text")
+        try:
+            d = _extract_json(text)
+            return _result(self.name, d["verdict"], d["issues"], d["unverified_claims"], usage, model)
+        except (ValueError, KeyError, json.JSONDecodeError):
+            return _result(self.name, "revise", ["reviewer reply was not valid JSON"], [], usage, model)
+
+
 class GeminiReviewer:
     """Independent second opinion via google-genai. NOT implemented/verified: needs a real key and current docs."""
     name = "gemini"
@@ -155,10 +212,11 @@ def decide(rule_findings, reviews):
     reasons += [f"{r['reviewer']} blocked" for r in reviews if r["verdict"] == "block"]
     if reasons:
         return "blocked", reasons
-    real_pass = [r for r in reviews if r["reviewer"] != "mock" and r["verdict"] == "pass"]
+    # independence: reviewers from the same vendor ("claude", "claude_web") count once; "pass" needs two different vendors
+    real_pass = {r["reviewer"].split("_")[0] for r in reviews if r["reviewer"] != "mock" and r["verdict"] == "pass"}
     unverified = [c for r in reviews for c in r["unverified_claims"]]
     if len(real_pass) < 2:
-        reasons.append(f"only {len(real_pass)} non-mock reviewer(s) passed (need 2)")
+        reasons.append(f"only {len(real_pass)} independent (different-vendor, non-mock) reviewer(s) passed (need 2)")
     reasons += [f"{r['reviewer']} asks for revision" for r in reviews if r["verdict"] == "revise"]
     if unverified:
         reasons.append(f"{len(unverified)} unverified claim(s)")

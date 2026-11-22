@@ -76,7 +76,7 @@ def test_script_length_is_corrected_by_reprompting(tmp_path):
         return dict(title_options=["T"], original_angle="a", hook="h", description="d", tags=["x"], fact_claims_to_verify=[],
                     ai_disclosure_needed=True, sections=[dict(heading="s", narration="あ" * n, visual_prompt="v", seconds=1)])
 
-    sizes = iter([1000, 3000])          # first too short (target 3120), then within tolerance
+    sizes = iter([1000, 2600])          # first too short (target 2640 = 480 s * 5.5), then within tolerance
     calls = []
 
     class C(FakeClient):
@@ -88,6 +88,6 @@ def test_script_length_is_corrected_by_reprompting(tmp_path):
     c = C()
     data = script.write_script(con, c, pid, target_seconds=480)
     assert len(calls) == 2 and "EXPAND" in calls[1]["messages"][0]["content"]
-    assert abs(script.narration_chars(data) - 3120) / 3120 <= 0.15
-    assert data["sections"][0]["seconds"] == round(3000 / 6.5)
+    assert abs(script.narration_chars(data) - 2640) / 2640 <= 0.15
+    assert data["sections"][0]["seconds"] == round(2600 / 5.5)
     assert ledger.profit(con, pid)["cost_usd"] > 0.2           # two calls were paid for and recorded

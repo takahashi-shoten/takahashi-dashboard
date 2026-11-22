@@ -9,7 +9,7 @@ from typing import Protocol
 
 from .errors import NotConnected
 
-CHARS_PER_SEC = {"ja": 6.5, "en": 15.0}
+CHARS_PER_SEC = {"ja": 5.5, "en": 15.0}   # ja measured with real VOICEVOX 2026-11-22
 SAMPLE_RATE = 24000
 
 

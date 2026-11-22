@@ -63,7 +63,7 @@ def main():
     print(f"duration_sec: {dur:.3f}")
     print(f"synthesis_wall_sec: {wall:.3f}")
     print(f"real_time_factor: {wall / dur:.3f}")
-    print(f"chars_per_sec: {chars_per_sec(SAMPLE, dur):.2f} (project assumption: 6.5)")
+    print(f"chars_per_sec: {chars_per_sec(SAMPLE, dur):.2f} (project value: 5.5, measured 2026-11-22)")
     print(f"file_size_bytes: {OUT.stat().st_size}")
     print(f"sample_rate_hz: {rate}")
     print(f"channels: {ch}")

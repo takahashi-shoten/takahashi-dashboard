@@ -25,11 +25,11 @@ def main(ytr_db, genre, lang):
     print("sections:", len(data["sections"]), "narration_chars:", sum(len(s["narration"]) for s in data["sections"]),
           "planned_seconds:", sum(s["seconds"] for s in data["sections"]))
     print("claims_to_verify:", len(data["fact_claims_to_verify"]), "ai_disclosure_needed:", data["ai_disclosure_needed"])
-    print("narration_chars:", script.narration_chars(data), "-> est_audio_seconds:", round(script.narration_chars(data) / script.CHARS_PER_SEC.get(lang, 6.5)))
+    print("narration_chars:", script.narration_chars(data), "-> est_audio_seconds:", round(script.narration_chars(data) / script.CHARS_PER_SEC.get(lang, 5.5)))
     print("HOOK:", data["hook"][:200])
     for i, sec in enumerate(data["sections"], 1):
         print(f"SECTION {i}: {sec['heading']} | {len(sec['narration'])}字 | {sec['narration'][:90]}...")
-    rev = qa.ClaudeReviewer(anthropic.Anthropic())
+    rev = qa.WebClaudeReviewer(anthropic.Anthropic())
     res = qa.run_qa(d, lang, [rev], reference_titles=[h["title"] for h in b["reference_hits"]])
     print("qa_decision:", res["decision"], "| reasons:", res["reasons"][:3])
     for r in res["reviews"]:
@@ -37,12 +37,18 @@ def main(ytr_db, genre, lang):
         if u:
             m = r.get("model") if r.get("model") in ledger.PRICES else "claude-opus-5-5"
             ledger.record_cost(con, pid, "qa", "anthropic", m, u["input_tokens"], u["output_tokens"])
-        print("review:", r["reviewer"], r["verdict"], "issues:", len(r["issues"]), "unverified:", len(r["unverified_claims"]))
-    if res["decision"] != "pass":
+        print("review:", r["reviewer"], r["verdict"], "issues:", len(r["issues"]), "unverified:", len(r["unverified_claims"]),
+              "web_searches:", (u or {}).get("web_searches"))
+        for it in r["issues"][:6]:
+            print("  issue:", it[:200])
+        for it in r["unverified_claims"][:6]:
+            print("  unverified:", it[:200])
+    needs_fix = any(r["verdict"] == "revise" for r in res["reviews"]) or bool(res["unverified_claims"])
+    if needs_fix:      # revising costs money: only when the reviewers actually found something to fix
         issues = [i for r in res["reviews"] for i in r["issues"]]
         data2 = script.revise_with_feedback(con, anthropic.Anthropic(), pid, data, issues, res["unverified_claims"], lang)
         (d / "script.json").write_text(json.dumps(data2, ensure_ascii=False, indent=1), encoding="utf-8")
-        res2 = qa.run_qa(d, lang, [qa.ClaudeReviewer(anthropic.Anthropic())], reference_titles=[h["title"] for h in b["reference_hits"]])
+        res2 = qa.run_qa(d, lang, [qa.WebClaudeReviewer(anthropic.Anthropic())], reference_titles=[h["title"] for h in b["reference_hits"]])
         for r in res2["reviews"]:
             u = r.get("usage")
             if u:
