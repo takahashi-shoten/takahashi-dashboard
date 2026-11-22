@@ -182,10 +182,13 @@ def main(argv=None):
     ap.add_argument("--voice", default="Iapetus")
     ap.add_argument("--format", choices=["long", "short"], default="long", help="long: 16:9 video; short: vertical 9:16 Short (45-60 s)")
     ap.add_argument("--target-seconds", type=int, default=None, help="default 480 (long) / 50 (short)")
+    ap.add_argument("--topic", default="", help="optional topic/angle hint passed to the script writer")
     ap.add_argument("--audience", default="40-60代の日本人男性")
     a = ap.parse_args(argv)
     con = ledger.connect(":memory:")
     b = brief.make_brief(a.ytr_db, a.genre, a.lang, audience=a.audience)
+    if a.topic:
+        b["topic"] = a.topic
     pid = brief.create_project(con, b)
     client = anthropic.Anthropic()
     run = produce_short if a.format == "short" else produce

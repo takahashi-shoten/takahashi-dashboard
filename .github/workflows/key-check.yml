@@ -5,8 +5,20 @@ on:
   workflow_dispatch:
     inputs:
       task:
-        description: "keys (default) or gemini (live image + review test)"
+        description: "keys (default) | gemini | imagecompare | ttscompare | ttsvariants | produce"
         default: "keys"
+      genre:
+        description: "produce: ytr genre id"
+        default: "history"
+      format:
+        description: "produce: long or short"
+        default: "short"
+      lang:
+        description: "produce: ja or en"
+        default: "en"
+      topic:
+        description: "produce: optional topic or angle hint"
+        default: ""
 
 permissions:
   contents: read
@@ -125,13 +137,17 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python -m studio.produce --ytr-db /tmp/ytr.sqlite --genre relationships_dating --lang ja --voice Iapetus --target-seconds 480
+          P_GENRE: ${{ github.event.inputs.genre }}
+          P_FORMAT: ${{ github.event.inputs.format }}
+          P_LANG: ${{ github.event.inputs.lang }}
+          P_TOPIC: ${{ github.event.inputs.topic }}
+        run: python -m studio.produce --ytr-db /tmp/ytr.sqlite --genre "$P_GENRE" --lang "$P_LANG" --voice Iapetus --format "$P_FORMAT" --topic "$P_TOPIC"
       - name: Publish review files to studio-output branch
         if: always()
         run: |
           mkdir -p /tmp/out
           W=$(ls -d studio/work/*/ 2>/dev/null | head -1); echo "work dir: $W"; ls -la "$W" || true
-          for f in preview.mp4 shorts.mp4 thumbnail.png final.srt script.json storyboard.json qa.json report.json; do
+          for f in short.mp4 preview.mp4 shorts.mp4 thumbnail.png final.srt script.json storyboard.json qa.json report.json; do
             [ -f "$W$f" ] && [ "$(stat -c %s "$W$f")" -lt 90000000 ] && cp "$W$f" /tmp/out/ || echo "skip $f"
           done
           cp -r "$W"visuals /tmp/out/visuals_sample 2>/dev/null && find /tmp/out/visuals_sample -name '*.png' | sort | sed -n '4,$p' | xargs -r rm -f || true
