@@ -1,0 +1,11 @@
+# GitHub Pages (Jekyll) publishes this repository root. Keep non-app folders OUT of the published site:
+# the cash-management PWA (index.html, manifest.json, sw.js) is the only thing meant to be public.
+exclude:
+  - yt_research
+  - studio
+  - docs
+  - .github
+  - .claude
+  - "*.md"
+  - "*.sqlite"
+  - "*.sqlite.gz"
