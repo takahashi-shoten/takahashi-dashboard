@@ -107,6 +107,7 @@ class GeminiVoice:
     """Gemini text-to-speech (prebuilt voice + style direction). Chosen by the owner after listening (Iapetus, Alnilam, Charon).
     Voices can drift a little between calls; every call gets the identical direction."""
     name = "GeminiVoice"
+    short_chars_per_sec = {"ja": 4.8, "en": 12.5}    # planning rate for Shorts (short chunks read slower than long passages)
     chars_per_sec = {"ja": 5.5, "en": 12.5}      # ja: "warm" direction measured 5.4-5.7; en: plain/short direction measured 12.7-13.5 chars/s on an 89-char sample, 12.5 is conservative
     STYLE = {"ja": ("Read the following Japanese text as a middle-aged Japanese male narrator talking to a friend. "
                     "Natural spoken Japanese, no announcer tone, no theatrical acting. "
@@ -114,9 +115,9 @@ class GeminiVoice:
              # English: a LONG direction made Gemini TTS read ~2.5x too slowly (measured 2026-11-22: 5.4 vs 13.5 chars/s), so none for long-form
              "en": ""}
     STYLE_SHORT = {"en": "Say quickly and energetically:",      # short direction measured at 12.7 chars/s
-                   "ja": None}          # None -> the tested "warm" Japanese direction (a long brisk direction risks slow reading, as in English)
+                   "ja": ""}            # plain: measured 4.7-5.7 chars/s on short Japanese chunks; directions made it unstable (3.1-6.0)
 
-    def __init__(self, voice="Iapetus", model=None, style=None, session=None, retries=3, sleep=None):
+    def __init__(self, voice="Iapetus", model=None, style=None, session=None, retries=5, sleep=None):
         import os
         import time
         self.voice = voice
@@ -138,7 +139,7 @@ class GeminiVoice:
                 last = e
                 if not any(c in str(e) for c in ("HTTP 429", "HTTP 500", "HTTP 502", "HTTP 503", "HTTP 504", "no audio")) or attempt == self.retries:
                     raise
-                self.sleep(2 ** attempt * 3)
+                self.sleep(min(40, 2 ** attempt * 4))
         else:  # pragma: no cover
             raise last
         Path(out_path).parent.mkdir(parents=True, exist_ok=True)

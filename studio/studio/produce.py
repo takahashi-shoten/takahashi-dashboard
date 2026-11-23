@@ -113,7 +113,7 @@ def produce_short(con, project_id, lang, client, voice_provider, image_provider,
     """Like `produce` but makes a vertical YouTube Short (short.mp4, 1080x1920, <= 59 s): one idea, 6-9 beats, one image per beat."""
     d = (Path(work_root) / str(project_id)) if work_root else project_dir(project_id)
     d.mkdir(parents=True, exist_ok=True)
-    rate = getattr(voice_provider, "chars_per_sec", {}).get(lang) if hasattr(voice_provider, "chars_per_sec") else None
+    rate = getattr(voice_provider, "short_chars_per_sec", getattr(voice_provider, "chars_per_sec", {})).get(lang) if hasattr(voice_provider, "chars_per_sec") else None
     rep = {"project_id": project_id, "lang": lang, "format": "short", "stages": {}, "files": {}}
 
     def stage(name, status, note=""):
