@@ -162,7 +162,56 @@ def split_frames(total, weights):
     return [b - a for a, b in zip([0] + bounds[:-1], bounds)]
 
 
-def assemble(project_dir: Path, fps=30) -> Path:
+def cut_counts(frames, cut_seconds, fps=30):
+    """Frame counts of the sub-cuts of one span (sum == frames); n = max(1, round(span / cut_seconds))."""
+    n = max(1, round(frames / fps / cut_seconds))
+    return split_frames(frames, [1.0] * min(n, max(frames, 1)))
+
+
+# (zoom, x, y) expressions of zoompan; p = progress 0..1 within the cut. Consecutive moves differ clearly.
+_MOVES = [
+    ("1+0.18*{p}", "iw/2-iw/zoom/2", "ih/2-ih/zoom/2"),                         # zoom in on the centre
+    ("1.25", "(iw-iw/zoom)*{p}", "ih/2-ih/zoom/2"),                             # pan left -> right
+    ("1.45+0.1*{p}", "iw/2-iw/zoom/2", "max(0,ih/6-ih/zoom/2)"),                # punch-in on the upper third (heads)
+    ("1.4-0.4*{p}", "iw/2-iw/zoom/2", "ih/2-ih/zoom/2"),                        # zoom out 1.4 -> 1.0
+    ("1.25", "(iw-iw/zoom)*(1-{p})", "ih/2-ih/zoom/2"),                         # pan right -> left
+    ("1.5", "min(iw-iw/zoom,max(0,iw*0.75-iw/zoom/2))", "min(ih-ih/zoom,max(0,ih*0.75-ih/zoom/2))"),   # punch-in lower right
+]
+
+
+def _cut_filter(i, frames, fps, size):
+    """Framing number i (cycles through _MOVES) of one sub-cut; rendered from the full-size source, 1.25x upscaled first."""
+    z, x, y = (e.format(p="(on/%d)" % max(frames - 1, 1)) for e in _MOVES[i % len(_MOVES)])
+    w, h = size
+    return f"scale={w * 5 // 4}:{h * 5 // 4},zoompan=z='{z}':x='{x}':y='{y}':d={frames}:s={w}x{h}:fps={fps},format=yuv420p"
+
+
+def _render_cuts(src, counts, k, tmp, tag, fps, size, enc):
+    """Hard-cut sub-clips of one image with different framings, joined by stream copy. Returns (video path, next k)."""
+    parts = []
+    for j, n in enumerate(counts):
+        part = tmp / f"{tag}_{j:02d}.mp4"
+        _run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-framerate", str(fps), "-i", str(src),
+              "-vf", _cut_filter(k, n, fps, size), "-frames:v", str(n), *enc, "-an", str(part)])
+        parts.append(part)
+        k += 1
+    return _concat_copy(parts, tmp / f"{tag}_cat.mp4"), k
+
+
+def _concat_copy(parts, out):
+    plist = out.with_suffix(".txt")
+    plist.write_text("".join(f"file '{c}'\n" for c in parts))
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(plist), "-c", "copy", str(out)])
+    return out
+
+
+def _mux_audio(vid, wav, frames, fps, clip):
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(vid), "-i", str(wav), "-map", "0:v", "-map", "1:a",
+          "-c:v", "copy", "-af", "aresample=48000,apad", "-ac", "2",
+          "-t", f"{frames / fps:.4f}", "-c:a", "aac", "-b:a", "192k", str(clip)])
+
+
+def assemble(project_dir: Path, fps=30, cut_seconds=None) -> Path:
     project_dir = Path(project_dir)
     sections, wavs, pngs, durs = _load(project_dir)
     final = project_dir / "final.mp4"
@@ -179,19 +228,23 @@ def assemble(project_dir: Path, fps=30) -> Path:
                 parts = []
                 for j, (bp, n) in enumerate(zip(beats, counts)):
                     part = tmp / f"beat_{i:02d}_{j:02d}.mp4"
-                    _run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-framerate", str(fps), "-i", str(bp),
-                          "-vf", _kenburns(k, n, fps), "-frames:v", str(n), *enc, "-an", str(part)])
+                    if cut_seconds and n / fps > cut_seconds * 1.5:
+                        vid_b, k = _render_cuts(bp, cut_counts(n, cut_seconds, fps), k, tmp, f"bc_{i:02d}_{j:02d}", fps, (1920, 1080), enc)
+                        part = vid_b
+                    else:
+                        _run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-framerate", str(fps), "-i", str(bp),
+                              "-vf", _kenburns(k, n, fps), "-frames:v", str(n), *enc, "-an", str(part)])
+                        k += 1
                     parts.append(part)
-                    k += 1
-                plist = tmp / f"beats_{i:02d}.txt"
-                plist.write_text("".join(f"file '{c}'\n" for c in parts))
-                vid = tmp / f"vid_{i:02d}.mp4"
-                _run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(plist), "-c", "copy", str(vid)])
-                _run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(vid), "-i", str(wav), "-map", "0:v", "-map", "1:a",
-                      "-c:v", "copy", "-af", "aresample=48000,apad", "-ac", "2",
-                      "-t", f"{frames / fps:.4f}", "-c:a", "aac", "-b:a", "192k", str(clip)])
+                vid = _concat_copy(parts, tmp / f"vid_{i:02d}.mp4")
+                _mux_audio(vid, wav, frames, fps, clip)
             else:
                 src = png if png.exists() or not beats else beats[0]
+                if cut_seconds and frames / fps > cut_seconds * 1.5:
+                    vid, k = _render_cuts(src, cut_counts(frames, cut_seconds, fps), k, tmp, f"sc_{i:02d}", fps, (1920, 1080), enc)
+                    _mux_audio(vid, wav, frames, fps, clip)
+                    clips.append(clip)
+                    continue
                 _run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-framerate", str(fps), "-i", str(src), "-i", str(wav),
                       "-vf", _kenburns(k, frames, fps), "-af", "aresample=48000,apad", "-ac", "2", "-frames:v", str(frames),
                       "-t", f"{frames / fps:.4f}", *enc, "-c:a", "aac", "-b:a", "192k", str(clip)])
@@ -268,8 +321,8 @@ def make_short_ass(events, font_name="DejaVu Sans", size=SHORT_SIZE, font_px=88)
     return head + "\n".join(lines) + "\n"
 
 
-def assemble_short(project_dir: Path, fps=30) -> Path:
-    """short.mp4: 1080x1920 H.264/AAC, one Ken Burns image per section, burned-in 3-5 word captions, loudness-normalized, <= 59 s."""
+def assemble_short(project_dir: Path, fps=30, cut_seconds=3.0) -> Path:
+    """short.mp4: 1080x1920 H.264/AAC, each section cut into ~cut_seconds sub-cuts (same image, different framings; 0/None = one clip per section), burned-in 3-5 word captions, loudness-normalized, <= 59 s."""
     project_dir = Path(project_dir)
     sections, wavs, pngs, durs = _load(project_dir)
     frames = [round((d + SHORT_PAUSE) * fps) for d in durs]
@@ -282,10 +335,15 @@ def assemble_short(project_dir: Path, fps=30) -> Path:
     enc = ["-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", "-r", str(fps)]
     with tempfile.TemporaryDirectory(dir=project_dir) as tmp:
         tmp = Path(tmp)
-        clips = []
+        clips, k = [], 0
         for i, (wav, png, n) in enumerate(zip(wavs, pngs, frames)):
             src = png if png.exists() else (find_beats(project_dir, png.stem) or [png])[0]
             clip = tmp / f"clip_{i:02d}.mp4"
+            if cut_seconds:
+                vid, k = _render_cuts(src, cut_counts(n, cut_seconds, fps), k, tmp, f"sc_{i:02d}", fps, SHORT_SIZE, enc)
+                _mux_audio(vid, wav, n, fps, clip)
+                clips.append(clip)
+                continue
             _run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-framerate", str(fps), "-i", str(src), "-i", str(wav),
                   "-vf", _kenburns(i, n, fps, SHORT_SIZE), "-af", "aresample=48000,apad", "-ac", "2", "-frames:v", str(n),
                   "-t", f"{n / fps:.4f}", *enc, "-c:a", "aac", "-b:a", "192k", str(clip)])

@@ -171,6 +171,87 @@ def test_assemble_short_rejects_over_59_seconds(tmp_path):
     assert not (tmp_path / "short.mp4").exists()
 
 
+# ---------- sub-cuts ----------
+def _busy_png(path, size=(1080, 1920)):
+    """High-contrast image (checkerboard + horizontal gradient + bright patch) so different framings differ strongly."""
+    from PIL import ImageDraw
+    w, h = size
+    img = Image.linear_gradient("L").resize((w, h)).convert("RGB")
+    d = ImageDraw.Draw(img)
+    for gx in range(0, w, 90):
+        for gy in range(0, h, 90):
+            if (gx // 90 + gy // 90) % 2:
+                d.rectangle([gx, gy, gx + 89, gy + 89], fill=(255, 40, 40))
+    d.rectangle([600, 150, 900, 450], fill=(255, 255, 255))
+    img.save(path)
+
+
+def _frame(video, t, out):
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{t:.4f}", "-i", str(video), "-frames:v", "1", str(out)], check=True)
+    return Image.open(out).convert("L").crop((0, 0, 1080, 1300))      # above the caption band
+
+
+def test_cut_counts_sum_and_size():
+    for frames in (1, 2, 30, 77, 216, 231, 1700):
+        c = edit.cut_counts(frames, 3.0)
+        assert sum(c) == frames and min(c) >= 1 and len(c) == max(1, round(frames / 30 / 3.0))
+        assert len(c) == 1 or all(2.0 <= n / 30 <= 4.0 for n in c)
+    assert edit.cut_counts(210, 3.0) == [105, 105] and len(edit.cut_counts(231, 3.0)) == 3
+
+
+def test_consecutive_moves_differ():
+    fs = [edit._cut_filter(i, 90, 30, edit.SHORT_SIZE) for i in range(13)]
+    assert all(a != b for a, b in zip(fs, fs[1:])) and fs[0] == fs[6] and len(set(fs[:6])) == 6
+
+
+def test_short_subcuts_change_picture_and_keep_duration(tmp_path):
+    texts = ["How did ancient humans make the first clay pots?", "They did not start with a wheel at all."]
+    make_project(tmp_path, texts, [6.8, 2.8])      # spans 7.0 s -> 2 cuts, 3.0 s -> 1 cut
+    for i in (1, 2):
+        _busy_png(tmp_path / "visuals" / f"section_{i:02d}.png")
+    out = edit.assemble_short(tmp_path)
+    dur = float(probe(out, "format=duration")["format"]["duration"])
+    assert abs(dur - 10.0) < 0.1
+    n1 = edit.cut_counts(round(7.0 * 30), 3.0)
+    assert n1 == [105, 105]
+    b = n1[0] / 30
+    a = _frame(out, b - 1 / 30, tmp_path / "a.png"); c = _frame(out, b + 1 / 30, tmp_path / "b.png")
+    from PIL import ImageChops, ImageStat
+    assert ImageStat.Stat(ImageChops.difference(a, c)).mean[0] > 20
+    # a frame within a cut barely moves compared with the jump at the cut
+    d = _frame(out, 1.0, tmp_path / "d.png"); e = _frame(out, 1.0 + 1 / 30, tmp_path / "e.png")
+    assert ImageStat.Stat(ImageChops.difference(d, e)).mean[0] < 5
+    # section boundary also a hard cut with a different framing
+    f = _frame(out, 7.0 - 1 / 30, tmp_path / "f.png"); g = _frame(out, 7.0 + 1 / 30, tmp_path / "g.png")
+    assert ImageStat.Stat(ImageChops.difference(f, g)).mean[0] > 20
+
+
+def test_short_cut_seconds_zero_is_old_behavior(tmp_path):
+    texts = ["How did ancient humans make the first clay pots?", "They did not start with a wheel at all."]
+    make_project(tmp_path, texts, [6.8, 2.8])
+    old = edit.assemble_short(tmp_path, cut_seconds=0)
+    d0 = float(probe(old, "format=duration")["format"]["duration"])
+    new = edit.assemble_short(tmp_path)
+    assert abs(d0 - float(probe(new, "format=duration")["format"]["duration"])) < 0.05 and abs(d0 - 10.0) < 0.1
+
+
+def test_short_guard_with_cuts(tmp_path):
+    make_project(tmp_path, ["Some narration here for the long one."] * 3, [20.0, 20.0, 18.9])
+    with pytest.raises(ValueError, match="limit is 59"):
+        edit.assemble_short(tmp_path, cut_seconds=3.0)
+
+
+def test_long_form_cut_seconds_option(tmp_path):
+    texts = ["First part of the story goes here.", "Second part of the story."]
+    make_project(tmp_path, texts, [6.8, 2.0])
+    for i in (1, 2):
+        Image.new("RGB", (1920, 1080), (30, 60, 90)).save(tmp_path / "visuals" / f"section_{i:02d}.png")
+    base = edit.assemble(tmp_path)
+    d0 = float(probe(base, "format=duration")["format"]["duration"])
+    fast = edit.assemble(tmp_path, cut_seconds=3.0)
+    assert abs(float(probe(fast, "format=duration")["format"]["duration"]) - d0) < 0.1 and abs(d0 - 9.6) < 0.15
+
+
 # ---------- produce_short ----------
 def test_produce_short_end_to_end_with_mocks(tmp_path, monkeypatch):
     con, pid = new_project("en")
