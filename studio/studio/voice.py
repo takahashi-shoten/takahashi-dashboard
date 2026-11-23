@@ -125,12 +125,14 @@ class GeminiVoice:
         self.style, self.session, self.retries = style, session, retries
         self.sleep = sleep or time.sleep
         self.usage = []
+        self.min_interval = 0 if sleep else 6
 
     def synthesize(self, text, lang, out_path):
         import wave
         from . import gemini
         style = self.style if self.style is not None else self.STYLE.get(lang, self.STYLE["en"])
         last = None
+        self.sleep(self.min_interval)   # pace calls: the TTS model has its own per-minute quota
         for attempt in range(self.retries + 1):
             try:
                 pcm, rate, u = gemini.tts(self.model, text, self.voice, style, self.session)
@@ -139,7 +141,7 @@ class GeminiVoice:
                 last = e
                 if not any(c in str(e) for c in ("HTTP 429", "HTTP 500", "HTTP 502", "HTTP 503", "HTTP 504", "no audio")) or attempt == self.retries:
                     raise
-                self.sleep(min(40, 2 ** attempt * 4))
+                self.sleep(min(65, 2 ** attempt * 8))
         else:  # pragma: no cover
             raise last
         Path(out_path).parent.mkdir(parents=True, exist_ok=True)

@@ -28,7 +28,7 @@ def generate_content(model, body, session=None, timeout=180):
             msg = r.json().get("error", {}).get("message", "")
         except ValueError:
             msg = ""
-        raise GeminiError(f"HTTP {r.status_code}: {msg[:300]}")
+        raise GeminiError(f"HTTP {r.status_code}: {msg[:1200]}")
     return r.json()
 
 
