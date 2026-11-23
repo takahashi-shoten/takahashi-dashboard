@@ -127,22 +127,54 @@ class GeminiVoice:
         self.usage = []
         self.min_interval = 0 if sleep else 6
 
+    # Per-model daily request limit (100/day on Tier 1, measured 2026-11-23). On a daily-limit 429 retrying the same model is pointless,
+    # so fall back to the next model (each has its own daily quota). A different model may sound slightly different: `models_used` records it.
+    FALLBACK_MODELS = ["gemini-3.8-flash-lite-tts", "gemini-3.1-flash-tts-preview", "gemini-2.5-flash-preview-tts"]
+
+    def _cache_path(self, model, text, style):
+        import hashlib
+        import os
+        key = hashlib.sha256("\x00".join([model, self.voice, style or "", text]).encode()).hexdigest()[:32]
+        d = Path(os.environ.get("STUDIO_TTS_CACHE", Path(__file__).resolve().parent.parent / "work" / "tts_cache"))
+        return d / f"{key}.pcm"
+
     def synthesize(self, text, lang, out_path):
         import wave
         from . import gemini
         style = self.style if self.style is not None else self.STYLE.get(lang, self.STYLE["en"])
+        models = [self.model] + [m for m in self.FALLBACK_MODELS if m != self.model]
+        self.models_used = getattr(self, "models_used", [])
         last = None
-        self.sleep(self.min_interval)   # pace calls: the TTS model has its own per-minute quota
-        for attempt in range(self.retries + 1):
-            try:
-                pcm, rate, u = gemini.tts(self.model, text, self.voice, style, self.session)
+        pcm = rate = u = None
+        for model in models:
+            cp = self._cache_path(model, text, style)
+            if cp.exists():                       # identical request already paid for: reuse (no API call)
+                pcm, rate, u = cp.read_bytes(), 24000, {"cached": True}
+                self.models_used.append(model + " (cache)")
                 break
-            except gemini.GeminiError as e:
-                last = e
-                if not any(c in str(e) for c in ("HTTP 429", "HTTP 500", "HTTP 502", "HTTP 503", "HTTP 504", "no audio")) or attempt == self.retries:
-                    raise
-                self.sleep(min(65, 2 ** attempt * 8))
-        else:  # pragma: no cover
+            self.sleep(self.min_interval)         # pace calls
+            daily = False
+            for attempt in range(self.retries + 1):
+                try:
+                    pcm, rate, u = gemini.tts(model, text, self.voice, style, self.session)
+                    break
+                except gemini.GeminiError as e:
+                    last = e
+                    msg = str(e)
+                    if "per_day" in msg or "requests per day" in msg:
+                        daily = True
+                        break                     # this model's daily quota is gone: try the next model
+                    if not any(c in msg for c in ("HTTP 429", "HTTP 500", "HTTP 502", "HTTP 503", "HTTP 504", "no audio")) or attempt == self.retries:
+                        raise
+                    self.sleep(min(65, 2 ** attempt * 8))
+            if pcm is not None:
+                cp.parent.mkdir(parents=True, exist_ok=True)
+                cp.write_bytes(pcm)
+                self.models_used.append(model)
+                break
+            if not daily:
+                raise last
+        if pcm is None:
             raise last
         Path(out_path).parent.mkdir(parents=True, exist_ok=True)
         with wave.open(str(out_path), "wb") as w:
