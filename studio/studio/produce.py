@@ -7,6 +7,7 @@ Nothing is ever published by this module.
 """
 import argparse
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -185,7 +186,9 @@ def main(argv=None):
     ap.add_argument("--target-seconds", type=int, default=None, help="default 480 (long) / 50 (short)")
     ap.add_argument("--topic", default="", help="optional topic/angle hint passed to the script writer")
     ap.add_argument("--audience", default="40-60代の日本人男性")
+    ap.add_argument("--style", default="photo", choices=["photo", "manga", "illustration"], help="visual style of the generated images")
     a = ap.parse_args(argv)
+    os.environ["STUDIO_VISUAL_STYLE"] = a.style
     con = ledger.connect(":memory:")
     b = brief.make_brief(a.ytr_db, a.genre, a.lang, audience=a.audience)
     if a.topic:
@@ -194,7 +197,7 @@ def main(argv=None):
     client = anthropic.Anthropic()
     run = produce_short if a.format == "short" else produce
     vstyle = voice.GeminiVoice.STYLE_SHORT.get(a.lang) if a.format == "short" else None     # brisk pace for Shorts
-    rep = run(con, pid, a.lang, client, voice.GeminiVoice(voice=a.voice, style=vstyle), visuals.GeminiImage(style="photo"),
+    rep = run(con, pid, a.lang, client, voice.GeminiVoice(voice=a.voice, style=vstyle), visuals.GeminiImage(style=a.style),
               [qa.WebClaudeReviewer(client), qa.GeminiReviewer()], a.target_seconds or (50 if a.format == "short" else 480))
     short = {k: rep.get(k) for k in ("project_id", "title_options", "narration_seconds", "final_seconds", "measured_usd_claude",
                                     "image_output_tokens", "image_usd_estimate", "is_mock", "ready_to_publish", "voice_credit", "stopped")}

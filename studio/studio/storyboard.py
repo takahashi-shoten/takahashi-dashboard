@@ -43,7 +43,9 @@ Rules:
 - shot is one of: wide, medium, close_up, hands_detail, object, environment, over_shoulder, back_view.
 - At least HALF of the beats must NOT show a clearly visible face (back_view, hands_detail, object, environment, over_shoulder), because face consistency
   across images is hard for the image model. Vary the shot type between neighbouring beats. cast_ids must be empty for object/environment shots.
-- Photographic style (real camera, natural light) when style is "photo"; otherwise original illustration style."""
+- Photographic style (real camera, natural light) when style is "photo". When style is "manga": Japanese comic illustration (clean bold line art, flat bright colours,
+  expressive exaggerated faces and emotions, simple readable backgrounds); style_bible.look must say so, and for manga at least a THIRD of the beats should
+  avoid a clearly visible face (hands, documents, objects, back views) while the rest show strong emotion. Otherwise original illustration style."""
 
 SAFE_FALLBACK = ("An empty quiet interior at a calm moment, soft natural light falling across a table with a few simple everyday objects, "
                  "no people, no text, shallow depth of field")
@@ -121,9 +123,10 @@ def _call(con, client, project_id, model, payload):
     return json.loads(next(b.text for b in resp.content if b.type == "text"))
 
 
-def make_storyboard(con, client, project_id, project_dir, lang, style="photo", model=None, beats_per_section=None, vertical=False):
+def make_storyboard(con, client, project_id, project_dir, lang, style=None, model=None, beats_per_section=None, vertical=False):
     project_dir = Path(project_dir)
     model = model or MODEL
+    style = style or os.environ.get("STUDIO_VISUAL_STYLE", "photo")
     script = json.loads((project_dir / "script.json").read_text(encoding="utf-8"))
     plan = _plan_beats(script, lang, beats_per_section)
     if not plan:
