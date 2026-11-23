@@ -14,6 +14,10 @@ on:
         description: visual style (photo or manga)
         required: false
         default: photo
+      seconds:
+        description: "produce: target video length in seconds (default: 480 long / 50 short)"
+        required: false
+        default: ""
       format:
         description: "produce: long or short"
         default: "short"
@@ -150,9 +154,10 @@ jobs:
           P_GENRE: ${{ github.event.inputs.genre }}
           P_FORMAT: ${{ github.event.inputs.format }}
           P_STYLE: ${{ github.event.inputs.style }}
+          P_SECONDS: ${{ github.event.inputs.seconds }}
           P_LANG: ${{ github.event.inputs.lang }}
           P_TOPIC: ${{ github.event.inputs.topic }}
-        run: python -m studio.produce --ytr-db /tmp/ytr.sqlite --genre "$P_GENRE" --lang "$P_LANG" --voice Iapetus --format "$P_FORMAT" --style "${P_STYLE:-photo}" --topic "$P_TOPIC"
+        run: python -m studio.produce --ytr-db /tmp/ytr.sqlite --genre "$P_GENRE" --lang "$P_LANG" --voice Iapetus --format "$P_FORMAT" --style "${P_STYLE:-photo}" ${P_SECONDS:+--target-seconds "$P_SECONDS"} --topic "$P_TOPIC"
       - name: Publish review files to studio-output branch
         if: always()
         run: |
