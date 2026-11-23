@@ -114,8 +114,7 @@ class GeminiVoice:
              # English: a LONG direction made Gemini TTS read ~2.5x too slowly (measured 2026-11-22: 5.4 vs 13.5 chars/s), so none for long-form
              "en": ""}
     STYLE_SHORT = {"en": "Say quickly and energetically:",      # short direction measured at 12.7 chars/s
-                   "ja": ("Read the following Japanese text as a natural male narrator telling a friend a surprising fact in a short video. "
-                          "Brisk conversational pace, short natural pauses only between sentences, no theatrical acting, no announcer tone.")}
+                   "ja": None}          # None -> the tested "warm" Japanese direction (a long brisk direction risks slow reading, as in English)
 
     def __init__(self, voice="Iapetus", model=None, style=None, session=None, retries=3, sleep=None):
         import os

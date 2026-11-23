@@ -48,4 +48,6 @@ DATE_SAMPLE_MAX_AGE_DAYS = 60
 
 # Genres to cover first (owner's current interest). Others follow, least-covered first.
 PRIORITY_GENRES = ("mens_sexual_health", "relationships_dating", "sex_trivia_edu", "grooming_men",
-                   "midlife_men", "aga_hair", "sleep_health", "side_income", "asset_building")
+                   "midlife_men", "aga_hair", "sleep_health", "side_income", "asset_building",
+                   # Japanese queries of these genres had never run (2026-11-23) while English ones had: needed for a fair JA vs EN comparison
+                   "history", "science", "psychology", "cozy_life", "space", "biology_nature", "trivia")
