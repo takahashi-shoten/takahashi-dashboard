@@ -67,7 +67,7 @@ def compose(left_path, right_path, variant, out_path):
     px = fit_px(d, bottom, W - 60, start=96, sw=8)
     outlined(d, ((W - d.textlength(bottom, font=font(px))) / 2, H - 112), bottom, px, (255, 225, 0), sw=8)
     bubble(d, (24, 462, 400, 578), bl, (170, 400))      # below the boss's face, tail pointing up to him
-    bubble(d, (W - 420, 164, W - 40, 262), br, (W - 560, 340))
+    bubble(d, (W - 420, 164, W - 40, 262), br, (W - 400, 292))
     canvas.save(out_path)
     return out_path
 
