@@ -11,8 +11,12 @@ SCENE1 = (f"Candid editorial photograph, 35mm lens, shallow depth of field, soft
           "in a quiet Tokyo cafe, he leans in listening attentively while she speaks with a gentle smile, two cups of coffee on the table.")
 SCENE2 = (f"Candid editorial photograph, 35mm lens, natural overcast daylight. The same two people: {CAST}, walking side by side along a tree-lined "
           "path in a Tokyo park in autumn, talking and laughing softly.")
-JOBS = [("cmp_flash_scene1.png", "gemini-3.1-flash-image", SCENE1), ("cmp_pro_scene1.png", "gemini-3-pro-image", SCENE1),
-        ("cmp_flash_scene2.png", "gemini-3.1-flash-image", SCENE2)]
+H1 = ("Dramatic historical illustration, Japanese Sengoku era 1560: a rain-soaked mountain pass at dawn, an army of ashigaru foot soldiers in simple armour "
+      "marching in a long line, banners wet and heavy, grey mist, painterly realistic style, cinematic composition.")
+H2 = ("Dramatic historical illustration, Japanese Bakumatsu era 1867: a narrow night street in Kyoto lit by paper lanterns, two samurai in dark haori "
+      "talking in low voices under the eaves, painterly realistic style, cinematic composition.")
+JOBS = [("cmp_hist_flash_1.png", "gemini-3.1-flash-image", H1), ("cmp_hist_lite_1.png", "gemini-3.1-flash-lite-image", H1),
+        ("cmp_hist_flash_2.png", "gemini-3.1-flash-image", H2), ("cmp_hist_lite_2.png", "gemini-3.1-flash-lite-image", H2)]
 
 
 def main():
@@ -20,7 +24,7 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     rc = 0
     for name, model, prompt in JOBS:
-        g = visuals.GeminiImage(model=model, style="photo")
+        g = visuals.GeminiImage(model=model, style="illustration")
         t = time.time()
         try:
             g.generate(prompt, out / name)
