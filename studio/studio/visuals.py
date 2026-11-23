@@ -72,7 +72,8 @@ class GeminiImage:
     name = "GeminiImage"
 
     STYLES = {
-        "manga": ("Japanese comic (manga) illustration, clean bold line art, flat bright colours, expressive exaggerated faces and emotions. "
+        "manga": ("Modern Japanese web-manga illustration as used by popular YouTube story-manga channels: clean thin line art, cel shading, bright pastel colours, "
+                  "attractive stylised characters with simple expressive faces and big readable emotions, simple tidy backgrounds. "
                   "No text, letters, speech bubbles, logos or brand names anywhere. Fictional characters only."),
         "illustration": "Original illustration. No text, letters, logos or watermarks. No real people.",
         "photo": ("Photorealistic photograph, natural lighting, realistic skin texture and proportions. Fictional people only (not any real person's "

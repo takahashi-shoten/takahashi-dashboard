@@ -9,6 +9,10 @@ from . import visuals
 
 FONT_BOLD = "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc"
 SIZE = (1280, 720)
+TALL_L = ("A tired but calm young Japanese man in a navy work jacket holding a worn notebook, standing in front of a smug middle-aged manager in a grey suit "
+          "who sneers and points at him; warehouse office background. Vertical portrait panel, both faces clearly visible, upper bodies.")
+TALL_R = ("A middle-aged manager in a grey suit, pale and trembling with wide shocked eyes and sweat drops, gripping a document; behind him a young man in a navy work "
+          "jacket calmly smiling, holding a notebook. Vertical portrait panel, dramatic, both faces clearly visible, upper bodies.")
 PANEL_L = ("A smug middle-aged Japanese office boss in a grey suit, arms crossed, sneering down at a tired young warehouse supervisor in a blue work jacket "
            "who stands with a worn notebook under his arm. Warehouse office background. Comic panel, close-up on the two faces.")
 PANEL_R = ("The same boss now pale, frozen, eyes wide with shock and sweat drops, holding a document; the calm warehouse supervisor in the blue work jacket "
@@ -72,14 +76,53 @@ def compose(left_path, right_path, variant, out_path):
     return out_path
 
 
+def vtext(draw, x, y, text, px, fill, stroke=(255, 255, 255), sw=0, max_h=640):
+    """Vertical Japanese text, one column, top to bottom (x = left edge of the column). Shrinks to fit max_h."""
+    while px > 30 and len(text) * px * 1.02 > max_h:
+        px -= 2
+    f = font(px)
+    for i, ch in enumerate(text):
+        cx, cy = x, y + i * px * 1.02
+        if ch in "、。":
+            cx, cy = x + px * 0.55, cy - px * 0.45
+        elif ch in "ー―":
+            ch = "｜"
+        draw.text((cx, cy), ch, font=f, fill=fill, stroke_width=sw, stroke_fill=stroke)
+    return px
+
+
+def compose_v(left_path, right_path, variant, out_path):
+    """Three columns like the top Japanese story-manga thumbnails: left panel | vertical headline strip | right panel, dialogue bubbles inside the panels."""
+    top, bottom, bl, br = VARIANTS[variant]
+    W, H = SIZE
+    strip = 300
+    pw = (W - strip) // 2
+    canvas = Image.new("RGB", SIZE, (255, 255, 255))
+    for k, p in enumerate((left_path, right_path)):
+        im = Image.open(p).convert("RGB")
+        im = im.resize((pw, int(im.height * pw / im.width)))
+        top_off = max(0, (im.height - H) // 3)
+        canvas.paste(im.crop((0, top_off, pw, top_off + H)), (0 if k == 0 else pw + strip, 0))
+    d = ImageDraw.Draw(canvas)
+    d.rectangle((pw, 0, pw + strip, H), fill=(255, 255, 255))
+    d.line((pw, 0, pw, H), fill=(0, 0, 0), width=6)
+    d.line((pw + strip, 0, pw + strip, H), fill=(0, 0, 0), width=6)
+    vtext(d, pw + strip - 130, 22, top, 100, (225, 15, 40), sw=0, max_h=H - 40)           # right column (read first)
+    vtext(d, pw + 30, 22, bottom, 100, (0, 0, 0), sw=0, max_h=H - 40)                      # left column
+    bubble(d, (16, 22, pw - 16, 132), bl, (pw * 0.5, 190))
+    bubble(d, (pw + strip + 16, 22, W - 16, 132), br, (pw + strip + 140, 190))
+    canvas.save(out_path)
+    return out_path
+
+
 def main():
     out = Path(__file__).resolve().parent.parent / "work" / "gemini_live"
     out.mkdir(parents=True, exist_ok=True)
     g = visuals.GeminiImage(style="manga")
-    g.generate(PANEL_L, out / "panel_l.png", size=(1280, 1024))
-    g.generate(PANEL_R, out / "panel_r.png", size=(1280, 1024))
+    g.generate(TALL_L, out / "tall_l.png", size=(720, 1280))
+    g.generate(TALL_R, out / "tall_r.png", size=(720, 1280))
     for v in VARIANTS:
-        compose(out / "panel_l.png", out / "panel_r.png", v, out / f"thumb_{v}.png")
+        compose_v(out / "tall_l.png", out / "tall_r.png", v, out / f"thumb_{v}.png")
     print("thumbnail variants written:", sorted(p.name for p in out.glob("thumb_*.png")), "image usage:", g.usage)
 
 
