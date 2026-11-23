@@ -52,18 +52,24 @@ def narration_chars(data):
 
 
 def _call(con, client, project_id, stage, system, payload):
-    resp = client.beta.messages.create(
-        model=MODEL, max_tokens=16000,
-        betas=["server-side-fallback-2026-07-01"], fallbacks="default",
-        thinking={"type": "adaptive"},
-        output_config={"effort": "medium", "format": {"type": "json_schema", "schema": SCHEMA}},
-        system=system, messages=[{"role": "user", "content": json.dumps(payload, ensure_ascii=False)}])
-    usd = ledger.record_cost(con, project_id, stage, "anthropic", resp.model if getattr(resp, "model", None) in ledger.PRICES else MODEL,
-                             resp.usage.input_tokens, resp.usage.output_tokens)
-    if resp.stop_reason == "refusal":
-        ledger.add_step(con, project_id, stage, "failed", detail="model refused")
-        return None, usd
-    return json.loads(next(b.text for b in resp.content if b.type == "text")), usd
+    """One model call. If the output is cut off by the token limit (thinking tokens count against it), retry once with lower effort."""
+    total = 0.0
+    for effort in ("medium", "low"):
+        resp = client.beta.messages.create(
+            model=MODEL, max_tokens=20000,
+            betas=["server-side-fallback-2026-07-01"], fallbacks="default",
+            thinking={"type": "adaptive"},
+            output_config={"effort": effort, "format": {"type": "json_schema", "schema": SCHEMA}},
+            system=system, messages=[{"role": "user", "content": json.dumps(payload, ensure_ascii=False)}])
+        total += ledger.record_cost(con, project_id, stage, "anthropic", resp.model if getattr(resp, "model", None) in ledger.PRICES else MODEL,
+                                    resp.usage.input_tokens, resp.usage.output_tokens)
+        if resp.stop_reason == "refusal":
+            ledger.add_step(con, project_id, stage, "failed", detail="model refused")
+            return None, total
+        if resp.stop_reason != "max_tokens":
+            return json.loads(next(b.text for b in resp.content if b.type == "text")), total
+        ledger.add_step(con, project_id, stage, "retry", detail=f"output cut off by max_tokens at effort={effort}")
+    raise RuntimeError("script output was cut off by the token limit twice; shorten the brief")
 
 
 def _normalize_seconds(data, rate):
