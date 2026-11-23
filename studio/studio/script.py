@@ -47,6 +47,28 @@ REVISE_SYSTEM = SYSTEM + """
 You are REVISING an existing script. Return the complete revised script in the same schema. Follow the instruction exactly."""
 
 
+HISTORY_GUIDE = """
+HISTORY / FACT-BASED GUIDE (applies to this video):
+- Format: a historical mystery or "the common belief turns out to be wrong" investigation about REAL people/events. Open with the question and why it matters (first 30-60 seconds),
+  then: 1) the popular belief, 2) what the primary sources actually say (name each source: e.g. the chronicle, diary, document, with its date and author type),
+  3) where later accounts diverge or were added, 4) the competing interpretations, 5) a conclusion that states how certain it is, 6) a short wrap-up. A reversal of an assumption is welcome ONLY if the evidence supports it.
+- Facts: every date, name, number and quote must be real and checkable. Never invent a quotation, a source or a statistic. Separate clearly: what is documented / what is a later tradition / what is the narrator's inference.
+  Use hedges such as 「〜とされる」「〜という記録がある」「〜と考える研究者もいる」 for anything not firmly established. If scholars disagree, say so.
+- Only people and events that are long past. No living people, no recent crimes or victims, no modern politics. No glorifying violence.
+- Narration is a calm, curious storyteller (not a lecturer). Concrete scenes and details; explain unfamiliar terms briefly. No filler.
+- description: a 2-3 sentence summary, then a section 「参考にした史料・文献」 listing the sources named in the video (titles only; do not invent bibliographic details), then the AI-use notice.
+- visual_prompt: depict scenes, landscapes, objects, documents and ANONYMOUS period figures (e.g. "a daimyo in armour seen from behind"). Never name or portray a specific real person's face.
+"""
+
+
+def _guide(con, project_id):
+    try:
+        r = con.execute("SELECT genre FROM projects WHERE project_id=?", (project_id,)).fetchone()
+        return HISTORY_GUIDE if r and r["genre"] == "history" else ""
+    except Exception:
+        return ""
+
+
 def narration_chars(data):
     return sum(len(s["narration"]) for s in data["sections"])
 
@@ -84,7 +106,7 @@ def write_script(con, client, project_id, target_seconds=480, max_fixes=2, chars
     brief = json.loads(p["brief_json"])
     rate = chars_per_sec or CHARS_PER_SEC.get(brief.get("lang"), 5.5)
     target = int(target_seconds * rate)
-    data, total = _call(con, client, project_id, "script", SYSTEM,
+    data, total = _call(con, client, project_id, "script", SYSTEM + _guide(con, project_id),
                         {"brief": brief, "target_seconds": target_seconds, "target_narration_chars": target, "chars_per_second": rate})
     if data is None:
         return None
@@ -92,7 +114,7 @@ def write_script(con, client, project_id, target_seconds=480, max_fixes=2, chars
     while fixes < max_fixes and abs(narration_chars(data) - target) / target > LENGTH_TOLERANCE:
         n = narration_chars(data)
         verb = "EXPAND (add substance, examples, concrete detail; no padding)" if n < target else "TRIM (cut repetition, keep the best material)"
-        fixed, usd = _call(con, client, project_id, "script_fix", REVISE_SYSTEM, {
+        fixed, usd = _call(con, client, project_id, "script_fix", REVISE_SYSTEM + _guide(con, project_id), {
             "instruction": f"The narration is {n} characters but the target is {target} (+-10%). {verb}. Keep the original angle, hook and section structure.",
             "target_narration_chars": target, "chars_per_second": rate, "script": data})
         total += usd
@@ -111,7 +133,7 @@ def revise_with_feedback(con, client, project_id, data, issues, unverified_claim
     """Applies QA feedback: removes or softens claims that cannot be verified, keeps the length."""
     rate = chars_per_sec or (SHORT_CHARS_PER_SEC if short else CHARS_PER_SEC).get(lang, 5.5)
     n = narration_chars(data)
-    revised, _ = _call(con, client, project_id, "script_revise", SHORT_REVISE_SYSTEM if short else REVISE_SYSTEM, {
+    revised, _ = _call(con, client, project_id, "script_revise", SHORT_REVISE_SYSTEM if short else REVISE_SYSTEM + _guide(con, project_id), {
         "instruction": ("Fix the reviewer's issues. For every unverified claim: remove it, or rewrite it as a clearly hedged general statement "
                         "without invented numbers, studies or quotes; never keep a precise statistic you cannot source. List what remains "
                         "in fact_claims_to_verify. Keep total narration length within 10% of the current length."),

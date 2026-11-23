@@ -18,6 +18,10 @@ on:
         description: "produce: target video length in seconds (default: 480 long / 50 short)"
         required: false
         default: ""
+      script_only:
+        description: "produce: set to 1 to stop after the script and QA (no voice/image spend)"
+        required: false
+        default: ""
       format:
         description: "produce: long or short"
         default: "short"
@@ -155,9 +159,10 @@ jobs:
           P_FORMAT: ${{ github.event.inputs.format }}
           P_STYLE: ${{ github.event.inputs.style }}
           P_SECONDS: ${{ github.event.inputs.seconds }}
+          P_SCRIPT_ONLY: ${{ github.event.inputs.script_only }}
           P_LANG: ${{ github.event.inputs.lang }}
           P_TOPIC: ${{ github.event.inputs.topic }}
-        run: python -m studio.produce --ytr-db /tmp/ytr.sqlite --genre "$P_GENRE" --lang "$P_LANG" --voice Iapetus --format "$P_FORMAT" --style "${P_STYLE:-photo}" ${P_SECONDS:+--target-seconds "$P_SECONDS"} --topic "$P_TOPIC"
+        run: python -m studio.produce --ytr-db /tmp/ytr.sqlite --genre "$P_GENRE" --lang "$P_LANG" --voice Iapetus --format "$P_FORMAT" --style "${P_STYLE:-photo}" ${P_SECONDS:+--target-seconds "$P_SECONDS"} ${P_SCRIPT_ONLY:+--script-only} --topic "$P_TOPIC"
       - name: Publish review files to studio-output branch
         if: always()
         run: |

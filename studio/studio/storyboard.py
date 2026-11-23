@@ -45,7 +45,7 @@ Rules:
   across images is hard for the image model. Vary the shot type between neighbouring beats. cast_ids must be empty for object/environment shots.
 - Photographic style (real camera, natural light) when style is "photo". When style is "manga": Japanese comic illustration (clean bold line art, flat bright colours,
   expressive exaggerated faces and emotions, simple readable backgrounds); style_bible.look must say so, and for manga at least a THIRD of the beats should
-  avoid a clearly visible face (hands, documents, objects, back views) while the rest show strong emotion. Otherwise original illustration style."""
+  avoid a clearly visible face (hands, documents, objects, back views) while the rest show strong emotion. When style is "history": painterly realistic historical illustration (cinematic light, muted earthy palette, accurate period details); style_bible.look must say so; figures are anonymous period people, never a named real person; documents/objects/landscapes/maps-like scenes are welcome. Otherwise original illustration style."""
 
 SAFE_FALLBACK = ("An empty quiet interior at a calm moment, soft natural light falling across a table with a few simple everyday objects, "
                  "no people, no text, shallow depth of field")

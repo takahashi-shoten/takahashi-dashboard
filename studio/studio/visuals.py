@@ -75,6 +75,8 @@ class GeminiImage:
         "manga": ("Modern Japanese web-manga illustration as used by popular YouTube story-manga channels: clean thin line art, cel shading, bright pastel colours, "
                   "attractive stylised characters with simple expressive faces and big readable emotions, simple tidy backgrounds. "
                   "No text, letters, speech bubbles, logos or brand names anywhere. Fictional characters only."),
+        "history": ("Painterly realistic historical illustration, cinematic natural lighting, muted earthy palette, rich period detail (armour, clothing, architecture, landscapes, documents). "
+                    "Anonymous period figures only, never a specific real person's face. No text, letters, logos, modern objects or watermarks."),
         "illustration": "Original illustration. No text, letters, logos or watermarks. No real people.",
         "photo": ("Photorealistic photograph, natural lighting, realistic skin texture and proportions. Fictional people only (not any real person's "
                   "likeness). No text, letters, logos or watermarks."),

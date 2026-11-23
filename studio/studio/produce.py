@@ -58,7 +58,7 @@ def image_cost(provider):
     return tok, usd
 
 
-def produce(con, project_id, lang, client, voice_provider, image_provider, reviewers, target_seconds=480, work_root=None, revise_once=True):
+def produce(con, project_id, lang, client, voice_provider, image_provider, reviewers, target_seconds=480, work_root=None, revise_once=True, script_only=False):
     d = (Path(work_root) / str(project_id)) if work_root else project_dir(project_id)
     d.mkdir(parents=True, exist_ok=True)
     rate = getattr(voice_provider, "chars_per_sec", {}).get(lang) if hasattr(voice_provider, "chars_per_sec") else None
@@ -85,6 +85,11 @@ def produce(con, project_id, lang, client, voice_provider, image_provider, revie
     _record_qa(con, project_id, rep, res, stage)
     if res["decision"] == "blocked":
         rep["stopped"] = "QA blocked the script; no paid asset was generated"
+        (d / "report.json").write_text(json.dumps(rep, ensure_ascii=False, indent=1), encoding="utf-8")
+        return rep
+    if script_only:
+        rep["stopped"] = "script_only: script and QA done, no voice/images generated (owner reviews the script first)"
+        rep["title_options"] = data["title_options"]
         (d / "report.json").write_text(json.dumps(rep, ensure_ascii=False, indent=1), encoding="utf-8")
         return rep
 
@@ -200,7 +205,8 @@ def main(argv=None):
     ap.add_argument("--target-seconds", type=int, default=None, help="default 480 (long) / 50 (short)")
     ap.add_argument("--topic", default="", help="optional topic/angle hint passed to the script writer")
     ap.add_argument("--audience", default="40-60代の日本人男性")
-    ap.add_argument("--style", default="photo", choices=["photo", "manga", "illustration"], help="visual style of the generated images")
+    ap.add_argument("--script-only", action="store_true", help="stop after the script and QA (no voice/image spend)")
+    ap.add_argument("--style", default="photo", choices=["photo", "manga", "illustration", "history"], help="visual style of the generated images")
     a = ap.parse_args(argv)
     os.environ["STUDIO_VISUAL_STYLE"] = a.style
     con = ledger.connect(":memory:")
@@ -212,7 +218,8 @@ def main(argv=None):
     run = produce_short if a.format == "short" else produce
     vstyle = voice.GeminiVoice.STYLE_SHORT.get(a.lang) if a.format == "short" else None     # brisk pace for Shorts
     rep = run(con, pid, a.lang, client, voice.GeminiVoice(voice=a.voice, style=vstyle), (visuals.HybridImage(style=a.style, max_share=1.0 if a.format == "short" else 0.3) if os.environ.get("STUDIO_IMAGE_MODE", "hybrid") == "hybrid" else visuals.GeminiImage(style=a.style)),
-              [qa.WebClaudeReviewer(client), qa.GeminiReviewer()], a.target_seconds or (50 if a.format == "short" else 480))
+              [qa.WebClaudeReviewer(client), qa.GeminiReviewer()], a.target_seconds or (50 if a.format == "short" else 480),
+              **({"script_only": True} if a.script_only and a.format != "short" else {}))
     short = {k: rep.get(k) for k in ("project_id", "title_options", "narration_seconds", "final_seconds", "measured_usd_claude",
                                     "image_output_tokens", "image_usd_estimate", "is_mock", "ready_to_publish", "voice_credit", "stopped")}
     print(json.dumps(short, ensure_ascii=False, indent=1))
