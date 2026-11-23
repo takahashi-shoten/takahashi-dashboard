@@ -80,7 +80,7 @@ jobs:
           PY
 
   gemini-live:
-    if: github.event.inputs.task == 'gemini' || github.event.inputs.task == 'imagecompare' || github.event.inputs.task == 'ttscompare' || github.event.inputs.task == 'ttsvariants' || github.event.inputs.task == 'ttsen'
+    if: github.event.inputs.task == 'gemini' || github.event.inputs.task == 'imagecompare' || github.event.inputs.task == 'ttscompare' || github.event.inputs.task == 'ttsvariants' || github.event.inputs.task == 'ttsen' || github.event.inputs.task == 'music'
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -91,12 +91,15 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install requests pillow
+      - name: Install ffmpeg
+        if: github.event.inputs.task == 'music'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
       - name: Gemini live test (one image + one grounded review)
         working-directory: studio
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           STUDIO_GEMINI_REVIEW_MODEL: gemini-3.8-flash
-        run: python -m studio.${{ github.event.inputs.task == 'imagecompare' && 'image_compare' || github.event.inputs.task == 'ttscompare' && 'tts_compare' || github.event.inputs.task == 'ttsvariants' && 'tts_variants' || github.event.inputs.task == 'ttsen' && 'tts_en_probe' || 'gemini_live_test' }}
+        run: python -m studio.${{ github.event.inputs.task == 'imagecompare' && 'image_compare' || github.event.inputs.task == 'ttscompare' && 'tts_compare' || github.event.inputs.task == 'ttsvariants' && 'tts_variants' || github.event.inputs.task == 'ttsen' && 'tts_en_probe' || github.event.inputs.task == 'music' && 'music_live_test' || 'gemini_live_test' }}
       - name: Publish sample image to studio-samples branch (so it can be viewed)
         if: always()
         run: |
