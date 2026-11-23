@@ -117,6 +117,56 @@ class GeminiImage:
                     note=f"GeminiImage {self.model} via REST" + ("" if ok else " (needs GEMINI_API_KEY)"))
 
 
+class HybridImage:
+    """Two-tier image generation (owner's choice B, 2026-11-23): the premium model for the opening (~2 min of narration) and the last few beats,
+    the cheaper model for the rest. Viewers decide in the first seconds, so quality goes where it matters; the middle stays cheap (about half the cost)."""
+    name = "HybridImage"
+    PREMIUM_MODEL = "gemini-3.1-flash-image"
+    STANDARD_MODEL = "gemini-3.1-flash-lite-image"
+
+    def __init__(self, style="illustration", premium=None, standard=None, opening_chars=660, tail_beats=3, max_share=0.3, session=None):
+        self.premium = premium or GeminiImage(model=self.PREMIUM_MODEL, style=style, session=session)
+        self.standard = standard or GeminiImage(model=self.STANDARD_MODEL, style=style, session=session)
+        self.opening_chars, self.tail_beats, self.max_share = opening_chars, tail_beats, max_share
+        self.premium_paths = set()
+        self.model = f"{self.PREMIUM_MODEL}+{self.STANDARD_MODEL}"
+
+    def plan_premium(self, items):
+        """items: [(path, beat dict)]. Premium = opening beats until opening_chars of narration, plus the last tail_beats; capped at max_share of all beats."""
+        order = sorted(items, key=lambda x: (x[1]["section"], x[1]["beat"]))
+        cap = max(1, int(len(order) * self.max_share + 0.999)) if self.max_share < 1 else len(order)
+        opening, acc = [], 0
+        for p, b in order:
+            if acc >= self.opening_chars:
+                break
+            opening.append(p)
+            acc += int(b.get("chars", 0))
+        tail = [p for p, _ in order[-self.tail_beats:]] if self.tail_beats else []
+        chosen = list(dict.fromkeys(opening[: max(0, cap - len(tail))] + tail))[:cap]
+        self.premium_paths = set(chosen)
+        return self.premium_paths
+
+    def generate(self, prompt, out_path, size=(1920, 1080)):
+        (self.premium if out_path in self.premium_paths else self.standard).generate(prompt, out_path, size)
+
+    @property
+    def last_usage(self):
+        return self.standard.last_usage or self.premium.last_usage
+
+    @property
+    def parts(self):
+        return [(self.premium.model, self.premium.usage), (self.standard.model, self.standard.usage)]
+
+    @property
+    def usage(self):
+        return list(self.premium.usage) + list(self.standard.usage)
+
+    def describe(self):
+        d = self.premium.describe()
+        d["note"] = f"HybridImage premium={self.premium.model} (opening + ending), standard={self.standard.model}" + ("" if d["status"] == "done" else " (needs GEMINI_API_KEY)")
+        return d
+
+
 class OpenAIImage(_KeyedStub):
     env, name = "OPENAI_API_KEY", "OpenAIImage"
 

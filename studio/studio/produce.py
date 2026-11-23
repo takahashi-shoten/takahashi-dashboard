@@ -42,6 +42,22 @@ def _record_qa(con, project_id, rep, res, stage):
     stage("qa", "real" if len(real_reviewers) >= 2 else "mock", f"decision={res['decision']}")
 
 
+def image_cost(provider):
+    """(output tokens, USD estimate or None) over every model the provider used; unknown-model tokens make the USD None."""
+    parts = getattr(provider, "parts", None) or [(getattr(provider, "model", ""), getattr(provider, "usage", []))]
+    tok, usd = 0, 0.0
+    for model, usage in parts:
+        t = sum(int(u.get("output_tokens", 0)) for u in usage)
+        tok += t
+        price = IMAGE_USD_PER_M_TOKENS.get(model)
+        if price is None:
+            if t:
+                return tok, None
+        else:
+            usd += t * price / 1e6
+    return tok, usd
+
+
 def produce(con, project_id, lang, client, voice_provider, image_provider, reviewers, target_seconds=480, work_root=None, revise_once=True):
     d = (Path(work_root) / str(project_id)) if work_root else project_dir(project_id)
     d.mkdir(parents=True, exist_ok=True)
@@ -83,9 +99,8 @@ def produce(con, project_id, lang, client, voice_provider, image_provider, revie
     paths = storyboard.render_beats(d, image_provider)
     stage("visuals", "real" if imd["status"] == "done" else "mock", f"{len(paths)} images; {imd.get('note', '')}")
     model = getattr(image_provider, "model", "")
-    tok = sum(int(u.get("output_tokens", 0)) for u in getattr(image_provider, "usage", []))     # thread-safe per-image usage
-    price = IMAGE_USD_PER_M_TOKENS.get(model)
-    ledger.record_usage(con, project_id, "images", "gemini", model or "?", 0, tok, None if price is None else tok * price / 1e6)
+    tok, usd = image_cost(image_provider)                                                    # thread-safe per-image usage
+    ledger.record_usage(con, project_id, "images", "gemini", model or "?", 0, tok, usd)
 
     edit.assemble(d)
     edit.make_shorts(d)
@@ -101,7 +116,7 @@ def produce(con, project_id, lang, client, voice_provider, image_provider, revie
     rep["costs"] = [dict(r) for r in con.execute("SELECT stage, provider, model, input_tokens, output_tokens, usd FROM costs WHERE project_id=?", (project_id,))]
     rep["measured_usd_claude"] = round(sum(r["usd"] or 0 for r in rep["costs"] if r["provider"] == "anthropic"), 4)
     rep["image_output_tokens"] = tok
-    rep["image_usd_estimate"] = None if price is None else round(tok * price / 1e6, 4)
+    rep["image_usd_estimate"] = None if usd is None else round(usd, 4)
     rep["is_mock"] = any(s["status"] == "mock" for s in rep["stages"].values())
     rep["ready_to_publish"] = (not rep["is_mock"]) and res["decision"] == "pass" and pipeline.is_publish_approved(con, project_id)
     rep["files"] = {n: str(d / n) for n in ("final.mp4", "preview.mp4", "shorts.mp4", "thumbnail.png", "final.srt", "script.json", "storyboard.json", "qa.json")
@@ -152,9 +167,8 @@ def produce_short(con, project_id, lang, client, voice_provider, image_provider,
     paths = storyboard.render_beats(d, image_provider, size=edit.SHORT_SIZE)
     stage("visuals", "real" if imd["status"] == "done" else "mock", f"{len(paths)} vertical images; {imd.get('note', '')}")
     model = getattr(image_provider, "model", "")
-    tok = sum(int(u.get("output_tokens", 0)) for u in getattr(image_provider, "usage", []))
-    price = IMAGE_USD_PER_M_TOKENS.get(model)
-    ledger.record_usage(con, project_id, "images", "gemini", model or "?", 0, tok, None if price is None else tok * price / 1e6)
+    tok, usd = image_cost(image_provider)
+    ledger.record_usage(con, project_id, "images", "gemini", model or "?", 0, tok, usd)
 
     edit.assemble_short(d)
     stage("edit", "real", "ffmpeg vertical assembly with burned-in captions")
@@ -167,7 +181,7 @@ def produce_short(con, project_id, lang, client, voice_provider, image_provider,
     rep["costs"] = [dict(r) for r in con.execute("SELECT stage, provider, model, input_tokens, output_tokens, usd FROM costs WHERE project_id=?", (project_id,))]
     rep["measured_usd_claude"] = round(sum(r["usd"] or 0 for r in rep["costs"] if r["provider"] == "anthropic"), 4)
     rep["image_output_tokens"] = tok
-    rep["image_usd_estimate"] = None if price is None else round(tok * price / 1e6, 4)
+    rep["image_usd_estimate"] = None if usd is None else round(usd, 4)
     rep["is_mock"] = any(s["status"] == "mock" for s in rep["stages"].values())
     rep["ready_to_publish"] = (not rep["is_mock"]) and res["decision"] == "pass" and pipeline.is_publish_approved(con, project_id)
     rep["files"] = {n: str(d / n) for n in ("short.mp4", "short.ass", "script.json", "storyboard.json", "qa.json") if (d / n).exists()}
@@ -197,7 +211,7 @@ def main(argv=None):
     client = anthropic.Anthropic()
     run = produce_short if a.format == "short" else produce
     vstyle = voice.GeminiVoice.STYLE_SHORT.get(a.lang) if a.format == "short" else None     # brisk pace for Shorts
-    rep = run(con, pid, a.lang, client, voice.GeminiVoice(voice=a.voice, style=vstyle), visuals.GeminiImage(style=a.style),
+    rep = run(con, pid, a.lang, client, voice.GeminiVoice(voice=a.voice, style=vstyle), (visuals.HybridImage(style=a.style, max_share=1.0 if a.format == "short" else 0.3) if os.environ.get("STUDIO_IMAGE_MODE", "hybrid") == "hybrid" else visuals.GeminiImage(style=a.style)),
               [qa.WebClaudeReviewer(client), qa.GeminiReviewer()], a.target_seconds or (50 if a.format == "short" else 480))
     short = {k: rep.get(k) for k in ("project_id", "title_options", "narration_seconds", "final_seconds", "measured_usd_claude",
                                     "image_output_tokens", "image_usd_estimate", "is_mock", "ready_to_publish", "voice_credit", "stopped")}

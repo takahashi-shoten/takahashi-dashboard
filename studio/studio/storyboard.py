@@ -180,6 +180,8 @@ def render_beats(project_dir, image_provider, max_workers=3, size=(1920, 1080)):
     if bad:
         raise ValueError("beat prompt rejected: " + "; ".join(bad))
     out.mkdir(parents=True, exist_ok=True)
+    if hasattr(image_provider, "plan_premium"):      # two-tier provider: tell it which beats get the premium model
+        image_provider.plan_premium([(path, b) for path, _, b in jobs])
     usage = []
 
     def run(job):
