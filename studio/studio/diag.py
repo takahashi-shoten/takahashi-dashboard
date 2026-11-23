@@ -31,10 +31,30 @@ def tts_once():
     print("TTS body", r.text[:3000] if r.status_code != 200 else "ok (audio returned)")
 
 
+def price_sections():
+    h = requests.get("https://ai.google.dev/gemini-api/docs/pricing", timeout=60).text
+    t = re.sub(r"<script.*?</script>|<style.*?</style>", " ", h, flags=re.S)
+    t = re.sub(r"<[^>]+>", " ", t); t = re.sub(r"\s+", " ", t)
+    for head in ("## Gemini Omni 1.2 Flash", "## Gemini Omni 1.1 Flash", "## Gemini 3.8 Flash TTS"):
+        i = t.find(head)
+        print("SECTION", head, "::", t[i + 300: i + 2600] if i >= 0 else "not found")
+
+
+def tts_burst(n=10, gap=6):
+    import time
+    body = {"contents": [{"parts": [{"text": "はい。テストです。"}]}],
+            "generationConfig": {"responseModalities": ["AUDIO"],
+                                 "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": "Iapetus"}}}}}
+    for i in range(n):
+        r = requests.post(f"{gemini.BASE}gemini-3.8-flash-tts:generateContent", json=body, timeout=120,
+                          headers={"x-goog-api-key": gemini.api_key(), "Content-Type": "application/json"})
+        print("BURST", i, r.status_code, (r.text[:600] if r.status_code != 200 else ""))
+        time.sleep(gap)
+
+
 def main():
-    page_lines("https://ai.google.dev/gemini-api/docs/pricing", ["omni", "tts", "per second", "video"])
-    page_lines("https://ai.google.dev/gemini-api/docs/rate-limits", ["tier 1", "text-to-speech", "tts", "per day", "RPD"])
-    tts_once()
+    price_sections()
+    tts_burst()
 
 
 if __name__ == "__main__":
