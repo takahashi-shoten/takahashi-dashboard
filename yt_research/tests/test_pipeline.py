@@ -156,8 +156,9 @@ def test_full_analyze_and_report(env):
     assert (config.REPORT_DIR / "exports" / "channel_metrics.csv").exists()
 
 
-def test_topic_scheduler_rotates_genres(env):
+def test_topic_scheduler_rotates_genres(env, monkeypatch):
     con, *_ = env
+    monkeypatch.setattr(config, "FOCUS_GENRES", ())          # round-robin behaviour without a focus genre
     sel = topics.select_topics(con, 10)
     assert len({r["genre"] for r in sel}) == 10
 
@@ -212,8 +213,9 @@ def test_migration_on_old_db(tmp_path):
     assert "date_sampled_at" in {r[1] for r in con.execute("PRAGMA table_info(topics)")}
 
 
-def test_priority_genres_searched_first(env):
+def test_priority_genres_searched_first(env, monkeypatch):
     con, *_ = env
+    monkeypatch.setattr(config, "FOCUS_GENRES", ())
     sel = topics.select_topics(con, 9)
     assert {r["genre"] for r in sel} <= set(config.PRIORITY_GENRES)
     assert len({r["genre"] for r in sel}) == 9      # still one per genre
@@ -263,3 +265,11 @@ def test_date_sample_topics_start_with_priority_genres(env):
     con, *_ = env
     sel = topics.select_date_sample_topics(con, 9)
     assert {r["genre"] for r in sel} <= set(config.PRIORITY_GENRES)
+
+
+def test_focus_genre_fresh_topics_come_first(env, monkeypatch):
+    con, *_ = env
+    monkeypatch.setattr(config, "FOCUS_GENRES", ("history",))
+    sel = topics.select_topics(con, 8)
+    n_history = sum(1 for r in con.execute("SELECT 1 FROM topics WHERE genre='history' AND runs=0 AND status='active'"))
+    assert [r["genre"] for r in sel[:min(8, n_history)]] == ["history"] * min(8, n_history)

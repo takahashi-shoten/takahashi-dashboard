@@ -47,6 +47,8 @@ DATE_SAMPLE_MIN_AGE_DAYS = 14
 DATE_SAMPLE_MAX_AGE_DAYS = 60
 
 # Genres to cover first (owner's current interest). Others follow, least-covered first.
+# Genres whose never-run topics are searched BEFORE the round-robin over all genres (owner's current focus: history mysteries, 2026-11-23).
+FOCUS_GENRES = ("history",)
 PRIORITY_GENRES = ("mens_sexual_health", "relationships_dating", "sex_trivia_edu", "grooming_men",
                    "midlife_men", "aga_hair", "sleep_health", "side_income", "asset_building",
                    # Japanese queries of these genres had never run (2026-11-23) while English ones had: needed for a fair JA vs EN comparison

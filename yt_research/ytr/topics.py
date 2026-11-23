@@ -141,7 +141,8 @@ def select_topics(con, n: int, now=None):
     # priority genres first, then the genres searched least so far -> every genre reaches the
     # support threshold (8 audited channels) as early as the quota allows
     genre_order = sorted(by_genre, key=lambda g: (g not in config.PRIORITY_GENRES, searched.get(g) or 0, g))
-    ordered = []
+    ordered = [r for g in config.FOCUS_GENRES for r in by_genre.pop(g, [])]      # focus genres' fresh topics first
+    genre_order = [g for g in genre_order if g in by_genre]
     while any(by_genre.values()):
         for g in genre_order:
             if by_genre[g]:
