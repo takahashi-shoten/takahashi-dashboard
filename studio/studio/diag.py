@@ -52,9 +52,17 @@ def tts_burst(n=10, gap=6):
         time.sleep(gap)
 
 
+def image_prices():
+    import re as _re
+    h = requests.get("https://ai.google.dev/gemini-api/docs/pricing", timeout=60).text
+    t = _re.sub(r"<script.*?</script>|<style.*?</style>", " ", h, flags=_re.S)
+    t = _re.sub(r"<[^>]+>", " ", t); t = _re.sub(r"\s+", " ", t)
+    for m in _re.finditer(r"## (Gemini[^#]{0,60}?[Ii]mage[^#]{0,40}?) \{%", t):
+        print("IMGMODEL", m.group(1)[:70], "::", t[m.end(): m.end() + 1400])
+
+
 def main():
-    price_sections()
-    tts_burst()
+    image_prices()
 
 
 if __name__ == "__main__":
