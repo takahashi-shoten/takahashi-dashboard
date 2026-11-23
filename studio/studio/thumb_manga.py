@@ -40,7 +40,8 @@ def fit_px(draw, text, max_w, start=150, min_px=60, sw=10):
 def bubble(draw, box, text, tail):
     x0, y0, x1, y1 = box
     draw.ellipse(box, fill=(255, 255, 255), outline=(0, 0, 0), width=5)
-    draw.polygon([tail, (x0 + (x1 - x0) * 0.35, y1 - 12), (x0 + (x1 - x0) * 0.6, y1 - 18)], fill=(255, 255, 255), outline=(0, 0, 0))
+    edge = y0 + 12 if tail[1] < y0 else y1 - 12                 # tail leaves the top edge when it points up, else the bottom edge
+    draw.polygon([tail, (x0 + (x1 - x0) * 0.35, edge), (x0 + (x1 - x0) * 0.6, edge)], fill=(255, 255, 255), outline=(0, 0, 0))
     px = fit_px(draw, text, (x1 - x0) * 0.82, start=54, min_px=26, sw=0)
     w = draw.textlength(text, font=font(px))
     draw.text((x0 + (x1 - x0 - w) / 2, y0 + (y1 - y0 - px) / 2 - 4), text, font=font(px), fill=(0, 0, 0))
@@ -65,8 +66,8 @@ def compose(left_path, right_path, variant, out_path):
     d.rectangle((0, H - 120, W, H), fill=(0, 0, 0))
     px = fit_px(d, bottom, W - 60, start=96, sw=8)
     outlined(d, ((W - d.textlength(bottom, font=font(px))) / 2, H - 112), bottom, px, (255, 225, 0), sw=8)
-    bubble(d, (30, 170, 400, 290), bl, (150, 380))
-    bubble(d, (W - 410, 170, W - 30, 290), br, (W - 150, 380))
+    bubble(d, (24, 462, 400, 578), bl, (170, 400))      # below the boss's face, tail pointing up to him
+    bubble(d, (W - 420, 164, W - 40, 262), br, (W - 560, 340))
     canvas.save(out_path)
     return out_path
 
