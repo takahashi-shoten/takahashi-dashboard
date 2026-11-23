@@ -18,11 +18,11 @@ PANEL_L = ("A smug middle-aged Japanese office boss in a grey suit, arms crossed
 PANEL_R = ("The same boss now pale, frozen, eyes wide with shock and sweat drops, holding a document; the calm warehouse supervisor in the blue work jacket "
            "behind him quietly holding the notebook, faint smile. Comic panel, dramatic close-up, speed lines.")
 
-# headline_top, headline_bottom, bubble_left, bubble_right
+# hook (red column), lower line 1, lower line 2 (black columns), bubble_left (the manager), bubble_right (the manager)
 VARIANTS = {
-    "a": ("手柄を横取りした課長", "契約書の3ページ目で青ざめた結果", "全部俺の手柄だ", "え…3ページ目…？"),
-    "b": ("残業を消された現場主任", "ノート1冊で全員が固まった", "お前の残業？ないよ", "その記録は…まさか"),
-    "c": ("怒鳴らず、言いふらさず", "正式な窓口に出しただけ", "騒ぐなよ、無能", "監査…？聞いてない"),
+    "a": ("手柄を横取りした課長", "契約書の３ページ目で", "青ざめた結果", "全部俺の手柄だ", "え…3ページ目…？"),
+    "b": ("残業を消された現場主任", "ノート１冊で", "全員が固まった", "お前の残業？ないよ", "その記録は…まさか"),
+    "c": ("怒鳴らず、言いふらさず", "正式な窓口に", "出しただけ", "騒ぐなよ、無能", "監査…？聞いてない"),
 }
 
 
@@ -52,7 +52,8 @@ def bubble(draw, box, text, tail):
 
 
 def compose(left_path, right_path, variant, out_path):
-    top, bottom, bl, br = VARIANTS[variant]
+    top, l1, l2, bl, br = VARIANTS[variant]
+    bottom = l1 + l2
     W, H = SIZE
     canvas = Image.new("RGB", SIZE, (15, 15, 20))
     for k, p in enumerate((left_path, right_path)):
@@ -84,12 +85,8 @@ def vtext(draw, x, y, text, px, fill, max_h=640, img=None):
     f = font(px)
     for i, ch in enumerate(text):
         cx, cy = x, y + i * px * 1.02
-        if ch in "ー―" and img is not None:
-            tile = Image.new("RGBA", (px * 2, px * 2), (0, 0, 0, 0))
-            ImageDraw.Draw(tile).text((px * 0.5, px * 0.45), "ー", font=f, fill=fill)
-            tile = tile.rotate(-90)
-            img.paste(tile, (int(cx - px * 0.5), int(cy - px * 0.45)), tile)
-            continue
+        if ch in "ー―":
+            ch = "｜"
         if ch in "、。":
             cx, cy = x + px * 0.55, cy - px * 0.45
         draw.text((cx, cy), ch, font=f, fill=fill)
@@ -98,7 +95,7 @@ def vtext(draw, x, y, text, px, fill, max_h=640, img=None):
 
 def compose_v(left_path, right_path, variant, out_path):
     """Three columns like the top Japanese story-manga thumbnails: left panel | vertical headline strip | right panel, dialogue bubbles inside the panels."""
-    top, bottom, bl, br = VARIANTS[variant]
+    top, line1, line2, bl, br = VARIANTS[variant]
     W, H = SIZE
     strip = 300
     pw = (W - strip) // 2
@@ -113,9 +110,8 @@ def compose_v(left_path, right_path, variant, out_path):
     d.line((pw, 0, pw, H), fill=(0, 0, 0), width=6)
     d.line((pw + strip, 0, pw + strip, H), fill=(0, 0, 0), width=6)
     vtext(d, pw + strip - 112, 22, top, 100, (225, 15, 40), max_h=H - 40, img=canvas)     # right column (read first): the hook
-    half = (len(bottom) + 1) // 2                                                          # lower line split in two columns, bigger type
-    vtext(d, pw + strip - 205, 22, bottom[:half], 86, (0, 0, 0), max_h=H - 40, img=canvas)
-    vtext(d, pw + strip - 295, 22, bottom[half:], 86, (0, 0, 0), max_h=H - 40, img=canvas)
+    vtext(d, pw + strip - 207, 22, line1, 84, (0, 0, 0), max_h=H - 40, img=canvas)       # lower line in two black columns, split at a phrase boundary
+    vtext(d, pw + strip - 297, 22, line2, 84, (0, 0, 0), max_h=H - 40, img=canvas)
     bubble(d, (16, 22, pw - 16, 132), bl, (pw * 0.8, 175))     # tail points at the manager (right side of the left panel)
     bubble(d, (pw + strip + 16, 22, W - 16, 132), br, (pw + strip + 140, 190))
     canvas.save(out_path)
