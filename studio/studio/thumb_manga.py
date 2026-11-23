@@ -10,9 +10,11 @@ from . import visuals
 FONT_BOLD = "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc"
 SIZE = (1280, 720)
 TALL_L = ("A tired but calm young Japanese man in a navy work jacket holding a worn notebook, standing in front of a smug middle-aged manager in a grey suit "
-          "who sneers and points at him; warehouse office background. Vertical portrait panel, both faces clearly visible, upper bodies.")
+          "who sneers and points at him; warehouse office background. Vertical portrait panel, both faces clearly visible, upper bodies. "
+          "Composition: the young man on the LEFT side of the frame, the manager on the RIGHT side of the frame.")
 TALL_R = ("A middle-aged manager in a grey suit, pale and trembling with wide shocked eyes and sweat drops, gripping a document; behind him a young man in a navy work "
-          "jacket calmly smiling, holding a notebook. Vertical portrait panel, dramatic, both faces clearly visible, upper bodies.")
+          "jacket calmly smiling, holding a notebook. Vertical portrait panel, dramatic, both faces clearly visible, upper bodies. "
+          "Composition: the shocked manager large in the foreground on the LEFT side of the frame, the young man standing behind him on the RIGHT side of the frame.")
 PANEL_L = ("A smug middle-aged Japanese office boss in a grey suit, arms crossed, sneering down at a tired young warehouse supervisor in a blue work jacket "
            "who stands with a worn notebook under his arm. Warehouse office background. Comic panel, close-up on the two faces.")
 PANEL_R = ("The same boss now pale, frozen, eyes wide with shock and sweat drops, holding a document; the calm warehouse supervisor in the blue work jacket "
@@ -115,7 +117,7 @@ def compose_v(left_path, right_path, variant, out_path):
     vtext(d, pw + strip - 207, 22, line1, 84, (0, 0, 0), max_h=H - 40, img=canvas)       # lower line in two black columns, split at a phrase boundary
     vtext(d, pw + strip - 297, 22, line2, 84, (0, 0, 0), max_h=H - 40, img=canvas)
     bubble(d, (16, 22, pw - 16, 132), bl, (pw * 0.8, 175))     # tail points at the manager (right side of the left panel)
-    bubble(d, (pw + strip + 16, 22, W - 16, 132), br, (pw + strip + 140, 190))
+    bubble(d, (pw + strip + 16, 22, W - 16, 132), br, (pw + strip + 130, 200))     # tail points at the manager (left side of the right panel)
     canvas.save(out_path)
     return out_path
 
