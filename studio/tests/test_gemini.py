@@ -53,7 +53,7 @@ def test_image_is_decoded_resized_and_usage_recorded(monkeypatch, tmp_path):
     assert Image.open(tmp_path / "a.png").size == (1920, 1080)
     assert g.last_usage == {"input_tokens": 30, "output_tokens": 1290, "thought_tokens": 0}
     url, body, headers = s.calls[0]
-    assert url.endswith("/gemini-3.1-flash-image:generateContent") and headers["x-goog-api-key"] == "k"
+    assert url.endswith("/gemini-3.1-flash-lite-image:generateContent") and headers["x-goog-api-key"] == "k"
     assert "key=" not in url                       # key only in the header, never in the URL
 
 

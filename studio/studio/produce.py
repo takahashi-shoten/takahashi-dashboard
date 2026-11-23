@@ -15,7 +15,7 @@ from pathlib import Path
 from . import brief, edit, ledger, pipeline, qa, script, storyboard, visuals, voice
 from .run import project_dir
 
-IMAGE_USD_PER_M_TOKENS = {"gemini-3.1-flash-image": 60.0}   # Google list price per 1M image output tokens (flash image); other models: unknown -> not priced
+IMAGE_USD_PER_M_TOKENS = {"gemini-3.1-flash-image": 60.0, "gemini-3.1-flash-lite-image": 30.0}   # Google list price per 1M image output tokens (flash image); other models: unknown -> not priced
 
 
 def _duration(path):

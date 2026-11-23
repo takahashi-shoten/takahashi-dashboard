@@ -125,7 +125,7 @@ def compose_v(left_path, right_path, variant, out_path):
 def main():
     out = Path(__file__).resolve().parent.parent / "work" / "gemini_live"
     out.mkdir(parents=True, exist_ok=True)
-    g = visuals.GeminiImage(style="manga")
+    g = visuals.GeminiImage(model="gemini-3.1-flash-image", style="manga")
     g.generate(TALL_L, out / "tall_l.png", size=(720, 1280))
     g.generate(TALL_R, out / "tall_r.png", size=(720, 1280))
     for v in VARIANTS:

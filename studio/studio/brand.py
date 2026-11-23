@@ -33,7 +33,7 @@ def compose_banner(bg_path, out_path, size=(2560, 1440)):
 def main():
     out = Path(__file__).resolve().parent.parent / "work" / "gemini_live"
     out.mkdir(parents=True, exist_ok=True)
-    g = visuals.GeminiImage(style="illustration")
+    g = visuals.GeminiImage(model="gemini-3.1-flash-image", style="illustration")
     g.generate(ICON_PROMPT, out / "icon_raw.png", size=(1024, 1024))
     Image.open(out / "icon_raw.png").convert("RGB").resize((800, 800), Image.LANCZOS).save(out / "channel_icon.png")
     g.generate(BANNER_PROMPT, out / "banner_bg.png", size=(2560, 1440))

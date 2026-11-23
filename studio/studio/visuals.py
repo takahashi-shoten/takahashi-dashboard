@@ -81,7 +81,7 @@ class GeminiImage:
     }
 
     def __init__(self, model=None, session=None, style="illustration"):
-        self.model = model or os.environ.get("STUDIO_GEMINI_IMAGE_MODEL", "gemini-3.1-flash-image")
+        self.model = model or os.environ.get("STUDIO_GEMINI_IMAGE_MODEL", "gemini-3.1-flash-lite-image")   # half the price of flash-image, similar look (compared 2026-11-23)
         self.session, self.last_usage, self.style = session, None, style
         self.usage = []     # one entry per generated image (list.append is thread-safe)
 
