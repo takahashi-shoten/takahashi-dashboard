@@ -85,8 +85,10 @@ def vtext(draw, x, y, text, px, fill, max_h=640, img=None):
     f = font(px)
     for i, ch in enumerate(text):
         cx, cy = x, y + i * px * 1.02
-        if ch in "ー―":
-            ch = "｜"
+        if ch in "ー―":                       # draw the vertical long-vowel bar ourselves (font glyphs come out horizontal)
+            bx = cx + px * 0.5
+            draw.rectangle((bx - px * 0.05, cy + px * 0.1, bx + px * 0.05, cy + px * 0.9), fill=fill)
+            continue
         if ch in "、。":
             cx, cy = x + px * 0.55, cy - px * 0.45
         draw.text((cx, cy), ch, font=f, fill=fill)
