@@ -76,18 +76,23 @@ def compose(left_path, right_path, variant, out_path):
     return out_path
 
 
-def vtext(draw, x, y, text, px, fill, stroke=(255, 255, 255), sw=0, max_h=640):
-    """Vertical Japanese text, one column, top to bottom (x = left edge of the column). Shrinks to fit max_h."""
+def vtext(draw, x, y, text, px, fill, max_h=640, img=None):
+    """Vertical Japanese text, one column, top to bottom (x = left edge of the column). Shrinks to fit max_h.
+    Long-vowel marks are drawn rotated 90 degrees; commas/full stops sit at the upper right of their cell."""
     while px > 30 and len(text) * px * 1.02 > max_h:
         px -= 2
     f = font(px)
     for i, ch in enumerate(text):
         cx, cy = x, y + i * px * 1.02
+        if ch in "ー―" and img is not None:
+            tile = Image.new("RGBA", (px * 2, px * 2), (0, 0, 0, 0))
+            ImageDraw.Draw(tile).text((px * 0.5, px * 0.45), "ー", font=f, fill=fill)
+            tile = tile.rotate(-90)
+            img.paste(tile, (int(cx - px * 0.5), int(cy - px * 0.45)), tile)
+            continue
         if ch in "、。":
             cx, cy = x + px * 0.55, cy - px * 0.45
-        elif ch in "ー―":
-            ch = "｜"
-        draw.text((cx, cy), ch, font=f, fill=fill, stroke_width=sw, stroke_fill=stroke)
+        draw.text((cx, cy), ch, font=f, fill=fill)
     return px
 
 
@@ -107,9 +112,11 @@ def compose_v(left_path, right_path, variant, out_path):
     d.rectangle((pw, 0, pw + strip, H), fill=(255, 255, 255))
     d.line((pw, 0, pw, H), fill=(0, 0, 0), width=6)
     d.line((pw + strip, 0, pw + strip, H), fill=(0, 0, 0), width=6)
-    vtext(d, pw + strip - 130, 22, top, 100, (225, 15, 40), sw=0, max_h=H - 40)           # right column (read first)
-    vtext(d, pw + 30, 22, bottom, 100, (0, 0, 0), sw=0, max_h=H - 40)                      # left column
-    bubble(d, (16, 22, pw - 16, 132), bl, (pw * 0.5, 190))
+    vtext(d, pw + strip - 112, 22, top, 100, (225, 15, 40), max_h=H - 40, img=canvas)     # right column (read first): the hook
+    half = (len(bottom) + 1) // 2                                                          # lower line split in two columns, bigger type
+    vtext(d, pw + strip - 205, 22, bottom[:half], 86, (0, 0, 0), max_h=H - 40, img=canvas)
+    vtext(d, pw + strip - 295, 22, bottom[half:], 86, (0, 0, 0), max_h=H - 40, img=canvas)
+    bubble(d, (16, 22, pw - 16, 132), bl, (pw * 0.8, 175))     # tail points at the manager (right side of the left panel)
     bubble(d, (pw + strip + 16, 22, W - 16, 132), br, (pw + strip + 140, 190))
     canvas.save(out_path)
     return out_path
