@@ -83,6 +83,16 @@ SEEDS = [
     ("horror_mystery", "en", "US", "mystery documentary"), ("maps_geo", "en", "US", "world maps explained"),
     ("infrastructure", "en", "US", "engineering explained"), ("biology_nature", "en", "US", "wildlife documentary"),
     ("ai_film", "en", "US", "AI cinematic story"),
+    # history mysteries (Japanese: Sengoku / Bakumatsu / world history), added 2026-11-23 after the owner chose this direction
+    ("history", "ja", "JP", "戦国時代 謎 真相"), ("history", "ja", "JP", "本能寺の変 真相"), ("history", "ja", "JP", "関ヶ原の戦い 真相"),
+    ("history", "ja", "JP", "武田信玄 死因 謎"), ("history", "ja", "JP", "豊臣秀吉 謎"), ("history", "ja", "JP", "徳川家康 影武者"),
+    ("history", "ja", "JP", "織田信長 最期"), ("history", "ja", "JP", "真田幸村 真実"), ("history", "ja", "JP", "明智光秀 黒幕"),
+    ("history", "ja", "JP", "幕末 謎 真相"), ("history", "ja", "JP", "坂本龍馬 暗殺 真相"), ("history", "ja", "JP", "新選組 真実"),
+    ("history", "ja", "JP", "西郷隆盛 謎"), ("history", "ja", "JP", "吉田松陰 真実"), ("history", "ja", "JP", "大政奉還 裏側"),
+    ("history", "ja", "JP", "歴史 ミステリー 検証"), ("history", "ja", "JP", "歴史 定説 覆る"), ("history", "ja", "JP", "世界史 謎 真相"),
+    ("history", "ja", "JP", "ナポレオン 最期"), ("history", "ja", "JP", "三国志 真相"), ("history", "ja", "JP", "クレオパトラ 真実"),
+    ("history", "ja", "JP", "チンギス・ハン 墓 謎"), ("history", "ja", "JP", "ローマ皇帝 最期"), ("history", "ja", "JP", "第二次世界大戦 知られざる"),
+    ("history", "ja", "JP", "ヴァイキング 真実"), ("history", "ja", "JP", "歴史 事件簿 AI"),
 ]
 
 MIN_RERUN_DAYS = 3
