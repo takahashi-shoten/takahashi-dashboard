@@ -57,7 +57,7 @@ def estimate_cost(model, u):
 def analyze(video, model, prompt=PROMPT_ITEMS, resolution="low", start=None, end=None, is_file_uri=False, max_out=16000):
     """video: YouTube URL/ID or a Gemini Files API uri. Returns dict(text, json, usage, seconds, cost_usd)."""
     uri = video if is_file_uri or video.startswith("http") else f"https://www.youtube.com/watch?v={video}"
-    part = {"fileData": {"fileUri": uri}} if is_file_uri else {"fileData": {"fileUri": uri}}
+    part = {"fileData": {"fileUri": uri, "mimeType": "video/mp4"}} if is_file_uri else {"fileData": {"fileUri": uri}}
     if start or end:
         part["videoMetadata"] = {k: v for k, v in (("startOffset", start), ("endOffset", end)) if v}
     body = {"contents": [{"parts": [part, {"text": prompt}]}],
