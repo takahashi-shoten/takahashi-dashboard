@@ -1,0 +1,69 @@
+name: yt-measure
+
+# Closed-loop measurement (docs/MANAGEMENT_PRINCIPLES.md): fetch YouTube Analytics for every published experiment at 24h/72h/7d/28d,
+# diagnose the funnel, record the single change to try next. The experiment registry lives on the `studio-data` branch (experiments.sqlite.gz).
+# Needs the repository secrets YT_OAUTH_CLIENT_ID / YT_OAUTH_CLIENT_SECRET / YT_OAUTH_REFRESH_TOKEN (owner sets them up once). Without them the run is a no-op.
+on:
+  schedule:
+    - cron: "41 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      cmd:
+        description: "run | report | register | publish"
+        default: "run"
+      args:
+        description: "register: experiments/plans/E1.json  |  publish: EXPERIMENT_ID VIDEO_ID PUBLISHED_AT_ISO"
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: yt-measure
+  cancel-in-progress: false
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      YT_OAUTH_CLIENT_ID: ${{ secrets.YT_OAUTH_CLIENT_ID }}
+      YT_OAUTH_CLIENT_SECRET: ${{ secrets.YT_OAUTH_CLIENT_SECRET }}
+      YT_OAUTH_REFRESH_TOKEN: ${{ secrets.YT_OAUTH_REFRESH_TOKEN }}
+      STUDIO_DB: /tmp/experiments.sqlite
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests pillow
+      - name: Load the experiment registry
+        run: |
+          if git ls-remote --exit-code --heads origin studio-data >/dev/null 2>&1; then
+            git fetch --depth=1 origin studio-data
+            git show FETCH_HEAD:experiments.sqlite.gz | gunzip > "$STUDIO_DB" || rm -f "$STUDIO_DB"
+          fi
+          ls -la "$STUDIO_DB" 2>/dev/null || echo "no registry yet (a new one is created)"
+      - name: Run
+        working-directory: studio
+        env:
+          CMD: ${{ github.event.inputs.cmd }}
+          ARGS: ${{ github.event.inputs.args }}
+        run: |
+          CMD="${CMD:-run}"
+          if [ "$CMD" = "run" ] && { [ -z "$YT_OAUTH_REFRESH_TOKEN" ] || [ -z "$YT_OAUTH_CLIENT_ID" ]; }; then
+            echo "YT_OAUTH_* secrets are not set yet: nothing to measure (owner setup pending)."; exit 0
+          fi
+          case "$CMD" in
+            register) python -m studio.measure register "../$ARGS" ;;
+            publish)  python -m studio.measure publish $ARGS ;;
+            report)   python -m studio.measure report ;;
+            run)      python -m studio.measure run && python -m studio.measure report ;;
+          esac
+      - name: Save the registry (only if it changed)
+        run: |
+          [ -f "$STUDIO_DB" ] || exit 0
+          rm -rf /tmp/sd && mkdir /tmp/sd && gzip -c "$STUDIO_DB" > /tmp/sd/experiments.sqlite.gz
+          cd /tmp/sd && git init -q -b studio-data && git config user.name ytr-bot && git config user.email ytr-bot@users.noreply.github.com
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git add -A && git commit -qm "experiment registry $(date -u +%FT%TZ)" && git push -q --force origin HEAD:studio-data

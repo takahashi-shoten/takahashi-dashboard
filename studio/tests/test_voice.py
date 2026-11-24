@@ -80,3 +80,41 @@ def test_english_stub():
     with pytest.raises(NotConnected, match="OPENAI_API_KEY"):
         voice.EnglishVoice().synthesize("hi", "en", Path("x.wav"))
     assert voice.EnglishVoice().describe()["status"] == "not_connected"
+
+
+def test_fit_to_total_speeds_up_within_limit_and_refuses_beyond(tmp_path):
+    import subprocess
+    vd = tmp_path / "voice"; vd.mkdir()
+    for k in ("01", "02"):
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "sine=frequency=300:duration=35", "-ar", "24000", "-ac", "1", str(vd / f"section_{k}.wav")], check=True)
+    d = {"01": 35.0, "02": 35.0}                       # 70 s + 0.4 > 59: needs ~x1.19
+    out = voice.fit_to_total(tmp_path, d, 59.0)
+    assert sum(out.values()) + 0.4 <= 59.0 + 0.1 and out["01"] < 35.0
+    d2 = {"01": 100.0, "02": 100.0}
+    try:
+        voice.fit_to_total(tmp_path, d2, 59.0)
+        assert False, "must refuse a x3 speed-up"
+    except ValueError:
+        pass
+    assert voice.GeminiVoice.STYLE_SHORT["en"] != voice.GeminiVoice.STYLE["en"]
+
+
+def test_gemini_voice_daily_limit_falls_back_and_caches(tmp_path, monkeypatch):
+    from studio import gemini, voice
+    monkeypatch.setenv("STUDIO_TTS_CACHE", str(tmp_path / "cache"))
+    calls = []
+
+    def fake_tts(model, text, v, style, session):
+        calls.append(model)
+        if model == "gemini-3.8-flash-tts":
+            raise gemini.GeminiError("HTTP 429: Quota exceeded for metric: generate_requests_per_model_per_day, limit: 100")
+        return b"\x00\x00" * 24000, 24000, {"output_tokens": 1}
+
+    monkeypatch.setattr(gemini, "tts", fake_tts)
+    gv = voice.GeminiVoice(sleep=lambda s: None)
+    d = gv.synthesize("こんにちは", "ja", tmp_path / "a.wav")
+    assert abs(d - 1.0) < 0.01
+    assert calls == ["gemini-3.8-flash-tts", "gemini-3.8-flash-lite-tts"]
+    gv.synthesize("こんにちは", "ja", tmp_path / "b.wav")           # same text again: the fallback model's result is served from cache
+    assert calls == ["gemini-3.8-flash-tts", "gemini-3.8-flash-lite-tts", "gemini-3.8-flash-tts"]   # primary is retried first (still over quota), the paid fallback audio is not re-requested
+    assert gv.models_used[-1] == "gemini-3.8-flash-lite-tts (cache)"

@@ -193,3 +193,29 @@ def test_same_vendor_reviewers_do_not_count_as_two():
     assert dec == "needs_human" and "independent" in reasons[0]
     dec, _ = qa.decide([], [dict(ok, reviewer="claude_web"), dict(ok, reviewer="gemini")])
     assert dec == "pass"
+
+
+def test_web_reviewer_verifies_long_scripts_in_chunks_and_merges():
+    import types
+    from studio import qa
+
+    class Client:
+        def __init__(self):
+            self.calls = []
+            self.beta = types.SimpleNamespace(messages=types.SimpleNamespace(create=self.create))
+
+        def create(self, **kw):
+            self.calls.append(kw)
+            n = len(self.calls)
+            body = '{"verdict": "%s", "issues": ["i%d"], "unverified_claims": ["u%d"]}' % ("pass" if n == 1 else "revise", n, n)
+            return types.SimpleNamespace(stop_reason="end_turn", model="claude-opus-5-5", content=[types.SimpleNamespace(type="text", text=body)],
+                                         usage=types.SimpleNamespace(input_tokens=10, output_tokens=5, server_tool_use=types.SimpleNamespace(web_search_requests=3)))
+
+    c = Client()
+    rev = qa.WebClaudeReviewer(c)
+    script = {"title_options": ["t"], "sections": [{"heading": str(i), "narration": "x", "visual_prompt": "v", "seconds": 1} for i in range(10)]}
+    r = rev.review(script, "ja")
+    assert len(c.calls) == 3                                  # 10 sections -> 3 passes of at most 4
+    assert r["verdict"] == "revise" and r["issues"] == ["i1", "i2", "i3"] and r["unverified_claims"] == ["u1", "u2", "u3"]
+    assert r["usage"]["web_searches"] == 9 and r["usage"]["input_tokens"] == 30
+    assert "ONLY the factual claims" in c.calls[0]["messages"][0]["content"]

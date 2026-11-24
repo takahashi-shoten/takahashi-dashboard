@@ -107,14 +107,17 @@ class GeminiVoice:
     """Gemini text-to-speech (prebuilt voice + style direction). Chosen by the owner after listening (Iapetus, Alnilam, Charon).
     Voices can drift a little between calls; every call gets the identical direction."""
     name = "GeminiVoice"
-    chars_per_sec = {"ja": 5.5, "en": 14.0}      # "warm" direction measured 5.4-5.7 chars/s (ja) on a 90-char passage; 5.5 is conservative
+    short_chars_per_sec = {"ja": 4.8, "en": 12.5}    # planning rate for Shorts (short chunks read slower than long passages)
+    chars_per_sec = {"ja": 5.5, "en": 12.5}      # ja: "warm" direction measured 5.4-5.7; en: plain/short direction measured 12.7-13.5 chars/s on an 89-char sample, 12.5 is conservative
     STYLE = {"ja": ("Read the following Japanese text as a middle-aged Japanese male narrator talking to a friend. "
                     "Natural spoken Japanese, no announcer tone, no theatrical acting. "
                     "Warm and friendly, a faint smile in the voice, relaxed conversational pace, like talking over coffee."),
-             "en": ("Read the following as a calm, warm, trustworthy middle-aged male narrator talking naturally to a friend. "
-                    "Moderately slow pace, natural pauses, gentle intonation, no theatrical acting.")}
+             # English: a LONG direction made Gemini TTS read ~2.5x too slowly (measured 2026-11-22: 5.4 vs 13.5 chars/s), so none for long-form
+             "en": ""}
+    STYLE_SHORT = {"en": "Say quickly and energetically:",      # short direction measured at 12.7 chars/s
+                   "ja": ""}            # plain: measured 4.7-5.7 chars/s on short Japanese chunks; directions made it unstable (3.1-6.0)
 
-    def __init__(self, voice="Iapetus", model=None, style=None, session=None, retries=3, sleep=None):
+    def __init__(self, voice="Iapetus", model=None, style=None, session=None, retries=5, sleep=None):
         import os
         import time
         self.voice = voice
@@ -122,22 +125,56 @@ class GeminiVoice:
         self.style, self.session, self.retries = style, session, retries
         self.sleep = sleep or time.sleep
         self.usage = []
+        self.min_interval = 0 if sleep else 6
+
+    # Per-model daily request limit (100/day on Tier 1, measured 2026-11-23). On a daily-limit 429 retrying the same model is pointless,
+    # so fall back to the next model (each has its own daily quota). A different model may sound slightly different: `models_used` records it.
+    FALLBACK_MODELS = ["gemini-3.8-flash-lite-tts", "gemini-3.1-flash-tts-preview", "gemini-2.5-flash-preview-tts"]
+
+    def _cache_path(self, model, text, style):
+        import hashlib
+        import os
+        key = hashlib.sha256("\x00".join([model, self.voice, style or "", text]).encode()).hexdigest()[:32]
+        d = Path(os.environ.get("STUDIO_TTS_CACHE", Path(__file__).resolve().parent.parent / "work" / "tts_cache"))
+        return d / f"{key}.pcm"
 
     def synthesize(self, text, lang, out_path):
         import wave
         from . import gemini
-        style = self.style or self.STYLE.get(lang, self.STYLE["en"])
+        style = self.style if self.style is not None else self.STYLE.get(lang, self.STYLE["en"])
+        models = [self.model] + [m for m in self.FALLBACK_MODELS if m != self.model]
+        self.models_used = getattr(self, "models_used", [])
         last = None
-        for attempt in range(self.retries + 1):
-            try:
-                pcm, rate, u = gemini.tts(self.model, text, self.voice, style, self.session)
+        pcm = rate = u = None
+        for model in models:
+            cp = self._cache_path(model, text, style)
+            if cp.exists():                       # identical request already paid for: reuse (no API call)
+                pcm, rate, u = cp.read_bytes(), 24000, {"cached": True}
+                self.models_used.append(model + " (cache)")
                 break
-            except gemini.GeminiError as e:
-                last = e
-                if not any(c in str(e) for c in ("HTTP 429", "HTTP 500", "HTTP 502", "HTTP 503", "HTTP 504", "no audio")) or attempt == self.retries:
-                    raise
-                self.sleep(2 ** attempt * 3)
-        else:  # pragma: no cover
+            self.sleep(self.min_interval)         # pace calls
+            daily = False
+            for attempt in range(self.retries + 1):
+                try:
+                    pcm, rate, u = gemini.tts(model, text, self.voice, style, self.session)
+                    break
+                except gemini.GeminiError as e:
+                    last = e
+                    msg = str(e)
+                    if "per_day" in msg or "requests per day" in msg:
+                        daily = True
+                        break                     # this model's daily quota is gone: try the next model
+                    if not any(c in msg for c in ("HTTP 429", "HTTP 500", "HTTP 502", "HTTP 503", "HTTP 504", "no audio")) or attempt == self.retries:
+                        raise
+                    self.sleep(min(65, 2 ** attempt * 8))
+            if pcm is not None:
+                cp.parent.mkdir(parents=True, exist_ok=True)
+                cp.write_bytes(pcm)
+                self.models_used.append(model)
+                break
+            if not daily:
+                raise last
+        if pcm is None:
             raise last
         Path(out_path).parent.mkdir(parents=True, exist_ok=True)
         with wave.open(str(out_path), "wb") as w:
@@ -166,3 +203,24 @@ def render_voice(project_dir: Path, provider: VoiceProvider, lang: str) -> dict:
 
 def describe(provider: VoiceProvider) -> dict:
     return provider.describe()
+
+
+def fit_to_total(project_dir: Path, durations: dict, max_total: float, pause: float = 0.2, max_factor: float = 1.3) -> dict:
+    """Safety net for Shorts: if narration + pauses exceed `max_total`, speed every section up with ffmpeg `atempo` (pitch preserved).
+    Raises ValueError when more than `max_factor` would be needed (the script, not the audio, must then be shortened)."""
+    project_dir = Path(project_dir)
+    total = sum(durations.values()) + pause * len(durations)
+    if total <= max_total:
+        return durations
+    factor = (sum(durations.values())) / (max_total - pause * len(durations) - 0.05)
+    if factor > max_factor:
+        raise ValueError(f"narration {sum(durations.values()):.1f}s needs x{factor:.2f} speed-up to fit {max_total}s; shorten the script")
+    out = {}
+    for key, d in durations.items():
+        f = project_dir / "voice" / f"section_{key}.wav"
+        tmp = f.with_suffix(".fast.wav")
+        _run(["ffmpeg", "-y", "-v", "error", "-i", str(f), "-filter:a", f"atempo={factor:.4f}", str(tmp)])
+        tmp.replace(f)
+        out[key] = probe_duration(f)
+    (project_dir / "voice" / "durations.json").write_text(json.dumps(out, indent=1))
+    return out

@@ -5,8 +5,32 @@ on:
   workflow_dispatch:
     inputs:
       task:
-        description: "keys (default) or gemini (live image + review test)"
+        description: "keys (default) | gemini | imagecompare | ttscompare | ttsvariants | produce"
         default: "keys"
+      genre:
+        description: "produce: ytr genre id"
+        default: "history"
+      style:
+        description: visual style (photo or manga)
+        required: false
+        default: photo
+      seconds:
+        description: "produce: target video length in seconds (default: 480 long / 50 short)"
+        required: false
+        default: ""
+      script_only:
+        description: "produce: set to 1 to stop after the script and QA (no voice/image spend)"
+        required: false
+        default: ""
+      format:
+        description: "produce: long or short"
+        default: "short"
+      lang:
+        description: "produce: ja or en"
+        default: "en"
+      topic:
+        description: "produce: optional topic or angle hint"
+        default: ""
 
 permissions:
   contents: read
@@ -63,12 +87,12 @@ jobs:
           names = [(m["name"].split("/")[-1], m.get("supportedGenerationMethods", [])) for m in data.get("models", [])]
           print("model_count:", len(names))
           for n, meth in names:
-              if re.search(r"image|imagen|flash|pro", n) and "embedding" not in n:
+              if re.search(r"veo|video|omni|lyria|imagen|live|music|animate|i2v", n):
                   print("model:", n, meth)
           PY
 
   gemini-live:
-    if: github.event.inputs.task == 'gemini' || github.event.inputs.task == 'imagecompare' || github.event.inputs.task == 'ttscompare' || github.event.inputs.task == 'ttsvariants'
+    if: github.event.inputs.task == 'gemini' || github.event.inputs.task == 'imagecompare' || github.event.inputs.task == 'ttscompare' || github.event.inputs.task == 'ttsvariants' || github.event.inputs.task == 'ttsen' || github.event.inputs.task == 'music' || github.event.inputs.task == 'videoprobe' || github.event.inputs.task == 'diag' || github.event.inputs.task == 'brand' || github.event.inputs.task == 'thumbstudy' || github.event.inputs.task == 'thumbgen' || github.event.inputs.task == 'thumbhist' || github.event.inputs.task == 'vuprobe' || github.event.inputs.task == 'vuanalyze' || github.event.inputs.task == 'vugt' || github.event.inputs.task == 'vudiag' || github.event.inputs.task == 'vustab' || github.event.inputs.task == 'vumk' || github.event.inputs.task == 'vubatch' || github.event.inputs.task == 'vustats'
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -79,12 +103,27 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install requests pillow
+      - name: Install ffmpeg
+        if: github.event.inputs.task == 'music'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Install Japanese font
+        if: github.event.inputs.task == 'brand' || github.event.inputs.task == 'thumbgen' || github.event.inputs.task == 'thumbhist'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq fonts-ipafont-gothic fonts-noto-cjk
+      - name: Fetch own video for ground-truth test (E1 preview + subtitles)
+        if: github.event.inputs.task == 'vugt' || github.event.inputs.task == 'vudiag' || github.event.inputs.task == 'vustab'
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          git fetch -q origin exp-E-20261124-01
+          mkdir -p studio/work/vugt
+          git show FETCH_HEAD:preview.mp4 > studio/work/vugt/preview.mp4
+          git show FETCH_HEAD:final.srt > studio/work/vugt/final.srt
       - name: Gemini live test (one image + one grounded review)
         working-directory: studio
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           STUDIO_GEMINI_REVIEW_MODEL: gemini-3.8-flash
-        run: python -m studio.${{ github.event.inputs.task == 'imagecompare' && 'image_compare' || github.event.inputs.task == 'ttscompare' && 'tts_compare' || github.event.inputs.task == 'ttsvariants' && 'tts_variants' || 'gemini_live_test' }}
+        run: python -m studio.${{ github.event.inputs.task == 'imagecompare' && 'image_compare' || github.event.inputs.task == 'ttscompare' && 'tts_compare' || github.event.inputs.task == 'ttsvariants' && 'tts_variants' || github.event.inputs.task == 'ttsen' && 'tts_en_probe' || github.event.inputs.task == 'music' && 'music_live_test' || github.event.inputs.task == 'videoprobe' && 'video_probe' || github.event.inputs.task == 'diag' && 'diag' || github.event.inputs.task == 'brand' && 'brand' || github.event.inputs.task == 'thumbstudy' && 'thumb_study' || github.event.inputs.task == 'thumbgen' && 'thumb_manga' || github.event.inputs.task == 'thumbhist' && 'thumb_history' || github.event.inputs.task == 'vuprobe' && 'vu_probe' || github.event.inputs.task == 'vuanalyze' && 'video_analysis' || github.event.inputs.task == 'vugt' && 'vu_groundtruth' || github.event.inputs.task == 'vudiag' && 'vu_diag' || github.event.inputs.task == 'vustab' && 'vu_stab' || github.event.inputs.task == 'vumk' && 'vu_marketing' || github.event.inputs.task == 'vubatch' && 'vu_batch' || github.event.inputs.task == 'vustats' && 'vu_channel_stats' || 'gemini_live_test' }} ${{ github.event.inputs.task == 'vuanalyze' && format('{0} {1}', github.event.inputs.topic, github.event.inputs.genre) || github.event.inputs.task == 'vumk' && format('{0} {1}', github.event.inputs.topic, github.event.inputs.genre) || github.event.inputs.task == 'vustats' && 'DYUxKuX0Bxc r-G2ryyJIbc,JjKQjOGB6aw,fxpKk4mvlqo,4cx8Ohmz2vs,DYUxKuX0Bxc,YzH5blXRHf8' || github.event.inputs.task == 'vubatch' && format('DYUxKuX0Bxc gemini-3.8-flash "{0}"', github.event.inputs.topic) || github.event.inputs.task == 'vugt' && 'work/vugt/preview.mp4 work/vugt/final.srt' || github.event.inputs.task == 'vudiag' && format('work/vugt/preview.mp4 work/vugt/final.srt {0}', github.event.inputs.genre) || github.event.inputs.task == 'vustab' && 'work/vugt/preview.mp4 work/vugt/final.srt 120,600 3' || '' }}
       - name: Publish sample image to studio-samples branch (so it can be viewed)
         if: always()
         run: |
@@ -102,7 +141,7 @@ jobs:
           retention-days: 14
 
   produce:
-    if: github.event.inputs.task == 'produce'
+    if: github.event.inputs.task == 'produce' || github.event.inputs.task == 'qarerun'
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -121,17 +160,36 @@ jobs:
         run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-ipafont-gothic
       - run: pip install requests pillow anthropic
       - name: Produce one video (real providers)
+        if: github.event.inputs.task == 'produce'
         working-directory: studio
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python -m studio.produce --ytr-db /tmp/ytr.sqlite --genre relationships_dating --lang ja --voice Iapetus --target-seconds 480
+          P_GENRE: ${{ github.event.inputs.genre }}
+          P_FORMAT: ${{ github.event.inputs.format }}
+          P_STYLE: ${{ github.event.inputs.style }}
+          P_SECONDS: ${{ github.event.inputs.seconds }}
+          P_SCRIPT_ONLY: ${{ github.event.inputs.script_only }}
+          P_LANG: ${{ github.event.inputs.lang }}
+          P_TOPIC: ${{ github.event.inputs.topic }}
+        run: python -m studio.produce --ytr-db /tmp/ytr.sqlite --genre "$P_GENRE" --lang "$P_LANG" --voice Iapetus --format "$P_FORMAT" --style "${P_STYLE:-photo}" ${P_SECONDS:+--target-seconds "$P_SECONDS"} ${P_SCRIPT_ONLY:+--script-only} --topic "$P_TOPIC"
+      - name: Re-run QA on an existing script (no generation)
+        if: github.event.inputs.task == 'qarerun'
+        working-directory: studio
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          P_BRANCH: ${{ github.event.inputs.topic }}
+        run: |
+          git fetch --depth=1 origin "$P_BRANCH"
+          git show FETCH_HEAD:script.json > /tmp/rerun_script.json
+          python -m studio.qa_rerun /tmp/rerun_script.json ja
       - name: Publish review files to studio-output branch
         if: always()
         run: |
           mkdir -p /tmp/out
           W=$(ls -d studio/work/*/ 2>/dev/null | head -1); echo "work dir: $W"; ls -la "$W" || true
-          for f in preview.mp4 shorts.mp4 thumbnail.png final.srt script.json storyboard.json qa.json report.json; do
+          for f in short.mp4 preview.mp4 shorts.mp4 thumbnail.png final.srt script.json storyboard.json qa.json report.json; do
             [ -f "$W$f" ] && [ "$(stat -c %s "$W$f")" -lt 90000000 ] && cp "$W$f" /tmp/out/ || echo "skip $f"
           done
           cp -r "$W"visuals /tmp/out/visuals_sample 2>/dev/null && find /tmp/out/visuals_sample -name '*.png' | sort | sed -n '4,$p' | xargs -r rm -f || true

@@ -43,7 +43,9 @@ Rules:
 - shot is one of: wide, medium, close_up, hands_detail, object, environment, over_shoulder, back_view.
 - At least HALF of the beats must NOT show a clearly visible face (back_view, hands_detail, object, environment, over_shoulder), because face consistency
   across images is hard for the image model. Vary the shot type between neighbouring beats. cast_ids must be empty for object/environment shots.
-- Photographic style (real camera, natural light) when style is "photo"; otherwise original illustration style."""
+- Photographic style (real camera, natural light) when style is "photo". When style is "manga": Japanese comic illustration (clean bold line art, flat bright colours,
+  expressive exaggerated faces and emotions, simple readable backgrounds); style_bible.look must say so, and for manga at least a THIRD of the beats should
+  avoid a clearly visible face (hands, documents, objects, back views) while the rest show strong emotion. When style is "history": painterly realistic historical illustration (cinematic light, muted earthy palette, accurate period details); style_bible.look must say so; figures are anonymous period people, never a named real person; documents/objects/landscapes/maps-like scenes are welcome. Otherwise original illustration style."""
 
 SAFE_FALLBACK = ("An empty quiet interior at a calm moment, soft natural light falling across a table with a few simple everyday objects, "
                  "no people, no text, shallow depth of field")
@@ -97,7 +99,10 @@ def split_beats(narration, lang, target_chars=None):
     return beats
 
 
-def _plan_beats(script, lang):
+def _plan_beats(script, lang, beats_per_section=None):
+    """beats_per_section=1: every section is exactly one beat (Shorts: one image per narration beat, no further splitting)."""
+    if beats_per_section == 1:
+        return [{"section": si, "beat": 1, "narration": sec["narration"]} for si, sec in enumerate(script["sections"], 1) if sec["narration"].strip()]
     return [{"section": si, "beat": bi, "narration": b}
             for si, sec in enumerate(script["sections"], 1)
             for bi, b in enumerate(split_beats(sec["narration"], lang), 1)]
@@ -118,21 +123,29 @@ def _call(con, client, project_id, model, payload):
     return json.loads(next(b.text for b in resp.content if b.type == "text"))
 
 
-def make_storyboard(con, client, project_id, project_dir, lang, style="photo", model=None):
+def make_storyboard(con, client, project_id, project_dir, lang, style=None, model=None, beats_per_section=None, vertical=False):
     project_dir = Path(project_dir)
     model = model or MODEL
+    style = style or os.environ.get("STUDIO_VISUAL_STYLE", "photo")
     script = json.loads((project_dir / "script.json").read_text(encoding="utf-8"))
-    plan = _plan_beats(script, lang)
+    plan = _plan_beats(script, lang, beats_per_section)
     if not plan:
         raise ValueError("script has no narration to storyboard")
     payload = {"lang": lang, "style": style, "beats": plan}
+    if vertical:
+        payload["frame"] = "vertical 9:16 (1080x1920) frames for a YouTube Short: compose for portrait, subject centered, keep the lower third calm for captions"
+    payload["instruction"] = (f"Return EXACTLY {len(plan)} beats, one for each input beat, with the same section and beat numbers. "
+                              "Do not add, split, merge or skip beats.")
     want = [(b["section"], b["beat"]) for b in plan]
     data, got = None, []
     for _ in range(2):
         cand = _call(con, client, project_id, model, payload)
+        by_key = {}
+        for b in cand["beats"]:
+            by_key.setdefault((b["section"], b["beat"]), b)       # keep the first entry for a key; extras and duplicates are ignored
         got = [(b["section"], b["beat"]) for b in cand["beats"]]
-        if got == want:
-            data = cand
+        if all(k in by_key for k in want):
+            data = dict(cand, beats=[by_key[k] for k in want])    # exactly the wanted beats, in order
             break
     if data is None:
         raise ValueError(f"storyboard beats mismatch: expected {len(want)} beats in order, model returned {len(got)} (after one retry)")
@@ -158,7 +171,7 @@ def final_prompt(bible, beat):
     return "\n".join(parts)
 
 
-def render_beats(project_dir, image_provider, max_workers=3):
+def render_beats(project_dir, image_provider, max_workers=3, size=(1920, 1080)):
     project_dir = Path(project_dir)
     sb = json.loads((project_dir / "storyboard.json").read_text(encoding="utf-8"))
     out = project_dir / "visuals"
@@ -167,13 +180,15 @@ def render_beats(project_dir, image_provider, max_workers=3):
     if bad:
         raise ValueError("beat prompt rejected: " + "; ".join(bad))
     out.mkdir(parents=True, exist_ok=True)
+    if hasattr(image_provider, "plan_premium"):      # two-tier provider: tell it which beats get the premium model
+        image_provider.plan_premium([(path, b) for path, _, b in jobs])
     usage = []
 
     def run(job):
         path, prompt, b = job
         if path.exists():
             return
-        image_provider.generate(prompt, path, (1920, 1080))
+        image_provider.generate(prompt, path, size)
         # best effort: last_usage lives on the shared provider, so with several workers it can be overwritten by another
         # thread between generate() and this read; treat the per-image attribution as approximate.
         u = getattr(image_provider, "last_usage", None)

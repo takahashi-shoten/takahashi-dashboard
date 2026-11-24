@@ -34,7 +34,7 @@ def _norm(t):
     return re.sub(r"[\W_]+", "", t.lower())
 
 
-def rule_checks(script: dict, lang: str, reference_titles=None) -> list[dict]:
+def rule_checks(script: dict, lang: str, reference_titles=None, short=False) -> list[dict]:
     out = []
     sections = script.get("sections", [])
     narration = "\n".join(s.get("narration", "") for s in sections)
@@ -48,8 +48,9 @@ def rule_checks(script: dict, lang: str, reference_titles=None) -> list[dict]:
     if "ai_disclosure_needed" not in script:
         out.append(_f("ai_disclosure_missing", "block", "ai_disclosure_needed is missing"))
     total = sum(int(s.get("seconds", 0)) for s in sections)
-    if not 60 <= total <= 900:
-        out.append(_f("duration", "warn", f"total {total}s is outside 60..900"))
+    lo, hi = (30, 60) if short else (60, 900)     # Shorts are 45-60 s
+    if not lo <= total <= hi:
+        out.append(_f("duration", "warn", f"total {total}s is outside {lo}..{hi}"))
     titles = script.get("title_options") or []
     if reference_titles and titles:
         refs = [_norm(r) for r in reference_titles]
@@ -57,7 +58,7 @@ def rule_checks(script: dict, lang: str, reference_titles=None) -> list[dict]:
             out.append(_f("title_copy", "warn", "every title option is a near-duplicate of a reference title"))
     for i, s in enumerate(sections, 1):
         n = s.get("narration", "")
-        if (len(n.strip()) < 40) if lang == "ja" else (len(n.split()) < 15):
+        if (len(n.strip()) < (10 if short else 40)) if lang == "ja" else (len(n.split()) < (4 if short else 15)):
             out.append(_f("short_section", "warn", f"section {i} narration is too short"))
     return out
 
@@ -136,7 +137,9 @@ class WebClaudeReviewer(ClaudeReviewer):
     it is not an independent second opinion. Web search is billed per search on top of tokens (check the usage page; price not hardcoded)."""
     name = "claude_web"
 
-    def __init__(self, client, model=MODEL, max_searches=8, max_resumes=4):
+    CHUNK_SECTIONS = 4        # long fact-based scripts are verified a few sections at a time so each pass has its own search budget
+
+    def __init__(self, client, model=MODEL, max_searches=10, max_resumes=4):
         super().__init__(client, model)
         self.max_searches, self.max_resumes = max_searches, max_resumes
 
@@ -144,6 +147,23 @@ class WebClaudeReviewer(ClaudeReviewer):
         return dict(stage="qa", status="done", note=f"Claude reviewer {self.model} with web search (max {self.max_searches} searches)")
 
     def review(self, script, lang):
+        secs = script.get("sections") or []
+        if len(secs) <= self.CHUNK_SECTIONS + 1:
+            return self._review_once(script, lang)
+        parts = []
+        for i in range(0, len(secs), self.CHUNK_SECTIONS):
+            chunk = dict(script)
+            chunk["sections"] = secs[i:i + self.CHUNK_SECTIONS]
+            chunk["review_scope"] = (f"Verify ONLY the factual claims in these sections (sections {i + 1}-{i + len(chunk['sections'])} of {len(secs)}); "
+                                     "the rest of the script is reviewed in other passes. Use your searches on these claims.")
+            parts.append(self._review_once(chunk, lang))
+        verdict = "block" if any(p["verdict"] == "block" for p in parts) else ("pass" if all(p["verdict"] == "pass" for p in parts) else "revise")
+        issues = [x for p in parts for x in p["issues"]]
+        unverified = [x for p in parts for x in p["unverified_claims"]]
+        usage = {k: sum(p["usage"].get(k, 0) for p in parts) for k in ("input_tokens", "output_tokens", "web_searches")}
+        return _result(self.name, verdict, issues, unverified, usage, parts[0].get("model") or self.model)
+
+    def _review_once(self, script, lang):
         messages = [{"role": "user", "content": json.dumps({"lang": lang, "script": script}, ensure_ascii=False)}]
         tin = tout = searches = 0
         resp = None
@@ -232,10 +252,10 @@ def decide(rule_findings, reviews):
     return ("needs_human", reasons) if reasons else ("pass", ["2+ non-mock reviewers passed, no blocks, no unverified claims"])
 
 
-def run_qa(project_dir: Path, lang: str, reviewers: list, reference_titles=None) -> dict:
+def run_qa(project_dir: Path, lang: str, reviewers: list, reference_titles=None, short=False) -> dict:
     project_dir = Path(project_dir)
     script = json.loads((project_dir / "script.json").read_text(encoding="utf-8"))
-    findings = rule_checks(script, lang, reference_titles)
+    findings = rule_checks(script, lang, reference_titles, short)
     reviews = [r.review(script, lang) for r in reviewers]
     decision, reasons = decide(findings, reviews)
     unverified = list(dict.fromkeys(c for r in reviews for c in r["unverified_claims"]))

@@ -91,3 +91,12 @@ def test_script_length_is_corrected_by_reprompting(tmp_path):
     assert abs(script.narration_chars(data) - 2640) / 2640 <= 0.15
     assert data["sections"][0]["seconds"] == round(2600 / 5.5)
     assert ledger.profit(con, pid)["cost_usd"] > 0.2           # two calls were paid for and recorded
+
+
+def test_history_guide_applies_only_to_history_projects(tmp_path):
+    from studio import brief, ledger, script
+    con = ledger.connect(tmp_path / "g.sqlite")
+    h = brief.create_project(con, dict(genre="history", lang="ja", platform="youtube", audience=""))
+    d = brief.create_project(con, dict(genre="drama_story", lang="ja", platform="youtube", audience=""))
+    assert "HISTORY / FACT-BASED GUIDE" in script._guide(con, h)
+    assert script._guide(con, d) == ""

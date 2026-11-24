@@ -11,6 +11,10 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
+SHORT_PAUSE = 0.2      # tighter pause after each beat of a Short
+SHORT_MAX = 59.0       # hard cap (seconds) for a Short
+SHORT_SIZE = (1080, 1920)
+CAPTION_WORDS = 5      # captions show 3-5 words at a time
 PAUSE = 0.4            # silence appended after each section's narration
 HOOK_MAX = 55.0        # seconds of final video used for shorts
 FONT = "/usr/share/fonts/opentype/ipafont-gothic/ipag.ttf"
@@ -112,8 +116,8 @@ def _load(project_dir):
     return sections, wavs, pngs, durs
 
 
-def _kenburns(i, frames, fps):
-    """Mode i%4: zoom in, zoom out, pan right, pan left (slow, over the clip)."""
+def _kenburns(i, frames, fps, size=(1920, 1080)):
+    """Mode i%4: zoom in, zoom out, pan right, pan left (slow, over the clip). Source is upscaled 1.25x before zoompan."""
     m = i % 4
     z = ["1+0.12*on/%d" % frames, "1.12-0.12*on/%d" % frames, "1.1", "1.1"][m]
     if m == 2:
@@ -122,7 +126,8 @@ def _kenburns(i, frames, fps):
         x = "(iw-iw/zoom)*(1-on/%d)" % frames
     else:
         x = "iw/2-iw/zoom/2"
-    return f"scale=2400:1350,zoompan=z='{z}':x='{x}':y='ih/2-ih/zoom/2':d={frames}:s=1920x1080:fps={fps},format=yuv420p"
+    w, h = size
+    return (f"scale={w * 5 // 4}:{h * 5 // 4},zoompan=z='{z}':x='{x}':y='ih/2-ih/zoom/2':d={frames}:s={w}x{h}:fps={fps},format=yuv420p")
 
 
 def find_beats(project_dir, name):
@@ -157,7 +162,56 @@ def split_frames(total, weights):
     return [b - a for a, b in zip([0] + bounds[:-1], bounds)]
 
 
-def assemble(project_dir: Path, fps=30) -> Path:
+def cut_counts(frames, cut_seconds, fps=30):
+    """Frame counts of the sub-cuts of one span (sum == frames); n = max(1, round(span / cut_seconds))."""
+    n = max(1, round(frames / fps / cut_seconds))
+    return split_frames(frames, [1.0] * min(n, max(frames, 1)))
+
+
+# (zoom, x, y) expressions of zoompan; p = progress 0..1 within the cut. Consecutive moves differ clearly.
+_MOVES = [
+    ("1+0.18*{p}", "iw/2-iw/zoom/2", "ih/2-ih/zoom/2"),                         # zoom in on the centre
+    ("1.25", "(iw-iw/zoom)*{p}", "ih/2-ih/zoom/2"),                             # pan left -> right
+    ("1.45+0.1*{p}", "iw/2-iw/zoom/2", "max(0,ih/6-ih/zoom/2)"),                # punch-in on the upper third (heads)
+    ("1.4-0.4*{p}", "iw/2-iw/zoom/2", "ih/2-ih/zoom/2"),                        # zoom out 1.4 -> 1.0
+    ("1.25", "(iw-iw/zoom)*(1-{p})", "ih/2-ih/zoom/2"),                         # pan right -> left
+    ("1.5", "min(iw-iw/zoom,max(0,iw*0.75-iw/zoom/2))", "min(ih-ih/zoom,max(0,ih*0.75-ih/zoom/2))"),   # punch-in lower right
+]
+
+
+def _cut_filter(i, frames, fps, size):
+    """Framing number i (cycles through _MOVES) of one sub-cut; rendered from the full-size source, 1.25x upscaled first."""
+    z, x, y = (e.format(p="(on/%d)" % max(frames - 1, 1)) for e in _MOVES[i % len(_MOVES)])
+    w, h = size
+    return f"scale={w * 5 // 4}:{h * 5 // 4},zoompan=z='{z}':x='{x}':y='{y}':d={frames}:s={w}x{h}:fps={fps},format=yuv420p"
+
+
+def _render_cuts(src, counts, k, tmp, tag, fps, size, enc):
+    """Hard-cut sub-clips of one image with different framings, joined by stream copy. Returns (video path, next k)."""
+    parts = []
+    for j, n in enumerate(counts):
+        part = tmp / f"{tag}_{j:02d}.mp4"
+        _run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-framerate", str(fps), "-i", str(src),
+              "-vf", _cut_filter(k, n, fps, size), "-frames:v", str(n), *enc, "-an", str(part)])
+        parts.append(part)
+        k += 1
+    return _concat_copy(parts, tmp / f"{tag}_cat.mp4"), k
+
+
+def _concat_copy(parts, out):
+    plist = out.with_suffix(".txt")
+    plist.write_text("".join(f"file '{c}'\n" for c in parts))
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(plist), "-c", "copy", str(out)])
+    return out
+
+
+def _mux_audio(vid, wav, frames, fps, clip):
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(vid), "-i", str(wav), "-map", "0:v", "-map", "1:a",
+          "-c:v", "copy", "-af", "aresample=48000,apad", "-ac", "2",
+          "-t", f"{frames / fps:.4f}", "-c:a", "aac", "-b:a", "192k", str(clip)])
+
+
+def assemble(project_dir: Path, fps=30, cut_seconds=None) -> Path:
     project_dir = Path(project_dir)
     sections, wavs, pngs, durs = _load(project_dir)
     final = project_dir / "final.mp4"
@@ -174,19 +228,23 @@ def assemble(project_dir: Path, fps=30) -> Path:
                 parts = []
                 for j, (bp, n) in enumerate(zip(beats, counts)):
                     part = tmp / f"beat_{i:02d}_{j:02d}.mp4"
-                    _run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-framerate", str(fps), "-i", str(bp),
-                          "-vf", _kenburns(k, n, fps), "-frames:v", str(n), *enc, "-an", str(part)])
+                    if cut_seconds and n / fps > cut_seconds * 1.5:
+                        vid_b, k = _render_cuts(bp, cut_counts(n, cut_seconds, fps), k, tmp, f"bc_{i:02d}_{j:02d}", fps, (1920, 1080), enc)
+                        part = vid_b
+                    else:
+                        _run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-framerate", str(fps), "-i", str(bp),
+                              "-vf", _kenburns(k, n, fps), "-frames:v", str(n), *enc, "-an", str(part)])
+                        k += 1
                     parts.append(part)
-                    k += 1
-                plist = tmp / f"beats_{i:02d}.txt"
-                plist.write_text("".join(f"file '{c}'\n" for c in parts))
-                vid = tmp / f"vid_{i:02d}.mp4"
-                _run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(plist), "-c", "copy", str(vid)])
-                _run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(vid), "-i", str(wav), "-map", "0:v", "-map", "1:a",
-                      "-c:v", "copy", "-af", "aresample=48000,apad", "-ac", "2",
-                      "-t", f"{frames / fps:.4f}", "-c:a", "aac", "-b:a", "192k", str(clip)])
+                vid = _concat_copy(parts, tmp / f"vid_{i:02d}.mp4")
+                _mux_audio(vid, wav, frames, fps, clip)
             else:
                 src = png if png.exists() or not beats else beats[0]
+                if cut_seconds and frames / fps > cut_seconds * 1.5:
+                    vid, k = _render_cuts(src, cut_counts(frames, cut_seconds, fps), k, tmp, f"sc_{i:02d}", fps, (1920, 1080), enc)
+                    _mux_audio(vid, wav, frames, fps, clip)
+                    clips.append(clip)
+                    continue
                 _run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-framerate", str(fps), "-i", str(src), "-i", str(wav),
                       "-vf", _kenburns(k, frames, fps), "-af", "aresample=48000,apad", "-ac", "2", "-frames:v", str(frames),
                       "-t", f"{frames / fps:.4f}", *enc, "-c:a", "aac", "-b:a", "192k", str(clip)])
@@ -203,6 +261,103 @@ def assemble(project_dir: Path, fps=30) -> Path:
             _run(base + tail)
     (project_dir / "final.srt").write_text(make_srt(sections, durs, fps), "utf-8")
     return final
+
+
+# ---------- Shorts (1080x1920) ----------
+def short_span(duration, fps=30) -> float:
+    return round((duration + SHORT_PAUSE) * fps) / fps
+
+
+def caption_groups(text, max_words=CAPTION_WORDS):
+    """Word groups of 3-5 words (even sizes; a text of fewer than 3 words is one group)."""
+    words = text.split()
+    if not words:
+        return []
+    n = -(-len(words) // max_words)
+    base, extra = divmod(len(words), n)
+    out, i = [], 0
+    for k in range(n):
+        size = base + (1 if k < extra else 0)
+        out.append(" ".join(words[i:i + size]))
+        i += size
+    return out
+
+
+def make_caption_events(sections, durations, fps=30):
+    """[(start, end, text)]: groups share the section's narration time in proportion to their characters;
+    section starts are offset by the cumulative (narration + 0.2 s pause) of earlier sections."""
+    events, offset = [], 0.0
+    for sec, d in zip(sections, durations):
+        groups = caption_groups(sec["narration"])
+        total = sum(len(g) for g in groups) or 1
+        t = offset
+        for g in groups:
+            end = t + d * len(g) / total
+            events.append((t, end, g))
+            t = end
+        offset += short_span(d, fps)
+    return events
+
+
+def _ass_ts(t):
+    cs = round(t * 100)
+    return f"{cs // 360000}:{cs // 6000 % 60:02}:{cs // 100 % 60:02}.{cs % 100:02}"
+
+
+def short_font():
+    """(font name, fonts dir): DejaVu Sans Bold if installed, else the IPAGothic fallback."""
+    dj = Path("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf")
+    return ("DejaVu Sans", str(dj.parent)) if dj.exists() else ("IPAGothic", FONTS_DIR)
+
+
+def make_short_ass(events, font_name="DejaVu Sans", size=SHORT_SIZE, font_px=88):
+    w, h = size
+    head = (f"[Script Info]\nScriptType: v4.00+\nPlayResX: {w}\nPlayResY: {h}\nWrapStyle: 0\n\n[V4+ Styles]\n"
+            "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, "
+            "ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\n"
+            f"Style: Default,{font_name},{font_px},&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,-1,0,0,0,100,100,0,0,1,7,2,2,70,70,{h // 6},1\n\n"
+            "[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
+    lines = [f"Dialogue: 0,{_ass_ts(a)},{_ass_ts(b)},Default,,0,0,0,,{t.replace(chr(10), ' ').replace('{', '(').replace('}', ')')}" for a, b, t in events]
+    return head + "\n".join(lines) + "\n"
+
+
+def assemble_short(project_dir: Path, fps=30, cut_seconds=3.0) -> Path:
+    """short.mp4: 1080x1920 H.264/AAC, each section cut into ~cut_seconds sub-cuts (same image, different framings; 0/None = one clip per section), burned-in 3-5 word captions, loudness-normalized, <= 59 s."""
+    project_dir = Path(project_dir)
+    sections, wavs, pngs, durs = _load(project_dir)
+    frames = [round((d + SHORT_PAUSE) * fps) for d in durs]
+    total = sum(frames) / fps
+    if total > SHORT_MAX:
+        raise ValueError(f"short is {total:.1f} s long (voice {sum(durs):.1f} s + {SHORT_PAUSE} s pauses); the limit is {SHORT_MAX:.0f} s: shorten the script")
+    out = project_dir / "short.mp4"
+    font_name, fonts_dir = short_font()
+    (project_dir / "short.ass").write_text(make_short_ass(make_caption_events(sections, durs, fps), font_name), "utf-8")
+    enc = ["-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", "-r", str(fps)]
+    with tempfile.TemporaryDirectory(dir=project_dir) as tmp:
+        tmp = Path(tmp)
+        clips, k = [], 0
+        for i, (wav, png, n) in enumerate(zip(wavs, pngs, frames)):
+            src = png if png.exists() else (find_beats(project_dir, png.stem) or [png])[0]
+            clip = tmp / f"clip_{i:02d}.mp4"
+            if cut_seconds:
+                vid, k = _render_cuts(src, cut_counts(n, cut_seconds, fps), k, tmp, f"sc_{i:02d}", fps, SHORT_SIZE, enc)
+                _mux_audio(vid, wav, n, fps, clip)
+                clips.append(clip)
+                continue
+            _run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-framerate", str(fps), "-i", str(src), "-i", str(wav),
+                  "-vf", _kenburns(i, n, fps, SHORT_SIZE), "-af", "aresample=48000,apad", "-ac", "2", "-frames:v", str(n),
+                  "-t", f"{n / fps:.4f}", *enc, "-c:a", "aac", "-b:a", "192k", str(clip)])
+            clips.append(clip)
+        lst = tmp / "list.txt"
+        lst.write_text("".join(f"file '{c}'\n" for c in clips))
+        base = ["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(lst),
+                "-vf", f"subtitles=short.ass:fontsdir={fonts_dir},format=yuv420p"]
+        tail = ["-t", f"{total:.4f}", *enc, "-ar", "48000", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", str(out.resolve())]
+        try:
+            _run(base + ["-af", "loudnorm=I=-16:TP=-1.5:LRA=11"] + tail, cwd=project_dir)
+        except RuntimeError:   # loudnorm yields NaN on fully silent audio (mock voice); keep the audio as is
+            _run(base + tail, cwd=project_dir)
+    return out
 
 
 def make_preview(project_dir, height=720, crf=28) -> Path:

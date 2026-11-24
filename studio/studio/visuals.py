@@ -35,8 +35,9 @@ class MockImage:
         for y in range(ht):
             t = y / max(1, ht - 1)
             d.line([(0, y), (w, y)], fill=tuple(int(a + (b - a) * t) for a, b in zip(c1, c2)))
-        d.text((w // 2, ht // 2), "MOCK", font=_font(ht // 4), fill=(255, 255, 255), anchor="mm", stroke_width=6, stroke_fill=(0, 0, 0))
-        d.text((40, ht - 40), prompt[:60], font=_font(ht // 22), fill=(255, 255, 255), anchor="ls", stroke_width=2, stroke_fill=(0, 0, 0))
+        m = min(w, ht)
+        d.text((w // 2, ht // 2), "MOCK", font=_font(m // 4), fill=(255, 255, 255), anchor="mm", stroke_width=6, stroke_fill=(0, 0, 0))
+        d.text((40, ht - 40), prompt[:60], font=_font(m // 22), fill=(255, 255, 255), anchor="ls", stroke_width=2, stroke_fill=(0, 0, 0))
         Path(out_path).parent.mkdir(parents=True, exist_ok=True)
         img.save(out_path, "PNG")
 
@@ -59,19 +60,30 @@ class _KeyedStub:
         return dict(stage="visuals", status="not_connected", note=f"{self.name}: stub, needs {self.env} and an implementation")
 
 
+def aspect_ratio(size):
+    """Gemini imageConfig.aspectRatio for a pixel size: 16:9 landscape, 9:16 portrait, 1:1 square."""
+    w, h = size
+    return "16:9" if w > h else "9:16" if h > w else "1:1"
+
+
 class GeminiImage:
     """Gemini image generation over REST (model ids come from the live models list; see key-check workflow output).
     Verified only by studio/gemini_live_test.py with a real key. Records token usage in `last_usage` (price: check the Google pricing page)."""
     name = "GeminiImage"
 
     STYLES = {
+        "manga": ("Modern Japanese web-manga illustration as used by popular YouTube story-manga channels: clean thin line art, cel shading, bright pastel colours, "
+                  "attractive stylised characters with simple expressive faces and big readable emotions, simple tidy backgrounds. "
+                  "No text, letters, speech bubbles, logos or brand names anywhere. Fictional characters only."),
+        "history": ("Painterly realistic historical illustration, cinematic natural lighting, muted earthy palette, rich period detail (armour, clothing, architecture, landscapes, documents). "
+                    "Anonymous period figures only, never a specific real person's face. No text, letters, logos, modern objects or watermarks."),
         "illustration": "Original illustration. No text, letters, logos or watermarks. No real people.",
         "photo": ("Photorealistic photograph, natural lighting, realistic skin texture and proportions. Fictional people only (not any real person's "
                   "likeness). No text, letters, logos or watermarks."),
     }
 
     def __init__(self, model=None, session=None, style="illustration"):
-        self.model = model or os.environ.get("STUDIO_GEMINI_IMAGE_MODEL", "gemini-3.1-flash-image")
+        self.model = model or os.environ.get("STUDIO_GEMINI_IMAGE_MODEL", "gemini-3.1-flash-lite-image")   # half the price of flash-image, similar look (compared 2026-11-23)
         self.session, self.last_usage, self.style = session, None, style
         self.usage = []     # one entry per generated image (list.append is thread-safe)
 
@@ -80,7 +92,7 @@ class GeminiImage:
         from PIL import Image, ImageOps
         from . import gemini
         text = f"{prompt}\n\n{self.STYLES[self.style]}"
-        attempts = [{"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": "16:9"}}, {"responseModalities": ["TEXT", "IMAGE"]}]
+        attempts = [{"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": aspect_ratio(size)}}, {"responseModalities": ["TEXT", "IMAGE"]}]
         last = None
         for cfg in attempts:                      # some models need TEXT+IMAGE or reject imageConfig: try the simplest alternative once
             try:
@@ -105,6 +117,56 @@ class GeminiImage:
         ok = bool(os.environ.get("GEMINI_API_KEY"))
         return dict(stage="visuals", status="done" if ok else "not_connected",
                     note=f"GeminiImage {self.model} via REST" + ("" if ok else " (needs GEMINI_API_KEY)"))
+
+
+class HybridImage:
+    """Two-tier image generation (owner's choice B, 2026-11-23): the premium model for the opening (~2 min of narration) and the last few beats,
+    the cheaper model for the rest. Viewers decide in the first seconds, so quality goes where it matters; the middle stays cheap (about half the cost)."""
+    name = "HybridImage"
+    PREMIUM_MODEL = "gemini-3.1-flash-image"
+    STANDARD_MODEL = "gemini-3.1-flash-lite-image"
+
+    def __init__(self, style="illustration", premium=None, standard=None, opening_chars=660, tail_beats=3, max_share=0.3, session=None):
+        self.premium = premium or GeminiImage(model=self.PREMIUM_MODEL, style=style, session=session)
+        self.standard = standard or GeminiImage(model=self.STANDARD_MODEL, style=style, session=session)
+        self.opening_chars, self.tail_beats, self.max_share = opening_chars, tail_beats, max_share
+        self.premium_paths = set()
+        self.model = f"{self.PREMIUM_MODEL}+{self.STANDARD_MODEL}"
+
+    def plan_premium(self, items):
+        """items: [(path, beat dict)]. Premium = opening beats until opening_chars of narration, plus the last tail_beats; capped at max_share of all beats."""
+        order = sorted(items, key=lambda x: (x[1]["section"], x[1]["beat"]))
+        cap = max(1, int(len(order) * self.max_share + 0.999)) if self.max_share < 1 else len(order)
+        opening, acc = [], 0
+        for p, b in order:
+            if acc >= self.opening_chars:
+                break
+            opening.append(p)
+            acc += int(b.get("chars", 0))
+        tail = [p for p, _ in order[-self.tail_beats:]] if self.tail_beats else []
+        chosen = list(dict.fromkeys(opening[: max(0, cap - len(tail))] + tail))[:cap]
+        self.premium_paths = set(chosen)
+        return self.premium_paths
+
+    def generate(self, prompt, out_path, size=(1920, 1080)):
+        (self.premium if out_path in self.premium_paths else self.standard).generate(prompt, out_path, size)
+
+    @property
+    def last_usage(self):
+        return self.standard.last_usage or self.premium.last_usage
+
+    @property
+    def parts(self):
+        return [(self.premium.model, self.premium.usage), (self.standard.model, self.standard.usage)]
+
+    @property
+    def usage(self):
+        return list(self.premium.usage) + list(self.standard.usage)
+
+    def describe(self):
+        d = self.premium.describe()
+        d["note"] = f"HybridImage premium={self.premium.model} (opening + ending), standard={self.standard.model}" + ("" if d["status"] == "done" else " (needs GEMINI_API_KEY)")
+        return d
 
 
 class OpenAIImage(_KeyedStub):
