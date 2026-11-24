@@ -137,7 +137,9 @@ class WebClaudeReviewer(ClaudeReviewer):
     it is not an independent second opinion. Web search is billed per search on top of tokens (check the usage page; price not hardcoded)."""
     name = "claude_web"
 
-    def __init__(self, client, model=MODEL, max_searches=8, max_resumes=4):
+    CHUNK_SECTIONS = 4        # long fact-based scripts are verified a few sections at a time so each pass has its own search budget
+
+    def __init__(self, client, model=MODEL, max_searches=10, max_resumes=4):
         super().__init__(client, model)
         self.max_searches, self.max_resumes = max_searches, max_resumes
 
@@ -145,6 +147,23 @@ class WebClaudeReviewer(ClaudeReviewer):
         return dict(stage="qa", status="done", note=f"Claude reviewer {self.model} with web search (max {self.max_searches} searches)")
 
     def review(self, script, lang):
+        secs = script.get("sections") or []
+        if len(secs) <= self.CHUNK_SECTIONS + 1:
+            return self._review_once(script, lang)
+        parts = []
+        for i in range(0, len(secs), self.CHUNK_SECTIONS):
+            chunk = dict(script)
+            chunk["sections"] = secs[i:i + self.CHUNK_SECTIONS]
+            chunk["review_scope"] = (f"Verify ONLY the factual claims in these sections (sections {i + 1}-{i + len(chunk['sections'])} of {len(secs)}); "
+                                     "the rest of the script is reviewed in other passes. Use your searches on these claims.")
+            parts.append(self._review_once(chunk, lang))
+        verdict = "block" if any(p["verdict"] == "block" for p in parts) else ("pass" if all(p["verdict"] == "pass" for p in parts) else "revise")
+        issues = [x for p in parts for x in p["issues"]]
+        unverified = [x for p in parts for x in p["unverified_claims"]]
+        usage = {k: sum(p["usage"].get(k, 0) for p in parts) for k in ("input_tokens", "output_tokens", "web_searches")}
+        return _result(self.name, verdict, issues, unverified, usage, parts[0].get("model") or self.model)
+
+    def _review_once(self, script, lang):
         messages = [{"role": "user", "content": json.dumps({"lang": lang, "script": script}, ensure_ascii=False)}]
         tin = tout = searches = 0
         resp = None
