@@ -136,7 +136,7 @@ def revise_with_feedback(con, client, project_id, data, issues, unverified_claim
     """Applies QA feedback: removes or softens claims that cannot be verified, keeps the length."""
     rate = chars_per_sec or (SHORT_CHARS_PER_SEC if short else CHARS_PER_SEC).get(lang, 5.5)
     n = narration_chars(data)
-    revised, _ = _call(con, client, project_id, "script_revise", SHORT_REVISE_SYSTEM if short else REVISE_SYSTEM + _guide(con, project_id), {
+    revised, _ = _call(con, client, project_id, "script_revise", (SHORT_REVISE_SYSTEM if short else REVISE_SYSTEM) + _guide(con, project_id), {
         "instruction": ("Fix the reviewer's issues. For every unverified claim: remove it, or rewrite it as a clearly hedged general statement "
                         "without invented numbers, studies or quotes; never keep a precise statistic you cannot source. List what remains "
                         "in fact_claims_to_verify. Keep total narration length within 10% of the current length."),
@@ -225,12 +225,12 @@ def write_short(con, client, project_id, target_seconds=50, chars_per_sec=None, 
     rate = chars_per_sec or SHORT_CHARS_PER_SEC.get(brief.get("lang"), 14.0)
     target, cap = short_limits(rate, target_seconds)
     base = {"target_narration_chars": target, "max_narration_chars": cap, "chars_per_second": rate, "beats": f"{SHORT_MIN_BEATS}-{SHORT_MAX_BEATS}"}
-    data, total = _call(con, client, project_id, "script", SHORT_SYSTEM, {"brief": brief, "target_seconds": target_seconds, "format": "youtube short 9:16", **base})
+    data, total = _call(con, client, project_id, "script", SHORT_SYSTEM + _guide(con, project_id), {"brief": brief, "target_seconds": target_seconds, "format": "youtube short 9:16", **base})
     if data is None:
         return None
     fixes = 0
     while fixes < max_fixes and (problem := _short_problem(data, rate, target, cap)):
-        fixed, usd = _call(con, client, project_id, "script_fix", SHORT_REVISE_SYSTEM, {
+        fixed, usd = _call(con, client, project_id, "script_fix", SHORT_REVISE_SYSTEM + _guide(con, project_id), {
             "instruction": problem + " Keep the opening question, the payoff and the closing loop.", **base, "script": data})
         total += usd
         if fixed is None:
