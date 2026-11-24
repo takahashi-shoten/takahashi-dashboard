@@ -39,6 +39,8 @@ PASSES = {
                                       "2) この動画の弱点・反例になりうる点（合わない視聴者、逆効果になりうる表現）。\n"
                                       "3) 表面（話し方・キャラクター）を真似せずに抽象化できる『成功技術の原理』を5〜8個。各原理に、根拠の時刻、適用条件、他市場（美容・教育・AIサービス・デジタル商品など）への応用例、確信度（高/中/低）を付ける。\n"
                                       "4) 生身の人間である話者の強みのうち、AIで再現しやすいもの・難しいものを、観察できる範囲で分ける（結論は断定しない）。"),
+    "p5_keyword_check": RULES + ("課題: 語句の確認。次の語句または同じ意味の発言が、この動画で実際に話されている箇所を、時刻MM:SSと前後の発言（短く引用）付きで全て挙げてください。"
+                                  "語句: 「1日1分」「小さな習慣」「悪い習慣をやめる」「不要なものを手放す」「理想の自分」。動画内に無い語句は「なし」と明記し、推測で補わないこと。"),
 }
 
 
@@ -48,7 +50,8 @@ def yt(path, **params):
 
 def main():
     vid = sys.argv[1]
-    model = sys.argv[2] if len(sys.argv) > 2 else "gemini-3.8-flash"
+    model, _, only = (sys.argv[2] if len(sys.argv) > 2 else "gemini-3.8-flash").partition(":")
+    names = [only] if only else [k for k in PASSES if k != "p5_keyword_check"]
     out = d.OUT.parent / "marketing" / vid
     out.mkdir(parents=True, exist_ok=True)
     meta = {}
@@ -69,7 +72,8 @@ def main():
     (out / "meta.json").write_text(json.dumps(dict(meta=meta, comments=comments), ensure_ascii=False, indent=1), encoding="utf-8")
     print("META", json.dumps({k: meta.get(k) for k in ("title", "channel", "published", "duration", "views", "likes", "comments", "channel_subs")}, ensure_ascii=False), "| comments fetched:", len(comments), flush=True)
     uri = f"https://www.youtube.com/watch?v={vid}"
-    for name, prompt in PASSES.items():
+    for name in names:
+        prompt = PASSES[name]
         if d.SPENT[0] > 2.5:
             print("BUDGET CAP reached; stop"); break
         r = d.gen(model, uri, None, prompt, f"{model}|{vid}|{name}", resolution="MEDIA_RESOLUTION_LOW", max_out=16000)
