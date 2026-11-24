@@ -1,0 +1,24 @@
+{
+ "experiment_plan": "experiments/plans/E1.json",
+ "output_branch": "exp-E-20261124-01",
+ "produced_at": "2026-11-24T00:33Z",
+ "video_seconds": 1150.6,
+ "narration_seconds": 1146.6,
+ "cost_usd": {
+  "claude_measured": 1.103,
+  "images_estimated_from_tokens": 4.9158,
+  "image_output_tokens": 144078,
+  "gemini_tts_and_gemini_review": "未確認(台帳に金額として未記録)",
+  "qa_rerun_claude_tokens_in_out": "217,197 / 7,900 (26 web searches; 金額は未算出)"
+ },
+ "production_wall_minutes": 29.3,
+ "qa": {
+  "first_pass": "web search hit its usage limit: facts unchecked (14 unverified)",
+  "rerun_chunked": "26 searches; no factual error found; 7 claims unverified (wording of primary sources not retrievable)",
+  "decision": "needs_human",
+  "ready_to_publish": false
+ },
+ "changed_vs_previous": "title says 最期の朝 (no duration claim); hook rewritten to first-10-seconds rule; chunked QA; hybrid images",
+ "published": false,
+ "metrics": "未取得(未公開)"
+}
