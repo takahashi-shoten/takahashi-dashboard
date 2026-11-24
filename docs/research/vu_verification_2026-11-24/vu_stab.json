@@ -1,0 +1,3135 @@
+{
+ "ran_at": "2026-11-24T14:16:38+00:00",
+ "summary": [
+  {
+   "clip_start": 120.0,
+   "ref_chars": 290,
+   "cer_llm_mp4": {
+    "values": [
+     0.069,
+     0.062,
+     0.041
+    ],
+    "mean": 0.057,
+    "max": 0.069
+   },
+   "cer_llm_wav": {
+    "values": [
+     0.055,
+     0.031,
+     0.031
+    ],
+    "mean": 0.039,
+    "max": 0.055
+   },
+   "cer_transcribe_wav": {
+    "values": [
+     0.076,
+     0.076,
+     0.076
+    ],
+    "mean": 0.076,
+    "max": 0.076
+   },
+   "mute_pass": [
+    true,
+    true,
+    true
+   ],
+   "mute_err": [
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "black_pass": [
+    true,
+    true,
+    true
+   ],
+   "black_err": [
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "clean_false_alarms": {
+    "silent": 0,
+    "black": 0,
+    "trials": 3
+   }
+  },
+  {
+   "clip_start": 600.0,
+   "ref_chars": 284,
+   "cer_llm_mp4": {
+    "values": [
+     0.479,
+     0.479,
+     0.496
+    ],
+    "mean": 0.485,
+    "max": 0.496
+   },
+   "cer_llm_wav": {
+    "values": [
+     0.479,
+     0.468,
+     0.486
+    ],
+    "mean": 0.478,
+    "max": 0.486
+   },
+   "cer_transcribe_wav": {
+    "values": [
+     0.493,
+     0.493,
+     0.493
+    ],
+    "mean": 0.493,
+    "max": 0.493
+   },
+   "mute_pass": [
+    false,
+    false,
+    true
+   ],
+   "mute_err": [
+    [
+     4.0,
+     0.0
+    ],
+    null,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "black_pass": [
+    true,
+    true,
+    true
+   ],
+   "black_err": [
+    [
+     -1.0,
+     -1.0
+    ],
+    [
+     0.0,
+     -1.0
+    ],
+    [
+     -1.0,
+     -1.0
+    ]
+   ],
+   "clean_false_alarms": {
+    "silent": 0,
+    "black": 0,
+    "trials": 3
+   }
+  }
+ ],
+ "total_cost_usd": 0.2451,
+ "log": [
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|A_tr|0",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:10:25+00:00",
+   "seconds": 8.4,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/0idhk1jqa4tl",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5505,
+    "output": 199,
+    "thoughts": 534,
+    "total": 6238,
+    "by_modality": {
+     "VIDEO": 5460,
+     "TEXT": 45
+    }
+   },
+   "cost_usd": 0.0069,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "炎の中で人間五十年と敦盛を舞う。\nそして奥の間に入り、静かに障子を閉めて腹を切る。\n蘭丸は最後まで主君を守って戦い、討ち死にする。\n遺体は見つからず、謎だけが残った。\n映画やドラマ、時代小説で、この流れはほとんど定番になっています。\nでも、こうした場面の1つ1つに出所があります。\n同時代の記録にそのまま書かれているもの、\n記録を元に後から膨らませたもの、\nそして、記録には全く見当たらないもの。\nそれらが混ざり合って、1つの有名な最後が出来上がっています。\n例えば、「是非もなし」という言い回しは、『信長公記』の「是非に及ばず」を言い換えたものです。\n似ていますが、同じではありません。\nこの動画では、記録に書かれていることには出典の名前を添え、",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "炎の中で人間五十年と敦盛を舞う。\nそして奥の間に入り、静かに障子を閉めて腹を切る。\n蘭丸は最後まで主君を守って戦い、討ち死にする。\n遺体は見つからず、謎だけが残った。\n映画やドラマ、時代小説で、この流れはほとんど定番になっています。\nでも、こうした場面の1つ1つに出所があります。\n同時代の記録にそのまま書かれているもの、\n記録を元に後から膨らませたもの、\nそして、記録には全く見当たらないもの。\nそれらが混ざり合って、1つの有名な最後が出来上がっています。\n例えば、「是非もなし」という言い回しは、『信長公記』の「是非に及ばず」を言い換えたものです。\n似ていますが、同じではありません。\nこの動画では、記録に書かれていることには出典の名前を添え、",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5505,
+     "candidatesTokenCount": 199,
+     "totalTokenCount": 6238,
+     "promptTokensDetails": [
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      }
+     ],
+     "thoughtsTokenCount": 534,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "yJoFa9O1MpnaytMP2baxAQ"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|C_tr|0",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:10:32+00:00",
+   "seconds": 7.4,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "audio/wav",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/zx4o0r4sg03o",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 1546,
+    "output": 199,
+    "thoughts": 527,
+    "total": 2272,
+    "by_modality": {
+     "AUDIO": 1501,
+     "TEXT": 45
+    }
+   },
+   "cost_usd": 0.0039,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "炎の中で「人間五十年」と敦盛を舞う。\nそして奥の間に入り、静かに障子を閉めて腹を切る。\n蘭丸は最後まで主君を守って戦い、討ち死にする。\n遺体は見つからず、謎だけが残った。\n映画やドラマ、時代小説で、この流れはほとんど定番になっています。\nでも、こうした場面の1つ1つに出どころがあります。\n同時代の記録にそのまま書かれているもの、記録を元に後から膨らませたもの、そして記録には全く見当たらないもの。\nそれらが混ざり合って、1つの有名な最期が出来上がっています。\n例えば、「是非もなし」という言い回しは『信長公記』の「是非に及ばず」を言い換えたものです。\n似ていますが、同じではありません。\nこの動画では、記録に書かれていることには出典の名前を添え、",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "炎の中で「人間五十年」と敦盛を舞う。\nそして奥の間に入り、静かに障子を閉めて腹を切る。\n蘭丸は最後まで主君を守って戦い、討ち死にする。\n遺体は見つからず、謎だけが残った。\n映画やドラマ、時代小説で、この流れはほとんど定番になっています。\nでも、こうした場面の1つ1つに出どころがあります。\n同時代の記録にそのまま書かれているもの、記録を元に後から膨らませたもの、そして記録には全く見当たらないもの。\nそれらが混ざり合って、1つの有名な最期が出来上がっています。\n例えば、「是非もなし」という言い回しは『信長公記』の「是非に及ばず」を言い換えたものです。\n似ていますが、同じではありません。\nこの動画では、記録に書かれていることには出典の名前を添え、",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 1546,
+     "candidatesTokenCount": 199,
+     "totalTokenCount": 2272,
+     "promptTokensDetails": [
+      {
+       "modality": "AUDIO",
+       "tokenCount": 1501
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      }
+     ],
+     "thoughtsTokenCount": 527,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "0ZoFa4ibJ8vW0_gPtZ_OsAw"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.5-transcribe|s120|C_tr|0",
+   "model": "gemini-3.5-transcribe",
+   "at": "2026-11-24T14:10:34+00:00",
+   "seconds": 1.3,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "audio/wav",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/zx4o0r4sg03o",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 1546,
+    "output": 178,
+    "thoughts": null,
+    "total": 1724,
+    "by_modality": {
+     "AUDIO": 1501,
+     "TEXT": 45
+    }
+   },
+   "cost_usd": 0.0052,
+   "modelVersion": "gemini-3.5-transcribe",
+   "text": "炎の中で人間五十年と敦盛を舞う。そして奥の間に入り、静かに障子を閉めて腹を切る。蘭丸は最後まで主君を守って戦い、自刃する。遺体は見つからず、謎だけが残った。映画やドラマ、時代小説でこの流れはほとんど定番になっています。でも、こうした場面の1つ1つに出所があります。同時代の記録にそのまま書かれているもの、記録をもとに後から膨らませたもの、そして記録には全く見当たらないもの。それらが混ざり合って、1つの有名な最後が出来上がっています。例えば、是非もなしという言い回しは、信長公記の是非に及ばずを言い換えたものです。似ていますが、同じではありません。この動画では、記録に書かれていることには出典の名前を添え",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "炎の中で人間五十年と敦盛を舞う。そして奥の間に入り、静かに障子を閉めて腹を切る。蘭丸は最後まで主君を守って戦い、自刃する。遺体は見つからず、謎だけが残った。映画やドラマ、時代小説でこの流れはほとんど定番になっています。でも、こうした場面の1つ1つに出所があります。同時代の記録にそのまま書かれているもの、記録をもとに後から膨らませたもの、そして記録には全く見当たらないもの。それらが混ざり合って、1つの有名な最後が出来上がっています。例えば、是非もなしという言い回しは、信長公記の是非に及ばずを言い換えたものです。似ていますが、同じではありません。この動画では、記録に書かれていることには出典の名前を添え",
+         "audioTranscription": {
+          "text": "炎の中で人間五十年と敦盛を舞う。そして奥の間に入り、静かに障子を閉めて腹を切る。蘭丸は最後まで主君を守って戦い、自刃する。遺体は見つからず、謎だけが残った。映画やドラマ、時代小説でこの流れはほとんど定番になっています。でも、こうした場面の1つ1つに出所があります。同時代の記録にそのまま書かれているもの、記録をもとに後から膨らませたもの、そして記録には全く見当たらないもの。それらが混ざり合って、1つの有名な最後が出来上がっています。例えば、是非もなしという言い回しは、信長公記の是非に及ばずを言い換えたものです。似ていますが、同じではありません。この動画では、記録に書かれていることには出典の名前を添え"
+         }
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 1546,
+     "candidatesTokenCount": 178,
+     "totalTokenCount": 1724,
+     "promptTokensDetails": [
+      {
+       "modality": "AUDIO",
+       "tokenCount": 1501
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      }
+     ],
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.5-transcribe",
+    "responseId": "2ZoFa77eBL3dytMPp6OO4Qk"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|MUTE|0",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:10:59+00:00",
+   "seconds": 24.9,
+   "http_status": 200,
+   "request": {
+    "prompt": "発話がない区間や、音声全体が無音になる区間があれば、その開始時刻と終了時刻（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/n3zaiwocigb0",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 28,
+    "thoughts": 774,
+    "total": 6301,
+    "by_modality": {
+     "TEXT": 39,
+     "VIDEO": 5460
+    }
+   },
+   "cost_usd": 0.0071,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "音声のない、または発話のない区間は以下の通りです。\n\n- 00:15 - 00:35",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "音声のない、または発話のない区間は以下の通りです。\n\n- 00:15 - 00:35",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 28,
+     "totalTokenCount": 6301,
+     "cachedContentTokenCount": 3711,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3685
+      }
+     ],
+     "thoughtsTokenCount": 774,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "2poFa_n3JJW4wbUPy--toQE"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|BLACK|0",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:11:07+00:00",
+   "seconds": 8.3,
+   "http_status": 200,
+   "request": {
+    "prompt": "画面全体が黒くなる区間が存在するか確認してください。存在する場合は開始時刻、終了時刻、継続時間（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/8v4nbb88b1zk",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 48,
+    "thoughts": 486,
+    "total": 6033,
+    "by_modality": {
+     "VIDEO": 5460,
+     "TEXT": 39
+    }
+   },
+   "cost_usd": 0.0061,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "画面全体が黒くなる区間が存在します。詳細は以下のとおりです。\n\n- **開始時刻**: 00:30\n- **終了時刻**: 00:38\n- **継続時間**: 約8秒",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "画面全体が黒くなる区間が存在します。詳細は以下のとおりです。\n\n- **開始時刻**: 00:30\n- **終了時刻**: 00:38\n- **継続時間**: 約8秒",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 48,
+     "totalTokenCount": 6033,
+     "cachedContentTokenCount": 3711,
+     "promptTokensDetails": [
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3685
+      }
+     ],
+     "thoughtsTokenCount": 486,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "85oFa5PyGty0xdIPnpnaYQ"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|A_clean_silent|0",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:11:16+00:00",
+   "seconds": 8.9,
+   "http_status": 200,
+   "request": {
+    "prompt": "発話がない区間や、音声全体が無音になる区間があれば、その開始時刻と終了時刻（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/0idhk1jqa4tl",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 35,
+    "thoughts": 854,
+    "total": 6388,
+    "by_modality": {
+     "TEXT": 39,
+     "VIDEO": 5460
+    }
+   },
+   "cost_usd": 0.0075,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "動画には発話がない区間や無音の区間はなく、全体を通して音声が続いています。\n\nそのため、該当する区間は**なし**です。",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "動画には発話がない区間や無音の区間はなく、全体を通して音声が続いています。\n\nそのため、該当する区間は**なし**です。",
+         "thoughtSignature": "EqgSCqUSAWkUfRNzDoGrpYP0Grv9zvSQsaVg0XLKhh02tL2WJSGF09YgnYdChS+gSir4rnklSFJr6iEOrxkhbxiBmXkE834qzcdihJ6gFJ/ouiyzuZ7acl3hDSaMdw211NzZyu9/muVdAhenZgtvlRo3jidEDW3rZJVJwXiKjOJML1BzD67ANeoAedIaOAl8xhFI+6bq7sSr0SmnBk0eglp6VWEEjSoYTWfTUWkMLPE2ARSNYR4IKiOJdFbzAKyLjhwAS16g/pFZ1fGJNb/ySAbN+eS0MnDZ5NVwe3GYY7E+inOLJD06egSg7KVq28YbMD3TcBQj8+P/gGt324qKxPdyfdFHpIjjkGFFSA5BzqhC1EEYEV2j6/VzaGW0n6Ec64fHo38k9LU+AlZUF2COom6Kwm6z2kGePfBfABjK+aOXGz9URp83W8dmlfZzfBYrC5ItTqyX+Rx8H6IFRU0e2om4TkZumDTDhnYV/MdYlWHO4yOMTxacsW76ekLmOxjk97dUa2a3n3aHezfS6t1Kwxlu0YSNmEQHy4KWyazK108OzW4befaW6LI/p2KzNisSLpl0Kl2KTUSQUwENAWrFKh4D0eJS1Px/dxNCOHwNxHGSxhN/O0USdiZXPU0vpfk15DQgiUB9W8tyKgGOcCqRvNgKxo+rZ6szijL4VlJqwlmcvE2O75tk4f2MftI0qBZDRQs5SkLHG3zydcDmdww1nKNcFLjpGp030vp4IJkEfxj4sdGUoL3AN62RJBOaEb5XJhvb7f+h/4LWk72+GhmiDWfp/4Z+woWrgNK07ItmR8fJSkeod0bBiLPIzAZOZsq4nUoIPkO9i5BsysO42xXh79DGOyVl0xX9IPhyPxP1frg8qJGBQ6cpkeZsxKryrCQl8Oe6ABJhSK1uI/ATWC51DLr49T1PABlGzi4yI/hRqa3CGgX/QKHcocjncPAK1OB/nH1ea+DaRp8ADXFwh2Wi8XXGhOTo5stP84oXgxDTpxnW3fc7T7JONTOduIq1rXZj6wz2JfvhanOj9BoCzSaGEbgr/3tTFbgIGURxdx0dGJK1lWG74WXKuHKfalU8rZQwNnD43MxdCnP3NSVDy1Vw6oGzwm0pHWDhxhBHKrtIpqwHmsE6M0EQsnOeVg0BuvgLfWbYF8nx6n0/0a2aUKa4aQKZ0gSf66Z4O/DQ+B9Me3re4vzfZu1PvhbLtiLLwo8c1Ui5YyJUgOXexCscyuKX1hSmt0N71Sw6vSiyc4CB1wy7aNM0Bs5PPzmnpz6rV2yz/kbHh5SF43by6ZezbTeZQLEnv25MNP143RkwteaXejdklBTP9A7DxCu8yapE+ElTXzTIycfUuDAY2tIavgeCm/BvrbWbtBkBTCjHGUs25qXRA2euIabz+/b1Q5i4M5CXX1LxrSFjcqBKZSF5q2d5haD5SLLpzHt7KIMK712rUhZNPhVRwjM692QA+E2C64rE7DyktgHjKVcA6Bim//C/XhLXGJlCmvYRp5sBEcbyT017AAAsEMUVxSlcdpMix+XoPvwZ20DCwqmPHxLST4lUJTxxlnyXBhCGOjh1AvfQr8gybTWYityzuQ9uBDjfoHaNeUxWVGVw8aR/t48On2Lr/GjKpoUKN01+l9Mhpr+skaPlbtGYoMlkPcpvuP90jkpe0e1MzpX2CFp1lxAO0CzagG9h+lwou/3NxNrL3bQjq4TdSAakJClbEWEsNZDwOdfGZR6PEKKdyOTRlNEx4HFxr3EEdp1HaiAWIrvoRlCPvmYY/TkXWt0zE3KWoGPj66bfUr7XX0X/4e8zaMV0CJ6YbdST1okszqWO9LY3MMaHplq4ZAS1soxtm4KrHSROMtDnjEKG8qXj/ll8+1Kh4sMJpoHfizKTbxyzevnh+/nYpsbq/5lo9AGuCbdOCogjhC3m9Hln9ZR5Vo6fMhHWi5rswX34z24oYDy99/NffjC1Eeq00zNKXAfM0pQx6hJBBnwg4rYT7xF018qjBg/iKmqjS2d3n+wH4YNjwqpNQmWpm9wXYUqu7kqJ9F/2ueF4MzuF/TpIu5TXxuttxr0wyFo0m7oKD2FxweUX3nhhYIFAENoq5iIFk6oWiXjwb4G5QQdgmMdGuJABSSr7SL05Va0slDWhHMr8McgBl51Hcrh9ZgwF7xjhlc1AGeWAFttFCz0P2LGOODI1N/C7HI7EqH7IU8ktppih/UDUMG6fz6vm0ecZmx4J4leis3aKyIpAJe/Yv8q8tCkv3fP/N5lwdDF9eK37lX9PovaICkhyD6zBU8MEf0R6RwaT5JMu+iVl/4jgjpEHaTaExt0deV5a8gN4iYKbeICEamSVjK5p72biJ+a0cRJg/6hq2UbIL0rzXzQzkcKY/wwJ9mGazxnWqD+mCmSdpC+FSXnTDTRoTeFsgirrxF3IfcRi4hbfo3AcnzDnEEuX5YpjEoawROvIb2FC3W86iBFTkKjWKBHNiOtyi4pENbl0yVKNuVo5c08wmy+PFBAXHVyTtdqO6LM4ed/OpIMfVIJnFCIBNZ69Y1uGJxxQWWF34qLI0NUVfYDq36ef8h89Okas6AoJHkEAvD2PnI4zveEyiv7k0IvAHllZgSkzcUfZ4jMIm68x4CXLaj4Xh7rC66r1JJAYONPmaOHM7zA73yURS0W9cD89q8sl/0LQ1cm7C2ajyG+zREsjzhS4LVdgxE9/2k1cD0Pl18BCDo9chZPzO1VTw9zNEn7jelk1uvtJBT8FwCClVbg4d3xYeqPZcDDhRdY2DObNLDvZyQ42h1lEOabsFGgPYO8DvcrSv7IXMR1LVBRU7MACxYxbm+ctan0ZDH/jz9PU6HPXplno5u7WmUFDUJ+vN+b7KfDUr24lIaKWpFwA4YhcuiY42rI6nrvQou+uALx7vJDviES+kQSTslmEsExBYDvplkIxKProzZCJRMGo2Kmn0G39OZSK4pGJMjTGaOdKrx85VXdPMyS6aAlYQcAjooppkKuzYMv9O8AXSgyLTAVlrDvJ2dyUJbYVsp6spi9wOskbyHboqjnPAa0hLxrMGb+Ilj362vLDppen+RCl7GZBcaLZ2Q5NPnRdL32F/F0L4Dd5bTe9dmrjxjBeA1CDQ6py7UG08FWZzJgWLLiWcw=="
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 35,
+     "totalTokenCount": 6388,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      }
+     ],
+     "thoughtsTokenCount": 854,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "-5oFa831LvyswbUP76zuqAI"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|A_clean_black|0",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:11:25+00:00",
+   "seconds": 8.5,
+   "http_status": 200,
+   "request": {
+    "prompt": "画面全体が黒くなる区間が存在するか確認してください。存在する場合は開始時刻、終了時刻、継続時間（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/0idhk1jqa4tl",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 29,
+    "thoughts": 494,
+    "total": 6022,
+    "by_modality": {
+     "VIDEO": 5460,
+     "TEXT": 39
+    }
+   },
+   "cost_usd": 0.0061,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "提供された動画には、画面全体が黒くなる区間は存在しません。\n\nよって、回答は「**なし**」となります。",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "提供された動画には、画面全体が黒くなる区間は存在しません。\n\nよって、回答は「**なし**」となります。",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 29,
+     "totalTokenCount": 6022,
+     "cachedContentTokenCount": 3711,
+     "promptTokensDetails": [
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3685
+      }
+     ],
+     "thoughtsTokenCount": 494,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "BJsFa9CvKaCjo_UPovXWgQY"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|A_tr|1",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:11:37+00:00",
+   "seconds": 12.7,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/0idhk1jqa4tl",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5505,
+    "output": 188,
+    "thoughts": 675,
+    "total": 6368,
+    "by_modality": {
+     "VIDEO": 5460,
+     "TEXT": 45
+    }
+   },
+   "cost_usd": 0.0074,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "炎の中で、人間五十年と敦盛を舞う。そして奥の間に入り、静かに障子を閉めて腹を切る。乱丸は最後まで主君を守って戦い、討ち死にする。遺体は見つからず、謎だけが残った。\n\n映画やドラマ、時代小説で、この流れはほとんど定番になっています。でも、こうした場面の1つ1つに出所があります。同時代の記録にそのまま書かれているもの、記録をもとに後から膨らませたもの、そして記録には全く見当たらないもの。それらが混ざり合って、1つの有名な最期が出来上がっています。例えば、「是非もなし」という言い回しは、『信長公記』の「是非に及ばず」を言い換えたものです。似ていますが、同じではありません。この動画では、記録に書かれていることには出典の名前を添え、",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "炎の中で、人間五十年と敦盛を舞う。そして奥の間に入り、静かに障子を閉めて腹を切る。乱丸は最後まで主君を守って戦い、討ち死にする。遺体は見つからず、謎だけが残った。\n\n映画やドラマ、時代小説で、この流れはほとんど定番になっています。でも、こうした場面の1つ1つに出所があります。同時代の記録にそのまま書かれているもの、記録をもとに後から膨らませたもの、そして記録には全く見当たらないもの。それらが混ざり合って、1つの有名な最期が出来上がっています。例えば、「是非もなし」という言い回しは、『信長公記』の「是非に及ばず」を言い換えたものです。似ていますが、同じではありません。この動画では、記録に書かれていることには出典の名前を添え、",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5505,
+     "candidatesTokenCount": 188,
+     "totalTokenCount": 6368,
+     "cachedContentTokenCount": 3711,
+     "promptTokensDetails": [
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 30
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3681
+      }
+     ],
+     "thoughtsTokenCount": 675,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "DZsFa4inCcSp5NoP2e2JuA4"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|C_tr|1",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:11:46+00:00",
+   "seconds": 8.8,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "audio/wav",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/zx4o0r4sg03o",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 1546,
+    "output": 196,
+    "thoughts": 784,
+    "total": 2526,
+    "by_modality": {
+     "TEXT": 45,
+     "AUDIO": 1501
+    }
+   },
+   "cost_usd": 0.0048,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "炎の中で、人間五十年と敦盛を舞う。\nそして奥の間に入り、静かに障子を閉めて腹を切る。\n蘭丸は最後まで主君を守って戦い、討ち死にする。\n遺体は見つからず、謎だけが残った。\n映画やドラマ、時代小説で、この流れはほとんど定番になっています。\nでも、こうした場面のひとつひとつに出どころがあります。\n同時代の記録にそのまま書かれているもの、記録をもとに後から膨らませたもの、\nそして、記録には全く見当たらないもの。\nそれらが混ざり合って、ひとつの有名な最期が出来上がっています。\n例えば、「是非もなし」という言い回しは、信長公記の「是非に及ばず」を言い換えたものです。\n似ていますが、同じではありません。\nこの動画では、記録に書かれていることには出展の名前を添え、",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "炎の中で、人間五十年と敦盛を舞う。\nそして奥の間に入り、静かに障子を閉めて腹を切る。\n蘭丸は最後まで主君を守って戦い、討ち死にする。\n遺体は見つからず、謎だけが残った。\n映画やドラマ、時代小説で、この流れはほとんど定番になっています。\nでも、こうした場面のひとつひとつに出どころがあります。\n同時代の記録にそのまま書かれているもの、記録をもとに後から膨らませたもの、\nそして、記録には全く見当たらないもの。\nそれらが混ざり合って、ひとつの有名な最期が出来上がっています。\n例えば、「是非もなし」という言い回しは、信長公記の「是非に及ばず」を言い換えたものです。\n似ていますが、同じではありません。\nこの動画では、記録に書かれていることには出展の名前を添え、",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 1546,
+     "candidatesTokenCount": 196,
+     "totalTokenCount": 2526,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      },
+      {
+       "modality": "AUDIO",
+       "tokenCount": 1501
+      }
+     ],
+     "thoughtsTokenCount": 784,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "GZsFa8W7MvGt5NoP496zqQo"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.5-transcribe|s120|C_tr|1",
+   "model": "gemini-3.5-transcribe",
+   "at": "2026-11-24T14:11:47+00:00",
+   "seconds": 1.3,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "audio/wav",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/zx4o0r4sg03o",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 1546,
+    "output": 178,
+    "thoughts": null,
+    "total": 1724,
+    "by_modality": {
+     "TEXT": 45,
+     "AUDIO": 1501
+    }
+   },
+   "cost_usd": 0.0052,
+   "modelVersion": "gemini-3.5-transcribe",
+   "text": "炎の中で人間五十年と敦盛を舞う。そして奥の間に入り、静かに障子を閉めて腹を切る。蘭丸は最後まで主君を守って戦い、自刃する。遺体は見つからず、謎だけが残った。映画やドラマ、時代小説でこの流れはほとんど定番になっています。でも、こうした場面の1つ1つに出所があります。同時代の記録にそのまま書かれているもの、記録をもとに後から膨らませたもの、そして記録には全く見当たらないもの。それらが混ざり合って、1つの有名な最後が出来上がっています。例えば、是非もなしという言い回しは、信長公記の是非に及ばずを言い換えたものです。似ていますが、同じではありません。この動画では、記録に書かれていることには出典の名前を添え",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "炎の中で人間五十年と敦盛を舞う。そして奥の間に入り、静かに障子を閉めて腹を切る。蘭丸は最後まで主君を守って戦い、自刃する。遺体は見つからず、謎だけが残った。映画やドラマ、時代小説でこの流れはほとんど定番になっています。でも、こうした場面の1つ1つに出所があります。同時代の記録にそのまま書かれているもの、記録をもとに後から膨らませたもの、そして記録には全く見当たらないもの。それらが混ざり合って、1つの有名な最後が出来上がっています。例えば、是非もなしという言い回しは、信長公記の是非に及ばずを言い換えたものです。似ていますが、同じではありません。この動画では、記録に書かれていることには出典の名前を添え",
+         "audioTranscription": {
+          "text": "炎の中で人間五十年と敦盛を舞う。そして奥の間に入り、静かに障子を閉めて腹を切る。蘭丸は最後まで主君を守って戦い、自刃する。遺体は見つからず、謎だけが残った。映画やドラマ、時代小説でこの流れはほとんど定番になっています。でも、こうした場面の1つ1つに出所があります。同時代の記録にそのまま書かれているもの、記録をもとに後から膨らませたもの、そして記録には全く見当たらないもの。それらが混ざり合って、1つの有名な最後が出来上がっています。例えば、是非もなしという言い回しは、信長公記の是非に及ばずを言い換えたものです。似ていますが、同じではありません。この動画では、記録に書かれていることには出典の名前を添え"
+         }
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 1546,
+     "candidatesTokenCount": 178,
+     "totalTokenCount": 1724,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      },
+      {
+       "modality": "AUDIO",
+       "tokenCount": 1501
+      }
+     ],
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.5-transcribe",
+    "responseId": "IpsFa6GUKIiQytMP_auygQ0"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|MUTE|1",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:11:55+00:00",
+   "seconds": 7.7,
+   "http_status": 200,
+   "request": {
+    "prompt": "発話がない区間や、音声全体が無音になる区間があれば、その開始時刻と終了時刻（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/n3zaiwocigb0",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 24,
+    "thoughts": 640,
+    "total": 6163,
+    "by_modality": {
+     "TEXT": 39,
+     "VIDEO": 5460
+    }
+   },
+   "cost_usd": 0.0066,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "以下の区間で発話が見られません。\n\n- 00:15 - 00:35",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "以下の区間で発話が見られません。\n\n- 00:15 - 00:35",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 24,
+     "totalTokenCount": 6163,
+     "cachedContentTokenCount": 3725,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3699
+      }
+     ],
+     "thoughtsTokenCount": 640,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "I5sFa_WwO6mq5NoPqdOSkQ4"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|BLACK|1",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:12:04+00:00",
+   "seconds": 8.5,
+   "http_status": 200,
+   "request": {
+    "prompt": "画面全体が黒くなる区間が存在するか確認してください。存在する場合は開始時刻、終了時刻、継続時間（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/8v4nbb88b1zk",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 43,
+    "thoughts": 384,
+    "total": 5926,
+    "by_modality": {
+     "TEXT": 39,
+     "VIDEO": 5460
+    }
+   },
+   "cost_usd": 0.0057,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "画面全体が黒くなる区間が存在します。\n\n- **開始時刻**: 00:30\n- **終了時刻**: 00:38\n- **継続時間**: 約8秒",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "画面全体が黒くなる区間が存在します。\n\n- **開始時刻**: 00:30\n- **終了時刻**: 00:38\n- **継続時間**: 約8秒",
+         "thoughtSignature": "EvIICu8IAWkUfRPAc2RKUEcxMzqRmTcz364xw2V33q9tBn/JT6SRXfC4JJYDfb8sEtHQQliwb4UXD1j9P64Tr+r8mb5NsqSEFhGtwtg5G2AdSdAY4z52rG4Swy52VLuy+0Qi/Y4IMGcMu1aKoGLzX0CX3epiPg12/LmljvreJEWoAUk83ZD5dG9zO/xSIRAV6mVA2bOydNNrjVMKC31ipM72ufC0O5iNv4TCXbRgCABbqPt/LWO7Yc59Bhg2yanpJWXTniZtee28k094DQi/wrdzsjw1HHLAWcyjXY1X/Lpq8OC+hxOH5DO8hi0dH08Rt1f/Ggqr/V7PjWE2zicvh/z63edPLCMmsdKPBM6QMBnlqcJrbYlDw8R/BoupQoDjFXTB4iikc5u6RFTfIu6s50KAC6zS1X88vBGLGiDopyukcq+j7n8h4Sa4nTnt/L2oqo3Mle0GJhy20E2ORAXZIRCRu6bx/bs6vSs5Dkazo77B2+L7CbueESmfra7VOu0Cg/9cfAVMbcTWSnjWfDKfS07YHUf2qfovhThsBNFjWqW7tZISKf16YDDH64d8/h9ohxeF7rKxUgb4Mu7dm3nl1qqNlaK5FJvFxChclY37D5eBTnK+5sryFlr5GkN+gn7cZwFciNSdFChYA0Fm0NKoSV0TntzpRXS1//buJ9YNO3zyAdowpZU6I/+QusvtX6PWWAedIt/6k+tMiShWR+tIxcb0KcvQgIx5c9AssZRja7AY9rdIty9NB7FxYLp6WQLX8xysyJGPnuJZw+immp0UF729DmxXZMiZwXBuaEHC7W3OMyshmcQEurCgLwive5gSIhBUFLMPV6n1fomDjeTrLDvnZYYkqVlNboRssbcMb45HwmRF9N8uohEk0kFbzjRvg/uOWc42CpgkyWf+tKfMKsAmIlGpbMAmQ5ok5eZ09MUzoxrfZY9KNAIMib2TREeiMdOT88vRGQqT3Vw5gLq/u8prNbM8VXM9y8dN5VhCECa8VWo0ZhxITsdOngHr435g0mqaKo7VfXk+vVIdvDtK8RfiRmqhi9XL9xL8acncIcVtFBATH8fzlqtm4xvPGAuHhny17/yLNCy4sxnLtf44XeKNWd7gkp7swq5IGY5C2ZKQ/tTlqVn7BoRIVu1bdxBaGwZHXocWf8228dcku0rhfJb9gR9/6Q5Pw3VzkJYj4g91w7B88vMZX+U8OZGJ3NYP+X37D5B5BPJz16xWWmOewHPpzXRukUgq7qFytL4CkLKc9HGMuZ57FzbOVTt/nE1acJ8fQtD68MyapffkSlqL9tHJQjmn38M1VfZag4iiKVHfUtL4RCEfrX2etscbvbqMp9olcE6O2eXrvgDNeLALKnEr+7sxI2/Lif526YDAvFZJbJ6I+mi1XHgdrty1nnJZn8TDkt1aSdIAi/2BqeznNxnQlZk1CK+zmOoOSjuttkNr1UiV6etX0wR9Ylt/r7+/bg2Q10qFxUUaDLLc3Wg0xeU5C9efQp1YUxlZ1VNvmikUfHsu8w=="
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 43,
+     "totalTokenCount": 5926,
+     "cachedContentTokenCount": 3725,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3699
+      }
+     ],
+     "thoughtsTokenCount": 384,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "K5sFa8bcKvyPytMPs8Pu4Q0"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|A_clean_silent|1",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:12:10+00:00",
+   "seconds": 6.8,
+   "http_status": 200,
+   "request": {
+    "prompt": "発話がない区間や、音声全体が無音になる区間があれば、その開始時刻と終了時刻（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/0idhk1jqa4tl",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 17,
+    "thoughts": 525,
+    "total": 6041,
+    "by_modality": {
+     "VIDEO": 5460,
+     "TEXT": 39
+    }
+   },
+   "cost_usd": 0.0062,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "この動画には、発話のない区間や無音の区間はありません。",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "この動画には、発話のない区間や無音の区間はありません。",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 17,
+     "totalTokenCount": 6041,
+     "cachedContentTokenCount": 3711,
+     "promptTokensDetails": [
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3685
+      }
+     ],
+     "thoughtsTokenCount": 525,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "NJsFa5X0DMK6xdIPo6uuyAg"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|A_clean_black|1",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:12:38+00:00",
+   "seconds": 27.3,
+   "http_status": 200,
+   "request": {
+    "prompt": "画面全体が黒くなる区間が存在するか確認してください。存在する場合は開始時刻、終了時刻、継続時間（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/0idhk1jqa4tl",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 7,
+    "thoughts": 317,
+    "total": 5823,
+    "by_modality": {
+     "TEXT": 39,
+     "VIDEO": 5460
+    }
+   },
+   "cost_usd": 0.0053,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "該当する区間はありません。なし",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "該当する区間はありません。なし",
+         "thoughtSignature": "EvsICvgIAWkUfROm+0WtYVVKHp55esT6U8Id0b9J8Ayobsc1eGNUL83uJho9pDJtM5PWLlD5ouEY8twNL+Q81/DbTYBYPsxavHan2zjqQ//w9rQ66P5mqJGdcqdA9zoZd2QX2aec8BVy9Qkm+ydbYUKa/hsnZKDHYKrEk4xb7B3ZoSdcvvWs/2N3rXdZnpuibva1ub5sLExr76gFciUaQuY58n3SLN+KDssHe0ByXVFTf1ZekpMdyF0bnwbejAHQLweLFwy9u865HY0NbqEfNqulGSvI4KakxtaUiO6PRuLBWkxSZQdXPkLRCzU+3661QWnBE+SWuIVJrsJo2FwO9BToEWx62ft3RWYK1wmwDUCO8xP0T4aLTFik0/FNKVhQcxeKtwSaa+NHXM+rGdLUcijASzrBuE3YxIXHNl4HMBEF1tVyEw6X5U2XjiPbc6AETsVf5Ju520Awi41e9Y/dmjRxp56bscEfo71dOfTxkCDNL7UL1jhbTKPNAAaxorS83aOQ76I7tmejrbwaR1LZ/4Tmti62TNPQstnfKj4Ub1MOcLjTgatWfb04kuk04iczFfb1l5nQBy+qWWePW+QRrEdOswSTZmWC/7W9i2fhNndUAKqH2qlhWixLl29KKdt7jR/ZNafbK8GVGoaJPT5pc5yaIi+Gs5dyaK7Q8NUvG8CbUsBuU0BtLW5O/IrZbUIA4qOqCCcz1tAVlyUoqVHEmBr8HA7e09lds+SolFtmcDpuYOin9zU9wgE5Z3LMlZpzFeVIq3rM9mizI9LTnR2eyCQr33zbx5TjzYWw6izmz2oZyYWK/ZhuhgsdNgSajVkbz9lzZHBt8etRd+n4VOUYj36bcF9fiPN59nmNULO+7hJcETgfefVU+zffLjZ9ohiOME7ntR+CzGXiVIiI8VZSeVs3feBf+GyHGdSoiA7qKEWuf2QBPAqrUSWOZGEPGmC3Y6/6QRh1Z07L4StI1CDj2BXbnEWVb25lXip6DEZU2ftkMJ5bCvCIEVPIj39sBd25i29wysWqmL/VBbwzcOIgcCMBG9MdqwuA/ZAutKP+4IgUIpaXWXQ/sj6NDtLRmo8KO0SIuqA1jGm0VzHq+pmcLwHjl06XgQuk5glMlpWECHS1mn8KxshpePy7TAX7ZZ35DuwnQYoYJxctazV5PeFDw7ydjcvgUixMWybkZcGvQnMRwla8laDzqgBK9Gi+NQ8sHh+Pd7X3hdTHx8bL5is0BC4XuM6h21ZbonJ5yuSJ3wcwd/IXqgeFR449UWeDQun96DGAIBGCQlNnQEFOO2Tcfw/yC+coTHp3zRkvRqJgVShvg7txSEXTr+P7f83Uq7sVJ8g8MjheISW1F506UHTO+ebusA/Pd7zWPIq5zMYDeNFda99Sa1ql0gkTJzGSsPlbV4VhE5fNcAuQG0EbEOHNmMfl2/CwjxqWSuq9+YKbZ9Q4rEboM6BwYM7Ltt8Ui9QTjlRkJ8711Sh/X5bDhHHs8KPsh2iL/N+b20kJ2yG2dpSGpvIUb43p/R73ppLeRA=="
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 7,
+     "totalTokenCount": 5823,
+     "cachedContentTokenCount": 3725,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3699
+      }
+     ],
+     "thoughtsTokenCount": 317,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "O5sFa6ZQi6vK0w_murbICQ"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|A_tr|2",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:12:44+00:00",
+   "seconds": 6.5,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/0idhk1jqa4tl",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5505,
+    "output": 185,
+    "thoughts": 240,
+    "total": 5930,
+    "by_modality": {
+     "VIDEO": 5460,
+     "TEXT": 45
+    }
+   },
+   "cost_usd": 0.0057,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "炎の中で人間五十年と敦盛を舞う。\nそして奥の間に入り、静かに障子を閉めて腹を切る。\n乱丸は最後まで主君を守って戦い討ち死にする。\n遺体は見つからず、謎だけが残った。\n映画やドラマ、時代小説でこの流れはほとんど定番になっています。\nでもこうした場面のひとつひとつに出所があります。\n同時代の記録にそのまま書かれているもの。\n記録をもとに後から膨らませたもの。\nそして記録には全く見当たらないもの。\nそれらが混ざり合ってひとつの有名な最期が出来上がっています。\n例えば、是非もなしという言い回しは、信長公記の是非に及ばずを言い換えたものです。\n似ていますが同じではありません。\nこの動画では記録に書かれていることには出典の名前を添え、",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "炎の中で人間五十年と敦盛を舞う。\nそして奥の間に入り、静かに障子を閉めて腹を切る。\n乱丸は最後まで主君を守って戦い討ち死にする。\n遺体は見つからず、謎だけが残った。\n映画やドラマ、時代小説でこの流れはほとんど定番になっています。\nでもこうした場面のひとつひとつに出所があります。\n同時代の記録にそのまま書かれているもの。\n記録をもとに後から膨らませたもの。\nそして記録には全く見当たらないもの。\nそれらが混ざり合ってひとつの有名な最期が出来上がっています。\n例えば、是非もなしという言い回しは、信長公記の是非に及ばずを言い換えたものです。\n似ていますが同じではありません。\nこの動画では記録に書かれていることには出典の名前を添え、",
+         "thoughtSignature": "EsEKCr4KAWkUfRNqItNapGfTpIb6axKKQe+N4cQVPyxNU1zHbDxWEKYkM3IggSbsy8dQLeeW2Qz6jhxidsRbexxQknuYNsnDAoSr2KG7ySGrTqfLqZChiAjm9Mi4oiXOSV38jUvXRMRZ1ivGFC5u4LYlr8q6IskDJ7juKDPoPJm5YdopAdG0zwAo+elT4AXTJthruUpmy7hA+8GHSmR/9F0XI7RGRO03XmwqTcdDKn8oHMGZWRwHjFNdIcWFSPlbCfewhzwfK3XqYBoTWuzyOthrsDuJCHrk3OTUM5gzBUJwr9BGMEgX5AhpbKLKs6oGFNF+pcBTu2uKU2Bpa30b+a9w8EWneWx6HikC5cJ28ve4q0IHUx25b13E/Zp4iq9Bfx6eHAGog6lkeZDQzF4Qgrp7FUPuufjMTIxUZLapwmQbVwG7lC5vd7spFBFx+d4lMrEajFWbSzDue5jqKV9jKQcqMsSmozXTN+f2GOPXQf1a0hbBSfSCdpG+KjGudEQeThxtxAc4EoF5376ZFya5HHt/tkAf2TSJqBqOpxtJsS+bNk4M6L7voal+3tUA7htWL+Fc8xfJzFSf2PBTYWZZ4q2hsd/vzv4iyuDYivIZEBZS4lrOS6kMNCupUgKgvXmOR4pdJYAfjPa8olfDNE4f05bU+aRIzshkqXlCQLp0CGYaCdgTXku2/0+qPYKiGj2Yt0r6GuIRqLtyMgHu8iw9s8Hx4Szzc9zyHMB7jo7UBDITWwJhpgVop2so477hIYt+NR4ZZ/K72VM5Zv4fCP6KQAWel7t4QGyAeWlild2SgYlAA3u3E3D6+SUPBE0xwHWXBEStH8iFfw+gC67vAAthyFrxC977A2Z6gh8mHEgjPf/McGtnEgnmbfkGk5JjbhwQ9+RNVZP86FVTorP54nNkLf1CNE2mw7+g282U5VnEHmCkpcQdiZUjPyfk15tatlDMRaCs4GfS+X5TWOhTORWpXyWOyRrgKgXr0hnbCtalWSmT1CHVuSwsN9WQGZvzJuRdCUutNN9uRBWF/TiZKZZ2viwDNnV0AlOKXkm6lTcCHjE/0hFNsuOJZV6isUYNpOLPnJfDXEkdcf+z7OSZRpy/9NDErkd4FhhCjwLekq9CWECd1nQHErtJffe5uSbEoCmKPuMIKQh2XuMbiH6sXsx9vGkDHkiaLVLifiiq5qgeLYgwW+52Vxm8/vfeOa9lCKDJvdjymq36K+JRtdp8ZNZwptQ2v2r6uzw/xCKlaCmIrl7u95cF+irJlwsrpukuGItePY2vLY48KjUxZKNwzdJOUHVc53wi8mjocXuoSwZJi/RmxCNGGZectaauGZ0alj66yt+FSwihhDYBFMQLGTGgZYOCNjvBAmAAIheQAsb3Kn0LQd7B1k0gOHeK9di18e9p+j8M+VmJH1VSQTwxLYBeZ3JlygR4SzqXBbEs870zIvt4DeI6jbYSnSb1NBnpHQTZ0xSXxoWkJvvVqFwMcYYZcG5g2HYqjgczPqdxha3CaM+knCkJe7Bng4ZhyR0lt7Jxo1uo1f2GafuE5HTRpJpNR4e/yYm/zaAL8LPBRyprTLLlAdB2/LhrAjidpn8CaFw7IZD1GlWU2lC/tvEUfBRQqB3virq18rWh/3ATt9ZchM2TDL9QOtx5VT69bw2XjYtfCK41FwU15QtGNmsD2D3eDP/fR9gARK0fvv6tcNCH05dCOV6Eo7PjowVIdfEhFfVEe9inOe0WwXOVcFyraNslgAMAfpK87GKvWPSh9mAayI63IZk3GSiQcGFM10/UZFV3gaZgNg=="
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5505,
+     "candidatesTokenCount": 185,
+     "totalTokenCount": 5930,
+     "cachedContentTokenCount": 3711,
+     "promptTokensDetails": [
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 30
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3681
+      }
+     ],
+     "thoughtsTokenCount": 240,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "VpsFa-n8FP2o5NoP0O_j-A0"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|C_tr|2",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:12:52+00:00",
+   "seconds": 8.0,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "audio/wav",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/zx4o0r4sg03o",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 1546,
+    "output": 199,
+    "thoughts": 646,
+    "total": 2391,
+    "by_modality": {
+     "TEXT": 45,
+     "AUDIO": 1501
+    }
+   },
+   "cost_usd": 0.0043,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "炎の中で「人間五十年」と敦盛を舞う。\nそして奥の間に入り、静かに障子を閉めて腹を切る。\n蘭丸は最後まで主君を守って戦い、討ち死にする。\n遺体は見つからず、謎だけが残った。\n映画やドラマ、時代小説で、この流れはほとんど定番になっています。\nでも、こうした場面の1つ1つに出どころがあります。\n同時代の記録にそのまま書かれているもの、記録をもとに後から膨らませたもの、\nそして記録にはまったく見当たらないもの。\nそれらが混ざり合って、1つの有名な最期が出来上がっています。\nたとえば「是非もなし」という言い回しは、『信長公記』の「是非に及ばず」を言い換えたものです。\n似ていますが、同じではありません。\nこの動画では、記録に書かれていることには出典の名前を添え、",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "炎の中で「人間五十年」と敦盛を舞う。\nそして奥の間に入り、静かに障子を閉めて腹を切る。\n蘭丸は最後まで主君を守って戦い、討ち死にする。\n遺体は見つからず、謎だけが残った。\n映画やドラマ、時代小説で、この流れはほとんど定番になっています。\nでも、こうした場面の1つ1つに出どころがあります。\n同時代の記録にそのまま書かれているもの、記録をもとに後から膨らませたもの、\nそして記録にはまったく見当たらないもの。\nそれらが混ざり合って、1つの有名な最期が出来上がっています。\nたとえば「是非もなし」という言い回しは、『信長公記』の「是非に及ばず」を言い換えたものです。\n似ていますが、同じではありません。\nこの動画では、記録に書かれていることには出典の名前を添え、",
+         "thoughtSignature": "EsMUCsAUAWkUfRNyytALdyzd1xHCddV30uBCa2ewViM/v2FesNXwUQaEXq6oSaFU5oYYq/S7CCqS28KBSmWgIXHCx77OBcUTnXw3Xg0niAxb4O7jH6YniUCnXZ2j9lUDhRVyqcrr8fVVBQMbmQf3y+I55NZAb1vWszslB8M3plLDT2DzOTc2bKbEQoW8wa7DxvZebNklhmsb5IQlF493qAR7jwcjy70gyniEqxBkJNhta660I5pwcfrmaTh8ct4mx125xEhvbl0mz7ZIXv2WpZwPYyqsNGtzpNvhA/d/hSbzFnQ+9HGtoypSpodhDRziNa0VHVb1pBnsiGgF5/GKIo4LR9YCfO1PHGGNHZuc2WeEvxViVE++5xic9KRJUEwz4lGkgl9cUJIFwDIIgHkK8lqNM4wLE2ZKwVio5HzGgJOK3TtFkGLmCovex4xspxnUo9eAHGty8lk+iTihFpjwkGE2t1I+bGTqeL/hs1Z2VHmRyRC0xZAeAkPAoy+z3P5BhaqlMufsxi1Mwa29OsMAwNLsVBBAdEmnsOtPKjMdsZaiE+O4QFIR9fjYpayQMjwM+wTAZ3fupsQC5Roc1BSDekOInw8PIKB91jGF4FDkKoANpCVEMkurVmFQfB4Vt9toEfaV0I/47Mefyz9DZL73PmhRmtD8OSN30AGqKJBclBLJxGpz+56iulhn7ERgx1z7MegGWuM3GAHAVky5h6NaW1eX72GgUcvrQtd79qzkCQ1Ssj0DKvskhD7jEVQ2GQLB7lil0yTQzx4WqGfVGiXGU4aE57/8+9FmmmyydkyU2bsK68vu112Sn1M9yusIaBiFxUsmNpdSi0ngw4BeoRlA+SfHFk/n3Sd+jQxUAZ1e//eARTeANf1z7j5QYfJE9dGC1yGIXcD6LFery4aAJCfRS071T/CHKRJTQ2YkQ0v0wCTWGn2TVsA1GrSVjtynrd0LUn/RA5anIpRFQS6Kca1pJdVM9F5sfRlVBVHkcz1IDnx4p1+rsydVP63Cg21Sn8TSO6HKVTaMRtln+D6Y/F8jdM5AtfIFMja4UkXdb8+01zKdiuLnhCCWCpG4M6kM2S5gDPOe+brSy3hFrDBttEnrjnyXvkKGXtDFGaOBGk7boh9vx5MqeVSnhyAdGCd2NmK2CuwEadtnmVOTtGf6eY/sQXZPsv6zAmHOVL4Qa6gdcqY9yTy7hqlqxt5gMKmhQIdsx4NaS2jaKdlRAiC8lqwKFnG5wJKNlvopZ66ro/V8SJXjvRFzf6SOQ5fO+XiO5AsK3HljTxDnEg1MpKNXLHuh4hbK2l2dbN+YlxiOAEdP4W3C40ZGsGaXKFiV7n0RcnHq9yHgMyM3QW97wn0K119F8Okh+khPDFPpiwWvpzppl3lqfDdb8CvEcDR9tpaUdnvA3Zz9gwJPrrmm+vpA946c4jBhfH0iFVKYM7HiDRsRfUWAjBXw1tLVKiDGuJqERFB0m4BvpOTTLUPJdgWSN1uX/jc3exBnbIKW6ZIBdPTZMJuh57mevsjfETxxoUSEd5ajin6MSxL++WteNPTB6ptWYar9Epr6cdbYlI9i2S8bf4/xGS6Zrmlc1PK+AyD//0nR6v7JQhOIwKV7JUvY4ZmpGIbgNbZPYkjsmgYoykweNZT3vRN9Sv2fG+pqwOSKC7D8Y/ezbspClAiRMed4jicB1hvHVa55BO3ked2DlZVKnmOqPbvwnvzIQNmSiyMtHksc1IAnny+h6qEO/danA3tmvcdTdz4t8aOCBScimgw42XtVGdkw4GN/gXg4itPNxyP6CdiIExAI6qKs9iP9sc+qwhDZ+3aEmZOIYC/AnEiNepIXzBsZrIXLLVSUSVpTXqZ+U1Ar9DpY/BhEqtdnsckQjku6xgWPwHC1XqVUL2L1wYd0rAPodAgQjQodkgKg+3LH2l+1/O9CZyN2uE2D20tPMy+NKFX27oO7HRHI1gWfd+rX//2ItzveCCKzgYEhaIacxkBedDN7jbzfVBvxDnAZIgyVWWN9nNAKM/ueEfrk2unKDnXJvr0MY5MDzzM03DLAuB0VQhED8Ir6Z1ZiV+Lb87xfJ5mISlBfeuk1b7o0xWRbklT2Zl8z6EU0led4ordr7i+bvumNV/F1vsALuxTTTJ7Uwn9Y7f2NhRyWh1a8Nkn14uY5RHrUzRhqPm2+mPNlxhDlHkwmMnfkFGSBbuxJ8z89RZof3ahI4mdCsqTzHsqFkzJ4ZRsdhh1ghhjZzoPp1ZwgbTVLOytcLzUjkZNdqal5mgFHu7k4Yg1TM7Y/LydGkLPijCg1O+HPyKMiJKfwbz3VTpgD8/6hO7w+Y++zA92911usxdDc5VnLIOtlsPvoTFd+jgYRQaVCAeWnyhHSQFA7z4w5+hVbk6BSfUc/Q+kuEzLwINSxmN9eBzZvjVqt423k3ej3HnTSznP00/eAuOPIMBeajfcBtf1tP/BgIoL2dTDSivGC8TupvAdVyi/gQxVpHR0O9wqpVfC9sRLsufg8Wv1w3Y2diaeZ6jQahBOpipV8e5PvkuPELE15BwKQ5N67dUb0Wf18qvhpqAgLrfhX05cYwbLP6H3n0lzDh5y51iMCvoBGJCV2CsZR/OF5iCqB0BxTLe5bQhiXST2EYhYUrsfZfmlEPWCa7KsS9xDotGNgXadMqIRafSyo7OQesu0NbfmrRi38eCQuNa+uLDWWofiszRFY/owVfRpD/YXTAw3A/D7bfRiXsgCvx4Eovu/NcUtHVO7Y2erZ/OnmWKB0H2HDUhAROspaQUmUy9Q/YTeoNBo6ZbPn9MkNfGsnI5wrmIJJWo1Bv79UzyfeUeXzpj1zQQr9tDseLbP5/WNJD05BQb7ZY1m+ZPlVpwGZDHriFdW7EwSuGT97lWli+YXDFP8upG1STREKxtUccRVqZtpftmORfPXe6+Mzvzk09niXO1zfMvfF2UShzBUaFK67A37q+dwwkuLFn1AO4wVP33a+LhGrgXCeryOSwUa3ZkaCn8/eQY1QaIoXO5p/o05Y9d2YEU22PsI1gufXCb6g9vAkQlpssn0LI1pLIbVkRaAJJTOsIM6kxgVmLmUU2GYRiJzHunZuo2uFy7yGBRfn6ydxbWz0aVXNOWovubGJMXHvsHPw9HvPIHUM+HT93YO8LTMGCYDRiAwBHxO1FsIlDJMFkmEcG8qq3K9VOOZOiiA77bvVM3LTpvv2Ky7D1+SvFs/iRJtd1jNBOhIGaUlpbjNfwBzOdcFQf3DLGcrCp7C7/NJO6U6MDdbYIjC6DyMSbTmkjL9hpjoiIBp4Wk3XZe8XSUW7Xd1DtrhQ5ij5aEpDsybkZnapg9HpnBp3huy5gy+nWhkgz0Ti7AMHbm619Iu+VcvVKDKGYPRtyte3nHbhNNp1g/4W/9OYg2tSHmFyqBobbrwf40KCXdH9gXiX0ug66won9Zx0RLwV2KDeCfAllEKRc0gqpLe0xeqht0rw6IhoXarQ50CoNTwg6q4E6WvADIqpI+1Y4G6zX6kGlH/h0ns="
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 1546,
+     "candidatesTokenCount": 199,
+     "totalTokenCount": 2391,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      },
+      {
+       "modality": "AUDIO",
+       "tokenCount": 1501
+      }
+     ],
+     "thoughtsTokenCount": 646,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "XJsFa8bmMOyg5NoPjfyYuA4"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.5-transcribe|s120|C_tr|2",
+   "model": "gemini-3.5-transcribe",
+   "at": "2026-11-24T14:12:54+00:00",
+   "seconds": 1.3,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "audio/wav",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/zx4o0r4sg03o",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 1546,
+    "output": 178,
+    "thoughts": null,
+    "total": 1724,
+    "by_modality": {
+     "AUDIO": 1501,
+     "TEXT": 45
+    }
+   },
+   "cost_usd": 0.0052,
+   "modelVersion": "gemini-3.5-transcribe",
+   "text": "炎の中で人間五十年と敦盛を舞う。そして奥の間に入り、静かに障子を閉めて腹を切る。蘭丸は最後まで主君を守って戦い、自刃する。遺体は見つからず、謎だけが残った。映画やドラマ、時代小説でこの流れはほとんど定番になっています。でも、こうした場面の1つ1つに出所があります。同時代の記録にそのまま書かれているもの、記録をもとに後から膨らませたもの、そして記録には全く見当たらないもの。それらが混ざり合って、1つの有名な最後が出来上がっています。例えば、是非もなしという言い回しは、信長公記の是非に及ばずを言い換えたものです。似ていますが、同じではありません。この動画では、記録に書かれていることには出典の名前を添え",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "炎の中で人間五十年と敦盛を舞う。そして奥の間に入り、静かに障子を閉めて腹を切る。蘭丸は最後まで主君を守って戦い、自刃する。遺体は見つからず、謎だけが残った。映画やドラマ、時代小説でこの流れはほとんど定番になっています。でも、こうした場面の1つ1つに出所があります。同時代の記録にそのまま書かれているもの、記録をもとに後から膨らませたもの、そして記録には全く見当たらないもの。それらが混ざり合って、1つの有名な最後が出来上がっています。例えば、是非もなしという言い回しは、信長公記の是非に及ばずを言い換えたものです。似ていますが、同じではありません。この動画では、記録に書かれていることには出典の名前を添え",
+         "audioTranscription": {
+          "text": "炎の中で人間五十年と敦盛を舞う。そして奥の間に入り、静かに障子を閉めて腹を切る。蘭丸は最後まで主君を守って戦い、自刃する。遺体は見つからず、謎だけが残った。映画やドラマ、時代小説でこの流れはほとんど定番になっています。でも、こうした場面の1つ1つに出所があります。同時代の記録にそのまま書かれているもの、記録をもとに後から膨らませたもの、そして記録には全く見当たらないもの。それらが混ざり合って、1つの有名な最後が出来上がっています。例えば、是非もなしという言い回しは、信長公記の是非に及ばずを言い換えたものです。似ていますが、同じではありません。この動画では、記録に書かれていることには出典の名前を添え"
+         }
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 1546,
+     "candidatesTokenCount": 178,
+     "totalTokenCount": 1724,
+     "promptTokensDetails": [
+      {
+       "modality": "AUDIO",
+       "tokenCount": 1501
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      }
+     ],
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.5-transcribe",
+    "responseId": "ZJsFa9WUOfWzytMP5_iy2AY"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|MUTE|2",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:12:59+00:00",
+   "seconds": 5.4,
+   "http_status": 200,
+   "request": {
+    "prompt": "発話がない区間や、音声全体が無音になる区間があれば、その開始時刻と終了時刻（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/n3zaiwocigb0",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 37,
+    "thoughts": 287,
+    "total": 5823,
+    "by_modality": {
+     "VIDEO": 5460,
+     "TEXT": 39
+    }
+   },
+   "cost_usd": 0.0053,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "以下の時間帯では、発話が確認されません（無音またはBGM・環境音のみ）。\n\n- 00:15 - 00:35",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "以下の時間帯では、発話が確認されません（無音またはBGM・環境音のみ）。\n\n- 00:15 - 00:35",
+         "thoughtSignature": "EtwHCtkHAWkUfRN7EA87fgDbwyf3k3m/S2uTh4jQPLEoWUHVrz6sOkHQTudsaj5pCEy0CoZgTPtpAdf7dOXG2IbmSRClFdMYOmLbJzM83j9olejGQB894n3Lc/hgac7ASpgVKsZh+wnequQTBZ2ulnvIDAn+zoxGLu6DwuwDVXt+KUqn55FaFj1/7VdXqHUaCc4vvV0GUiWZDihZyBZbh2y07CnEvbDweT7y3EuAJmI7oBZCasME9Oda/FPqdAr1gDkA4FewCOuJs1oUJSLYgsau8uXQ12ReqKt1BQcl7TtlpQXWbD+rHBFMiVB3mJvHBj/lrW2IfLaf/2oSnpkO972Ew29rYVABm8CN/bDhkJ9DCqqECMRArPxBBHyt8yp0x4dbIM5hJYZEUPhCK4BirEa9xxdtGm3fYwS0j2Yfm63r8Jv623UJtK8rq5aCLoIdIMmYE38pj4rHaV4dq0Z+x3qyK1IqQCRuUx5v7oS6sYXAbB2SbBS0UB0dVBHmFcRr7L1GUAgHyuFfduknDyUWuK9x2qipj5ChtQAFDRQigpuKl7uBqx+M3xoqZwtp7N3IqkyXFpFgJ+RTkQz3OmdrwlOh3grEI8E9JXridOydpwReJhG4iYXW0fEXsEbNQmnGx/EXkYAydTeOcVj3sSuhT3yL/mQzQR80AS5dM09ZsCRgDf86GgKoxfd2W0u/k7HjwDySTuf+pfvnmSlmC4n1MbiHBvAkhp/yeuUMO1S8IvhfO0KCthyKlRlZUYzfQ43m4sBJFuHqfozR9Hh0T8UpwANA+/hma37zydX0DErNNcff2z0YTNNB+okNpO9xfQI8pORpeDqz2cQbDpEsVlPDbPI0uLHkaaEZ1XaSQCpzijyivoge40AWuCbzZiACs1+O2eh7ZL67dAwrsQfOT8cgCxJ2q2TYNnp3LMTloi5tOmUD55DarbaEjQKe9so2u18z3Asz3wD1y8UEZhq31RWfkIBUc4l5GwTChsZxRmNaZ+bzLGCU2nI2DiN70LcB4hdjMw5hBFQFSHtZXRodwW3WrWdtZH2/Ur2niy9TAbSjz2rtmR3qhrTfcqHLtI1ah34wrhyezexN9FJDQVDYBu5BMQ6TGK2nNeuMbc8eQNbeaTfZFyo95PqLo6l+SndSkiTjVI4AH0GzPLn01qAX+2VeFW7gCrmqAOsGn4MRbUdVJ15sKIvr+MTtaTaN55qDqNQv6+5azix3B4+BdzRqUPdCbPkMd3x/xB+RLbfy7F2qsl7VHVi1CXbpqM9r6FpKzPucNNfeDeJiElojDhMo6mbDan65w3I0zo29wxypum3qvQ=="
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 37,
+     "totalTokenCount": 5823,
+     "cachedContentTokenCount": 3725,
+     "promptTokensDetails": [
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3699
+      }
+     ],
+     "thoughtsTokenCount": 287,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "ZpsFa4rmB7miuMYP5-1i"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|BLACK|2",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:13:08+00:00",
+   "seconds": 8.8,
+   "http_status": 200,
+   "request": {
+    "prompt": "画面全体が黒くなる区間が存在するか確認してください。存在する場合は開始時刻、終了時刻、継続時間（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/8v4nbb88b1zk",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 48,
+    "thoughts": 344,
+    "total": 5891,
+    "by_modality": {
+     "TEXT": 39,
+     "VIDEO": 5460
+    }
+   },
+   "cost_usd": 0.0056,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "画面全体が黒くなる区間が存在します。詳細は以下の通りです。\n\n- **開始時刻:** 00:30\n- **終了時刻:** 00:38\n- **継続時間:** 8秒",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "画面全体が黒くなる区間が存在します。詳細は以下の通りです。\n\n- **開始時刻:** 00:30\n- **終了時刻:** 00:38\n- **継続時間:** 8秒",
+         "thoughtSignature": "EvYICvMIAWkUfRMNZisBqQ5jzybQCKjRmNckjHafyBxTzwnM2v4+K9eePBH0R65BmG9wV4DOaw/Y29vF1T6/SdZgVNaeIZE5G/7WdrmipEGxqNibaLif+91+xfNUFDre5aJT9lQNPfOWpNgycB9snUCtEvrHcK34Y5NywiyiSTxZp+5T4mBOpXbySBuPVnYcHZ9W0V8lqhIjeaEz2GKcbuXqG840ruE/HG/jk+hgSCHW/PkNNprb09Snn9YstQ0iJ2fvdBbAfBo4sQ2t9/rSJurR1WAKQaHBbP+cca4ElZ0wBSqsn5zaDOTlNY54WZTmsGgMnWXzTDJSaPKdQgYZz4bwFyH6X+26ZOsV39BWgRHoSVHhVBJ0l4Oz9Mw+gDgSwU8yzNM04zJSo5DeBmfBSS2wzG5D7L/QEzMYxTVJXjIFno40zTMVANGnyiiWx8Y8Z5PJ7zrBdyCrDbsG07DKGSvVogZzKFpmm+gEYkQ9UUoBNbie+rhICcz4+MX3q5kFMW2kthtqeWRdWE7zevm29VG51sndUoBRBEmUQ6rIgZOsRFu5Q3VDuAADuAykjyyOK1PWhfl2iDaJL5/yxaEiqw/mU0EPE3d7X3wYaKKsZUen+VHKHDt8jCvqM+f4mbtVwBio84izW9wmMyAlD4Fmg1aRC0HA0ugDNCMbgs2ZnLfo2Vv+YtJ7wAt8rS30MqZte0bSW0Zfehls7DbyObXRit+sswQQFLIn3Qnr+1qsIx7C+P+jNc8HGhknUjRbvfV2Ler+YImgiaFMynLWRMHNbhRkFA8lASa63Hx6OqiNKhB1VD/4DMlMJLhr8lrVcaVy9pEXGYkXU+N1OKBJjdNnef3yfxX5hFqqFov6sQh4PFgtaubOLIBBFitXUPoJ67EI1M9p2sutvPtaBIBf0jo4bfNwxPJLeDYd2sw0C/ff5nYcfFmlEBz1EDAv53zFz/zCN/r1oD0Lrl1yG+JF5Bk3E+u1bjefAmmwgMVdwwyIF7ZCdR8FlLDqq4o1ZJsZ21FUAe9MISAj7IBc8/+SY8uOxLZNdyHyqfPpmTHzZUtWBuJU8yuWXYM+DzfnG7cQvzGQLi9vUS7gvaTfqmj1QH2ELSlQYQpd8pI1Le5QdQPcfrra1RUdeqXylcglK69GdE/AoAvyjdGmOLbYplC/zJWXFoPg8eDnTlesDWJmJxRsJVjEJZrwM0dF9KitjHehPiOg4L8X7ni01RCsN58lm50ff5Sx+HrV5nvau8iO/N5rz4SBfyW9ZP7384igmjPOvT4G59IJA+8l7kei5iMYX+E0x1tn1jTJVXSWJcsGQtPisU1y8jL8nIMMNFGgJ9gjRrEVtdTnd4QUdn3hVkeG4jQXq5x9FnS1eEZi3kIijhI7C8m6bCQWimANqjP/+kxbo3RUeM0U14m5icZhfONcdlQvi1fq3aGMioABsTZUeSmUOPoi/e2oE4Qt8clHj04hBcHVJQ8HM5A13nL3Uh9XMjgftFSB6FwSw0567zoozyvc3NLLca5oI5Yor6M="
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 48,
+     "totalTokenCount": 5891,
+     "cachedContentTokenCount": 3725,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3699
+      }
+     ],
+     "thoughtsTokenCount": 344,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "a5sFa7vTH7i6xdIPsJbZqA8"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|A_clean_silent|2",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:13:14+00:00",
+   "seconds": 6.6,
+   "http_status": 200,
+   "request": {
+    "prompt": "発話がない区間や、音声全体が無音になる区間があれば、その開始時刻と終了時刻（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/0idhk1jqa4tl",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 25,
+    "thoughts": 473,
+    "total": 5997,
+    "by_modality": {
+     "TEXT": 39,
+     "VIDEO": 5460
+    }
+   },
+   "cost_usd": 0.006,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "この動画には発話がない区間や、音声全体が無音になる目立った区間はありません（「なし」）。",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "この動画には発話がない区間や、音声全体が無音になる目立った区間はありません（「なし」）。",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 25,
+     "totalTokenCount": 5997,
+     "cachedContentTokenCount": 3711,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3685
+      }
+     ],
+     "thoughtsTokenCount": 473,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "dJsFa-TMGKSr5NoP7LCxsQo"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s120|A_clean_black|2",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:13:20+00:00",
+   "seconds": 5.8,
+   "http_status": 200,
+   "request": {
+    "prompt": "画面全体が黒くなる区間が存在するか確認してください。存在する場合は開始時刻、終了時刻、継続時間（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/0idhk1jqa4tl",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 8,
+    "thoughts": 358,
+    "total": 5865,
+    "by_modality": {
+     "VIDEO": 5460,
+     "TEXT": 39
+    }
+   },
+   "cost_usd": 0.0055,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "該当する区間はありません。なし。",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "該当する区間はありません。なし。",
+         "thoughtSignature": "EuEICt4IAWkUfRNn1Cn9uiPtWbCCngFdJ0bCRv5UeynuwjhJOCTrRbz+p+rHOltN7U8ezXzVQG99Gb2Amjw7nOB65cnNZ9WZ8HxBzltpkLD5214NTL+ZmY+/kL/K4ooH9NteZjQEo5BA5CLMA/z3joZmuCPGtUqYYKfSz81zVFCUmV5+NiU6Mh41Ejk3hNlAboTffK4xmFCN5nIJhCx3UsdetqLCpLWhq/6E24QkJ5LAydS/4uoD73eiYzlBpPJsVLdD6uO7DSlGQSoSSIPfxCZQFnjQ4LDYaRQwroaxh5SJM+ujrEFEk3MZKZUhLI/sMSrG0ARUlcoyM01AAQz3g1qLVsHf6HKUi6GiwMqy9BSX5IOSZ57yB9SIqfPu4AxwBG586mej9KJ6qahY3EWZ/9ANHCfTbAqdf0SJnXn7fIUpwHiQfBoXmr4Ko6up5D8DVCt8nHJlWSFXTwLWMYLcWHGeauk/Flj9jG8W9Yz41gNQJQFe8E3r5SqEZhBNxJCoSGzMTR3JkX/ZViwhnM7bOiSpH2FOWuFoGwPwlipFSdhLa7lmZkTfVwb0IVrY4xCDePCEMAlBpfpYGytbz1CeAr5O2q9nrCXOLIE70jmDsd2DuN2ZODUK65pDpgBk00e9JuaMBAteCWGJTyayZfC0zHABU8SRnO0P5V8IrgTQjFq9o3VTWR3H/C4CDcEBbyQKeu8lyAUifl1fae1C2HbRh657xgvgaxhpFeZs+Bt95/cqQZxmKizsVRwyKD/LHCctCFUmWQJ3MNmivBCWPltUbDl3KYCrB1Ro15+MFW4wJTHVActAz1WBU8k3D3wLlrNNoIJbuSWxZBWuzYWVY5LPkOlX0AsFRAp4cCiGTxnB6RmG34se7haLckSkBc+TmGdL1YDSZprhThiBF4yWHPs+giaG8rrifGUwEHGRA8Aj3FmUXuiYR0CBieRegeRnZruBp5B0wIiNB5kC0Ah/rtanTIeQgVQ3d635m8JX/oE+fux4/EVKGPbQ/q2FfSWHjspueRlUVzt7HWNRNC/WFxxGXD/qiEkz7ftbF6l1RHlpCNGaurjpfbHJ3tQ7ekopIdJFuKWDdeEd1zfkEiD8xX+iHvnamAh4Gbny7lG09Rvw0wNRg1K2RSr9GDYW5mDNq8KoV6bLKyp8klzrgWtYlNErkXdYMH8TQGdzrtyQ5jq8OXxhCxoe0ka1y/w9EU0NB5BJ/AStkgjWQMV8f7B6m9d+dY5X+QcSPdglsBFr7qD6V4rC2pOP2xLEXtiwpD+x8pgbk+NRTpNwlwJ3WEtOh4xaGqpOE8Em3W7OjRpvZVP/nkV3+7e2XE0yS+4g82v8ZcIS5BHdlZPo90KbGqOxz3MxU5Ic0BS+rWzmx8Emdmw1sS8f4f9fR7B1ufOkkxB+QR3nuXzeMtcnHvl7lSh+/Ov1oWZYQvYguBuMTe4cCRf02ZGQ7etgbpyJxEWZ9u5DxHb0a7VUNZBK53Ow6/0Z9CZKuZu/NUQ="
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 8,
+     "totalTokenCount": 5865,
+     "cachedContentTokenCount": 3725,
+     "promptTokensDetails": [
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3699
+      }
+     ],
+     "thoughtsTokenCount": 358,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "epsFa4fyObKtytMPt6LpkQ8"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|A_tr|0",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:14:12+00:00",
+   "seconds": 13.9,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/rrihs68cyudb",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5505,
+    "output": 205,
+    "thoughts": 1083,
+    "total": 6793,
+    "by_modality": {
+     "VIDEO": 5460,
+     "TEXT": 45
+    }
+   },
+   "cost_usd": 0.009,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "卯の刻、明智日向守が謀反によって本能寺へ押し寄せた。すぐに前右府、つまり信長が討ち死にした。続けて信長の嫡男・信忠が妙覚寺を出て二条の御所、日記の言葉では下御所に立て籠もったところへも押し寄せ、のちに討ち死にしたと。この下御所は天皇のお住まいではなく、当時誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時頃にあたります。ここで大事なのは「直ちに」、つまり「すぐに」という言葉です。時慶の記録では襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では弓から槍へ、手傷、女性たちを逃がす、火、納戸へ、という流れがありました。この二つは矛盾するのでしょうか。私はそうは考えません。時",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "卯の刻、明智日向守が謀反によって本能寺へ押し寄せた。すぐに前右府、つまり信長が討ち死にした。続けて信長の嫡男・信忠が妙覚寺を出て二条の御所、日記の言葉では下御所に立て籠もったところへも押し寄せ、のちに討ち死にしたと。この下御所は天皇のお住まいではなく、当時誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時頃にあたります。ここで大事なのは「直ちに」、つまり「すぐに」という言葉です。時慶の記録では襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では弓から槍へ、手傷、女性たちを逃がす、火、納戸へ、という流れがありました。この二つは矛盾するのでしょうか。私はそうは考えません。時",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5505,
+     "candidatesTokenCount": 205,
+     "totalTokenCount": 6793,
+     "promptTokensDetails": [
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      }
+     ],
+     "thoughtsTokenCount": 1083,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "ppsFa8HhJ6n70_gP6MiyuAU"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|C_tr|0",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:14:23+00:00",
+   "seconds": 11.1,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "audio/wav",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/hg5w6bxc36wy",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 1546,
+    "output": 211,
+    "thoughts": 923,
+    "total": 2680,
+    "by_modality": {
+     "TEXT": 45,
+     "AUDIO": 1501
+    }
+   },
+   "cost_usd": 0.0054,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "卯の刻、明智日向守が謀反によって本能寺へ押し寄せた。直ちに前右府、つまり信長が討ち死にした。続けて、信長の嫡男 信忠が妙覚寺を出て、二条の御所、日記の言葉では下御所に立て籠もったところへも押し寄せ、のちに討ち死にした、と。この下御所は、天皇のお住まいではなく、当時 誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時頃にあたります。ここで大事なのは、「直ちに」、つまり「すぐに」という言葉です。時慶の記録では、襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では弓から槍へ、手傷、女性たちを逃す、火、納戸へ、という流れがありました。この二つは矛盾するのでしょうか。私はそうは考えません。時慶",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "卯の刻、明智日向守が謀反によって本能寺へ押し寄せた。直ちに前右府、つまり信長が討ち死にした。続けて、信長の嫡男 信忠が妙覚寺を出て、二条の御所、日記の言葉では下御所に立て籠もったところへも押し寄せ、のちに討ち死にした、と。この下御所は、天皇のお住まいではなく、当時 誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時頃にあたります。ここで大事なのは、「直ちに」、つまり「すぐに」という言葉です。時慶の記録では、襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では弓から槍へ、手傷、女性たちを逃す、火、納戸へ、という流れがありました。この二つは矛盾するのでしょうか。私はそうは考えません。時慶",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 1546,
+     "candidatesTokenCount": 211,
+     "totalTokenCount": 2680,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      },
+      {
+       "modality": "AUDIO",
+       "tokenCount": 1501
+      }
+     ],
+     "thoughtsTokenCount": 923,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "tJsFa4yZI7q5xdIPhIywgAM"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.5-transcribe|s600|C_tr|0",
+   "model": "gemini-3.5-transcribe",
+   "at": "2026-11-24T14:14:25+00:00",
+   "seconds": 2.2,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "audio/wav",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/hg5w6bxc36wy",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 1546,
+    "output": 198,
+    "thoughts": null,
+    "total": 1744,
+    "by_modality": {
+     "AUDIO": 1501,
+     "TEXT": 45
+    }
+   },
+   "cost_usd": 0.0055,
+   "modelVersion": "gemini-3.5-transcribe",
+   "text": "卯の刻、明智光秀が謀反によって本能寺へ押し寄せた。すぐに禅右府、つまり信長が自害した。続けて信長の嫡男、信忠が妙覚寺を出て二条の御所、日記の言葉では下御所に立てこもったところへも押し寄せ、後に自害したと。この下御所は天皇のお住まいではなく、当時誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時ごろにあたります。ここで大事なのは直ちに、つまりすぐにという言葉です。時慶の記録では襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では弓から槍へ、敵ず、女性たちを逃がす、火、南殿へという流れがありました。この2つは矛盾するのでしょうか。私はそうは考えません。時慶",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "卯の刻、明智光秀が謀反によって本能寺へ押し寄せた。すぐに禅右府、つまり信長が自害した。続けて信長の嫡男、信忠が妙覚寺を出て二条の御所、日記の言葉では下御所に立てこもったところへも押し寄せ、後に自害したと。この下御所は天皇のお住まいではなく、当時誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時ごろにあたります。ここで大事なのは直ちに、つまりすぐにという言葉です。時慶の記録では襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では弓から槍へ、敵ず、女性たちを逃がす、火、南殿へという流れがありました。この2つは矛盾するのでしょうか。私はそうは考えません。時慶",
+         "audioTranscription": {
+          "text": "卯の刻、明智光秀が謀反によって本能寺へ押し寄せた。すぐに禅右府、つまり信長が自害した。続けて信長の嫡男、信忠が妙覚寺を出て二条の御所、日記の言葉では下御所に立てこもったところへも押し寄せ、後に自害したと。この下御所は天皇のお住まいではなく、当時誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時ごろにあたります。ここで大事なのは直ちに、つまりすぐにという言葉です。時慶の記録では襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では弓から槍へ、敵ず、女性たちを逃がす、火、南殿へという流れがありました。この2つは矛盾するのでしょうか。私はそうは考えません。時慶"
+         }
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 1546,
+     "candidatesTokenCount": 198,
+     "totalTokenCount": 1744,
+     "promptTokensDetails": [
+      {
+       "modality": "AUDIO",
+       "tokenCount": 1501
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      }
+     ],
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.5-transcribe",
+    "responseId": "v5sFa6nhKMvW0_gPtZ_OsAw"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|MUTE|0",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:14:33+00:00",
+   "seconds": 7.9,
+   "http_status": 200,
+   "request": {
+    "prompt": "発話がない区間や、音声全体が無音になる区間があれば、その開始時刻と終了時刻（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/uzhuza248xz5",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 33,
+    "thoughts": 448,
+    "total": 5980,
+    "by_modality": {
+     "VIDEO": 5460,
+     "TEXT": 39
+    }
+   },
+   "cost_usd": 0.0059,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "この動画では、以下の時間帯に発話のない無音区間が存在します。\n\n* 00:19 - 00:35",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "この動画では、以下の時間帯に発話のない無音区間が存在します。\n\n* 00:19 - 00:35",
+         "thoughtSignature": "Eu0KCuoKAWkUfRNK01jJi7lWpEP0RGGUKDjM6Kcq97LZA/0nezaHkwh2xJarfzPCpDkoQpmJhj/19AxefL75D5qVKZ+u+EhNRkOCoaQU3fV9l+TEQPh4w1Xqnt69uiJ6IdyMHMuA13aZOd28rbrTOrp7R9xnNgMfdHiHMh31FBfgfs9DedPNv6ZkwSBBewZyv9mKkRLJ3gHWRxwmsMSlS/d1nC1M3srhyQYC5P9mLFQWTqr2j+5tjhpIQO9fOoot9q9mCEsMaqTxjl02sacV4W7AiIVIbHWZdlWmLvu0cgDIcAl4TS9QRdD61jSV3obr+6iM1iDWP9WjBxgm3IlGMgZZewr9uKHhz7AuXM4yBSXqSF3lFy43GJa9Up+YSle4kNusW6R26OciUd4poB2EtkqWLO9k8Vj+n3c5Qp7sfCuq6Vq8Vd0uHGP2H6OA+5UOxMiX8DhcTmSoytpVlvg7sOvh6X//f0tvPilK2h7UcAf4kKs06bmv7gDDLUepQYYNstDKvpdU7At/RaD7Nf0N9nsXHVw0jwaaZmT9vpxNUQQVGQLF2qj3aLQM4+q4Ku4JjV3rpHkMubDmDtHowU2OaitkzRRNGySFiRUZxuJT2d/gxzLNft/hv2fB/7ivYVb2BDgvOB+JbrFx6K5EQzj1XUQ5qeyhgi7fCkVv8spHtY4GlDRd+7Y8O9lxoSKEqQNL7iOpGhpGtXJH4FNsCrIal6yknqvJ6XLUFVSiRzx+ct0UUrVhgqCfkV9/MbpCxCu4ue8KYngs9zXfX5Ps6sX6G2u9bCjBmw6mdz2AYYNYjw4xspArIUQugksiXINqx1VIW6zeoXLJf5HusA1yibrKAOaa+Ho7K6MYnzMHxopRqhnsCJw6aaW5WT1bt88z/OLYq1bJvfqQfrIuWxgdEAsWw4kUodsyFQk9DBu6rZ99CZhzkfrxH3Vgub6qvVh4LhnfOePz7OEBKfQxd7xKIDVdpoXMy5orW4YtVMO6V5GPO9Yfbq8IFhrp+L90szlQdLftHeQBmFwd3YkFIg1RpprrTF0DuNcYrqSfMT2TLgo7WUUMRYU/Cyk9wewA3n06D/WuDQ5701Wk7YW+x3FhvOyQzgUtW4b77Km1C3vXIaYAK7inmyLkL7U3kUkwcBvO4kv5zSIGOBWk/7ahlhHCkOW2x01j+ueOfL9HzsVLN7Of0IDOXMZHUYj8hnJCIy1LhcJKOSHqIXJyHdyIrzwPClVmJPb/r2cs2Is4mTEOmu/CIdtAz9HF3Qz5vzeV8sytLQrAkkB8wtqQYBtdEt45U0eClvW5RRrCPr+ztvcKIvLj+ZFotkublr43mCoMOMq7rNQAERurieP/RFYQUKEdaIxcvpln6IYDRHvpbzAyAxxEn5XSVVlCiuA31bYqvgeGBTyR0qgZ+i9aqLSagAyfcmh/Y5tGxfJhzqNx+8T2OzJMArLu/kjQkvpev50J7Jkdw0kKp4chkY7vine5zPMYz8LcsD0zmMxp+IhvyGUcgalu70Dy+e7AVxUDs2R89QDftwnOBg8oIyK6TGCk4cWuMovR7SaaTQHz7divdqkvl3Xyc6rH3ZDeLVlwOQwSPKhe+bJ+kEnv2iYonga6vb0gCkx01DgqMJfVvd+QMgYwNqszj0kNxJqIlxn1lzchnGzn3zcIRy00t2MV7D3o/JM3ZPk6TpZSO/uTOgjmphhr+818bJoqJrKgVH0+sNd6KAv2+BWcbNen5hVRykcSTOM+0OECzhwgeCtzj9OaUOLL9Y7OQJRQX34OJrNwG4ixAzZW3A6DQtdcGe5hfWnqntOFYw0lEGT/s084i0Bdx/tRg5yG2R4l12JI2E4kI6yxyj30LWar"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 33,
+     "totalTokenCount": 5980,
+     "promptTokensDetails": [
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      }
+     ],
+     "thoughtsTokenCount": 448,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "wZsFa6CQNoGi5NoPuOfoyAQ"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|BLACK|0",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:14:43+00:00",
+   "seconds": 9.8,
+   "http_status": 200,
+   "request": {
+    "prompt": "画面全体が黒くなる区間が存在するか確認してください。存在する場合は開始時刻、終了時刻、継続時間（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/dkhy0ydgu1ky",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 47,
+    "thoughts": 767,
+    "total": 6313,
+    "by_modality": {
+     "TEXT": 39,
+     "VIDEO": 5460
+    }
+   },
+   "cost_usd": 0.0072,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "映像内で画面全体が黒くなる区間は以下の通りです。\n\n- **開始時刻**: 00:29\n- **終了時刻**: 00:37\n- **継続時間**: 約8秒",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "映像内で画面全体が黒くなる区間は以下の通りです。\n\n- **開始時刻**: 00:29\n- **終了時刻**: 00:37\n- **継続時間**: 約8秒",
+         "thoughtSignature": "EtwRCtkRAWkUfRMEtcl3v+XU42HS5W6gojoFnxvT0HR8/gJ8vauAHc5YfhHeloT1+4BnBoizHizIGQsTJf75IB2h9dEpSChantg10pmziRp9+vsRQNvKoHxWbBH49SZcr/hIZwkY7T+FNS05aOH8hDHEChCOt2L0ZY1QDgVGkGDJmUyktb7L5J6nqZ/wE8Vf6yFugPjvh5Pf5k+JEqnqe0wMURlvb1DHEr3Gsx7iZYOSYujuamGRV+fF551Ie0mD/VQcJJ+6Jw4fPF/fTWJTTgbYTfoSxBdop3a/hEt0H7e+k+yLXtqorpLOtBsWoKIAj3xT9iGtPS8uJIreDF2PnZNwPQ+G365XIHMcWCDiWR97Rz3kwXAmuehrXoC0RzeS76eLxihLMiQ22NmprDdsNxDL03+BFcOkkBhnT/erFDAPCuwql6GrQJq7kdlT9ykBM7B5GS8KlBcZrl1odaN24G3URwgzvoHEGqSkcZXe4umT/2D+nd/wB2qnaz52dt7HmfwCnWyuJ+L3dQh0Wckck/heevAFEcgRdffIjrHVedZ9ZMr3HCakLNfGkOZ/XQy6T0hwOFL/gHfDakgzTB4EJ+05O7DiNtp9JAdyqzSJa2sIRZJ/dX/nrk+EzGa2is431ISpU0GwF4yCeDUQqz5T76f/Mlp8RtKQ+8ztCHcse+X+Le9J7uBkY2egmLyTaa69TwjwTETqtS4d7n3/GFL5uW9I/bpU9XJK1tBnliuGFhnbZip35x8fb1B5IPwD23TyGnreTmN8kVnmJT60LUcx1ireIv7yeWJ9bXSRc0bjT8YOdGHBgOL0l/iSRTkn7Iu7BQIh8im8P9PnMR7Yp+3GzE67yjirusm5s13cvFJwuSMWkNBCq4J6WbSt1etxVwReN2NI5ItOuE4OdLFg97WcBxKmUqBHQscSDDvLmH/TyJEcNlQ+EtjdFYi1rFeorGK6rerKAlN9Q+D7PN1x9bUifi4Hl4Bt/RigNM3FolDBUcj8zuYpCT/XASqhQp6ktmPQlj62aZJgDmQCe2yaRpIG8UbVO25FS0GZMljqWd21CBBAskxo4HzspY/oh46PEfuIAhcvIPmQpCSWNF0LcJPbME3tpexPxIYi+eWj+JoCoBuYvXjayQDsrXTThb+D+sa1y51vthXUaA3ZtpT6uHXQPaNkgvpACnZA+NnFwKAwXch/RcW0Vpb7oiRpDfhJRhaOO1uk2sSxq4bAA/zBSCsYnsHIsTYahG+byQ4MWcv2Ccb/Q9w0+cs7cr0FhaneWy7f40wxJ2y9CjTcmg91rrq5JhGGN22NsE9bDPhkXtz7Um3uW+kvNTmiK0NxX9y6AY/BmqhLcez0Q1jL1B8LeZf4+3yHAg77nYhLoJ9NliUfOXr7HoYhNmTKjX6IO2vSwyrZ+uN7y3M4RJfRlJUqp3J4eRh6Df7PyfswB1kNX4w5QMtmQqWvu7aCHbBHLt78cuR6G/dJOiDF0kySMVf0wjcAJ4b8kW7fd0D2EEaoWEyD4CADICTm2VvZFSMoycGUXDu54Fpos4ZG1FDC+5tvfAmCpFO76+jIhX9RIhSPYYrWzhAZcVhofAgdWOHA+KU0k3wnTLM/gWp9s69K7UBXa7EzXP9D0UmjpzrdVqvvqCk+i4MHJ3OPZvi50pAnHiZ+Trvy2KHBeCejAEIGDdOrYOZ7IAIO1Ee3Z6266aXVmM7NeRaNzjvxSqOVB6C/G42srYX+xZF9aYiGUG7I3OGMsv8eLzB1x5nRa6Q3km5nRA3eDT/MW8zczTcf9cSFvbA/dNGPLbQDt6xrwgY9d9xsGJSi+wEXyG1uzN86aJ5w8K2ytgTjYMX2+r0poUNDBQ1c/h/kZx0mdkuWDw0kjpKs3K/MKAJZl9wpO9QhhRGk5f9TD29Orusf+9ejwkhcCiAwpA7CxI5jThvxHH9/MV+rzsfhze0SPljRpZPijJFzUtS/U+9bI2vDrEm7sCGRIRKF3oW2U2ZGh9qlXamUWsyZ5oinndINI3as5YwLxuTZS1paCjatGh+Iak8bvtUG5442O1u7YO4Q3Dfiz175IehgHOGxeDFWpAbgwRxo6e+k2Un8wskAVrxqTS0szlss24HGt5TaPHhEHaxFDcQisKv+BFAspRGNB6lK9tDhHNCY5QZ4duyWkbW/JCbftiK+Dr2QJ59RJFelv2WvY7BbbopVZ2PhrQ+f49/Ys8JznCpmQHJDtKcVFYpvzzVs+4t970gARLD5TvydS3Ko/rkZrItEgJuQCxCDzYZTY8FMJGXa3J4tDxdnBflIQdovWPg0VIoh4Fd/MCAJ2VpqQ/uOAzgQUMbCI5ujU0KoHwkeBVeYCGs8cnV2ZKuihJiHvYxNcUrf5bF3qV1JMqtb/8dEoKTZ5yTYCH1zrUYuHgX6T/g+o6YYzxI6KthqC7XTLhCZ/0UcaE1FMJoewfKwrv6jFVA2lNci5ZuTI3Vzt6g2uJMEi7r1Er/UMnzh4NU2sVpdiQeuyJg8BqeH54lVRzPiwJIKCjulqcVz4JJFAtlN21KBh+sDMenaJFxBMQR1rhYbZ9/vfU9GKQGcuD41QRzoJRNkK8dDORHNXcswBnSqjFzdTwVn/CBCZ7vhA5xWeiav/Pm9wjJRm2hGCqNMBTxAgLv4R4Lqv7j4dskf3kqOnylSrciBPu+2IMhyWwRzs6+c9dbeqbk2LgrVLQfJwTla/0uFzBpZghm7D+9MAtIHIgS7XnAYTtdD4uQ0dO4CZe4NTevHUn5VS985U/ogMWMt2FZ6LCALsn0ZZe0d0EewYScIsDSMW0tgGbj43wTRRqw5BMJ2MrCNQsLZZf088kpfNgY5sYsDYZoswuy9RTRzx4ZMUJ/irrlF507Tj+3Xxhy8mXSGftEUhG41BDFxcGENB2LWAfuWqmeLoR/Z7/iRAoXRpQnPvOzZkTDv4rKVujHGiSaITpoZnxvyYIYXMI86YWJfNgZD81BvIL9bhXhcKtfEJmeWDK+/Nf8hc6KDvJ0+PLLo0HbmEFp4Twmjj+wq0Ya8NV3m"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 47,
+     "totalTokenCount": 6313,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      }
+     ],
+     "thoughtsTokenCount": 767,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "yZsFa4-qLKOq5NoPq_GJiQM"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|A_clean_silent|0",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:14:52+00:00",
+   "seconds": 9.5,
+   "http_status": 200,
+   "request": {
+    "prompt": "発話がない区間や、音声全体が無音になる区間があれば、その開始時刻と終了時刻（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/rrihs68cyudb",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 21,
+    "thoughts": 840,
+    "total": 6360,
+    "by_modality": {
+     "TEXT": 39,
+     "VIDEO": 5460
+    }
+   },
+   "cost_usd": 0.0074,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "この動画には発話がない、あるいは無音の目立った区間はありません（「なし」）。",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "この動画には発話がない、あるいは無音の目立った区間はありません（「なし」）。",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 21,
+     "totalTokenCount": 6360,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      }
+     ],
+     "thoughtsTokenCount": 840,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "05sFa_mkIdzcytMP0vilgQ0"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|A_clean_black|0",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:14:58+00:00",
+   "seconds": 5.5,
+   "http_status": 200,
+   "request": {
+    "prompt": "画面全体が黒くなる区間が存在するか確認してください。存在する場合は開始時刻、終了時刻、継続時間（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/rrihs68cyudb",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 21,
+    "thoughts": 274,
+    "total": 5794,
+    "by_modality": {
+     "TEXT": 39,
+     "VIDEO": 5460
+    }
+   },
+   "cost_usd": 0.0052,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "動画全体を確認しましたが、画面全体が黒くなる区間はありませんでした。そのため「なし」となります。",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "動画全体を確認しましたが、画面全体が黒くなる区間はありませんでした。そのため「なし」となります。",
+         "thoughtSignature": "EuMHCuAHAWkUfRO4QNdFTZUiRzXqu4/cxDAseUbcBPMJXi6VTfLHD6i8/qS4avUFVrBsCnUCHh9JRiYzd/VAcHGNMMhaezmedqMciKfkcSV5yyTwQ6ZUoVjpUizVyjbDeDdX8BMTyqosJEGvFrI3whbr64Ef7nIkwVmEpkvTg6aI2TMthQ8rgYiINg7bQXjEmWwGpMhSayVMrphkAkkhl/ymiteNEtiinhhZ3D/gZAQ57zOPHmkLuZxjp3pxfoSPXQq2eKZvouxQsU6INcq8DZowVHR5Ij+BaucuRG6me/zM/EhwMhRTemjPfZldiNLWDIuF3GC15q9GvALXnKppjvLtccniiJ+uOV3yXI0ryUnvf6iszTm7Tp+NVM1GmWjYj8tegoh3JYISZU5NowL36+iOcEfYd4coBI/NzJD2nH4pY4CJMKhIa+eMnGjZ1Cgx/TsjVKJRtSFALovc6AmAZfF1L2CE3zONafjjxOimXVACPX4Nsr/uqKY7iuDGXudeWNJoAF7DhJNHzwXlsEQVDVF3Dbkr7UlADFBrTo2c4N4wOAetsQxxksgKWxhjLZDWMlAR49gCcjBpvthJrAbOolAQ94VhIvgiOPuoV4gr+NdjTFwDebR5YudvI1Z3/lSaVPCp5UWXk9UbOVmN+yV24MCYKRiEBwdzqiBqruiMi+aJf3qnre2vMAmR2zEIzp1Oh/2dGZxvw8KVqHyjKbnkVDvvHus97LdqTLdetMYUXrSgjsJauH7nfe4Xmn8xvU+Um5UywpZpYrtmTxrHdE3X3pDE0m8Y3nvpjWCo0sVxsBhpR51dzxRQrjPmJwFBeavjQeCxnb3qjwVWNQhb6vYD1p70bqKDU4e1g9iaRDEuS3Nx6g7onFCFneHcTJMQpKPEg9/4hWhqSs+7U8yKoxGdqB2dh56bdenkHtNjJr7p9UfDjYKTh0dlDtohpgpxrWMbMvf/xx7vZYO6PBQ2tRXhsV/hwIJRFlS+pVYf1eL2H+seETGrAxoOcxFrHBJHWJjQrXLslyHHgN3fbXm4vhe8gv71c98gZVpHoQkJQKOSMWdM6V4WLy2Z2pmDPughoAM95Dh/GrJROcRLoqj8TCDTx07jIZwI406gfe4dEoZsvDyAPybEKb6T0C31c14YL2JcXCoaRsX0cDUhXXkDzv4qF5gx7KLc9yTw3i0rgxlU4HcBLh8soyHn9me6pWd8Zl0l/ZDHXMthAITg1ok/C+ZWWLvHJW6UaAyqX1T3TmcNM9gBTzFCqQF8jgy7heR4v6pguiinxiM7NpyMzmjlZqFNEyDyGCyWi/j9HEPwI6jQfigXtEc5J5o="
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 21,
+     "totalTokenCount": 5794,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      }
+     ],
+     "thoughtsTokenCount": 274,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "3JsFa5bPO6WqxdIP0uvZyA0"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|A_tr|1",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:15:18+00:00",
+   "seconds": 20.2,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/rrihs68cyudb",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5505,
+    "output": 215,
+    "thoughts": 957,
+    "total": 6677,
+    "by_modality": {
+     "VIDEO": 5460,
+     "TEXT": 45
+    }
+   },
+   "cost_usd": 0.0085,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "卯の刻、明智日向守が謀反によって本能寺へ押し寄せた。すぐに前右府、つまり信長が討ち死にした。続けて、信長の嫡男・信忠が妙覚寺を出て、二条の御所、日記の言葉では「下御所」に立てこもった所へも押し寄せ、のちに討ち死にした、と。この下御所は、天皇のお住まいではなく、当時、誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時頃にあたります。ここで大事なのは、「直ちに」、つまり「すぐに」という言葉です。言経の記録では、襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では、弓から槍へ、手傷、女性たちを逃がす、火、納戸へ、という流れがありました。この2つは矛盾するのでしょうか。私はそうは考えません。とき",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "卯の刻、明智日向守が謀反によって本能寺へ押し寄せた。すぐに前右府、つまり信長が討ち死にした。続けて、信長の嫡男・信忠が妙覚寺を出て、二条の御所、日記の言葉では「下御所」に立てこもった所へも押し寄せ、のちに討ち死にした、と。この下御所は、天皇のお住まいではなく、当時、誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時頃にあたります。ここで大事なのは、「直ちに」、つまり「すぐに」という言葉です。言経の記録では、襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では、弓から槍へ、手傷、女性たちを逃がす、火、納戸へ、という流れがありました。この2つは矛盾するのでしょうか。私はそうは考えません。とき",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5505,
+     "candidatesTokenCount": 215,
+     "totalTokenCount": 6677,
+     "cachedContentTokenCount": 3711,
+     "promptTokensDetails": [
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 30
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3681
+      }
+     ],
+     "thoughtsTokenCount": 957,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "4psFa46gHd6IytMPxuuvwAw"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|C_tr|1",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:15:25+00:00",
+   "seconds": 7.2,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "audio/wav",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/hg5w6bxc36wy",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 1546,
+    "output": 204,
+    "thoughts": 545,
+    "total": 2295,
+    "by_modality": {
+     "TEXT": 45,
+     "AUDIO": 1501
+    }
+   },
+   "cost_usd": 0.004,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "卯の刻、明智日向守が謀叛によって本能寺へ押し寄せた。すぐに前右府、つまり信長が討ち死にした。続けて信長の嫡男信忠が妙覚寺を出て二条の御所、日記の言葉では下御所に立て籠もったところへも押し寄せ、のちに討ち死にした、と。この下御所は天皇のお住まいではなく、当時誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時頃にあたります。ここで大事なのは、直ちに、つまり「すぐに」という言葉です。言経の記録では、襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では弓から槍へ、手傷、女性たちを逃す、火、納戸へという流れがありました。この二つは矛盾するのでしょうか。私はそうは考えません。言",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "卯の刻、明智日向守が謀叛によって本能寺へ押し寄せた。すぐに前右府、つまり信長が討ち死にした。続けて信長の嫡男信忠が妙覚寺を出て二条の御所、日記の言葉では下御所に立て籠もったところへも押し寄せ、のちに討ち死にした、と。この下御所は天皇のお住まいではなく、当時誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時頃にあたります。ここで大事なのは、直ちに、つまり「すぐに」という言葉です。言経の記録では、襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では弓から槍へ、手傷、女性たちを逃す、火、納戸へという流れがありました。この二つは矛盾するのでしょうか。私はそうは考えません。言",
+         "thoughtSignature": "EpkSCpYSAWkUfRN5dnUNwvneyxfvGrLK91iONnahE8DFN3/9hb3Y/lqSzGbAfJe8T2bYBqg2eeZwgFMoH9uD8QMc1TWGFDAA20QPVgKY8S3sYA4diFuA6fQILlw2qs4QhYmjqCuI3N2ENoqwxyIVorLyEPBIRWFyZ1iSSeB+SQYP1QJA80+n0NTTnj4gPTQdTGjcu499kIX1JihHciePdBk7OQ1TfIrTf9G6WwoZ3kC/sQhvy5kJX75d1b/OQsTObvD0ZdWfXAjQgSHSCM0xNDQ/lho7kKB6o/u7x6aL8SqD4mzr21Lg3/nplD/S2BUCw94WZOoHMRr4jd3AVQarN3p5fG9NJkN+fO2bosxmLmRPzgVc6GsDHlIHNfWuw5HPInxAu/g3Gj+GmHih33gm5sx2F77R+EIlFVumO1EPHFLtOgRV0/mrpyRl0rNIJatU2D786VuwUXjWY9exAuVcg9ljjoCmuoDggpDS04TmMf7879Wk4KVSr4Wnmy3v21gXqB6Vf12UXXOetfQf7/HU2DkETdOFzLg29rrdD8XZP5jmvATwEK3OMf52F3s1ErZ3oGpUc7z8t7G/yEZtTDBObc81h7W0H0tZo66nL5x9wDkZ/OzrNCnriCY1uJp9fxY/EIyVGZlh2kEPHNB4Y8GCnRVsXZiSa0QTc15tK1KASFdjuGm8q1dNe7JKKvDsVDa0qYqq4Mhks8oU5ZJ43rFIYqk2dzJIxWbSODsMB7awWr9oRDtpdM5RqKwZHpmms8QAfcCwW2wYnFttN5e7fv6qNEvLeZvqv8pA++84jEJxWAqNzUQhTiwxcYAETRbJwzSypN7xiJM9APOjJe4T7T+UBkggPVUOf/eohbL3BzBowXph+f3vBzJXGWKmLlQBEWCB9DNtRs0pSPjtqexGS+upLfalOPH/QlCc2Jwq2YRcTOKvp5O+vlkQfUDjdyVfdS9CZq5pd/Uoz5BmZT7emTZg71Mfakkwh2c4juWRNSI+UmaDjj3ZZ9cg9NpiTPyGX9XnN+u1v9Cbf8oo4D0uWvHfnqIcnC+NTjJTov6x9xxJneeaoFbYYwE0kDalr4QPLYgytaIaRBqOsrGc3nOEWZtaVDDaxSI61SY6gf/uVqB+PA9kou+K3qrezocdggeRocmZnvXpFib0o2/Y6GybPY3Flxt/lgSPNNU6k8gY8pKh/zHUpZwUAAHckIFyjLbErjm6qt3tVD9dfz/8V1Hqm8Y/sRQHLIKVfQZkxRamjP1Yb33jRZAqV2AhJkx/mKDAU7RVCmuQqI7UhEAh8S2IROvnOpWZZP8oH3G0AvKy7YivhQsRmeGxxgDVOGC000h2u6TNl70JynGYTJOU6Qkf0Waj4WrvYFsgpYEwJmELBFIjk7bhLHhziro4qIWY/VlEZ0+DYdFduaRmxf0F3t7jfLEzOMw3jVeIAayDWmNimEpmn9kpswsPkn0dLo+KRmUdobO3SIlwEy98bKp8l+hTzWHCnBiBo48wfprSHRIHB23eH40yqCwQbco63fR29TGmuSGwQW2y1G5u0E5hxKnkwsIMuGzkiM7pub10HL/1E/1bZWzSrgxDibBBgGS1rbHwofc9KAw+3tfJUYkodE8Lbyj6L7Ye3Ru570I0dJpbsQaXFXoIdERIY5TlEhrJvnILO8UMhDTnPdecoeRSDfsJPU+AkZCBJXWbbzicDfGKL7NAgaEOrV06JPp+KX4pcJzS/FIDZrOtGB8TS84V5Hinfs8nVmrT2MkWJvwy7VnIJmEIT6VWD+SsTDNpA7OCLIUo4xfRpY37pVx4KN4Wk6u5RQH1m8sZ/7rFmqEHsFQNL+PvGo6eM0Lah7eX0SZFWPFbpF/tOlJkmTtAX8cDjCfEtLJxydb/1ksYJqCsFnfWYv6QoIzXZgiqSuJNTLZlp9soqtS327Pqh/ayM2xRmcdUAdjtqIifbWJTfPm2Hyf0cYVKFhqiYDsJXhaj8lBtfZRD74Gjfos2cuojoKr3P2R+1z2/0ekXOKYNZ04NN59zJ+gX4Qtyf8T3GtAoAr4YYbGIY5oHl9aBGG2aahgqaNLVKi8zVLfztquWWWa/FMUPFOnxUoIsCyv8woCP41JoKU8RZ5qEPkWoJRi3O2G6NiEoD8bxuRnVFRI8KTGHex31Fp0ymZUygezgIgfbkorB6ggo07RY/12aHKBBIpDpLG5N/bhuKa4JSRb5a0B/Kef8LLksYauMKo0dXZYY1FmGxpZrZlSIHgOcnr+AYMNl5nZ3jDjy+AvUFW4NER+Ke8yGKNPwG3lBwpOUwDcg9GG29dRlCIH/R8UpEoE3QEZyKZTJCSSpBqZFgbSR6ujOzB5jJJxCDbbtVXTV6rg54sEb+4KM7pjUOZfZP/f0Hg7tF+mxv9aB4MA45+K3MtIuOq7gVuzPGjBROF/6wMxfSssD1+x8rKtqwn4e+NNJcEUaIhIU0Aw1p9HIgQl/RNlM6pDyHWUQmpy9QjcMn+qXLmswEGJFa4s3Nx5Ptue3BmJR+OVvvtMQDBuqlpaVljMAkOb8pszGNvU1Ebi5hWu/vz4QE93tsv/Mwj2MbyeMtoKjTAktkrLYbWZhjpwbmj2LPlbbyyVr2YgzQbF/CsetcedYJuZxbS5fC1E/N4xuK9gmAD+Fj35RpErA5GQ0ocFUYR6uBV6pYSYXOmK1CKff667ldpwFFpObRBM1B+Izn85uAvoR5319BVZlyzTfXuM+NA32doB3UaWY9swS3EEvkOKQMJE3nsKncJ2At+e14gUy/f47V9n++tRLjUEZzVGYz9Jqgs00UhC9xyxLnV7wdGGc5bEaocMvmy+HLBNBDLeGoiWNqM4BDz7DAj0uAoDp9G+UttTdspDtbR9cFFDzoTgg9Afz9UhOe5+4Uw7ioGvzqsyhS3qWpkoH49i8xxnnC9thJmstcclejAXP3dtC917KNXDoVVyo14RLzo8GXgxWkRLwpy3gOLr5X+C9JhWffJPYkqjaFkPp2Jil3UsIQ1BUnA1c7VV8/LWJ4i30lpMxRy6fijLKzuLgmKb5qoiLg97rUxIu8GsipFuvh793UngzHz9xpWge+QOeiv1hSbjmuT7xxvFwQ6wKvnVyKGAQdiH9TQ=="
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 1546,
+     "candidatesTokenCount": 204,
+     "totalTokenCount": 2295,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      },
+      {
+       "modality": "AUDIO",
+       "tokenCount": 1501
+      }
+     ],
+     "thoughtsTokenCount": 545,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "9psFa-StKojk5NoP9vjruQ4"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.5-transcribe|s600|C_tr|1",
+   "model": "gemini-3.5-transcribe",
+   "at": "2026-11-24T14:15:27+00:00",
+   "seconds": 1.3,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "audio/wav",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/hg5w6bxc36wy",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 1546,
+    "output": 198,
+    "thoughts": null,
+    "total": 1744,
+    "by_modality": {
+     "TEXT": 45,
+     "AUDIO": 1501
+    }
+   },
+   "cost_usd": 0.0055,
+   "modelVersion": "gemini-3.5-transcribe",
+   "text": "卯の刻、明智光秀が謀反によって本能寺へ押し寄せた。すぐに禅右府、つまり信長が自害した。続けて信長の嫡男、信忠が妙覚寺を出て二条の御所、日記の言葉では下御所に立てこもったところへも押し寄せ、後に自害したと。この下御所は天皇のお住まいではなく、当時誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時ごろにあたります。ここで大事なのは直ちに、つまりすぐにという言葉です。時慶の記録では襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では弓から槍へ、敵ず、女性たちを逃がす、火、南殿へという流れがありました。この2つは矛盾するのでしょうか。私はそうは考えません。時慶",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "卯の刻、明智光秀が謀反によって本能寺へ押し寄せた。すぐに禅右府、つまり信長が自害した。続けて信長の嫡男、信忠が妙覚寺を出て二条の御所、日記の言葉では下御所に立てこもったところへも押し寄せ、後に自害したと。この下御所は天皇のお住まいではなく、当時誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時ごろにあたります。ここで大事なのは直ちに、つまりすぐにという言葉です。時慶の記録では襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では弓から槍へ、敵ず、女性たちを逃がす、火、南殿へという流れがありました。この2つは矛盾するのでしょうか。私はそうは考えません。時慶",
+         "audioTranscription": {
+          "text": "卯の刻、明智光秀が謀反によって本能寺へ押し寄せた。すぐに禅右府、つまり信長が自害した。続けて信長の嫡男、信忠が妙覚寺を出て二条の御所、日記の言葉では下御所に立てこもったところへも押し寄せ、後に自害したと。この下御所は天皇のお住まいではなく、当時誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時ごろにあたります。ここで大事なのは直ちに、つまりすぐにという言葉です。時慶の記録では襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では弓から槍へ、敵ず、女性たちを逃がす、火、南殿へという流れがありました。この2つは矛盾するのでしょうか。私はそうは考えません。時慶"
+         }
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 1546,
+     "candidatesTokenCount": 198,
+     "totalTokenCount": 1744,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      },
+      {
+       "modality": "AUDIO",
+       "tokenCount": 1501
+      }
+     ],
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.5-transcribe",
+    "responseId": "_ZsFa8m9Ov68xdIPz7iciA0"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|MUTE|1",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:15:28+00:00",
+   "seconds": 1.2,
+   "http_status": 503,
+   "request": {
+    "prompt": "発話がない区間や、音声全体が無音になる区間があれば、その開始時刻と終了時刻（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/uzhuza248xz5",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": null,
+   "promptFeedback": null,
+   "usage": {},
+   "cost_usd": null,
+   "modelVersion": null,
+   "text": "",
+   "raw": {
+    "error": {
+     "code": 503,
+     "message": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+     "status": "UNAVAILABLE"
+    }
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|BLACK|1",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:15:35+00:00",
+   "seconds": 7.5,
+   "http_status": 200,
+   "request": {
+    "prompt": "画面全体が黒くなる区間が存在するか確認してください。存在する場合は開始時刻、終了時刻、継続時間（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/dkhy0ydgu1ky",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 49,
+    "thoughts": 469,
+    "total": 6017,
+    "by_modality": {
+     "TEXT": 39,
+     "VIDEO": 5460
+    }
+   },
+   "cost_usd": 0.0061,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "画面全体が黒くなる区間が確認されました。詳細は以下の通りです。\n\n- **開始時刻**: 00:30\n- **終了時刻**: 00:37\n- **継続時間**: 約7秒",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "画面全体が黒くなる区間が確認されました。詳細は以下の通りです。\n\n- **開始時刻**: 00:30\n- **終了時刻**: 00:37\n- **継続時間**: 約7秒",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 49,
+     "totalTokenCount": 6017,
+     "cachedContentTokenCount": 3711,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3685
+      }
+     ],
+     "thoughtsTokenCount": 469,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "AJwFa86YHamq5NoPqdOSkQ4"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|A_clean_silent|1",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:15:44+00:00",
+   "seconds": 8.2,
+   "http_status": 200,
+   "request": {
+    "prompt": "発話がない区間や、音声全体が無音になる区間があれば、その開始時刻と終了時刻（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/rrihs68cyudb",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 13,
+    "thoughts": 571,
+    "total": 6083,
+    "by_modality": {
+     "VIDEO": 5460,
+     "TEXT": 39
+    }
+   },
+   "cost_usd": 0.0063,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "発話がない区間や無音の区間はありません。",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "発話がない区間や無音の区間はありません。",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 13,
+     "totalTokenCount": 6083,
+     "cachedContentTokenCount": 3711,
+     "promptTokensDetails": [
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3685
+      }
+     ],
+     "thoughtsTokenCount": 571,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "B5wFa67DO6Or5NoPvN7MiQg"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|A_clean_black|1",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:15:49+00:00",
+   "seconds": 5.5,
+   "http_status": 200,
+   "request": {
+    "prompt": "画面全体が黒くなる区間が存在するか確認してください。存在する場合は開始時刻、終了時刻、継続時間（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/rrihs68cyudb",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 15,
+    "thoughts": 362,
+    "total": 5876,
+    "by_modality": {
+     "TEXT": 39,
+     "VIDEO": 5460
+    }
+   },
+   "cost_usd": 0.0055,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "「画面全体が黒くなる区間」は存在しません。\n\nなし",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "「画面全体が黒くなる区間」は存在しません。\n\nなし",
+         "thoughtSignature": "ErgJCrUJAWkUfROzeBrjEYFmN9JgX7E2Ks77KyvL7WBRAUXIj37FJ1XET/GlLFyYEuW/WfCgYymBEfd6xy7qaRMWJWikMZdxDT5foHGpDnbvpu31nBhwTyt3OMr6neYL2MmdrEvd/bom6DrVF5cDzmq6hmH5OmwwvQS8O1AJ0lgrt9D79yO/RgLFpDEeZfij4Vy7IXc0H8vf4iputBzO9XZ6laCCCUljZWw+/5bjF/szKo+7KeqlShtszzvuoPZohGiR3IgE1NwB6zOd76mclzeZncOUMgM1Fk7q0TzJfXQA6og1PFR90VGwcZzBIVzd1Zt+YI0+zoZoRfxVn5ul18xGVi+amdzB3Yk38D3wA1wkVoEoBAbM6b6eo2YM//nERpZBoe6Yld5TMQX0F6F+xWTpV+igjiA2EubFQBmvYfrCTtp23WRHZMX29ryNvqQMRDxfk2B7t3+ekKFB2QAoo2quWko5Tn8aAt7FBES+JVazxFpXdQRBRnqfsiwQetltEjMgj29+BYy7rlNhRs3Fo3IZWmjJUinLLTv4oKyx+eGBgqpiLi0RqtQ1xa1RPO0Z0tLK2IjFRfaWp6Q6xTPksmwxtQVI+JCmmhoKqYK+vXozkkS/3cfs9BKC4VItOHC5rY5HKBsx+fNI7/hXo2tNtDXqIhUlOUIVAJAwKPauLseu9zrCrN/0UumpC2dM+cdBC9Fdk5xLR0mHkvdD59HmNRHsFirRMI+lckcV5FNWRsKvhhkVxC24Oje+zgaUFkv4YFXrtCgna9dfWbo4paq9BgNg2vfKidqthPaS198wqVC19c8jBiWFG9fQuh/OTS8HgdSMLumVmc04br0RtyKjqOEg2ogoYE1xDgKtq0tTmrAMCCl+W20Dt0K8owFWRIao5ArHizyAZrAjRSmBMgBYA5RzZusWUol2+idZI3wRYSgsZiv2155EQW4m5mlIMfA4SdU6rHjWnzi7O7btSh2DoJgI22B1T/9iIRiv1aqZly26xigdbZwTkMacOa1wr08CM9t3qZUnp4DaCqzHGgOAngpukUPwuGjCm4Sh+Fq2qp6aqMOFURoHd9n657BAvWZu5PGeBSa18mVeqvHi3vU+k2K7DZWu9cr68otMiGccu2rE15vEVlGHxxs/CsAXA28PNVRhM+I8uB/DpeJF1TtjMSITa/IF0QG0Ijir7cVivC7NeDz3KPiPEneAdhEj+9tWW78xbc0FWD/NU1aJtOzeKuWgt7najWcV31Idk6efpXLNe4yRDexM2innfYIcdZOjEZLMuVOR3gsrEXoZI3SRRLnwEooXQN6Wx/x0NyBPU7q7BJTniH09KEuzQPjocHIgIkPG5DJyeJj1EOoH8rrY2/i3MzvMuoHaVG1T3fZqVq5BRiBXESowDblGjQkc9cprdpeHNkOxgjWFSJZkkVwqapnFHolDv6XDlFoWfxNWbzxcPvgBnlSnE8g35YMwtDlfkTeLMjN677SCt2fysR1nxxGmCZEoLkicxQoGa5722KiQTmLb2DXt12EWaE8QED7PT/KOpAGnHZU6t0FSlD8FtNcZwJ1wCGdHhW490cEB+7kNNQ7TTl5zeCdqavLLl09GaG9ZdoJaoDJvN+c="
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 15,
+     "totalTokenCount": 5876,
+     "cachedContentTokenCount": 3711,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3685
+      }
+     ],
+     "thoughtsTokenCount": 362,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "EJwFa96-CKe9xdIP38uy0AU"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|A_tr|2",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:16:01+00:00",
+   "seconds": 11.9,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/rrihs68cyudb",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5505,
+    "output": 206,
+    "thoughts": 899,
+    "total": 6610,
+    "by_modality": {
+     "VIDEO": 5460,
+     "TEXT": 45
+    }
+   },
+   "cost_usd": 0.0083,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "卯の刻、明智日向守が謀叛にて本能寺へ押し寄せた。直ぐに前右府、つまり信長が討ち死にした。続けて信長の嫡男・信忠が妙覚寺を出て、二条の御所、日記の言葉では下御所に立て籠もった所へも押し寄せ、後に討ち死にしたと。この下御所は天皇のお住まいではなく、当時誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時頃にあたります。ここで大事なのは「直ちに」、つまり「すぐに」という言葉です。時慶の記録では襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では弓から槍へ、手傷、女性たちを逃す、火、納戸へ、という流れがありました。この2つは矛盾するのでしょうか。私はそうは考えません。時",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "卯の刻、明智日向守が謀叛にて本能寺へ押し寄せた。直ぐに前右府、つまり信長が討ち死にした。続けて信長の嫡男・信忠が妙覚寺を出て、二条の御所、日記の言葉では下御所に立て籠もった所へも押し寄せ、後に討ち死にしたと。この下御所は天皇のお住まいではなく、当時誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時頃にあたります。ここで大事なのは「直ちに」、つまり「すぐに」という言葉です。時慶の記録では襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では弓から槍へ、手傷、女性たちを逃す、火、納戸へ、という流れがありました。この2つは矛盾するのでしょうか。私はそうは考えません。時",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5505,
+     "candidatesTokenCount": 206,
+     "totalTokenCount": 6610,
+     "cachedContentTokenCount": 3711,
+     "promptTokensDetails": [
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 30
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3681
+      }
+     ],
+     "thoughtsTokenCount": 899,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "FZwFa6WUKZiOytMPsbWsqQw"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|C_tr|2",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:16:10+00:00",
+   "seconds": 9.4,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "audio/wav",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/hg5w6bxc36wy",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 1546,
+    "output": 198,
+    "thoughts": 703,
+    "total": 2447,
+    "by_modality": {
+     "TEXT": 45,
+     "AUDIO": 1501
+    }
+   },
+   "cost_usd": 0.0045,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "卯の刻、明智日向守が謀叛によって本能寺へ押し寄せた。すぐに前右府、つまり信長が討死にした。続けて信長の嫡男 信忠が妙覚寺を出て二条の御所、日記の言葉では下御所に立てこもったところへも押し寄せ、後に討死にした、と。この下御所は天皇のお住まいではなく、当時 誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時頃にあたります。ここで大事なのは直ちに、つまりすぐにという言葉です。時慶の記録では襲撃から信長の死まではほとんど間がないように書かれています。一方 信長公記では弓から槍へ、手傷、女性たちを逃す、火、納戸へ、という流れがありました。この2つは矛盾するのでしょうか。私はそうは考えません。時",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "卯の刻、明智日向守が謀叛によって本能寺へ押し寄せた。すぐに前右府、つまり信長が討死にした。続けて信長の嫡男 信忠が妙覚寺を出て二条の御所、日記の言葉では下御所に立てこもったところへも押し寄せ、後に討死にした、と。この下御所は天皇のお住まいではなく、当時 誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時頃にあたります。ここで大事なのは直ちに、つまりすぐにという言葉です。時慶の記録では襲撃から信長の死まではほとんど間がないように書かれています。一方 信長公記では弓から槍へ、手傷、女性たちを逃す、火、納戸へ、という流れがありました。この2つは矛盾するのでしょうか。私はそうは考えません。時",
+         "thoughtSignature": "ErwWCrkWAWkUfRMiYpVlRCNHs4LCPCAm/TKumQOcb4yQiowHcgPnCFNtjyYwdCBNznOkVwqZMjbMAJmW4zlSagcTfAp0FwXLNoyPtho0cLKIoVZzHr7gseBvfobisoq+dw5k8Q2Q6DYUNje00VTyTELTNk3I5m669eZVZh3FdtMTAPg4o7mkWrWONA4x8EZzI6txccIucgsNPTp0MZSCEao3vZQMwqnodzkwbQZiPlWZ5jCIo4SqINgzjs1Xphs2F8DeXcKP8k6Z6A6sRHC+fg3tmkObVTyhwOD0LRA5W1WZe4M6RhUSEQboL5h43Kw8sivi1rJn6aCc2v3Mjp1WXEiug2R9daOU85u11slXSAt5ySSrbfqHM85B+HZ2Skjr9pg/wWZ5qZUuYlw67JQ+xE4RLC0PIs4Q5dGq/4lJQw/f5c7/DC0Gdno3xUA6DBhxxCgbcBIgfjOJ3gg3lIAODW5zdrkpjA/bKI/xucDPlbzSid7H27L+z/syf0x+1dIXkgJoB5MXziNLaV/UxRhraJgH+49loiTbIQaE0E0KlqZtOdjz38/ItzHQs3d8iB8SIk3IUJ2FQKOXgCehZ6dP5H4QmdYoN5wRvXkBq6d2HSfVA/6zJgxpKSIKMHDqpID2X3Z2Ncq+ZPTYisg/mqUK/9rkEqmw2vNMtR0SJCcqzj5X6UH8Qn67cYJOovxncRJfuEbKH5tXJhPZTg6pMxBMbkkfmmqQ4kc/xg0R3jJ4+RsjT9+oFqa2eIapqHjq6hNqnQzeoc0q9jxpyKwWWS/WRNgljmRHSJZkPlpIFWD/4dFvG4I/9ef1bJ0aei97SLrBwXJE+FBBPgEShueS9TCAdCZ1p0x4zuJbSQdXjickwE38DSe8cDbs6bKyvIUEgz98DjbKx7W02ucQMzHbWp/9Oe31L9OS2ca7O/yAzGguO7dKzwRhLEG+7QUg7XG1HlHckpLJ7K0lLrClOidIjnRBP+sDi7S+CTceDDXLJaXDzl8kTJL1VrdsglHfFUPO2wxHXinSZcQwhpYDxAxJ0PyiLNUL3dz/hAQj73BQb6PsUPcNiIvRSnJVg9TVTcj+0Ot2IVT7axZeEgC9lofMrqkGw4NW+YSnf7XGrE0HwTv/JTq2AMgNow9L1EOnEqj/0OqR35P0Xsv3AQeNZILqdEtmeENONAjvSfuoxtBdlRVxKOfHY0GRlFuqLWOBq/0vepOqJXv3KSlpAaW0rKSVPM4uPt+3GCfeONWBRkcg7qL8zYnUDKmI02lbjzowgTSUxGU3D8IMTN0xNASrMZgQftPJB1SaUI61zv62FksUz/o/2z8UKlEHADMIROtoYpXObAeN4zqXEzEKWW1Bv+mUex8iT18ctbO+QCM3houN0RC+yXocI2rgaa5T+big77NLKKHkPSGQNWxkd+ciJHOoPYuWdiZ6z6J3ELUjo0AidSWJmhv/MZ0b4xdsMt3qbPDwfLpodPO64Grcnmx83yo+3FuNQUuQtSvp8yWp6oMosTJDdZQaaxjjm2gZoyXqGhxizRXP8IRAuwbLqDG2+VZfGecBGqJ9HQ6EpN1DBezBuSluSu3ottBt+TieH8+iksjLk/EOg+Zov7lMWTju9ynbpd0qQa7PTW/yGH57gZLLfWOlkZiiMcp3vw2bKwlcoli3VVXJht1ox3zazT4Li1myv5djUfKiwQA/cJ4itCFWA1R3zLc5P4Nbcdkp40b71SXNQByvt3YSaG8oVAojvJAsNPdVYJNYW6F5sW1UhkdENydEWYJly+4Jd037wJX4r/RvxgPLQb4LDalrd5EUg3ePUmGtMN3N98NjNHrO06Gdq2y36fy3M75ZHxSuJuKR2rElqigO/sdwx1SPuiCOIXpV0dI1vB0RLTcMjdIt0c9Fj48AywRyIhJMAXjkAgHKRuNFPzm5auvnow1+PzmnavTaqhbaFIGMhmoWqCo4ublceB3HA+ght3eddmMyxmTBB71QbuLsqm7OweWB8uGwW/BFVWLuR8RDg6e8lxJLvWnm2p7lSvijWflxi/x6VNBZuJuSquPWn9jLowfGUNT/yyqCb6rnMvmzDxMXth5yV+LdxvWIjQYjz4uVUC9XGchEElkMX5WK2yBMh85AP6fp3EwTWDATNg24lMEbVJZotGId3GgMHlCGuTEJFHd3qGBMvRCtNcG0BMd3GZbwUCC5icujkIt1TtOAhOJwkTOh+329z9qJvI3W937zhSZeijVClt8A3lEjKLvu/yJ59LDl6Rx4V4DaqtJWUwgf+JwJTxBjXBAykz6OYyIyNH7Z+aamLEXvm21G32JaPJtgwlmqf4khPWIDIkRCANqk1vwymIUDVR67QVIG6mST3Z82+v5RF4qqsPVcGRpLwQSNgfzIgEYhM365DVbnAXxwD/Cl6QCcM1JbB8RGs9Vw0EL6QHzwJg+YniC9s651rt6/40WbhxwjgH2so0tCYyWYDghP1SntpoTYtmFaOkOUzLmkdIlaXfkCxNNgc7ees5frqrm5WNl8TGlIAz4cYW41aYwvkprivXBUjVWCHJ8UOxWlQAl5N3GOCeGM1qfD/f3/SGICR65Q5KCSfIQUU92nzfUW6tR4Rq9ME5QFiyIpvgYHxqj5ZnM2yzKKxTvu5XATtnnwootsd+Sv51elOTuTxE35FL1Vlc2lgNrW46VxWBvzsIoThEf7RnwjL5Y87P4NGYzEfqlAEVHAiUusrlwtLRv4EWvkpLDQL7DLuHOjm1mlOp9/qmefeMyrMlODMxbTPqm66NYawlEdwtMdaGgUhnAswO+g82KQl98Qlcv79VuAkpntyhw5HrPfonsPTHffG5AVE46Ti5rHE+dRCIPTjnrybHQdW4DPHqL7Ef9OBVyPAvNVn5TXLfJS8RnRj1lt/lIYVGZLwlFoJQz2bx3zujpy9De2ONmsY2L0D5hZsLN9pmok2lLXh7M34XIj+4hyoEaUwmtSZS1N2aimp7/Xd4bZqGE23SKbtnKVzloeQ1n2F4Uqm9PQRY83Qqe4a/69icJSXlNT0Xex775iKnPv0MVUh6RpXb87emQYZakQmBI1zlPy6jb26WHzX3ZqEfWqacAwhzGoOKLrZMlGap7afkGFvBVUMO5DQvP8ZHNpFKjf2awwO9e+3L43g2AnB2WYdByZ6MvFYtHkJoMm9/u0eRw8cwdTGkExJhjkk769yapgnOBMSn2kbnNynrzbrNlKmy0RZob8kMrYXGDmm0M79zCW4ZwladydwbVLST8norn6eS91GhMGJCSw0Fn9q6iIt2/m8RDl0i/HnppLsJvo2WiKDc9iARYSRt7XpQnBTlj7DpYWx3ZrMSNVEKTr22PdrYMfsBaV9mmL6Ae0w0r2HGwBNcJvpxDtAf6L9FLqVFNZF755WHov/EXVPGHG17CUZZ3hE4vDHn8Y59vsoJm2A8DwpEhOGeanXD5+m3+UaMIfQPNmxhB133wjqe//0r64mFPVbVxffWRXfMavS+yLpMP7WH6kQeVb8Zd3hqda4YCse0fbKvLT1njcOWwPj/zQ1n8+3idyHC7XmwOxzDE5TuHRQIVQO4LcrMU2uMSu/uKP89oWylsEDyrDkrQGSdjkKs8XYpqjqKSzvySYxKMrdCc3XBZOzmrzfVJJlAdnNtDzgDj7Gc5rXiAMppi8uTatkqhm6VPeIpCXZAzH9HaKVzJy1uV3027sMx4dBlvuvpWm5WZE5SMbNfCRZZrgXMozxJdGjANrJ5wQD9UilkbzJxnMZE8TXK318LNi8YzneMK/OcSUHxb6LyjJo+Gwbk2KIfRU+9rLfBsiTaRWKbbd997jmcXFvoj4rMUgJmQjjuMYhGd1zYElzk4="
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 1546,
+     "candidatesTokenCount": 198,
+     "totalTokenCount": 2447,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      },
+      {
+       "modality": "AUDIO",
+       "tokenCount": 1501
+      }
+     ],
+     "thoughtsTokenCount": 703,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "IZwFa7W-IeuzytMPmbGViAg"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.5-transcribe|s600|C_tr|2",
+   "model": "gemini-3.5-transcribe",
+   "at": "2026-11-24T14:16:12+00:00",
+   "seconds": 1.2,
+   "http_status": 200,
+   "request": {
+    "prompt": "この動画（音声）の日本語の発言を、聞こえた通りに書き起こしてください。出力は書き起こし本文のみとし、前置き、見出し、説明、注記は一切書かないでください。",
+    "mime": "audio/wav",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/hg5w6bxc36wy",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 1546,
+    "output": 198,
+    "thoughts": null,
+    "total": 1744,
+    "by_modality": {
+     "AUDIO": 1501,
+     "TEXT": 45
+    }
+   },
+   "cost_usd": 0.0055,
+   "modelVersion": "gemini-3.5-transcribe",
+   "text": "卯の刻、明智光秀が謀反によって本能寺へ押し寄せた。すぐに禅右府、つまり信長が自害した。続けて信長の嫡男、信忠が妙覚寺を出て二条の御所、日記の言葉では下御所に立てこもったところへも押し寄せ、後に自害したと。この下御所は天皇のお住まいではなく、当時誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時ごろにあたります。ここで大事なのは直ちに、つまりすぐにという言葉です。時慶の記録では襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では弓から槍へ、敵ず、女性たちを逃がす、火、南殿へという流れがありました。この2つは矛盾するのでしょうか。私はそうは考えません。時慶",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "卯の刻、明智光秀が謀反によって本能寺へ押し寄せた。すぐに禅右府、つまり信長が自害した。続けて信長の嫡男、信忠が妙覚寺を出て二条の御所、日記の言葉では下御所に立てこもったところへも押し寄せ、後に自害したと。この下御所は天皇のお住まいではなく、当時誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時ごろにあたります。ここで大事なのは直ちに、つまりすぐにという言葉です。時慶の記録では襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では弓から槍へ、敵ず、女性たちを逃がす、火、南殿へという流れがありました。この2つは矛盾するのでしょうか。私はそうは考えません。時慶",
+         "audioTranscription": {
+          "text": "卯の刻、明智光秀が謀反によって本能寺へ押し寄せた。すぐに禅右府、つまり信長が自害した。続けて信長の嫡男、信忠が妙覚寺を出て二条の御所、日記の言葉では下御所に立てこもったところへも押し寄せ、後に自害したと。この下御所は天皇のお住まいではなく、当時誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻はおよそ午前6時ごろにあたります。ここで大事なのは直ちに、つまりすぐにという言葉です。時慶の記録では襲撃から信長の死まではほとんど間がないように書かれています。一方、信長公記では弓から槍へ、敵ず、女性たちを逃がす、火、南殿へという流れがありました。この2つは矛盾するのでしょうか。私はそうは考えません。時慶"
+         }
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 1546,
+     "candidatesTokenCount": 198,
+     "totalTokenCount": 1744,
+     "promptTokensDetails": [
+      {
+       "modality": "AUDIO",
+       "tokenCount": 1501
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 45
+      }
+     ],
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.5-transcribe",
+    "responseId": "K5wFa457ha_F0g-k6czYCQ"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|MUTE|2",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:16:20+00:00",
+   "seconds": 8.5,
+   "http_status": 200,
+   "request": {
+    "prompt": "発話がない区間や、音声全体が無音になる区間があれば、その開始時刻と終了時刻（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/uzhuza248xz5",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 25,
+    "thoughts": 615,
+    "total": 6139,
+    "by_modality": {
+     "VIDEO": 5460,
+     "TEXT": 39
+    }
+   },
+   "cost_usd": 0.0065,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "以下の区間では発話が見られません。\n\n- 00:15 - 00:35",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "以下の区間では発話が見られません。\n\n- 00:15 - 00:35",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 25,
+     "totalTokenCount": 6139,
+     "cachedContentTokenCount": 3711,
+     "promptTokensDetails": [
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3685
+      }
+     ],
+     "thoughtsTokenCount": 615,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "LJwFa9XkDfzZ0_gPw7KTgQY"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|BLACK|2",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:16:26+00:00",
+   "seconds": 5.9,
+   "http_status": 200,
+   "request": {
+    "prompt": "画面全体が黒くなる区間が存在するか確認してください。存在する場合は開始時刻、終了時刻、継続時間（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/dkhy0ydgu1ky",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 48,
+    "thoughts": 314,
+    "total": 5861,
+    "by_modality": {
+     "TEXT": 39,
+     "VIDEO": 5460
+    }
+   },
+   "cost_usd": 0.0055,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "画面全体が黒くなる区間が存在します。詳細は以下の通りです。\n\n- **開始時刻**: 00:29\n- **終了時刻**: 00:37\n- **継続時間**: 約8秒",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "画面全体が黒くなる区間が存在します。詳細は以下の通りです。\n\n- **開始時刻**: 00:29\n- **終了時刻**: 00:37\n- **継続時間**: 約8秒",
+         "thoughtSignature": "EucICuQIAWkUfRM8A25Qz1/Q9cjYvdBF1haCif08vaq/od/9GFyQ5AqFclYJjdb+1eu4au8RLNY4LggBNrTprmGoTRdPwLkd74tqwcT0VF9on2UlZm5ktw+ymYHPstABGAYtbrdCBjWofVyGpqkU8akMpabrYJlA0E76iVkNjYVjI3ul4a2/kg9jRnDU01XUOyBZpH2l2Y9/6HacleLguo5YlU74ZWXoktCBIWoPQR4NExrurWhcNP8x9bTzchU4yYnxOg5iyHDn/VUr8vnmv5FlWSejkwTBB+nrTblzcmRxvjq2BqN7IE57pcFGhXxVoYl3Q/y3DfYuHuup/blqD86Fq6Z/bQNcknxserRbYh/sVcV0oQ8ZEV7O+cN+9QfhblWK/n+MLlYe/vctBfXYjeqAIEPIVFiAuFhJyImCvv1dLNButyfVo/lMSjGf8ElolenKjXiZ+8pBFKfClXVOnmD2lHTZ2RENbhV8+YsWzhVVAF0JPHkSdfUVUecg7PA4LutJ8go7mrRRdhsapaqFZC+Zw3i8NWS11XRQYkt9h+EM+Cg+btpohfcJwnSV+fu65PwtpSwcJM9viroQN0BEjdIKIYxDRoLnIVtnZB9GjlD9FYmWURquXuPFnAxq/u1fD04ILgW2jI3yR0RD2SjyJa414C5ay6plD9le4LwVTYiUbGL8mM8i8ZjmzRztaV8BBP4s5BgEFgBtU+ZQGAstdNuTlJPWvjSCYeqgv2lSB48p1YKhfXMu8zg6sdemySUg8h5gqFoLntYTWZi9U7K+xySUrkNOlvVZtZo7FT2hpsJ9KX80XIWbD/iX4QUzUbR/NfMWoDDrHO/oLCgtvsspxt/WGIARtZdiFAVzgPf6xRnrY5FK8kyd8Xps7+svLOVbtAjWp4dyjDjNaRBym0YbBqPiCVJmrdwozncfyk4mCG9NxcAmOs6G9wB2y3nFty1LrA4D3B6tIx3FBJ7WSt7ZSk+wmNZz3eFMOO7Eq3AdN56XiBefGYSNI+FURpYcrZ1kA9/YZZltsyeNddGX/uOlKsa+i6rS+hezDjWrZubmAOZrL+vP4mhHCSFPLsSrH72fs7FDzibn6OGaZ+oCTrkpedRWkcdAk5kuvAycK4mvzhe6rid3NSJgBgzCCcyDU8BdCaQgD6BL1l0JtNvRpPRq87nGK2MneCj8i7tp+JEWMgOATb2mOVJ1eZqCJwly8DLNxqNfp7ajDs7s2GZfO7Q5Y+oq2zGLUP2fqLMIuusve592Kv6JiI7cQgWyMZTVdxs3bqu4sKeoQU6y3k6FxqujSpug+Vp9ggFBejFvfMnF6Ks2cA4+9EXKfMnV/651cV3jm/C6If+vKTnuSJ+/zZ01hyk3m929qEIYajDxIGLGZxN4C/+2aMWMAnBvH7+f2eVW4i69qmXw63PMn/GV25XuPGjSJqAgLPUWdVmhHiZdUP6D3zMqxvr8DgDiVeU2QBhQka/tESqDGEjOtQLvIeNuyYauWmywzSKZKsc="
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 48,
+     "totalTokenCount": 5861,
+     "cachedContentTokenCount": 3711,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3685
+      }
+     ],
+     "thoughtsTokenCount": 314,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "NJwFa9nnKqOrytMPk9u8wQc"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|A_clean_silent|2",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:16:33+00:00",
+   "seconds": 6.5,
+   "http_status": 200,
+   "request": {
+    "prompt": "発話がない区間や、音声全体が無音になる区間があれば、その開始時刻と終了時刻（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/rrihs68cyudb",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 19,
+    "thoughts": 522,
+    "total": 6040,
+    "by_modality": {
+     "VIDEO": 5460,
+     "TEXT": 39
+    }
+   },
+   "cost_usd": 0.0062,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "この動画には明確な無音区間や発話がない区間は見られません。",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "この動画には明確な無音区間や発話がない区間は見られません。",
+         "thoughtSignature": "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"
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 19,
+     "totalTokenCount": 6040,
+     "cachedContentTokenCount": 3711,
+     "promptTokensDetails": [
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      },
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3685
+      }
+     ],
+     "thoughtsTokenCount": 522,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "OpwFa6_MI6Gt5NoPy7u7qA4"
+   }
+  },
+  {
+   "kind": "generate",
+   "label": "gemini-3.8-flash|s600|A_clean_black|2",
+   "model": "gemini-3.8-flash",
+   "at": "2026-11-24T14:16:38+00:00",
+   "seconds": 5.2,
+   "http_status": 200,
+   "request": {
+    "prompt": "画面全体が黒くなる区間が存在するか確認してください。存在する場合は開始時刻、終了時刻、継続時間（秒）を報告してください。無ければ「なし」と答えてください。",
+    "mime": "video/mp4",
+    "uri": "https://generativelanguage.googleapis.com/v1beta/files/rrihs68cyudb",
+    "resolution": null,
+    "maxOutputTokens": 8192
+   },
+   "finishReason": "STOP",
+   "promptFeedback": null,
+   "usage": {
+    "prompt": 5499,
+    "output": 22,
+    "thoughts": 352,
+    "total": 5873,
+    "by_modality": {
+     "TEXT": 39,
+     "VIDEO": 5460
+    }
+   },
+   "cost_usd": 0.0055,
+   "modelVersion": "gemini-3.8-flash",
+   "text": "「画面全体が黒くなる区間」は存在しません。よって答えは**なし**です。",
+   "raw": {
+    "candidates": [
+     {
+      "content": {
+       "parts": [
+        {
+         "text": "「画面全体が黒くなる区間」は存在しません。よって答えは**なし**です。",
+         "thoughtSignature": "EocLCoQLAWkUfRNPA5dMsWrziFc2Cyv8PdThNE4lAs4ajevUlm1N3BMo1asmqYmAAXcwlOfo2BJtP40TtSRiwISCLmqRvLiQ/gpX7PaHpuIO2X4aLzY58KBD1mluadY9T4GVU4JxQ8mU1JX55H3XnkX2Vr8eRcLFS2igE2HN2m7aT4FdVms6w1mFFUhm6HAz8iN1mU7ohpJWt+cuLVSkHXopxoa3i1TV5HXjgndOgdblJt++IfAc798De/vy3bJWaZoBWUpq/3BXIETJu7Fyh3ofC6sUMgBkUFFyk+bKAqUmFrkWrPOxGdhQdGV6lEMXxgxqOCn0xJ0fNJoGSxyH8zZBbegtgkBk3H1AoIAyKaVzV2Y9e0dphk/LC40WkRwSvSRuhoLKD0u1mv8E4okpqYrDi7lCIWRj+/Sgv/h8XLul13hTQGP7W7V2WbrIb0ocmeKzWW8+NqTVTKM+dzplds9X6Va+T854zgK3gW1GuIeJKo/+5kOsLVd2Ni/6GcSJ1jE37DtvR0Tl+ALOOZ8kSQXcp5He2QRipqnBGRUHR4/z6DN/YCK7XMCbTmpUK0rSSXosOkHaMhg+7XcRhoVMzMH4xvF0yJM7GrI4LTT6ax4DRGiKzwzK0SbKiys/aVOicg4SvpCJ97v9TV7aMviBlfA4XuYa0rTEY99nOdAXZtj7wp6mn/LGXg2Gnhb9vrGYGHiH6WD+B1o9FaUefKzEwdSWR5pdu0oyk/UbNWXU19TuqqAehuEfbidJbPgnTdoNhgk+z+G2ATg4YLidRGuoKWw8+c7a+U3lvCwp+FGf+PcDsiJvEgaUJ766QGcH6BU7QtDR6OXZP+tru0Ld2kpwipcm1wufumH+tIQB3vNnY3L5Ex57hP2ToACbQmIK0WAHH+hSjKL3dERp6quA2SECSkWrWKrOcl7Sjy3skoAR1pQwYPf06+1fDmGDLwHB6RDu1brriip5NwmZrc8jXJ3oSF+bmkZNWZjNyjo0xj8BN582ZrJttS9j8Ag+nM9VhA2Km67miKfct7BGNhKfMQYpRO1QlA9b64H34SAmKpaFjjkosaGTxd9DE14LUzORGtUFZ57hyQYmLSti9hAkA2R0kFagY4t4S1K9HWCcRwWGnN7N8B6JI2VAAiVjrJfEPcI5vNk+VYm9vU3tdGDw88xK+fhyA86tDkMGPoO+Aq6BmUfv9+bcFu0e4omR8wsSHVKnxQNh0atUBXrazKZ48MiXtc4cqpgunuVTuiKiFeRbXDCGvdcvqQHZsfqiq1YlDorhOi4fgYrOtECX1Lelr2YkgNtI3zcihzJTS/6+Dcc0RCX5cYylANzzeSxzPxJeFCNCC8o1uwnXdwHwWJoPWwlsraeiLidnBQhu8RBzf8KAIEXTOnOH8g6pSdb2Dyj278N5/JdJRmIqHK5UbjKuZ4C5JQnFhv9cB41hYyi8TneLOj3bwihiKDONYYhBCS6lVP4oBKMcxVWSV2p2yenpvuXxG+uchLOs6Rd1ofWW48UVuTH0W8/l+wxqPP5ry5AnnzQTgXNk2/8ub1TjxiqLVM/JjCCIHVPMcac1Cx3r7DHyhWazoXvE86cngF/I+1h3HRX5IsfCgkaSJ8/30fE6HcYqhu8QAdqOb01dnWabK2U51+XHYZF8fYxHZBVVCp03mohb+lq/wKIMrQAhF4ZXQLyLMBxyqvNm5CTMlRIe5cDttD4h223IC+7ghIupLtobBPygFBaOpabKEMaBkfEYo1xGeF8YXvwFVsHCq+mnA6eWC/7vVbso49pD076TxeQ1SPyt9Yy02a7D696iSb/+8GIerR6vvnDVYu3D1/Fq6dV3qe16/ItnQbGymra1y3BBbqQvXOPc1SQDCvs1xpuaDWzqs0BKnHMh7ej6kqo="
+        }
+       ],
+       "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+     }
+    ],
+    "usageMetadata": {
+     "promptTokenCount": 5499,
+     "candidatesTokenCount": 22,
+     "totalTokenCount": 5873,
+     "cachedContentTokenCount": 3711,
+     "promptTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 39
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 5460
+      }
+     ],
+     "cacheTokensDetails": [
+      {
+       "modality": "TEXT",
+       "tokenCount": 26
+      },
+      {
+       "modality": "VIDEO",
+       "tokenCount": 3685
+      }
+     ],
+     "thoughtsTokenCount": 352,
+     "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-3.8-flash",
+    "responseId": "QZwFa9OIBY-p5NoP48-HEA"
+   }
+  }
+ ]
+}
