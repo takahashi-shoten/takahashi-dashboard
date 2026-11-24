@@ -1,0 +1,77 @@
+{
+ "title": "(未定。資産形成・老後資金の解説。例: 『資産◯万円で景色が変わる』型の検証)",
+ "thumbnail_text": "(未定)",
+ "structure": "冒頭で具体的な数字と問い→一般的な制度解説→よくある誤解→数字で確認→免責(個別の投資助言はしない)",
+ "length_s": 900,
+ "tools": [
+  "claude",
+  "gemini(二重確認)",
+  "画像・音声は他と同じ"
+ ],
+ "desire": "経済的欲求(資産形成・老後不安の解消)",
+ "audience": "日本語話者の30〜50代の会社員(想定。未確認)",
+ "hypothesis": "経済的欲求の題材は、娯楽(E1)より広告単価が高く、アフィリエイトにつなげやすい。小規模チャンネルでも再生は取れるが、競合密度が高く差別化が必要。検証: 同じチャンネルでE1と比較してCTR・維持率に差が出るか。",
+ "audience_and_desire": "日本語圏の会社員。老後不安・資産形成。",
+ "evidence_of_desire": "登録者5,600人のチャンネルの『資産3,000万円を超えると景色が変わる』が約55万回(15分)、登録者5,400人の『株価暴落…いま何が起きているのか』が約41万回(2026-11-20)。",
+ "competitor_videos": [
+  {
+   "url": "https://www.youtube.com/watch?v=jsuhe526a6M",
+   "title": "【人生の勝ち組】資産3,000万円を超えると「景色」が変わる理由｜元UBSプライベートバンカーが徹底解説【資産形成】",
+   "published": "2026-09-05",
+   "views": 548741,
+   "subs": 5600,
+   "channel": "【Aiko】元外資PBのウェルスマネジメント",
+   "duration_min": 15,
+   "channel_uploads_90d": 10,
+   "channel_median_views": 40401,
+   "channel_p25": 16705,
+   "channel_p75": 94897
+  },
+  {
+   "url": "https://www.youtube.com/watch?v=gID0vX3FrKE",
+   "title": "【投資家がパニック】止まらない株価暴落...いま何が起きているのか",
+   "published": "2026-11-20",
+   "views": 413093,
+   "subs": 5400,
+   "channel": "さくらのお金教室",
+   "duration_min": 21,
+   "channel_uploads_90d": 8,
+   "channel_median_views": 43670,
+   "channel_p25": 37247,
+   "channel_p75": 207920
+  },
+  {
+   "url": "https://www.youtube.com/watch?v=tHPgQ2wcmyw",
+   "title": "【NISAおすすめ】S&P500、オルカン、日本株、NASDAQ100、FANG+、どれを選ぶのがベストか？",
+   "published": "2026-08-30",
+   "views": 382924,
+   "subs": 43000,
+   "channel": "かず【資産運用・経済チャンネル】",
+   "duration_min": 21,
+   "channel_uploads_90d": 16,
+   "channel_median_views": 39014,
+   "channel_p25": 24923,
+   "channel_p75": 100941
+  },
+  {
+   "url": "https://www.youtube.com/watch?v=qFOKYV2_xm4",
+   "title": "【NISA】「積立てれば安心」は間違い？経済アナリスト・森永康平が語る本当のリスク！ゼロからはじめる投資・資産形成（前編）",
+   "published": "2026-08-26",
+   "views": 376700,
+   "subs": 14300,
+   "channel": "コツ・コツ",
+   "duration_min": 26,
+   "channel_uploads_90d": 14,
+   "channel_median_views": 97095,
+   "channel_p25": 54709,
+   "channel_p75": 135962
+  }
+ ],
+ "competitor_channel_scale_and_distribution": "各動画のchannel_median_views参照。登録者5,400〜5,600人のチャンネルの通常投稿中央値は約4.0万〜4.4万回(8〜10本)。",
+ "room_for_individual_ai": "小規模チャンネルで数十万回の例があるが、専門家の肩書き(元UBS等)に依存している可能性がある(未確認)。AI制作で信頼性を担保する方法が課題。",
+ "differentiation": "未確定。数字の根拠(公的資料の引用)を明示する型を検討。",
+ "cost_and_time_estimate": "約$5〜7/本(実測: 長尺の画像 $3.1〜3.4 + Claude $0.5〜0.7 + 音声は数十セント。画像は混合方式で約半額に低減の見込み。未実測)。制作時間: 約14分/本(実測、CI実行時間)。台本のみの確認は約$0.6。",
+ "monetization_path": "広告単価が長尺の金融系は高いとされる(米国の数値のみで日本は未確認)。証券口座開設などの案件型アフィリエイト(報酬額は未確認)。",
+ "what_this_tests": "経済的欲求 vs 娯楽・好奇心で、同一チャンネルのCTR・維持率に差が出るか。",
+ "failure_metrics": "E1と同じ(インプレッション→CTR→冒頭維持→平均視聴率)。法務: 個別の投資助言に当たらないかの確認(人間の確認事項)。"
+}

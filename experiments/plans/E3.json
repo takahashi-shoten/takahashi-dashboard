@@ -1,0 +1,64 @@
+{
+ "title": "(試作済みの『職場の逆転劇』を使用。題名は試作の案から選定)",
+ "thumbnail_text": "手柄を横取りした課長(漫画2コマ型)",
+ "structure": "冒頭の屈辱のセリフ→段階的な見下し→セリフで逆転→末路。約18分に拡張した場合を比較。",
+ "length_s": 1080,
+ "tools": [
+  "claude",
+  "gemini",
+  "漫画風画像"
+ ],
+ "desire": "娯楽(感情の解放・共感)",
+ "audience": "職場で理不尽を感じる日本語話者の30〜50代(想定。未確認)",
+ "hypothesis": "日本語のドラマ系で最も本数・再生が厚い『スカッと系』の型(約16〜22分、漫画風、題名に屈辱のセリフ→逆転)は、新規チャンネルでもクリックされる。ただし量産型テンプレートとして規約上のリスクがあるため、似た動画を大量に作らない。",
+ "audience_and_desire": "職場の理不尽に耐えている人の感情解放。",
+ "evidence_of_desire": "日本語の『スカッと・漫画系』長尺623本(直近90日・5万再生以上)の再生数中央値は長さ16〜20分帯で約51.8万回。上位10本は16〜22分に集中。",
+ "competitor_videos": [
+  {
+   "url": "https://www.youtube.com/watch?v=foK9xBB16ZA",
+   "title": "Z世代「それパワハラなんでｗ」→上司「じゃあ指導やめるわ」Z世代が指導を拒否し続けた結果、無事終わるｗｗ【ずんだもん解説・ゆっくり解説】",
+   "published": "2026-09-03",
+   "views": 710873,
+   "subs": 22400,
+   "channel": "底辺なのだ",
+   "duration_min": 23,
+   "channel_uploads_90d": 38,
+   "channel_median_views": 202917,
+   "channel_p25": 101988,
+   "channel_p75": 356856
+  },
+  {
+   "url": "https://www.youtube.com/watch?v=QZhUWEtrkz4",
+   "title": "【漫画】「早く300万持ってこい！」新人に見栄を張る為に高級店を強要する同期→実は社長指定の会場は…【恋愛スカッとマンガ動画】",
+   "published": "2026-10-18",
+   "views": 446679,
+   "subs": 18700,
+   "channel": "ぬくぬく恋愛漫画",
+   "duration_min": 14,
+   "channel_uploads_90d": 35,
+   "channel_median_views": 64390,
+   "channel_p25": 43058,
+   "channel_p75": 126997
+  },
+  {
+   "url": "https://www.youtube.com/watch?v=8etp0LiBg_k",
+   "title": "【異世界漫画】魔法学院で俺の魔法盗む同級生。女勇者が冒険者を勧誘しに来たのだが、その目的が…【スカッと】",
+   "published": "2026-09-05",
+   "views": 388481,
+   "subs": 12100,
+   "channel": "ルミナの魔導図書館【異世界スカッと漫画】",
+   "duration_min": 23,
+   "channel_uploads_90d": 14,
+   "channel_median_views": 152425,
+   "channel_p25": 92247,
+   "channel_p75": 342827
+  }
+ ],
+ "competitor_channel_scale_and_distribution": "上位動画の投稿者(登録者71.6万人の大手チャンネル)は参考のみで、個人AIの根拠にしない。小規模チャンネルの例は上のchannel_median_views参照。",
+ "room_for_individual_ai": "小規模チャンネル(登録者1〜2万人台)で数十万回の例がある。ただし同型が非常に多く、競争が激しい(未確認: 新規参入の成功率)。",
+ "differentiation": "契約書の三ページ目など、手続き・記録を軸にした独自の仕掛け(品質確認で独自性の懸念は残った)。",
+ "cost_and_time_estimate": "約$5〜7/本(実測: 長尺の画像 $3.1〜3.4 + Claude $0.5〜0.7 + 音声は数十セント。画像は混合方式で約半額に低減の見込み。未実測)。制作時間: 約14分/本(実測、CI実行時間)。台本のみの確認は約$0.6。",
+ "monetization_path": "YouTube広告(収益化条件到達後)。",
+ "what_this_tests": "漫画風の中身+漫画2コマのサムネで、E1(歴史)とのCTR・維持率の差。",
+ "failure_metrics": "E1と同じ。規約リスク(量産型と判断されるか)は、収益化審査の結果で確認(未確認)。"
+}

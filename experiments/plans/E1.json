@@ -1,0 +1,79 @@
+{
+ "title": "本能寺、炎の中の最期の1時間。信長のそばにいた若者は、何を思ったのか",
+ "thumbnail_text": "本能寺 業火の1時間",
+ "structure": "冒頭10秒で場面に放り込む→史料(信長公記ほか)で確かめられる経過→小姓衆の記録→『ここからは想像』を短く区別→記録が途切れる所を正直に示す",
+ "length_s": 1200,
+ "tools": [
+  "claude-opus-5-5(台本)",
+  "claude web search + gemini(二重確認)",
+  "gemini-3.1-flash-image/flash-lite-image(画像・混合)",
+  "gemini-3.8-flash-tts(音声)",
+  "ffmpeg"
+ ],
+ "desire": "娯楽・好奇心(謎・知識欲・その場にいるような没入)",
+ "audience": "日本語話者。歴史・戦国に関心がある成人(想定。実視聴者の属性は公開後のAnalyticsで確認)",
+ "hypothesis": "『黒幕は誰か』ではなく『その瞬間、寺の中で何が起きていたか』という場面再現の切り口は、既存の本能寺動画(黒幕・AI推理)と被らず、題名とサムネの引きでクリック率を取れる。検証指標: 公開後7日でインプレッション≥1,000に達した場合のCTR、平均視聴率。",
+ "audience_and_desire": "日本語圏の歴史好き。娯楽・好奇心(謎、知識欲)。",
+ "evidence_of_desire": "日本語の歴史・謎系ヒット596本(直近90日・5万再生以上)のうち、『黒幕/真相/正体』型140本(中央値約19.8万回)、『最期/死因/暗殺』型16本(中央値約21万回)。同系統: ヒトラー最期の48時間 約175万回(登録者331万人のチャンネル=参考のみ)。",
+ "competitor_videos": [
+  {
+   "url": "https://www.youtube.com/watch?v=qzwD0OdfFJQ",
+   "title": "【440年の謎】本能寺の変の黒幕をAIに推理させたら、意外な人物が浮かび上がった",
+   "published": "2026-10-15",
+   "views": 1791632,
+   "subs": 18500,
+   "channel": "AI都市伝説検証室",
+   "duration_min": 26,
+   "channel_uploads_90d": 13,
+   "channel_median_views": 245037,
+   "channel_p25": 50989,
+   "channel_p75": 314545
+  },
+  {
+   "url": "https://www.youtube.com/watch?v=7jdgMycgil4",
+   "title": "【地形の謎】なぜ阿蘇は「山が吹き飛んだ跡」ではないのか？標高データで暴く巨大カルデラの真実",
+   "published": "2026-10-21",
+   "views": 1160387,
+   "subs": 7100,
+   "channel": "立体日本列島",
+   "duration_min": 11,
+   "channel_uploads_90d": 3,
+   "channel_median_views": 221784,
+   "channel_p25": 14083,
+   "channel_p75": 1160387
+  },
+  {
+   "url": "https://www.youtube.com/watch?v=ALQPWw4mIxQ",
+   "title": "【30年未解決】ジョンベネ事件にAIが驚きの回答「犯人は特定できた。だけど逮捕はほぼ不可能です」誰も裁かれない理由と事件の真相",
+   "published": "2026-10-31",
+   "views": 651726,
+   "subs": 14200,
+   "channel": "AI再捜査【実験検証】",
+   "duration_min": 47,
+   "channel_uploads_90d": 13,
+   "channel_median_views": 86574,
+   "channel_p25": 52737,
+   "channel_p75": 274420
+  },
+  {
+   "url": "https://www.youtube.com/watch?v=2MSVk-c4s0c",
+   "title": "【完全版】戦国の勢力図｜応仁の乱から大坂の陣まで 日本地図が塗り替わる148年をこの1本で",
+   "published": "2026-10-27",
+   "views": 589988,
+   "subs": 12400,
+   "channel": "ドラマチック見聞録 | ビジュアル日本史解説 ",
+   "duration_min": 33,
+   "channel_uploads_90d": 10,
+   "channel_median_views": 109918,
+   "channel_p25": 96144,
+   "channel_p75": 194278
+  }
+ ],
+ "competitor_channel_scale_and_distribution": "上の各動画のchannel_median_views/p25/p75(直近90日の通常投稿)を参照。本能寺AI推理の投稿者(登録者1.85万人)は通常投稿の中央値約24.5万回(13本)=一定の規模と実績があるチャンネルであり、登録者0の新規チャンネルの期待値ではない。新規(登録者1,000人未満)の通常動画の再生数中央値は約1,400回(日本語・10分以上、調査で見つかったチャンネルが対象で、実際はこれより低い可能性)。",
+ "room_for_individual_ai": "小規模チャンネル(登録者1〜3万人)が同ジャンルで数十万〜百万回超を出している事実がある(未確認: 再現性)。ただし制作会社の大ヒットは直接の証拠にしない。",
+ "differentiation": "場面再現(最期の1時間)×史料の区別(史料にあること/後世の創作/想像)。同ジャンルの多くは『黒幕は誰か』型。",
+ "cost_and_time_estimate": "約$5〜7/本(実測: 長尺の画像 $3.1〜3.4 + Claude $0.5〜0.7 + 音声は数十セント。画像は混合方式で約半額に低減の見込み。未実測)。制作時間: 約14分/本(実測、CI実行時間)。台本のみの確認は約$0.6。",
+ "monetization_path": "YouTube広告(長尺。収益化条件到達後)。当面は収益ゼロの見込みで、目的は視聴データの取得。アフィリエイト(書籍等)は将来検討(未確認)。",
+ "what_this_tests": "(1)場面再現の切り口のCTR (2)冒頭10秒の離脱 (3)20分の長さでの平均視聴率 (4)史料ベースの信頼性訴求が維持率に効くか",
+ "failure_metrics": "インプレッション数(表示されたか)→CTR(クリックされたか)→冒頭30秒の維持率(離脱)→平均視聴率(期待とのずれ)。視聴維持率曲線は未取得(要追加取得)。"
+}
