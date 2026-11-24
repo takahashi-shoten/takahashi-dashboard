@@ -92,7 +92,7 @@ jobs:
           PY
 
   gemini-live:
-    if: github.event.inputs.task == 'gemini' || github.event.inputs.task == 'imagecompare' || github.event.inputs.task == 'ttscompare' || github.event.inputs.task == 'ttsvariants' || github.event.inputs.task == 'ttsen' || github.event.inputs.task == 'music' || github.event.inputs.task == 'videoprobe' || github.event.inputs.task == 'diag' || github.event.inputs.task == 'brand' || github.event.inputs.task == 'thumbstudy' || github.event.inputs.task == 'thumbgen' || github.event.inputs.task == 'thumbhist'
+    if: github.event.inputs.task == 'gemini' || github.event.inputs.task == 'imagecompare' || github.event.inputs.task == 'ttscompare' || github.event.inputs.task == 'ttsvariants' || github.event.inputs.task == 'ttsen' || github.event.inputs.task == 'music' || github.event.inputs.task == 'videoprobe' || github.event.inputs.task == 'diag' || github.event.inputs.task == 'brand' || github.event.inputs.task == 'thumbstudy' || github.event.inputs.task == 'thumbgen' || github.event.inputs.task == 'thumbhist' || github.event.inputs.task == 'vuprobe'
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -113,8 +113,9 @@ jobs:
         working-directory: studio
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           STUDIO_GEMINI_REVIEW_MODEL: gemini-3.8-flash
-        run: python -m studio.${{ github.event.inputs.task == 'imagecompare' && 'image_compare' || github.event.inputs.task == 'ttscompare' && 'tts_compare' || github.event.inputs.task == 'ttsvariants' && 'tts_variants' || github.event.inputs.task == 'ttsen' && 'tts_en_probe' || github.event.inputs.task == 'music' && 'music_live_test' || github.event.inputs.task == 'videoprobe' && 'video_probe' || github.event.inputs.task == 'diag' && 'diag' || github.event.inputs.task == 'brand' && 'brand' || github.event.inputs.task == 'thumbstudy' && 'thumb_study' || github.event.inputs.task == 'thumbgen' && 'thumb_manga' || github.event.inputs.task == 'thumbhist' && 'thumb_history' || 'gemini_live_test' }}
+        run: python -m studio.${{ github.event.inputs.task == 'imagecompare' && 'image_compare' || github.event.inputs.task == 'ttscompare' && 'tts_compare' || github.event.inputs.task == 'ttsvariants' && 'tts_variants' || github.event.inputs.task == 'ttsen' && 'tts_en_probe' || github.event.inputs.task == 'music' && 'music_live_test' || github.event.inputs.task == 'videoprobe' && 'video_probe' || github.event.inputs.task == 'diag' && 'diag' || github.event.inputs.task == 'brand' && 'brand' || github.event.inputs.task == 'thumbstudy' && 'thumb_study' || github.event.inputs.task == 'thumbgen' && 'thumb_manga' || github.event.inputs.task == 'thumbhist' && 'thumb_history' || github.event.inputs.task == 'vuprobe' && 'vu_probe' || 'gemini_live_test' }}
       - name: Publish sample image to studio-samples branch (so it can be viewed)
         if: always()
         run: |
