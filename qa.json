@@ -1,0 +1,72 @@
+{
+ "decision": "needs_human",
+ "rule_findings": [
+  {
+   "id": "duration",
+   "severity": "warn",
+   "message": "total 1066s is outside 60..900"
+  }
+ ],
+ "reviews": [
+  {
+   "reviewer": "claude_web",
+   "verdict": "revise",
+   "issues": [
+    "Section 4 says Mori Yoshinari was killed 'when Nobunaga was still far from 天下' (信長がまだ天下に遠かったころ). He actually died in Genki 1 (1570) at Usayama Castle in Ōmi. That was after Nobunaga had marched into Kyoto in 1568 and was already close to the center of power. Change it to something like 「元亀元年(1570)、近江の宇佐山城の戦いで討ち死にした」.",
+    "Section 1 says Nobunaga had 'nearly taken most of the realm' (天下の大半を手にしかけていた). Sources usually say his lands covered about half the country in early summer of Tenshō 10, so 'most' (大半) overstates it. Suggest 「天下の半分ほどを手中にしていた」 or 「天下統一に迫っていた」.",
+    "Section 1 says he vanished 'in a very short time' (わずかな時間のうちに姿を消しました). This goes against the script's own stated rule not to claim how long things took. Remove the time phrase or soften it.",
+    "Section 3 says Shinchō Kōki reportedly has the 'thought it was a quarrel among low-ranking men' passage (という趣旨の記述があるとされます). The original text is confirmed (「当座の喧嘩を下々の者ども仕出し候と、おぼしめされ候」), so the hedge 'reportedly' (とされます) can go. You could also quote the original line.",
+    "Section 4 says only that Mori Ran's birth year is disputed. The usual date is Eiroku 8 (1565), with other theories up to about 1568. Giving that range would be more accurate and easier to follow (not an error, just a suggestion).",
+    "Policy check: I found no problems with advertiser rules, minors, sexual content, defamation, or medical or financial claims. The AI disclosure is in the description and should also be turned on with the platform's own disclosure setting.",
+    "Section 7 (本城惣右衛門覚書): 'Some people say the entrance seems to have been quiet' is weaker than the source. The memoir itself says the gate was open and 'not even a mouse' was there (鼠ほどのものもいませんでした). Cite the memoir's own words instead of attributing it to unnamed commentators.",
+    "Section 8 (Frois): 'the 1582 letter' should be named precisely as the 1582 Annual Letter supplement (日本年報追加), dated 5 November 1582 and sent from Kuchinotsu. Also say Frois was in Kuchinotsu in Kyushu at the time. His account was based on reports from Francisco Carrión, who was at the Kyoto church near Honnō-ji. That is more accurate and easier to check than 'missionaries in Kyoto'.",
+    "Section 8: The script contrasts the weapons as bow-and-spear (信長公記) versus naginata (Frois). This needs care: one secondary summary of Frois's 日本史 says Nobunaga also drew a bow whose string broke. Check the 日本史 wording before saying the weapons are entirely different.",
+    "Section 8: Frois's second version (burned alive / died in the fire) is described as 'set fire to the palace and died'. Check that the wording matches the translation, which is roughly 'or, alternatively, burned to death'.",
+    "Section 5: The idea that the women who were sent out were Gyūichi's source is clearly labeled as the narrator's guess, which is acceptable. Keep the hedge exactly as it is.",
+    "Policy check: no sexual content, minors, graphic violence or defamation was found. The AI disclosure is present. The visual prompts are non-graphic and show no real person's likeness.",
+    "Section 9 says about Mori Ran that the recorded actions are 'very few' and ends with 'that is all' (記録に残る行動は実はごくわずか…それだけです). This only holds for the Honnō-ji scene. The Shinchō Kōki also names 森乱 in other entries, for example as Nobunaga's messenger in Tenshō 7 (1579). Add a limiter such as '本能寺の場面では' or 'この朝の記録では' so viewers don't think he barely appears in the records at all.",
+    "Not an error, just noting for accuracy: the Yasuda Sakubei stories come from Edo-period compiled works such as the 森家先代実録 (a Mori family history) and the essay collection 翁草, not only from 'military tales.' The current wording ('後世の軍記や物語', later military tales and stories) is acceptable, but 'later compiled works (後世の編纂物)' would be more precise."
+   ],
+   "unverified_claims": [
+    "言経卿記 6月2日条: I could not find the actual wording (卯刻 / 明智日向守 / 則時に前右府打死 / 信忠が妙覚寺から下御所に籠もり討死) after searching.",
+    "下御所 = 誠仁親王's 二条新御所 (the identification in the 言経卿記 passage was not checked against a source).",
+    "卯の刻 ≈ around 6 a.m. (standard convention, but my search on this was not completed).",
+    "Frois's statement that Nobunaga's body was burned to ash with 'not a single hair' remaining was not confirmed.",
+    "信長公記 lists 中間 (low-rank servants) by name among the dead (the passage on the stable group was confirmed; the 中間 list was not quoted in sources found).",
+    "信長公記 lists 森乱・森力・森坊 among the dead inside the palace (a secondary source mentions the brothers but I did not see the exact list).",
+    "Tokugawa Ieyasu was in the Kamigata area at the time (one secondary source says he was travelling from Sakai to Kyoto; no authoritative source was checked)."
+   ],
+   "usage": {
+    "input_tokens": 217197,
+    "output_tokens": 7900,
+    "web_searches": 26
+   },
+   "model": "claude-opus-5-5"
+  },
+  {
+   "reviewer": "gemini",
+   "verdict": "pass",
+   "issues": [],
+   "unverified_claims": [],
+   "usage": {
+    "input_tokens": 8798,
+    "output_tokens": 4035
+   },
+   "model": "gemini-pro-latest"
+  }
+ ],
+ "unverified_claims": [
+  "言経卿記 6月2日条: I could not find the actual wording (卯刻 / 明智日向守 / 則時に前右府打死 / 信忠が妙覚寺から下御所に籠もり討死) after searching.",
+  "下御所 = 誠仁親王's 二条新御所 (the identification in the 言経卿記 passage was not checked against a source).",
+  "卯の刻 ≈ around 6 a.m. (standard convention, but my search on this was not completed).",
+  "Frois's statement that Nobunaga's body was burned to ash with 'not a single hair' remaining was not confirmed.",
+  "信長公記 lists 中間 (low-rank servants) by name among the dead (the passage on the stable group was confirmed; the 中間 list was not quoted in sources found).",
+  "信長公記 lists 森乱・森力・森坊 among the dead inside the palace (a secondary source mentions the brothers but I did not see the exact list).",
+  "Tokugawa Ieyasu was in the Kamigata area at the time (one secondary source says he was travelling from Sakai to Kyoto; no authoritative source was checked)."
+ ],
+ "reasons": [
+  "only 1 independent (different-vendor, non-mock) reviewer(s) passed (need 2)",
+  "claude_web asks for revision",
+  "7 unverified claim(s)"
+ ]
+}
