@@ -1,0 +1,220 @@
+{
+ "project_id": 1,
+ "lang": "ja",
+ "stages": {
+  "script": {
+   "status": "real",
+   "note": "narration_chars=5723"
+  },
+  "script_revision": {
+   "status": "real",
+   "note": "revised after QA feedback"
+  },
+  "qa": {
+   "status": "real",
+   "note": "decision=needs_human"
+  },
+  "storyboard": {
+   "status": "real",
+   "note": "beats=92"
+  },
+  "voice": {
+   "status": "real",
+   "note": "GeminiVoice gemini-3.8-flash-tts voice=Iapetus"
+  },
+  "visuals": {
+   "status": "real",
+   "note": "92 images; HybridImage premium=gemini-3.1-flash-image (opening + ending), standard=gemini-3.1-flash-lite-image"
+  },
+  "edit": {
+   "status": "real",
+   "note": "ffmpeg assembly"
+  }
+ },
+ "files": {
+  "final.mp4": "/home/runner/work/takahashi-dashboard/takahashi-dashboard/studio/work/1/final.mp4",
+  "preview.mp4": "/home/runner/work/takahashi-dashboard/takahashi-dashboard/studio/work/1/preview.mp4",
+  "shorts.mp4": "/home/runner/work/takahashi-dashboard/takahashi-dashboard/studio/work/1/shorts.mp4",
+  "thumbnail.png": "/home/runner/work/takahashi-dashboard/takahashi-dashboard/studio/work/1/thumbnail.png",
+  "final.srt": "/home/runner/work/takahashi-dashboard/takahashi-dashboard/studio/work/1/final.srt",
+  "script.json": "/home/runner/work/takahashi-dashboard/takahashi-dashboard/studio/work/1/script.json",
+  "storyboard.json": "/home/runner/work/takahashi-dashboard/takahashi-dashboard/studio/work/1/storyboard.json",
+  "qa.json": "/home/runner/work/takahashi-dashboard/takahashi-dashboard/studio/work/1/qa.json"
+ },
+ "qa": {
+  "decision": "needs_human",
+  "reasons": [
+   "only 1 independent (different-vendor, non-mock) reviewer(s) passed (need 2)",
+   "claude_web asks for revision",
+   "10 unverified claim(s)"
+  ],
+  "reviewers": [
+   "claude_web",
+   "gemini"
+  ],
+  "issues": [
+   "The web search tool hit its usage limit before it returned any results, so none of the script's factual claims could be checked against a source. Under the review rules the script cannot pass until the claims listed below are checked.",
+   "No policy problems found. The violence and seppuku are historical, non-graphic and told in an educational way. There are no minors in sexual or harmful contexts, no medical or financial claims, and no defamation of living people. The AI disclosure is included and the visual prompts avoid real-person likenesses.",
+   "Originality looks fine: the angle is to compare four primary sources, and the narration clearly separates what the records say, later legends, and the narrator's own guesses (for example, the idea that the women who were sent out were Ōta Gyūichi's source is labelled as a guess).",
+   "Small precision fix: say clearly that Frois wrote his 1582 report from Kuchinotsu, outside Kyoto. The script only says he was not in Kyoto. Also check the exact date of the letter before naming it in the description.",
+   "Small precision fix: Shinchō Kōki itself records the grant to Mori Ran as Kaneyama and Yonedajima. Iwamura comes from later sources. The narration should say this rather than treating the versions as equal."
+  ],
+  "unverified": [
+   "Shinchō Kōki wording and order of events: first taken for a brawl among low-ranking people (当座の喧嘩), then war cries and gunfire, then 是は謀叛か / 明智が者と見え申候 / 是非に及ばず",
+   "Shinchō Kōki: the bowstrings broke, Nobunaga was wounded in the elbow by a spear, he said 女はくるしからず、急ぎ罷り出でよ, the palace was set on fire, and he closed the storeroom door (納戸) from inside and committed seppuku",
+   "Shinchō Kōki: names of those killed (Yashiro Shōsuke, Ban Tarōzaemon, Ban Shōrin, Murata Kichigo; Mori Ran, Riki and Bō) and the guards from the front hall joining the defence of the palace",
+   "Tokitsune Kyōki entry for 6/2: hour of the Rabbit (卯刻), 'immediately' (則時ニ) Nobunaga killed, Nobutada holed up in the Shimo-gosho (Prince Sanehito's Nijō palace)",
+   "Honjō Sōemon memoir: written around Kan'ei 17 (1640), says he thought the target was Ieyasu, and the temple entrance was quiet",
+   "Frois: was not in Kyoto at the time; details of washing his face, the arrow, the naginata, the gunshot wound, two versions of how he died, and not a hair left (毛髪も残らず灰)",
+   "Mori Ran's given name was Nariyoshi; his father Mori Yoshinari was killed in battle in Ōmi; the 1582 land grant locations; his birth year is disputed",
+   "The Atsumori dance appears in Shinchō Kōki at Okehazama, not at Honnōji; the Yasuda Sakubei and paper-door (shōji) scenes come from later legends",
+   "The Kyoto church (Nanbanji) was near Honnōji; Ieyasu was in the Kamigata area (Sakai) at the time",
+   "Akechi's army marched from Kameyama in Tanba during the night and surrounded the temple around dawn; the date was Tenshō 10, 6/2"
+  ]
+ },
+ "title_options": [
+  "夜明けの本能寺、最期の朝。信長のそばにいた若者は、何を見たのか",
+  "「明智が者と見え申し候」本能寺の朝、4つの史料が語る寺の中の真実",
+  "黒幕ではなく「現場」を追う。本能寺の変、記録はどこまで語っているのか",
+  "敦盛も障子も記録にない?本能寺の最期を一次史料で確かめる"
+ ],
+ "ai_disclosure_needed": true,
+ "voice_credit": "Gemini TTS voice=Iapetus (synthetic voice)",
+ "narration_seconds": 1146.6,
+ "final_seconds": 1150.6,
+ "costs": [
+  {
+   "stage": "script",
+   "provider": "anthropic",
+   "model": "claude-opus-5-5",
+   "input_tokens": 3678,
+   "output_tokens": 19535,
+   "usd": 0.405412
+  },
+  {
+   "stage": "script_revise",
+   "provider": "anthropic",
+   "model": "claude-opus-5-5",
+   "input_tokens": 12335,
+   "output_tokens": 13487,
+   "usd": 0.31908
+  },
+  {
+   "stage": "qa",
+   "provider": "anthropic",
+   "model": "claude-opus-5-5",
+   "input_tokens": 51277,
+   "output_tokens": 3631,
+   "usd": 0.277728
+  },
+  {
+   "stage": "qa",
+   "provider": "gemini",
+   "model": "gemini-pro-latest",
+   "input_tokens": 8927,
+   "output_tokens": 4658,
+   "usd": null
+  },
+  {
+   "stage": "storyboard",
+   "provider": "anthropic",
+   "model": "claude-sonnet-5-5",
+   "input_tokens": 9301,
+   "output_tokens": 8215,
+   "usd": 0.100752
+  },
+  {
+   "stage": "voice",
+   "provider": "gemini",
+   "model": "gemini-3.8-flash-tts",
+   "input_tokens": 379,
+   "output_tokens": 2314,
+   "usd": null
+  },
+  {
+   "stage": "voice",
+   "provider": "gemini",
+   "model": "gemini-3.8-flash-tts",
+   "input_tokens": 371,
+   "output_tokens": 2348,
+   "usd": null
+  },
+  {
+   "stage": "voice",
+   "provider": "gemini",
+   "model": "gemini-3.8-flash-tts",
+   "input_tokens": 412,
+   "output_tokens": 3117,
+   "usd": null
+  },
+  {
+   "stage": "voice",
+   "provider": "gemini",
+   "model": "gemini-3.8-flash-tts",
+   "input_tokens": 397,
+   "output_tokens": 2513,
+   "usd": null
+  },
+  {
+   "stage": "voice",
+   "provider": "gemini",
+   "model": "gemini-3.8-flash-tts",
+   "input_tokens": 490,
+   "output_tokens": 3699,
+   "usd": null
+  },
+  {
+   "stage": "voice",
+   "provider": "gemini",
+   "model": "gemini-3.8-flash-tts",
+   "input_tokens": 480,
+   "output_tokens": 3467,
+   "usd": null
+  },
+  {
+   "stage": "voice",
+   "provider": "gemini",
+   "model": "gemini-3.8-flash-tts",
+   "input_tokens": 469,
+   "output_tokens": 3439,
+   "usd": null
+  },
+  {
+   "stage": "voice",
+   "provider": "gemini",
+   "model": "gemini-3.8-flash-tts",
+   "input_tokens": 418,
+   "output_tokens": 2872,
+   "usd": null
+  },
+  {
+   "stage": "voice",
+   "provider": "gemini",
+   "model": "gemini-3.8-flash-tts",
+   "input_tokens": 412,
+   "output_tokens": 2575,
+   "usd": null
+  },
+  {
+   "stage": "voice",
+   "provider": "gemini",
+   "model": "gemini-3.8-flash-tts",
+   "input_tokens": 344,
+   "output_tokens": 2281,
+   "usd": null
+  },
+  {
+   "stage": "images",
+   "provider": "gemini",
+   "model": "gemini-3.1-flash-image+gemini-3.1-flash-lite-image",
+   "input_tokens": 0,
+   "output_tokens": 144078,
+   "usd": 4.91583
+  }
+ ],
+ "measured_usd_claude": 1.103,
+ "image_output_tokens": 144078,
+ "image_usd_estimate": 4.9158,
+ "is_mock": false,
+ "ready_to_publish": false
+}

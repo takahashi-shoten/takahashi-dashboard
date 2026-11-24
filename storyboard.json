@@ -1,0 +1,1046 @@
+{
+  "style_bible": {
+    "look": "Painterly realistic historical illustration, cinematic low-key light, muted earthy palette of ochre, umber, faded indigo and ash grey, soft film grain, shallow depth of field, 35mm cinematic framing, accurate Sengoku-period (16th century Japan) details, firelight and dawn mist as main light sources, no text anywhere.",
+    "cast": [
+      {
+        "id": "page",
+        "description": "Anonymous young samurai attendant, about 18, slim build, hair in a topknot, wearing a dark indigo kimono and hakama with a short sword at his waist, alert earnest expression."
+      },
+      {
+        "id": "lord",
+        "description": "Anonymous powerful warlord, about 48, lean and sharp featured, thin moustache, hair in a topknot, wearing a white under-robe and a dark crimson kimono, commanding presence."
+      },
+      {
+        "id": "scribe",
+        "description": "Anonymous elderly retainer-chronicler, about 60, thin, grey topknot, wrinkled kind face, plain grey-brown kimono and hakama, ink-stained fingers."
+      },
+      {
+        "id": "old_soldier",
+        "description": "Anonymous elderly foot soldier, about 75, weathered face, white thinning hair, plain faded brown kimono, sitting hunched, calloused hands."
+      }
+    ],
+    "locations": [
+      {
+        "id": "temple",
+        "description": "A large 16th-century Kyoto temple compound at dawn: wooden halls with tiled roofs, gravel courtyard, heavy gates, mist."
+      },
+      {
+        "id": "hall",
+        "description": "Interior of the temple residence: tatami rooms, paper sliding doors, wooden pillars, dim lamplight, later filled with smoke and flames."
+      },
+      {
+        "id": "study",
+        "description": "Dim study of a chronicler: low desk, paper scrolls, brush and ink stone, oil lamp, wooden shelves."
+      },
+      {
+        "id": "kyoto",
+        "description": "Streets of 16th-century Kyoto: wooden townhouses, dirt road, pale dawn sky."
+      }
+    ]
+  },
+  "beats": [
+    {
+      "section": 1,
+      "beat": 1,
+      "chars": 59,
+      "narration": "『明智が者と見え申し候』。夜明けの本能寺で、若者がそう告げた。信長が返した言葉は、たった一言だった。『是非に及ばず』。",
+      "shot": "medium",
+      "cast_ids": [
+        "page",
+        "lord"
+      ],
+      "visual_prompt": "In a dim hall at dawn, the young attendant kneels and speaks urgently while the warlord sits up from bedding, tense stillness, grey light through paper doors.",
+      "replaced": false
+    },
+    {
+      "section": 1,
+      "beat": 2,
+      "chars": 52,
+      "narration": "この短いやりとりは、太田牛一がまとめた『信長公記』に書き残されています。天正十年六月二日、夜明けの京都。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "An old bound chronicle book lying open on a wooden desk, brush marks blurred as abstract strokes, warm lamp light.",
+      "replaced": false
+    },
+    {
+      "section": 1,
+      "beat": 3,
+      "chars": 68,
+      "narration": "天下の大半を手にしかけていた男が、わずかな時間のうちに姿を消しました。この事件が語られるとき、話題はたいてい『黒幕は誰か』に向かいます。",
+      "shot": "environment",
+      "cast_ids": [],
+      "visual_prompt": "Kyoto rooftops at first light under heavy mist, a distant temple silhouette, a sense of vanishing power.",
+      "replaced": false
+    },
+    {
+      "section": 1,
+      "beat": 4,
+      "chars": 66,
+      "narration": "でも、この動画ではその問いをいったん脇に置きます。追いかけたいのは、もっと手前の問いです。あの朝、寺の中で実際に何が起きていたのか。",
+      "shot": "back_view",
+      "cast_ids": [
+        "scribe"
+      ],
+      "visual_prompt": "The chronicler stands at the edge of a temple courtyard looking at the silent halls in dawn mist, setting a question aside.",
+      "replaced": false
+    },
+    {
+      "section": 1,
+      "beat": 5,
+      "chars": 85,
+      "narration": "そして、主君のそばで『明智が者』と告げた若者は何者だったのか。ドラマや小説で、私たちはこの場面を何度も見てきました。燃え上がる御殿、舞を舞う信長、静かに障子を閉める背中。",
+      "shot": "wide",
+      "cast_ids": [],
+      "visual_prompt": "A dramatic imagined scene: a great temple hall engulfed in flames at night, sparks rising, a figure dancing in silhouette inside, a sliding door being closed.",
+      "replaced": false
+    },
+    {
+      "section": 1,
+      "beat": 6,
+      "chars": 60,
+      "narration": "けれど、どれが当時の記録に書かれていて、どれが後から付け加えられたものなのか。意外なほど区別されないまま語られています。",
+      "shot": "hands_detail",
+      "cast_ids": [
+        "scribe"
+      ],
+      "visual_prompt": "Hands sorting several old paper scrolls into two piles on a desk, one worn and one freshly painted looking, lamp light.",
+      "replaced": false
+    },
+    {
+      "section": 1,
+      "beat": 7,
+      "chars": 79,
+      "narration": "手がかりになるのは、立場のまったく違う四つの記録です。信長の家臣だった人物の記録、京都の公家の日記、攻め込んだ側の一兵士の覚え書き、そして外国人宣教師の報告。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "Four different old documents laid side by side on a tatami floor: a bound chronicle, a diary book, a rough folded memoir, and a foreign letter with wax seal.",
+      "replaced": false
+    },
+    {
+      "section": 1,
+      "beat": 8,
+      "chars": 42,
+      "narration": "この四つを並べて、確かめられることと確かめられないことを、ひとつずつ分けていきます。",
+      "shot": "hands_detail",
+      "cast_ids": [
+        "scribe"
+      ],
+      "visual_prompt": "Hands placing four documents in a row, a small wooden marker moved between them, soft lamp light.",
+      "replaced": false
+    },
+    {
+      "section": 2,
+      "beat": 1,
+      "chars": 68,
+      "narration": "まず、多くの人が思い浮かべる本能寺の最期を、ざっとたどってみます。明け方、物音で目を覚ました信長が、そばに控える森蘭丸に何事かと尋ねる。",
+      "shot": "over_shoulder",
+      "cast_ids": [
+        "lord",
+        "page"
+      ],
+      "visual_prompt": "Over the shoulder of the warlord waking in bedding, the young attendant kneeling near the sliding door in dim dawn light, distant noise implied.",
+      "replaced": false
+    },
+    {
+      "section": 2,
+      "beat": 2,
+      "chars": 81,
+      "narration": "蘭丸が明智の謀反だと告げると、信長は『是非もなし』とつぶやく。弓を取り、槍を振るって戦うが、多勢に無勢。やがて御殿に火を放ち、炎の中で『人間五十年』と敦盛を舞う。",
+      "shot": "medium",
+      "cast_ids": [
+        "lord"
+      ],
+      "visual_prompt": "The warlord grips a bow and then a spear in a hall, flames starting to glow behind paper doors, dramatic firelight.",
+      "replaced": false
+    },
+    {
+      "section": 2,
+      "beat": 3,
+      "chars": 64,
+      "narration": "そして奥の間に入り、静かに障子を閉めて腹を切る。蘭丸は最後まで主君を守って戦い、討ち死にする。遺体は見つからず、謎だけが残った。",
+      "shot": "back_view",
+      "cast_ids": [
+        "lord"
+      ],
+      "visual_prompt": "The warlord walks into an inner room and pulls a sliding door shut behind him, smoke curling in the corridor.",
+      "replaced": false
+    },
+    {
+      "section": 2,
+      "beat": 4,
+      "chars": 79,
+      "narration": "映画やドラマ、時代小説で、この流れはほとんど定番になっています。でも、こうした場面のひとつひとつに出どころがあります。同時代の記録にそのまま書かれているもの。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "A stack of old books and playbills-like woodblock prints with no legible writing, spread on a table, warm light.",
+      "replaced": false
+    },
+    {
+      "section": 2,
+      "beat": 5,
+      "chars": 72,
+      "narration": "記録をもとに、後から膨らませたもの。そして、記録にはまったく見当たらないもの。それらが混ざり合って、ひとつの『有名な最期』ができあがっています。",
+      "shot": "environment",
+      "cast_ids": [],
+      "visual_prompt": "Three streams of colored mist merging above a burning temple silhouette, a metaphor for blended sources, painterly.",
+      "replaced": false
+    },
+    {
+      "section": 2,
+      "beat": 6,
+      "chars": 61,
+      "narration": "たとえば『是非もなし』という言い回しは、信長公記の『是非に及ばず』を言い換えたものです。似ていますが、同じではありません。",
+      "shot": "hands_detail",
+      "cast_ids": [
+        "scribe"
+      ],
+      "visual_prompt": "Two paper strips with slightly different brush strokes held side by side by aged hands, lamp light.",
+      "replaced": false
+    },
+    {
+      "section": 2,
+      "beat": 7,
+      "chars": 65,
+      "narration": "この動画では、記録に書かれていることには出典の名前を添え、後世の伝承には伝承だと言い、私自身の推測には推測だと断りながら進めます。",
+      "shot": "close_up",
+      "cast_ids": [
+        "scribe"
+      ],
+      "visual_prompt": "The elderly chronicler looking thoughtfully ahead, a brush in hand, in his lamp-lit study.",
+      "replaced": false
+    },
+    {
+      "section": 3,
+      "beat": 1,
+      "chars": 70,
+      "narration": "最初に、最も詳しい記録である『信長公記』を見ていきます。著者の太田牛一は、もともと信長に仕えた武士で、のちに主君の事績を書き記した人物です。",
+      "shot": "medium",
+      "cast_ids": [
+        "scribe"
+      ],
+      "visual_prompt": "The chronicler writing at his low desk by lamp light, scrolls piled around, calm and diligent.",
+      "replaced": false
+    },
+    {
+      "section": 3,
+      "beat": 2,
+      "chars": 81,
+      "narration": "ただ、牛一があの朝、寺の中にいたわけではないと考えられています。ではなぜ、寺の中の様子を書けたのか。その手がかりは本文の中にあるのですが、それは少し後で触れます。",
+      "shot": "environment",
+      "cast_ids": [],
+      "visual_prompt": "A temple compound seen from far across a field in morning mist, small and distant, an unanswered question atmosphere.",
+      "replaced": false
+    },
+    {
+      "section": 3,
+      "beat": 3,
+      "chars": 49,
+      "narration": "明智光秀の軍勢は、丹波の亀山から夜のうちに京へ向かい、夜明けのころに本能寺を取り囲んだとされます。",
+      "shot": "wide",
+      "cast_ids": [],
+      "visual_prompt": "A long column of armed soldiers with banners marching on a mountain road at night, torches glowing, heading toward Kyoto lights.",
+      "replaced": false
+    },
+    {
+      "section": 3,
+      "beat": 4,
+      "chars": 42,
+      "narration": "寺の中の人々が最初に感じたのは、敵襲だという確信ではなく、ただの騒ぎだったようです。",
+      "shot": "back_view",
+      "cast_ids": [
+        "page"
+      ],
+      "visual_prompt": "The young attendant stands in a corridor listening toward a courtyard where faint commotion begins, dawn blue light.",
+      "replaced": false
+    },
+    {
+      "section": 3,
+      "beat": 5,
+      "chars": 69,
+      "narration": "信長公記には、はじめは身分の低い者たちが喧嘩でも始めたのだろうと思っていた、という趣旨の記述があるとされます。ところが、そうではなかった。",
+      "shot": "environment",
+      "cast_ids": [],
+      "visual_prompt": "A temple courtyard at dawn, a few shadows scuffling beyond the gate like a brawl, then a growing crowd of armed silhouettes.",
+      "replaced": false
+    },
+    {
+      "section": 3,
+      "beat": 6,
+      "chars": 79,
+      "narration": "鬨の声が上がり、御殿に鉄砲が撃ち込まれる。この時点では、まだ火の手は上がっていません。信長が『これは謀反か、いかなる者の企てか』と問う。そこで森乱が答えます。",
+      "shot": "wide",
+      "cast_ids": [
+        "lord",
+        "page"
+      ],
+      "visual_prompt": "Gunfire flashes and war cries beyond the hall, the warlord standing and questioning, the page kneeling beside, no fire yet, tense dawn light.",
+      "replaced": false
+    },
+    {
+      "section": 3,
+      "beat": 7,
+      "chars": 84,
+      "narration": "『明智が者と見え申し候』。明智の手の者と見えます、という意味です。それに対して信長が返したのが『是非に及ばず』でした。この言葉の現代語訳は、訳す人によって幅があります。",
+      "shot": "close_up",
+      "cast_ids": [
+        "page"
+      ],
+      "visual_prompt": "The young attendant, wide-eyed and resolute, reporting in a hushed voice, cool dawn light on his face.",
+      "replaced": false
+    },
+    {
+      "section": 3,
+      "beat": 8,
+      "chars": 68,
+      "narration": "『仕方がない』という諦めとして読むこともできますし、『あれこれ言っている場合ではない』という切迫した言葉として読むこともできるでしょう。",
+      "shot": "back_view",
+      "cast_ids": [
+        "lord"
+      ],
+      "visual_prompt": "The warlord stands facing the paper doors where enemy shadows gather, shoulders heavy, accepting.",
+      "replaced": false
+    },
+    {
+      "section": 3,
+      "beat": 9,
+      "chars": 56,
+      "narration": "原文はこの一言だけで、信長の表情も声の調子も書かれていません。どちらに読むかは、読み手にゆだねられているのです。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "A single short line of brush writing on an old paper, empty space around it, lamp light, no legible characters.",
+      "replaced": false
+    },
+    {
+      "section": 4,
+      "beat": 1,
+      "chars": 80,
+      "narration": "では、この答えを返した『森乱』とは誰なのか。一般には森蘭丸の名で知られていますが、信長公記など当時に近い記録では『森乱』と書かれています。実名は成利とされます。",
+      "shot": "medium",
+      "cast_ids": [
+        "page"
+      ],
+      "visual_prompt": "The young attendant standing at attention in a corridor, holding a message, morning light, dignified.",
+      "replaced": false
+    },
+    {
+      "section": 4,
+      "beat": 2,
+      "chars": 61,
+      "narration": "父は森可成という信長の古くからの家臣で、可成は信長がまだ天下に遠かったころ、近江での戦いで討ち死にしたと伝えられています。",
+      "shot": "wide",
+      "cast_ids": [],
+      "visual_prompt": "A battlefield on a misty lakeside plain, spears and fallen banners, an older samurai fallen in the foreground, muted somber tones.",
+      "replaced": false
+    },
+    {
+      "section": 4,
+      "beat": 3,
+      "chars": 70,
+      "narration": "小姓とは、主君の身の回りに仕える若い側近のことです。身辺の世話だけでなく、来客の取り次ぎ、命令の伝達、そして居所の近くでの警護も担いました。",
+      "shot": "hands_detail",
+      "cast_ids": [
+        "page"
+      ],
+      "visual_prompt": "The attendant's hands carrying a lacquered tray and passing a folded letter to a visitor, tatami floor.",
+      "replaced": false
+    },
+    {
+      "section": 4,
+      "beat": 4,
+      "chars": 63,
+      "narration": "主君にもっとも近い場所で働く人々です。森乱も、そうした側近の一人として、変より前から信長のそばで務めていたと考えられています。",
+      "shot": "back_view",
+      "cast_ids": [
+        "page"
+      ],
+      "visual_prompt": "The young attendant kneeling just outside a lord's chamber, back to viewer, close to the door.",
+      "replaced": false
+    },
+    {
+      "section": 4,
+      "beat": 5,
+      "chars": 48,
+      "narration": "また同じ天正十年、甲斐の武田氏が滅んだあとの領地の配分で、美濃国内に所領を与えられたとされます。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "A rolled land-grant document with a red seal on a lacquer stand, wisps of incense, no legible text.",
+      "replaced": false
+    },
+    {
+      "section": 4,
+      "beat": 6,
+      "chars": 54,
+      "narration": "ただ、その場所は書物によって伝え方が異なり、美濃の岩村とするものもあれば、金山や米田島とするものもあります。",
+      "shot": "environment",
+      "cast_ids": [],
+      "visual_prompt": "Three different mountain valley villages in Mino province separated by misty ridges, a sense of uncertain location.",
+      "replaced": false
+    },
+    {
+      "section": 4,
+      "beat": 7,
+      "chars": 85,
+      "narration": "年齢についても、生まれた年に諸説があり、はっきりとは定まっていません。後世の物語では、絶世の美少年、あるいは信長の寵愛を一身に受けた若者として描かれることが多い人物です。",
+      "shot": "medium",
+      "cast_ids": [
+        "page"
+      ],
+      "visual_prompt": "An idealized romantic painting-like portrait of the young attendant, soft glow, sidelong pose, theatrical atmosphere.",
+      "replaced": false
+    },
+    {
+      "section": 4,
+      "beat": 8,
+      "chars": 35,
+      "narration": "けれども、容姿について当時の記録が詳しく語っているわけではありません。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "A blank paper scroll partly unrolled on a desk, no words, a brush resting beside it.",
+      "replaced": false
+    },
+    {
+      "section": 4,
+      "beat": 9,
+      "chars": 59,
+      "narration": "記録から言えるのは、彼が主君の近くで務める側近だったこと、そしてあの朝、主君の問いにすぐ答えられる位置にいたことです。",
+      "shot": "over_shoulder",
+      "cast_ids": [
+        "page",
+        "lord"
+      ],
+      "visual_prompt": "Over the shoulder of the young attendant kneeling, facing the warlord who looks up questioningly, close and ready to answer.",
+      "replaced": false
+    },
+    {
+      "section": 5,
+      "beat": 1,
+      "chars": 60,
+      "narration": "信長公記に戻りましょう。ここからの記述は、短い文の積み重ねで、驚くほど具体的です。明智勢は間を置かずに御殿へ攻め入った。",
+      "shot": "wide",
+      "cast_ids": [],
+      "visual_prompt": "Armored soldiers rushing through a temple gate into the main residence, spears lowered, dawn mist, motion.",
+      "replaced": false
+    },
+    {
+      "section": 5,
+      "beat": 2,
+      "chars": 38,
+      "narration": "表の御堂に詰めていた番の者たちも御殿に合流して、ひとかたまりになって防いだ。",
+      "shot": "medium",
+      "cast_ids": [],
+      "visual_prompt": "Guards from a prayer hall running to join a tight defensive cluster inside the residence courtyard, determined.",
+      "replaced": false
+    },
+    {
+      "section": 5,
+      "beat": 3,
+      "chars": 49,
+      "narration": "厩のほうからは、矢代勝介、伴太郎左衛門、伴正林、村田吉五といった者たちが打って出て、討ち死にした。",
+      "shot": "environment",
+      "cast_ids": [],
+      "visual_prompt": "A temple stable with horses panicking, fallen weapons near the open doors, smoky dawn light.",
+      "replaced": false
+    },
+    {
+      "section": 5,
+      "beat": 4,
+      "chars": 71,
+      "narration": "さらに、中間と呼ばれる身分の低い奉公人たちの名前まで、牛一は書き留めています。そして御殿の中で討ち死にした人々として、長い名前の列が続きます。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "A long scroll densely filled with columns of brush-written names, no legible characters, lamp light.",
+      "replaced": false
+    },
+    {
+      "section": 5,
+      "beat": 5,
+      "chars": 57,
+      "narration": "その中に、森乱、森力、森坊の兄弟の名があります。森乱だけでなく、弟たちもそこにいたのです。信長自身はどうしたのか。",
+      "shot": "hands_detail",
+      "cast_ids": [
+        "scribe"
+      ],
+      "visual_prompt": "The chronicler's hand writing three names in a row with a brush, ink on paper, quiet lamp light.",
+      "replaced": false
+    },
+    {
+      "section": 5,
+      "beat": 6,
+      "chars": 77,
+      "narration": "信長公記によれば、はじめは弓を取って二つ三つ矢を放ったが、どの弓も弦が切れた。その後は槍で戦い、肘に槍の傷を受けて退いた。ここで注目したい一文があります。",
+      "shot": "medium",
+      "cast_ids": [
+        "lord"
+      ],
+      "visual_prompt": "The warlord with a snapped bow string in hand and then a spear, wincing from an elbow wound, dim hall, smoke.",
+      "replaced": false
+    },
+    {
+      "section": 5,
+      "beat": 7,
+      "chars": 70,
+      "narration": "それまで信長のそばには女性たちが付き添っていたが、信長は『女はくるしからず、急ぎ罷り出でよ』と言って、彼女たちを外へ出させた、というのです。",
+      "shot": "back_view",
+      "cast_ids": [
+        "lord"
+      ],
+      "visual_prompt": "The warlord gestures women in long kimono toward the exit, seen from behind, they hurry out through a sliding door.",
+      "replaced": false
+    },
+    {
+      "section": 5,
+      "beat": 8,
+      "chars": 47,
+      "narration": "女は構わない、早く出て行け、という意味です。そのあとで、御殿には火がかけられ、炎が迫ってきた。",
+      "shot": "wide",
+      "cast_ids": [],
+      "visual_prompt": "Flames beginning to climb the wooden residence, orange glow in grey dawn, sparks and smoke.",
+      "replaced": false
+    },
+    {
+      "section": 5,
+      "beat": 9,
+      "chars": 65,
+      "narration": "信長は、姿を見せまいと思ったのか、御殿の奥深くへ入り、内側から納戸の口を閉ざして、腹を切った。信長公記の記述は、ここで途切れます。",
+      "shot": "back_view",
+      "cast_ids": [
+        "lord"
+      ],
+      "visual_prompt": "The warlord walks deep into a dark inner storeroom, pulling the door shut from inside, flames behind.",
+      "replaced": false
+    },
+    {
+      "section": 5,
+      "beat": 10,
+      "chars": 55,
+      "narration": "そして、この流れの中に、さきほどの疑問へのヒントがあるように思えます。牛一はなぜ、寺の中の言葉まで書けたのか。",
+      "shot": "close_up",
+      "cast_ids": [
+        "scribe"
+      ],
+      "visual_prompt": "The chronicler frowning in thought in his study, lamp light on his face, puzzled.",
+      "replaced": false
+    },
+    {
+      "section": 5,
+      "beat": 11,
+      "chars": 42,
+      "narration": "その場から逃がされた女性たちが、のちに様子を語ったのではないか。私はそう想像します。",
+      "shot": "back_view",
+      "cast_ids": [],
+      "visual_prompt": "A group of women in kimono walking away from a burning temple at dawn, seen from behind, glow on their shoulders.",
+      "replaced": false
+    },
+    {
+      "section": 5,
+      "beat": 12,
+      "chars": 48,
+      "narration": "ただし、牛一自身が情報源をはっきり書いているわけではないので、これはあくまで推測にとどまります。",
+      "shot": "hands_detail",
+      "cast_ids": [
+        "scribe"
+      ],
+      "visual_prompt": "The chronicler's hand hovering over a blank margin of a manuscript, brush lifted, hesitating.",
+      "replaced": false
+    },
+    {
+      "section": 6,
+      "beat": 1,
+      "chars": 45,
+      "narration": "次は、まったく別の立場の記録です。『言経卿記』。京都に住んでいた公家、山科言経の日記です。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "A diary book with a worn cover on a court noble's desk, an ink stone and brush, soft morning light, no legible text.",
+      "replaced": false
+    },
+    {
+      "section": 6,
+      "beat": 2,
+      "chars": 71,
+      "narration": "軍記でも回想録でもなく、その日その日の出来事を書き付けていく日記であるところに価値があります。六月二日の条に、言経はおおよそこう書いています。",
+      "shot": "hands_detail",
+      "cast_ids": [],
+      "visual_prompt": "A courtier's hands writing a daily diary entry with a brush, silk sleeve, quiet dawn light.",
+      "replaced": false
+    },
+    {
+      "section": 6,
+      "beat": 3,
+      "chars": 46,
+      "narration": "卯の刻、明智日向守が謀反によって本能寺へ押し寄せた。すぐに前右府、つまり信長が討ち死にした。",
+      "shot": "environment",
+      "cast_ids": [],
+      "visual_prompt": "Kyoto street at dawn with a distant column of smoke rising over the rooftops, residents looking, calm morning sky.",
+      "replaced": false
+    },
+    {
+      "section": 6,
+      "beat": 4,
+      "chars": 64,
+      "narration": "続けて、信長の嫡男信忠が妙覚寺を出て、二条の御所、日記の言葉では下御所に立てこもったところへも押し寄せ、のちに討ち死にした、と。",
+      "shot": "wide",
+      "cast_ids": [],
+      "visual_prompt": "Soldiers surrounding a walled palace in the city, a young noble inside its gate, early morning light, tense.",
+      "replaced": false
+    },
+    {
+      "section": 6,
+      "beat": 5,
+      "chars": 68,
+      "narration": "この下御所は、天皇のお住まいではなく、当時誠仁親王が暮らしていた二条の新しい御所のことです。卯の刻は、おおよそ午前六時ごろにあたります。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "An old Japanese water clock and sundial-like timekeeping instrument showing early morning, soft light.",
+      "replaced": false
+    },
+    {
+      "section": 6,
+      "beat": 6,
+      "chars": 69,
+      "narration": "ここで大事なのは『則時に』、つまり『すぐに』という言葉です。言経の記録では、襲撃から信長の死までは、ほとんど間がないように書かれています。",
+      "shot": "close_up",
+      "cast_ids": [],
+      "visual_prompt": "A brush stroke fast and sharp on paper, a single bold stroke, ink splatter, suggestion of suddenness.",
+      "replaced": false
+    },
+    {
+      "section": 6,
+      "beat": 7,
+      "chars": 73,
+      "narration": "一方、信長公記では、弓から槍へ、手傷、女性たちを逃がす、火、納戸へ、という流れがありました。この二つは矛盾するのでしょうか。私はそうは考えません。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "Two scrolls laid side by side, one with a long sequence and one with a short line, a thread connecting them.",
+      "replaced": false
+    },
+    {
+      "section": 6,
+      "beat": 8,
+      "chars": 68,
+      "narration": "言経は寺の外にいて、伝わってきた知らせを書いた人です。外から見れば、明け方に襲われ、あっという間に終わった、という印象だったのでしょう。",
+      "shot": "back_view",
+      "cast_ids": [],
+      "visual_prompt": "A courtier in silk robes standing at a Kyoto street corner, seen from behind, looking toward distant smoke.",
+      "replaced": false
+    },
+    {
+      "section": 6,
+      "beat": 9,
+      "chars": 39,
+      "narration": "信長公記の一つひとつの場面も、それほど長い時間を必要とするわけではありません。",
+      "shot": "hands_detail",
+      "cast_ids": [],
+      "visual_prompt": "A hand counting short time with a small wooden marker beside a hourglass-like incense clock burning down.",
+      "replaced": false
+    },
+    {
+      "section": 6,
+      "beat": 10,
+      "chars": 57,
+      "narration": "二つの記録をあわせて言えるのは、襲撃は夜明けのころで、寺の中の戦いは長くは続かなかったらしい、ということまでです。",
+      "shot": "environment",
+      "cast_ids": [],
+      "visual_prompt": "Temple walls and roofs under rising smoke at daybreak, a brief violent episode implied, soft light.",
+      "replaced": false
+    },
+    {
+      "section": 6,
+      "beat": 11,
+      "chars": 54,
+      "narration": "何分だったのか、何時間だったのか、正確な長さを示す記述は、ここで取り上げる四つの記録の中には見当たりません。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "A blank space on a paper where a measurement should be, a ruler-like bamboo stick resting on it, lamp light.",
+      "replaced": false
+    },
+    {
+      "section": 6,
+      "beat": 12,
+      "chars": 61,
+      "narration": "『最期の一時間』のような言い方を見かけることがありますが、少なくともこれらの記録からは、そこまで言うことはできないのです。",
+      "shot": "hands_detail",
+      "cast_ids": [
+        "scribe"
+      ],
+      "visual_prompt": "The chronicler's hand slowly crossing out an inked phrase on a draft, lamp light.",
+      "replaced": false
+    },
+    {
+      "section": 7,
+      "beat": 1,
+      "chars": 28,
+      "narration": "三つ目は、攻め込んだ側の記録です。『本城惣右衛門覚書』。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "A thin, folded, rough paper memoir tied with string, stained edges, resting on a wooden floor.",
+      "replaced": false
+    },
+    {
+      "section": 7,
+      "beat": 2,
+      "chars": 71,
+      "narration": "明智軍の一兵士だった本城惣右衛門が、ずっと後年、寛永十七年、西暦一六四〇年ごろに、自分の戦歴を書き残したものとされます。事件からおよそ六十年。",
+      "shot": "medium",
+      "cast_ids": [
+        "old_soldier"
+      ],
+      "visual_prompt": "The elderly soldier sitting on a veranda writing slowly in the 1640s, garden behind him, afternoon light.",
+      "replaced": false
+    },
+    {
+      "section": 7,
+      "beat": 3,
+      "chars": 64,
+      "narration": "記憶違いの可能性は当然あります。年老いた兵が若いころを振り返って書いたものですから、話が整えられている部分もあるかもしれません。",
+      "shot": "close_up",
+      "cast_ids": [
+        "old_soldier"
+      ],
+      "visual_prompt": "The old soldier looking up from his writing, eyes distant, trying to remember, warm side light.",
+      "replaced": false
+    },
+    {
+      "section": 7,
+      "beat": 4,
+      "chars": 38,
+      "narration": "それでも、攻め手の兵の目線で本能寺を語った記録は、ほかにほとんどありません。",
+      "shot": "environment",
+      "cast_ids": [],
+      "visual_prompt": "A temple wall and gate seen from the viewpoint of an attacking soldier at dawn, spearheads in the foreground, mist.",
+      "replaced": false
+    },
+    {
+      "section": 7,
+      "beat": 5,
+      "chars": 61,
+      "narration": "この覚書でまず驚かされるのは、惣右衛門が、自分たちは家康を討ちに行くのだと思っていた、という趣旨のことを書いている点です。",
+      "shot": "back_view",
+      "cast_ids": [],
+      "visual_prompt": "A column of foot soldiers with spears marching in the dark toward the city, seen from behind, lanterns bobbing.",
+      "replaced": false
+    },
+    {
+      "section": 7,
+      "beat": 6,
+      "chars": 77,
+      "narration": "徳川家康は当時信長の同盟者で、このころ上方方面に来ていたとされます。つまり兵の中には、標的が信長だとは知らされていなかった者がいた、ということになります。",
+      "shot": "wide",
+      "cast_ids": [],
+      "visual_prompt": "An allied lord's camp in the distance across a river valley at night, small tents and fires, foot soldiers looking toward them.",
+      "replaced": false
+    },
+    {
+      "section": 7,
+      "beat": 7,
+      "chars": 69,
+      "narration": "考えてみれば、これは不思議ではないかもしれません。主君を討つという計画が早くから兵の末端にまで伝わっていれば、どこかで漏れていたでしょう。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "A sealed letter being passed hand to hand and then stopped, only first few hands in a chain visible, tension.",
+      "replaced": false
+    },
+    {
+      "section": 7,
+      "beat": 8,
+      "chars": 48,
+      "narration": "これは私の推測ですが、本当の目的を知っていたのは、ごく限られた者だけだったのではないでしょうか。",
+      "shot": "hands_detail",
+      "cast_ids": [],
+      "visual_prompt": "A commander's hands covering a map with a cloth so that only a few officers see it, candlelight.",
+      "replaced": false
+    },
+    {
+      "section": 7,
+      "beat": 9,
+      "chars": 84,
+      "narration": "覚書には、寺に踏み込んだときの様子も書かれていて、入り口のあたりは思いのほか静かだったように読める、と紹介されることがあります。ここに、信長公記とは違う風景が見えます。",
+      "shot": "over_shoulder",
+      "cast_ids": [
+        "old_soldier"
+      ],
+      "visual_prompt": "Over the shoulder of a young foot soldier stepping into the quiet temple gate, empty courtyard ahead, pale dawn.",
+      "replaced": false
+    },
+    {
+      "section": 7,
+      "beat": 10,
+      "chars": 66,
+      "narration": "信長公記の御殿の中は、名のある者たちが次々に倒れる激しい戦いの場でした。けれども一人の兵が見たのは、広い境内のごく一部にすぎません。",
+      "shot": "wide",
+      "cast_ids": [],
+      "visual_prompt": "Broad temple compound with a distant fierce fighting in the main hall, while the gate area is nearly empty, a small viewpoint in foreground.",
+      "replaced": false
+    },
+    {
+      "section": 7,
+      "beat": 11,
+      "chars": 51,
+      "narration": "どちらかが嘘をついているというより、どこにいたかで見えたものがまるで違った、と考えるのが自然でしょう。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "Two different drawn sketches of the same temple from two angles lying side by side on a table.",
+      "replaced": false
+    },
+    {
+      "section": 7,
+      "beat": 12,
+      "chars": 47,
+      "narration": "同じ朝の出来事でも、御殿の奥にいた者と、門の近くにいた者とでは、まったく別の記憶が残るのです。",
+      "shot": "close_up",
+      "cast_ids": [
+        "old_soldier"
+      ],
+      "visual_prompt": "The old soldier gazing quietly at a gate in his memory, lined face lit by warm dusk light.",
+      "replaced": false
+    },
+    {
+      "section": 8,
+      "beat": 1,
+      "chars": 67,
+      "narration": "四つ目は、海の向こうへ送られた記録です。イエズス会の宣教師ルイス・フロイスは、事件のあと、本能寺の変について詳しい報告を書いています。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "A European-style letter with a red wax seal and a quill on a wooden desk, a small crucifix beside it, candlelight.",
+      "replaced": false
+    },
+    {
+      "section": 8,
+      "beat": 2,
+      "chars": 83,
+      "narration": "一五八二年に書かれた書簡と、のちにまとめた『日本史』です。フロイス自身はこのとき京都にいたわけではなく、京都にいた宣教師たちからの知らせなどをもとに書いたとされます。",
+      "shot": "hands_detail",
+      "cast_ids": [],
+      "visual_prompt": "A missionary's hands in dark robes writing a long letter by candlelight, other letters stacked beside.",
+      "replaced": false
+    },
+    {
+      "section": 8,
+      "beat": 3,
+      "chars": 60,
+      "narration": "京都の教会は、本能寺からそれほど遠くない場所にあったと言われます。フロイスの記述は、信長公記とは別の細部を伝えています。",
+      "shot": "environment",
+      "cast_ids": [],
+      "visual_prompt": "A small European-style church with a cross among Kyoto wooden houses, dawn light, temple roof in the distance.",
+      "replaced": false
+    },
+    {
+      "section": 8,
+      "beat": 4,
+      "chars": 84,
+      "narration": "信長はちょうど手と顔を洗い終え、手ぬぐいで体を拭いていたところに、背中に矢を受けた。その矢を引き抜き、長刀を手に取って戦ったが、腕に銃弾を受け、部屋に入って戸を閉じた。",
+      "shot": "medium",
+      "cast_ids": [
+        "lord"
+      ],
+      "visual_prompt": "The warlord wiping his face with a cloth at a washing basin, a sudden arrow strikes near him, he turns, a long-bladed naginata at hand.",
+      "replaced": false
+    },
+    {
+      "section": 8,
+      "beat": 5,
+      "chars": 80,
+      "narration": "そして、自ら腹を切ったと言う者もいれば、御殿に火を放って死んだと言う者もいる、と。さらに、信長の体は髪の毛一本残らず灰になった、という趣旨のことも書いています。",
+      "shot": "environment",
+      "cast_ids": [],
+      "visual_prompt": "Burned remains of a temple hall, white ash drifting across charred beams, nothing left but ash, hazy light.",
+      "replaced": false
+    },
+    {
+      "section": 8,
+      "beat": 6,
+      "chars": 84,
+      "narration": "信長公記と比べると、武器は弓と槍か長刀か、傷は肘の槍傷か腕の銃傷か、という違いがあります。一方で、腕に傷を負って奥へ退き、戸を閉ざしたという骨格は、驚くほど似ています。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "Two letters side by side, small differences and a visible thread linking the same shape of events, soft lamp light.",
+      "replaced": false
+    },
+    {
+      "section": 8,
+      "beat": 7,
+      "chars": 62,
+      "narration": "しかもフロイスは、腹を切ったのか火の中で死んだのか、断定していません。伝聞であることを踏まえて、二つの説を並べているのです。",
+      "shot": "hands_detail",
+      "cast_ids": [],
+      "visual_prompt": "Hands writing two parallel lines on a page, a hesitant pen, candlelight.",
+      "replaced": false
+    },
+    {
+      "section": 8,
+      "beat": 8,
+      "chars": 64,
+      "narration": "外国人の記録だから信用できないと切り捨てるのではなく、立場の違う証言として並べてみると、むしろ確かな部分が浮かび上がってきます。",
+      "shot": "wide",
+      "cast_ids": [],
+      "visual_prompt": "Four old documents in a row on a long wooden table, converging beams of light on their shared center.",
+      "replaced": false
+    },
+    {
+      "section": 9,
+      "beat": 1,
+      "chars": 76,
+      "narration": "では、私たちがよく知るあの場面は、どこから来たのでしょうか。江戸時代になると、本能寺の変は軍記物や芝居の題材になり、場面はどんどん劇的になっていきます。",
+      "shot": "wide",
+      "cast_ids": [],
+      "visual_prompt": "An Edo-period wooden theatre stage with painted flames and actors in silhouette, audience lanterns, dramatic.",
+      "replaced": false
+    },
+    {
+      "section": 9,
+      "beat": 2,
+      "chars": 82,
+      "narration": "信長に槍をつけたのは明智方の安田作兵衛だった、蘭丸がその作兵衛と斬り結んだ、といった話も、後世の軍記や物語で語られるもので、同時代の記録には見当たらないとされます。",
+      "shot": "medium",
+      "cast_ids": [
+        "page"
+      ],
+      "visual_prompt": "A dramatic stylized duel in a burning corridor, the young attendant with a sword clashing with a faceless armored samurai, theatrical painting.",
+      "replaced": false
+    },
+    {
+      "section": 9,
+      "beat": 3,
+      "chars": 70,
+      "narration": "燃える御殿で『人間五十年』と敦盛を舞う姿も、信長公記では桶狭間の戦いに向かう前の場面として出てくるとされ、本能寺の場面には書かれていません。",
+      "shot": "back_view",
+      "cast_ids": [
+        "lord"
+      ],
+      "visual_prompt": "A lone warlord dancing with a folding fan in a pre-battle camp at dawn, seen from behind, banners and mist.",
+      "replaced": false
+    },
+    {
+      "section": 9,
+      "beat": 4,
+      "chars": 79,
+      "narration": "最期に静かに障子を閉めた、という描写も、出典のはっきりしない後世の伝承と考えられます。信長公記にあるのは、あくまで『納戸の口を内から閉ざした』という一文です。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "A paper sliding door half closed with firelight glowing behind it, a small gap left open.",
+      "replaced": false
+    },
+    {
+      "section": 9,
+      "beat": 5,
+      "chars": 53,
+      "narration": "そして森乱について、記録に残る行動は実はごくわずかです。主君の問いに『明智が者と見え申し候』と答えたこと。",
+      "shot": "close_up",
+      "cast_ids": [
+        "page"
+      ],
+      "visual_prompt": "The young attendant's face turned in alert answer, pale dawn light, steady eyes.",
+      "replaced": false
+    },
+    {
+      "section": 9,
+      "beat": 6,
+      "chars": 74,
+      "narration": "御殿の中で、弟の力、坊とともに討ち死にした者の列に名前があること。それだけです。どこで、どのように倒れたのかは書かれていません。ここからは想像です。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "A long row of brush-written names on a scroll, three adjacent ones with faint shadows, no legible characters.",
+      "replaced": false
+    },
+    {
+      "section": 9,
+      "beat": 7,
+      "chars": 70,
+      "narration": "夜明けの騒ぎの中、外の様子を確かめ、見えたものから敵の名を主君に告げる。それは小姓として、いつもの取り次ぎと同じ動きだったのかもしれません。",
+      "shot": "back_view",
+      "cast_ids": [
+        "page"
+      ],
+      "visual_prompt": "The young attendant looks out over a courtyard from a veranda at dawn, seen from behind, about to turn and report.",
+      "replaced": false
+    },
+    {
+      "section": 9,
+      "beat": 8,
+      "chars": 65,
+      "narration": "ただ、その知らせが自分と弟たちの最期を意味すると、彼がどこまで分かっていたのか。それは誰にも分かりません。想像はここまでにします。",
+      "shot": "close_up",
+      "cast_ids": [
+        "page"
+      ],
+      "visual_prompt": "The young attendant, uncertain and quiet, light fading from the sky behind him, an unanswerable moment.",
+      "replaced": false
+    },
+    {
+      "section": 10,
+      "beat": 1,
+      "chars": 72,
+      "narration": "結論をまとめます。まず、かなり確かなこと。襲撃は六月二日の夜明けごろで、言経卿記によれば卯の刻だった。寺の中の戦いは長くは続かず、信長は死んだ。",
+      "shot": "wide",
+      "cast_ids": [],
+      "visual_prompt": "A temple compound at daybreak, a clear pale sky above, smoke rising, a solid and certain atmosphere.",
+      "replaced": false
+    },
+    {
+      "section": 10,
+      "beat": 2,
+      "chars": 72,
+      "narration": "信長のそばには森乱ら小姓衆がおり、多くが討ち死にした。御殿は燃えた。次に、ある程度確からしいこと。信長が手傷を負って奥へ退き、戸を閉ざしたこと。",
+      "shot": "environment",
+      "cast_ids": [],
+      "visual_prompt": "A burned temple residence at dawn, fallen weapons and a sliding door half shut in the smoke.",
+      "replaced": false
+    },
+    {
+      "section": 10,
+      "beat": 3,
+      "chars": 51,
+      "narration": "信長公記とフロイスが、おそらく別々の経路で、似た骨格を伝えているからです。そして、確かめられないこと。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "Two scrolls from different lands, one Japanese and one European, connected by a thin thread, lamp light.",
+      "replaced": false
+    },
+    {
+      "section": 10,
+      "beat": 4,
+      "chars": 72,
+      "narration": "正確な時間の長さ、信長が最後にどのように息絶えたのか、そして遺体の行方。信長の遺体が見つかったと書く記述は、今回の四つの記録には見当たりません。",
+      "shot": "hands_detail",
+      "cast_ids": [
+        "scribe"
+      ],
+      "visual_prompt": "The chronicler's hand pointing at an empty blank area of a page, brush in the other, lamp light.",
+      "replaced": false
+    },
+    {
+      "section": 10,
+      "beat": 5,
+      "chars": 40,
+      "narration": "記録は、納戸の戸が閉まったところで途切れています。ここから先は、誰も知りません。",
+      "shot": "object",
+      "cast_ids": [],
+      "visual_prompt": "A closed wooden storeroom door in a dark corridor, a faint line of light under it, silence.",
+      "replaced": false
+    },
+    {
+      "section": 10,
+      "beat": 6,
+      "chars": 92,
+      "narration": "四百年以上たった今、あの朝の本能寺について私たちが手にしているのは、逃がされた女性たちの記憶だったかもしれない言葉、寺の外で聞いた知らせ、攻め手の老いた記憶、そして海を越えた報告です。",
+      "shot": "wide",
+      "cast_ids": [
+        "scribe",
+        "old_soldier"
+      ],
+      "visual_prompt": "The chronicler and the old soldier seated at opposite ends of a long table, a diary and a foreign letter between them, warm lamp light.",
+      "replaced": false
+    },
+    {
+      "section": 10,
+      "beat": 7,
+      "chars": 61,
+      "narration": "黒幕を探す前に、まずその断片を、断片のまま見つめること。そこにこそ、あの朝のいちばん生々しい姿が残っているのだと思います。",
+      "shot": "back_view",
+      "cast_ids": [
+        "scribe"
+      ],
+      "visual_prompt": "The chronicler stands at an open window at dawn looking toward the distant temple site, seen from behind, fragments of paper on the desk.",
+      "replaced": false
+    }
+  ]
+}
