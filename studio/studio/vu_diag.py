@@ -56,9 +56,9 @@ def count_tokens(model, uri, mime, label):
     return rec
 
 
-def gen(model, uri, mime, prompt, label, resolution=None):
-    part = {"fileData": {"fileUri": uri, "mimeType": mime}}
-    body = {"contents": [{"parts": [part, {"text": prompt}]}], "generationConfig": {"maxOutputTokens": 8192}}
+def gen(model, uri, mime, prompt, label, resolution=None, max_out=8192):
+    part = {"fileData": {"fileUri": uri, **({"mimeType": mime} if mime else {})}}
+    body = {"contents": [{"parts": [part, {"text": prompt}]}], "generationConfig": {"maxOutputTokens": max_out}}
     if resolution:
         body["generationConfig"]["mediaResolution"] = resolution
     t = time.time()
@@ -77,7 +77,7 @@ def gen(model, uri, mime, prompt, label, resolution=None):
     SPENT[0] += cost or 0
     cand = (raw.get("candidates") or [{}])[0] if isinstance(raw, dict) else {}
     text = "".join(p.get("text", "") for p in (cand.get("content") or {}).get("parts", []) if "text" in p and not p.get("thought"))
-    rec = dict(kind="generate", label=label, model=model, at=now(), seconds=sec, http_status=r.status_code, request=dict(prompt=prompt, mime=mime, uri=uri, resolution=resolution, maxOutputTokens=8192),
+    rec = dict(kind="generate", label=label, model=model, at=now(), seconds=sec, http_status=r.status_code, request=dict(prompt=prompt, mime=mime, uri=uri, resolution=resolution, maxOutputTokens=max_out),
                finishReason=cand.get("finishReason"), promptFeedback=raw.get("promptFeedback") if isinstance(raw, dict) else None, usage=u, cost_usd=cost, modelVersion=raw.get("modelVersion") if isinstance(raw, dict) else None,
                text=text, raw=raw)
     LOG.append(rec)
