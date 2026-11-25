@@ -8,7 +8,8 @@
   "bio_has_booking_pointer": true,
   "grid_sample_posts_seen": 6,
   "grid_sample_posts_showing_hair_or_kitsuke_work": 1,
-  "grid_sample_posts_showing_kitsuke": 0
+  "grid_sample_posts_showing_kitsuke": 0,
+  "booking_link_destination": "hot_pepper_beauty"
  },
  "google_maps": {
   "rating": 4.8,
@@ -39,5 +40,6 @@
   "spare_capacity_per_month": 20,
   "bookings_source_breakdown": "unknown",
   "most_recent_booking_source": "friend via LINE (n=1)"
- }
+ },
+ "funnel_observed": "Instagram profile -> booking link -> Hot Pepper Beauty -> only the yukata kitsuke menu exists and it is not bookable online (phone enquiry). Google Maps: phone / route; website link destination unknown. Most recent booking came from a friend via LINE (n=1)."
 }
