@@ -108,3 +108,31 @@ def test_secrets_go_through_stdin_never_arguments_and_existing_ones_are_not_over
         m.store_secrets(vals, "o/r", False, run2)
     assert not [c for c in run2.calls if c[0][:3] == ["gh", "secret", "set"]]                  # nothing was written
     assert m.store_secrets(vals, "o/r", True, _Run(existing=["YT_OAUTH_REFRESH_TOKEN"]))
+
+
+def test_main_runs_the_whole_flow_end_to_end_with_fakes_and_stores_only_after_the_channel_matches(tmp_path, monkeypatch, capsys):
+    _write_client(tmp_path, "client_secret_x.json", "THE-SECRET")
+    tokens = {"access_token": "ACCESS", "refresh_token": "REFRESH-VALUE", "scope": " ".join(m.SCOPES)}
+    channels = {"items": [{"id": "UC1", "snippet": {"title": "静かなる逆転劇"}, "statistics": {"subscriberCount": "0", "videoCount": "0"}}]}
+
+    def fake_urlopen(req, timeout=30):
+        url = req.full_url if hasattr(req, "full_url") else req
+        return _Resp(json.dumps(tokens if "oauth2.googleapis.com/token" in url else channels).encode())
+    run = _Run()
+    monkeypatch.setattr(m.urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(m.subprocess, "run", run)
+    monkeypatch.setattr("builtins.input", lambda prompt="": "https://developers.google.com/oauthplayground/?code=4%2FCODE&state=" + captured["state"])
+    captured = {}
+    real_build = m.build_auth_url
+    monkeypatch.setattr(m, "build_auth_url", lambda cid, state, hint=None: captured.setdefault("state", state) and real_build(cid, state, hint))
+    assert m.main(["--downloads", str(tmp_path), "--login-hint", "a@example.com"]) == 0
+    out = capsys.readouterr().out
+    assert "静かなる逆転劇" in out and "THE-SECRET" not in out and "REFRESH-VALUE" not in out
+    sets = [c for c in run.calls if c[0][:3] == ["gh", "secret", "set"]]
+    assert {c[1] for c in sets} == {"123-abc.apps.googleusercontent.com", "THE-SECRET", "REFRESH-VALUE"}
+    # a different channel: nothing is stored
+    channels["items"][0]["snippet"]["title"] = "別のチャンネル"
+    run2 = _Run()
+    monkeypatch.setattr(m.subprocess, "run", run2)
+    assert m.main(["--downloads", str(tmp_path)]) == 1
+    assert not [c for c in run2.calls if c[0][:3] == ["gh", "secret", "set"]]

@@ -71,7 +71,8 @@ def extract_code(pasted, state=None):
     return qs["code"][0]
 
 
-def _post(url, data, opener=urllib.request.urlopen):
+def _post(url, data, opener=None):
+    opener = opener or urllib.request.urlopen
     req = urllib.request.Request(url, data=urllib.parse.urlencode(data).encode(), headers={"Content-Type": "application/x-www-form-urlencoded"})
     try:
         with opener(req, timeout=30) as r:
@@ -84,7 +85,7 @@ def _post(url, data, opener=urllib.request.urlopen):
         raise SetupError(f"Googleがトークンの交換を拒否しました: HTTP {e.code} {err}")
 
 
-def exchange_code(client, code, opener=urllib.request.urlopen):
+def exchange_code(client, code, opener=None):
     t = _post("https://oauth2.googleapis.com/token", dict(code=code, client_id=client["client_id"], client_secret=client["client_secret"], redirect_uri=REDIRECT, grant_type="authorization_code"), opener)
     if not t.get("refresh_token"):
         raise SetupError("リフレッシュトークンが返りませんでした(以前の許可が残っている可能性。画面で『許可』をもう一度押してください)")
@@ -95,7 +96,8 @@ def exchange_code(client, code, opener=urllib.request.urlopen):
     return t
 
 
-def verify_channel(access_token, expect_title, opener=urllib.request.urlopen):
+def verify_channel(access_token, expect_title, opener=None):
+    opener = opener or urllib.request.urlopen
     req = urllib.request.Request("https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&mine=true", headers={"Authorization": "Bearer " + access_token})
     with opener(req, timeout=30) as r:
         items = json.loads(r.read().decode()).get("items", [])
@@ -108,14 +110,16 @@ def verify_channel(access_token, expect_title, opener=urllib.request.urlopen):
     return dict(title=ch["snippet"]["title"], id=ch["id"], subscribers=ch["statistics"].get("subscriberCount"), videos=ch["statistics"].get("videoCount"))
 
 
-def existing_secret_names(repo=REPO, runner=subprocess.run):
+def existing_secret_names(repo=REPO, runner=None):
+    runner = runner or subprocess.run
     r = runner(["gh", "secret", "list", "--repo", repo], capture_output=True, text=True)
     if r.returncode != 0:
         raise SetupError("gh(GitHub CLI)が使えません。`gh auth login` を済ませてください: " + (r.stderr or "").strip()[:200])
     return {line.split()[0] for line in r.stdout.splitlines() if line.strip()}
 
 
-def store_secrets(values, repo=REPO, overwrite=False, runner=subprocess.run):
+def store_secrets(values, repo=REPO, overwrite=False, runner=None):
+    runner = runner or subprocess.run
     have = existing_secret_names(repo, runner)
     clash = [n for n in values if n in have]
     if clash and not overwrite:
@@ -150,7 +154,7 @@ def main(argv=None):
         pasted = input("3/5 許可のあと、ブラウザの上のアドレス(https://developers.google.com/oauthplayground/?code=… で始まるもの)を全部コピーして、ここに貼って Enter: ")
         code = extract_code(pasted, state)
         tokens = exchange_code(client, code)
-        info = verify_channel(tokens["access_token"])
+        info = verify_channel(tokens["access_token"], a.expect_title)
         print(f"4/5 チャンネルを確認: {info['title']}(ID {info['id']}、登録者 {info['subscribers']}、動画 {info['videos']})")
         names = store_secrets({"YT_OAUTH_CLIENT_ID": client["client_id"], "YT_OAUTH_CLIENT_SECRET": client["client_secret"], "YT_OAUTH_REFRESH_TOKEN": tokens["refresh_token"]}, overwrite=a.overwrite)
         print("5/5 GitHubに登録しました(値は表示していません): " + ", ".join(names))
