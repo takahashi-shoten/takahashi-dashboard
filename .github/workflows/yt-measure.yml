@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       cmd:
-        description: "run | report | register | publish"
+        description: "run | report | register | publish | check (OAuth connection check)"
         default: "run"
       args:
         description: "register: experiments/plans/E1.json  |  publish: EXPERIMENT_ID VIDEO_ID PUBLISHED_AT_ISO"
@@ -58,6 +58,7 @@ jobs:
             register) python -m studio.measure register "../$ARGS" ;;
             publish)  python -m studio.measure publish $ARGS ;;
             report)   python -m studio.measure report ;;
+            check)    python -m studio.measure check ;;
             run)      python -m studio.measure run && python -m studio.measure report ;;
           esac
       - name: Save the registry (only if it changed)
