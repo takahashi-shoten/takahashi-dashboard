@@ -1,0 +1,269 @@
+<title>着付け相談メモ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one narrow column of tap-to-answer rows; a fixed bar at the bottom carries progress and the one send button. */
+:root{
+  --bg:#f6f5f1; --fg:#1d2430; --muted:#5d6672; --line:#d9d8d2; --card:#ffffff;
+  --accent:#2a4a7f; --accent-fg:#ffffff; --gold:#9a6b00; --ok:#1f6b45; --focus:#2a4a7f; --chip:#eceae3;
+  --font-body:"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;
+  --font-head:"Zen Kaku Gothic New","Noto Sans JP","Hiragino Kaku Gothic ProN",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12161d; --fg:#e8e9ec; --muted:#9aa3ae; --line:#2b3340; --card:#1a202a; --chip:#242c38;
+  --accent:#8fb0e6; --accent-fg:#0f1620; --gold:#e0b34a; --ok:#6fcf9b; --focus:#8fb0e6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12161d; --fg:#e8e9ec; --muted:#9aa3ae; --line:#2b3340; --card:#1a202a; --chip:#242c38;
+  --accent:#8fb0e6; --accent-fg:#0f1620; --gold:#e0b34a; --ok:#6fcf9b; --focus:#8fb0e6; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);line-height:1.55;font-size:16px;
+  padding-block:20px 150px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+h1{font-family:var(--font-head);font-size:1.5rem;margin:0;text-wrap:balance}
+.lead{color:var(--muted);margin:6px 0 0;font-size:.95rem}
+.nav{display:flex;flex-wrap:wrap;gap:8px}
+.nav a{font-size:.85rem;text-decoration:none;color:var(--fg);background:var(--chip);border-radius:999px;padding:8px 12px;min-height:20px;font-variant-numeric:tabular-nums}
+.nav a.done{background:color-mix(in srgb,var(--ok) 22%,transparent)}
+h2{font-family:var(--font-head);font-size:1.1rem;margin:0 0 10px;padding-bottom:6px;border-bottom:2px solid var(--accent);display:flex;justify-content:space-between;gap:12px;scroll-margin-top:12px}
+h2 small{font-family:var(--font-body);font-weight:400;color:var(--muted);font-size:.85rem;font-variant-numeric:tabular-nums}
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.q+.q{margin-top:8px}
+.qt{margin:0;font-weight:600;font-size:.98rem}
+.star{color:var(--gold);margin-right:4px}
+.hint{margin:0;color:var(--muted);font-size:.85rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;display:inline-flex}
+.chip input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.chip span{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 14px;border-radius:10px;background:var(--chip);border:1px solid transparent;font-size:.95rem;text-align:center}
+.chip input:checked+span{background:var(--accent);color:var(--accent-fg);font-weight:600}
+.chip input:focus-visible+span{outline:2px solid var(--focus);outline-offset:2px}
+.sc .chip span{min-width:48px}
+.row{display:flex;align-items:center;gap:10px;min-width:0}
+input[type=number],input[type=text]{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-height:44px;box-sizing:border-box;min-width:0}
+input[type=number]{width:9.5em;font-variant-numeric:tabular-nums}
+input[type=text]{width:100%}
+.unit{color:var(--muted);white-space:nowrap}
+input:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);
+  padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+  display:flex;flex-direction:column;gap:8px}
+.prog{font-variant-numeric:tabular-nums;font-size:.9rem;line-height:1.35;display:flex;gap:16px;flex-wrap:wrap}
+.prog b{color:var(--ok)}
+.acts{display:flex;gap:8px;align-items:stretch}
+button,a.btn{font:inherit;border:0;border-radius:10px;padding:10px 16px;min-height:44px;background:var(--accent);color:var(--accent-fg);font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box}
+a.btn{flex:1}
+a.btn[aria-disabled="true"]{opacity:.45}
+button.ghost{background:transparent;color:var(--muted);border:1px solid var(--line);font-weight:400;padding:10px 12px}
+button:focus-visible,a.btn:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(132px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:.9rem;max-width:90vw;text-align:center}
+.out{white-space:pre-wrap;word-break:break-word;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:.88rem}
+@media (prefers-reduced-motion:no-preference){.chip span{transition:background .12s}}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600&family=Zen+Kaku+Gothic+New:wght@700&display=swap">
+
+<div class="wrap">
+  <header>
+    <h1>着付け相談メモ</h1>
+    <p class="lead">ありがとうございます、助かりました。続きの7問です(1〜2分)。ボタンをタップして、数字を入れるだけです。終わったら、画面の下の「LINEで送る」を押して、送り先を選んでください。</p>
+  </header>
+  <nav class="nav" id="nav" aria-label="セクション" hidden></nav>
+  <main id="root" class="wrap" style="gap:26px"></main>
+  <section>
+    <h2>回答のまとめ</h2>
+    <p class="hint" style="margin-bottom:8px">答えた内容が、ここに表示されます。</p>
+    <div id="out" class="out" aria-live="polite">まだ回答がありません。</div>
+  </section>
+</div>
+
+<div class="bar">
+  <div class="prog"><span>答えた <b id="pa">0</b> / <span id="pt">0</span> 問</span><span hidden>★ <b id="ps">0</b> / <span id="pst">0</span></span></div>
+  <div class="acts">
+    <button class="ghost" id="reset" type="button">全部消す</button>
+    <button class="ghost" id="copy" type="button">コピー</button>
+    <a class="btn" id="line" href="#" target="_blank" rel="noopener" aria-disabled="true">LINEで送る</a>
+  </div>
+</div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+const YN=["はい","いいえ","分からない"];
+// types: sg = choose one, ch = choose several, yn = yes/no/unknown, sc = 1-5 scale, num = number with unit, tx = short text
+const S_ALL=[
+ {id:"0",h:"そもそもの気持ち(まずここ)",qs:[
+  {id:"z1",star:1,t:"動画をSNSに出したいと思った、一番の理由は?",ty:"sg",o:["お客様(予約)を増やしたい","生徒を集めて教えたい","自分自身を有名にしたい(先生として)","仕事の幅を広げたい(出演・商品づくりなど)","楽しそう・やってみたい","まだよく分からない"]},
+  {id:"z2",star:1,t:"6か月後、どうなっていたら「やってよかった」と思う?(いくつでも)",ty:"ch",o:["予約が増えた","生徒が来た","フォロワーが増えた","取材・出演・企業の依頼が来た","自分の名前で知られた","楽しく続けられている","まだ分からない"]},
+  {id:"z3",t:"今、一番困っていることは?",ty:"sg",o:["お客様が足りない","単価を上げたい","忙しすぎる","新しいことを始めたい","特に困っていない"]},
+  {id:"z4",t:"うまくいかなくても、まず試してみたい?(2〜3週間、4〜6本)",ty:"yn"},
+  {id:"z5",t:"有名になることへの抵抗は?",ty:"sc",lo:"抵抗が大きい",hi:"全然ない"}]},
+ {id:"A",h:"目的とゴール",qs:[
+  {id:"a2",star:1,t:"来てほしいお客様は?(いくつでも)",ty:"ch",o:["成人式","七五三","卒業式","浴衣","結婚式・お出かけ","自分で着たい人","その他"]},
+  {id:"a3",star:1,t:"「講師」の形は?(いくつでも)",ty:"ch",o:["対面の着付け教室","オンライン講座","集客のための発信","その他"]},
+  {id:"a4",t:"予約を、月に何件増やしたい?",ty:"num",u:"件/月"},
+  {id:"a5",t:"いつまでに達成したい?",ty:"sg",o:["1か月","3か月","半年","1年"]},
+  {id:"a6",t:"成功と言える状態は?",ty:"tx",ph:"例: 3月までに月10件増"}]},
+ {id:"B",h:"お店の今の数字",qs:[
+  {id:"b1",star:1,t:"今、あと何人くらい予約を受けられる?",ty:"num",u:"人/月"},
+  {id:"b2",t:"今の着付けの件数は?",ty:"num",u:"件/月"},
+  {id:"b3",t:"着付け1人の料金は?",ty:"num",u:"円"},
+  {id:"b4",t:"着付け1人にかかる時間は?",ty:"num",u:"分"},
+  {id:"b5",t:"1日に受けられる着付けは、最大何人?",ty:"num",u:"人/日"},
+  {id:"b6",t:"ヘアセット・メイクも、一緒に頼まれることが多い?",ty:"yn"},
+  {id:"b7",t:"スタッフは、奥さん1人?",ty:"yn"},
+  {id:"b8",t:"予約の受け方は?(いくつでも)",ty:"ch",o:["電話","LINE","Instagramのメッセージ","ホットペッパー等","メール・フォーム"]},
+  {id:"b9",t:"紹介・口コミで来るお客様の割合は?",ty:"num",u:"%"},
+  {id:"b10",t:"リピーターの割合は?",ty:"num",u:"%"},
+  {id:"b11",t:"出張・訪問での着付けは対応できる?",ty:"yn"},
+  {id:"b12",t:"12月〜1月の予約は、どのくらい埋まっている?",ty:"num",u:"%"}]},
+ {id:"C",h:"集客の今",qs:[
+  {id:"c1",t:"Instagram のアカウントは、ある?",ty:"yn"},
+  {id:"c2",t:"フォロワー数は?",ty:"num",u:"人"},
+  {id:"c3",t:"投稿の頻度は?",ty:"sg",o:["ほぼしていない","月に数回","週に1〜2回","ほぼ毎日"]},
+  {id:"c4",t:"Google マップ(お店の登録)は、ある?",ty:"yn"},
+  {id:"c5",t:"Google マップの口コミは、何件?",ty:"num",u:"件"},
+  {id:"c6",t:"LINE 公式アカウントは、ある?",ty:"yn"},
+  {id:"c7",t:"ホームページは、ある?",ty:"yn"},
+  {id:"c8",t:"ホットペッパー等のサイトを使っている?",ty:"yn"},
+  {id:"c9",t:"今、広告にお金を使っている?",ty:"yn"},
+  {id:"c10",t:"広告費は、月にいくら?",ty:"num",u:"円/月"}]},
+ {id:"D",h:"奥さんのこと(講師)",qs:[
+  {id:"d1",t:"着付けの経験は、何年?",ty:"num",u:"年"},
+  {id:"d2",t:"人に着付けを教えた経験は、ある?",ty:"yn"},
+  {id:"d3",t:"カメラの前で話すのは?",ty:"sc",lo:"苦手",hi:"得意"},
+  {id:"d4",t:"オンラインで教えることへの抵抗は?",ty:"sc",lo:"抵抗が大きい",hi:"全然ない"},
+  {id:"d5",t:"顔を出して発信してもいい?",ty:"yn"},
+  {id:"d6",t:"お店の名前を出してもいい?",ty:"yn"},
+  {id:"d7",t:"教室をやる時間は、ある?",ty:"yn"},
+  {id:"d8",t:"生徒1人の受講料・月謝は、いくらにしたい?",ty:"num",u:"円"},
+  {id:"d9",t:"受け入れたい生徒の人数は?",ty:"num",u:"人"}]},
+ {id:"E",h:"撮影と制作",qs:[
+  {id:"e1",star:1,t:"撮影は、週に何本できそう?",ty:"num",u:"本/週"},
+  {id:"e2",t:"1回の撮影に使える時間は?",ty:"num",u:"分"},
+  {id:"e3",t:"スマホで撮影できる?",ty:"yn"},
+  {id:"e4",t:"三脚は、ある?",ty:"yn"},
+  {id:"e5",t:"照明(ライト)は、ある?",ty:"yn"},
+  {id:"e6",t:"撮影を手伝ってくれる人は、いる?",ty:"yn"},
+  {id:"e7",t:"練習用のモデルさん(顔を出していい人)は、いる?",ty:"yn"},
+  {id:"e8",t:"撮影する場所は、お店の1階でいい?",ty:"yn"},
+  {id:"e9",t:"動画の編集は、全部お任せしたい?",ty:"yn"},
+  {id:"e10",t:"投稿は、自分でできる?",ty:"yn"}]},
+ {id:"S",h:"安全・防犯(女性だけの職場)",qs:[
+  {id:"s1",star:1,t:"お客様を女性専用(または女性とお子様のみ)にしたい?",ty:"yn"},
+  {id:"s2",t:"男性のお客様は、紹介・同伴のみにしたい?",ty:"yn"},
+  {id:"s3",t:"予約は、LINE・予約フォームのみにしたい?(SNSのメッセージでは確定しない)",ty:"yn"},
+  {id:"s4",t:"初回は、名前と電話番号を確認してから予約を確定したい?",ty:"yn"},
+  {id:"s5",t:"住所は、予約が確定してから伝えたい?",ty:"yn"},
+  {id:"s6",t:"Google マップで、番地を出さない設定にしたい?",ty:"yn"},
+  {id:"s7",t:"ご家族が在宅している時間帯だけ、予約を受けたい?",ty:"yn"},
+  {id:"s8",t:"インターホン・防犯カメラは、ある?",ty:"yn"},
+  {id:"s9",t:"予約規約に「不審な申込み・迷惑行為はお断り」と書いていい?",ty:"yn"},
+  {id:"s10",t:"動画に、家の外観・玄関・表札・近所の目印を映さないことにできる?",ty:"yn"},
+  {id:"s11",t:"投稿の位置情報は、オフにできる?",ty:"yn"},
+  {id:"s12",t:"緊急時の連絡先を決めておける?",ty:"yn"},
+  {id:"s13",t:"これまでに、不安に感じたことはある?",ty:"yn"}]},
+ {id:"F",h:"許可・権利",qs:[
+  {id:"f1",t:"お客様の撮影の許可を、同意書などでもらえる?",ty:"yn"},
+  {id:"f2",t:"動画に写ってもいいと言ってくれそうなお客様は、いる?",ty:"yn"},
+  {id:"f3",t:"動画に音楽をつけたい?",ty:"yn"},
+  {id:"f4",t:"帯・小物などの商品の紹介や販売に、興味はある?",ty:"yn"},
+  {id:"f5",t:"今、商品(小物など)も売っている?",ty:"yn"}]},
+ {id:"G",h:"競合と強み",qs:[
+  {id:"g1",t:"近所に、同じような着付けのお店は、何店くらいある?",ty:"num",u:"店"},
+  {id:"g2",t:"奥さんの強みは?(いくつでも)",ty:"ch",o:["価格","丁寧さ","早さ","メニューの種類","予約の取りやすさ","出張","アットホーム","その他"]},
+  {id:"g3",t:"一番の売りを、一言で",ty:"tx",ph:"例: 着崩れしない"}]},
+ {id:"H",h:"予算と条件",qs:[
+  {id:"h1",t:"動画のために使える予算は?",ty:"num",u:"円/月"},
+  {id:"h2",t:"Instagram などに広告を出してもいい?",ty:"yn"},
+  {id:"h3",t:"奥さんがかけられる時間は?",ty:"num",u:"時間/週"},
+  {id:"h4",t:"やりたくないこと・NGは?",ty:"tx",ph:"自由に"},
+  {id:"h5",t:"そのほか、気になること",ty:"tx",ph:"自由に"}]}
+];
+// Round 2: the 7 questions still missing after round 1 (price, volume, channels, face, safety). Later rounds can ask the rest (same ids, same decoder).
+const R1=new Set(["b3","b2","c1","c4","d5","s10","s3"]);
+const S=S_ALL.map(s=>({...s,qs:s.qs.filter(q=>R1.has(q.id))})).filter(s=>s.qs.length);
+const KEY="kimono-memo-round2";
+let st={};
+try{st=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){st={}}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const all=S.flatMap(s=>s.qs.map(q=>({...q,sec:s.id})));
+const byId=Object.fromEntries(all.map(q=>[q.id,q]));
+function chips(q,type){
+  const opts=q.ty==="yn"?YN:q.ty==="sc"?[1,2,3,4,5]:q.o;
+  const cur=st[q.id];
+  return `<div class="chips ${q.ty==="sc"?"sc":""}" role="${type==="radio"?"radiogroup":"group"}">`+opts.map((o,i)=>{
+    const on=type==="radio"?cur===i:Array.isArray(cur)&&cur.includes(i);
+    return `<label class="chip"><input type="${type}" name="${q.id}" data-q="${q.id}" data-i="${i}" ${on?"checked":""}><span>${esc(o)}</span></label>`}).join("")+`</div>`+
+    (q.ty==="sc"?`<p class="hint">1 = ${esc(q.lo)} 〜 5 = ${esc(q.hi)}</p>`:"");
+}
+function field(q){
+  if(q.ty==="yn"||q.ty==="sg"||q.ty==="sc") return chips(q,"radio");
+  if(q.ty==="ch") return chips(q,"checkbox");
+  if(q.ty==="num") return `<div class="row"><input type="number" inputmode="decimal" min="0" id="${q.id}" data-n="${q.id}" value="${esc(st[q.id]??"")}" placeholder="数字"><span class="unit">${esc(q.u||"")}</span></div>`;
+  return `<input type="text" id="${q.id}" data-n="${q.id}" value="${esc(st[q.id]??"")}" placeholder="${esc(q.ph||"")}">`;
+}
+document.getElementById("root").innerHTML=S.map(s=>`<section id="sec-${s.id}"><h2><span>${s.id}. ${esc(s.h)}</span><small data-sc="${s.id}"></small></h2>`+
+  s.qs.map(q=>`<div class="q"><p class="qt">${q.star?'<span class="star" aria-label="重要">★</span>':""}${esc(q.t)}</p>${field(q)}</div>`).join("")+`</section>`).join("");
+const answered=q=>{const v=st[q.id];return Array.isArray(v)?v.length>0:(v!==undefined&&v!==null&&String(v).trim()!=="")};
+function label(q){
+  const v=st[q.id];
+  if(q.ty==="yn")return YN[v];
+  if(q.ty==="sc")return v+1+" / 5";
+  if(q.ty==="sg")return q.o[v];
+  if(q.ty==="ch")return v.map(i=>q.o[i]).join("、");
+  return String(v).trim()+(q.ty==="num"?" "+(q.u||""):"");
+}
+function summary(){
+  return S.map(s=>{const ls=s.qs.filter(answered).map(q=>(q.star?"★":"・")+q.t+" → "+label(q));
+    return ls.length?"【"+s.id+". "+s.h+"】\n"+ls.join("\n"):""}).filter(Boolean).join("\n\n");
+}
+// Short answer code for the LINE message: question id = chosen option number (0 = first) / numbers / short text. Claude decodes it with this page's question list.
+function code(){
+  const parts=[];
+  all.forEach(q=>{ if(!answered(q)) return; const v=st[q.id]; let s;
+    if(Array.isArray(v)) s=v.slice().sort((a,b)=>a-b).join(",");
+    else if(q.ty==="tx") s=String(v).trim().replace(/\s+/g," ").slice(0,80);
+    else s=String(v).trim();
+    parts.push(q.id+"="+s)});
+  return "【着付けアンケート第2回】"+parts.length+"/"+all.length+"問\n"+parts.join("\n");
+}
+function render(){
+  const stars=all.filter(q=>q.star), n=all.filter(answered).length;
+  document.getElementById("pa").textContent=n;
+  document.getElementById("pt").textContent=all.length;
+  document.getElementById("ps").textContent=stars.filter(answered).length;
+  document.getElementById("pst").textContent=stars.length;
+  document.getElementById("out").textContent=summary()||"まだ回答がありません。";
+  const a=document.getElementById("line");
+  if(n){a.href="https://line.me/R/share?text="+encodeURIComponent(code());a.removeAttribute("aria-disabled")}
+  else{a.href="#";a.setAttribute("aria-disabled","true")}
+  S.forEach(s=>{const k=s.qs.filter(answered).length;
+    document.querySelector(`[data-sc="${s.id}"]`).textContent=k+" / "+s.qs.length;
+    const l=document.querySelector(`#nav a[href="#sec-${s.id}"]`); if(l){l.querySelector("i").textContent=k+"/"+s.qs.length;l.classList.toggle("done",k===s.qs.length)}});
+}
+document.getElementById("nav").innerHTML=S.map(s=>`<a href="#sec-${s.id}">${s.id} ${esc(s.h)} <i style="font-style:normal;color:var(--muted)"></i></a>`).join("");
+document.getElementById("root").addEventListener("change",e=>{
+  const t=e.target;
+  if(t.dataset.q){const q=byId[t.dataset.q],i=+t.dataset.i;
+    if(q.ty==="ch"){const c=Array.isArray(st[q.id])?st[q.id]:[];st[q.id]=t.checked?[...new Set([...c,i])]:c.filter(n=>n!==i)}
+    else st[q.id]=i;
+    save();render()}
+});
+document.getElementById("root").addEventListener("input",e=>{
+  const t=e.target; if(t.dataset.n){st[t.dataset.n]=t.value;save();render()}
+});
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.hidden=false;setTimeout(()=>t.hidden=true,2600)}
+document.getElementById("line").addEventListener("click",e=>{
+  if(document.getElementById("line").getAttribute("aria-disabled")==="true"){e.preventDefault();toast("まだ回答がありません。先に、いくつか答えてください")}
+  else toast("LINEが開いたら、送り先を選んで送ってください")
+});
+document.getElementById("copy").addEventListener("click",async()=>{
+  const text=summary()||"(まだ回答がありません)";
+  try{await navigator.clipboard.writeText(text);toast("コピーしました")}
+  catch(e){const r=document.createRange();r.selectNodeContents(document.getElementById("out"));const s=getSelection();s.removeAllRanges();s.addRange(r);toast("下の文章を選択しました。コピーしてください")}
+});
+let armed=false;
+document.getElementById("reset").addEventListener("click",()=>{
+  const b=document.getElementById("reset");
+  if(!armed){armed=true;b.textContent="本当に消す?";setTimeout(()=>{armed=false;b.textContent="全部消す"},3000);return}
+  st={};save();location.reload();
+});
+render();
+</script>
