@@ -4,7 +4,8 @@ import json
 import re
 from datetime import datetime, timezone
 
-STATUSES = ("hypothesis", "observed", "tested_internal", "market_validated", "invalidated")
+# observed fact -> hypothesis -> supported_multi_case (several external cases) -> tested_internal -> market_validated (own market experiment) -> repeat_validated (repeated) ; invalidated = rejected/corrected
+STATUSES = ("hypothesis", "observed", "supported_multi_case", "tested_internal", "market_validated", "repeat_validated", "invalidated")
 DDL = """
 CREATE TABLE IF NOT EXISTS knowledge(
   knowledge_id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT, content TEXT, evidence TEXT, source_url TEXT, timestamp TEXT, observed_at TEXT,
@@ -64,7 +65,7 @@ def search(con, query="", category=None, audience=None, include_invalidated=Fals
     init(con)
     rows = con.execute("SELECT * FROM knowledge").fetchall()
     toks = _tokens(query)
-    order = {s: i for i, s in enumerate(("invalidated", "hypothesis", "observed", "tested_internal", "market_validated"))}
+    order = {s: i for i, s in enumerate(("invalidated", "hypothesis", "observed", "supported_multi_case", "tested_internal", "market_validated", "repeat_validated"))}
     out = []
     for r in rows:
         if r["status"] == "invalidated" and not include_invalidated:
@@ -97,7 +98,10 @@ def record_outcome(con, knowledge_id, used_in, outcome, detail="", market_result
     status, conf = r["status"], r["confidence"] or 0.4
     if outcome == "worked":
         conf = min(0.95 if market_result else 0.7, conf + 0.15)
-        status = "market_validated" if market_result and conf >= 0.7 else ("tested_internal" if status in ("hypothesis", "observed") else status)
+        if market_result and status in ("market_validated", "repeat_validated"):
+            status = "repeat_validated"            # a second market success on knowledge that was already market-validated
+        else:
+            status = "market_validated" if market_result and conf >= 0.7 else ("tested_internal" if status in ("hypothesis", "observed", "supported_multi_case") else status)
     elif outcome == "failed":
         conf = max(0.05, conf - 0.25)
         if market_result and conf <= 0.2:
