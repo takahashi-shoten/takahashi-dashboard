@@ -41,12 +41,23 @@ REAL = [
     ("kitsuke_r_f2b.png", f"{STYLE} {FURISODE_FACTS} Full back view of the young woman standing in a calm gray room, nobody else in frame; hair up with a small ornament."),
 ]
 
+# Owner-liked obi shape (Commons "Kimono backshot by sth", checked by eye from the owner's screenshot): bold, voluminous, LAYERED wings flowing diagonally from the left shoulder to the right, asymmetric.
+ACCENT_FACTS = ("Accurate furisode in charcoal and gray tones with a subtle pattern and long sleeves; the ONLY accent colour is the obi: a bold, voluminous brocade obi in vermilion, deep red and gold "
+                "tied in a modern layered style with several overlapping wings that sweep diagonally upward from the left shoulder to the right (asymmetric, like a tateya-style knot with layers), "
+                "a soft silk obi-age scarf along the top edge of the knot; a small hair ornament in red and ivory.")
+ACCENT = [
+    ("kitsuke_b_f1a.png", f"{STYLE} {ACCENT_FACTS} Close-up from behind at shoulder-to-waist height: only the dresser's hands (face not in frame) lifting and shaping one of the layered wings."),
+    ("kitsuke_b_f1b.png", f"{STYLE} {ACCENT_FACTS} Close-up from behind at shoulder-to-waist height: only the dresser's hands (face not in frame) lifting and shaping one of the layered wings."),
+    ("kitsuke_b_f2a.png", f"{STYLE} {ACCENT_FACTS} Full back view of the young woman standing in a calm modern gray room, nobody else in frame."),
+    ("kitsuke_b_f2b.png", f"{STYLE} {ACCENT_FACTS} Full back view of the young woman standing in a calm modern gray room, nobody else in frame."),
+]
+
 
 def main(which="hakama"):
     out = Path(__file__).resolve().parent.parent / "work" / "gemini_live"
     out.mkdir(parents=True, exist_ok=True)
     rc = 0
-    for name, prompt in (REAL if which == "real" else FURISODE if which == "furisode" else JOBS):
+    for name, prompt in (ACCENT if which == "accent" else REAL if which == "real" else FURISODE if which == "furisode" else JOBS):
         g = visuals.GeminiImage(model="gemini-3.1-flash-image", style="photo")
         t = time.time()
         try:
