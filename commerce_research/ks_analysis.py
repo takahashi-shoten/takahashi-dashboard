@@ -36,7 +36,7 @@ pp = [r["_pl"] / r["_b"] for r in done if r["_ok"] and r["_b"] and r["_pl"]]
 out["pledge_per_backer_usd_successful(median,p25,p75)"] = [round(x, 1) for x in (st.median(pp), *st.quantiles(pp, n=4)[::2])]
 # text: blurb length and staff_pick
 def L(r): return len(r["blurb"] or "")
-for name, fn in (("blurb_len<=60", lambda r: L(r) <= 60), ("blurb_len>60", lambda r: L(r) > 60), ("staff_pick", lambda r: r["staff_pick"] in ("true", "True", "1")), ("not_staff_pick", lambda r: r["staff_pick"] not in ("true", "True", "1"))):
+for name, fn in (("blurb_len<=60", lambda r: L(r) <= 60), ("blurb_len>60", lambda r: L(r) > 60), ("staff_pick", lambda r: str(r["staff_pick"]).lower() in ("true", "1")), ("not_staff_pick", lambda r: str(r["staff_pick"]).lower() not in ("true", "1"))):
     s = [r for r in done if fn(r)]; out.setdefault("text/flags(n,success_rate)", []).append((name, len(s), rate(s)))
 # concentration: share of pledges from top 10% of successful campaigns
 pl = sorted([r["_pl"] or 0 for r in done if r["_ok"]], reverse=True); tot = sum(pl) or 1

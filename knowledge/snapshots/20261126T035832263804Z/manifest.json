@@ -1,0 +1,15 @@
+{
+ "created_at": "2026-11-26T03:58:32+00:00",
+ "source": "../knowledge/marketing_knowledge.db",
+ "tables": {
+  "knowledge": 23,
+  "knowledge_history": 38,
+  "knowledge_uses": 13
+ },
+ "sha256": {
+  "schema.sql": "4c6f57fe20318f1887b86c0c77d85aae15d3b45857a412ea7eb5ab9fa905c3ce",
+  "knowledge.jsonl": "9e18736fe8f83b887fa0d6dd80679bf0c652d856f7443b4f91149c189bf16e2c",
+  "knowledge_history.jsonl": "a0c6c3c3ca58d90c57e3e34d419d093d8c764030cd15dc6c5835101ce2acc825",
+  "knowledge_uses.jsonl": "46b8cdac3adf74fe5888fca84db541eea717ab3bf8d08a2fd189a168f4e799a0"
+ }
+}

@@ -1,0 +1,90 @@
+{
+ "upcoming & live & successful projects_May09-2025.csv": {
+  "table": "raw_0",
+  "columns": 43,
+  "rows": 30339,
+  "id_col": "id",
+  "duplicate_ids": 1188,
+  "duplicate_rate": 0.0392,
+  "states": [
+   [
+    "successful",
+    15163
+   ],
+   [
+    "failed",
+    11259
+   ],
+   [
+    "canceled",
+    1637
+   ],
+   [
+    "submitted",
+    1520
+   ],
+   [
+    "live",
+    577
+   ],
+   [
+    "started",
+    179
+   ],
+   [
+    "suspended",
+    4
+   ]
+  ],
+  "missing_rate": {
+   "blurb": 0.0,
+   "profile_blurb": 0.001
+  }
+ },
+ "upcoming & live projects_July-11-2025.csv": {
+  "table": "raw_1",
+  "columns": 43,
+  "rows": 1805,
+  "id_col": "id",
+  "duplicate_ids": 60,
+  "duplicate_rate": 0.0332,
+  "states": [
+   [
+    "submitted",
+    1060
+   ],
+   [
+    "live",
+    611
+   ],
+   [
+    "started",
+    131
+   ],
+   [
+    "suspended",
+    3
+   ]
+  ],
+  "missing_rate": {
+   "blurb": 0.001
+  }
+ },
+ "items_live_daily_20250808.csv": {
+  "table": "raw_2",
+  "columns": 48,
+  "rows": 555,
+  "id_col": "id",
+  "duplicate_ids": 0,
+  "duplicate_rate": 0.0,
+  "states": [
+   [
+    "live",
+    555
+   ]
+  ],
+  "missing_rate": {
+   "image": 1.0
+  }
+ }
+}

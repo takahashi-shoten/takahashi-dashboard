@@ -14,7 +14,7 @@
 - 市場成果: 公開動画0本、顧客0、売上0円、利益0円。市場実験の実行0件。[実測]
 - 実運用で動いているもの: 調査データの自動収集(1日2回)。それ以外の輪は閉じていない。
 - YouTube OAuth: Secrets 3つ登録・同意画面「本番」・`measure check` で token ok / scopes_missing [] / analytics ok を、**Actions のログ(run 45725655099、2026-11-26 00:01)で確認**。[実測] 状態: 実動作確認済み(接続のみ)。動画0本のため、アップロード・測定の実績はない。
-- 知識DB: 19件(11-24: 内田チャンネル由来13件、11-26: 保存済み結果から6件追加)。`knowledge_uses`(使用記録)は0件=**企画に一度も使われていない**。
+- 知識DB: 23件(11-24: 内田チャンネル由来13件、11-26: 保存済み結果から6件、商取引調査から4件追加)。`knowledge_uses`(使用記録)は0件=**企画に一度も使われていない**。
 - 予算: 月3万円。研究・学習用API費の上限 **2,000円**(承認済み)。残り3,000円は未承認。累計の推定: 約4,000円(Gemini 約3,300 + Claude 約510〜570)。研究・検証分は約224円+Shorts視聴約34円。AIサブスクが月3万円に含まれるかは未確認。
 - **会話処理(Claude Code セッション)の利用記録**(11-26 に `get_session` で取得): `usage.cost_usd` はクライアントがトークン数から出した**推定の価格換算額で、請求額ではない**。旧セッション 92.64(完了)/ 続行セッション 32.33 / この継承セッション 11.02(進行中。11-26 01:10 時点)/ OAuthセッションは記録なし(Mac上のローカル実行)。3つの合計は約$136(約2.0万円@150円)。同時点の `rate_limit_info` は `isUsingOverage: false`・`five_hour`(契約プランの枠内の表示で、追加利用料金ではない)。実際の請求は未確認(契約プラン名・Extra usage・請求書は、オーナーが claude.ai の使用状況/請求の画面で確認する必要がある)。
 - **Anthropic APIの制作費とは別の計測で、二重計上ではない**: 制作パイプラインのAPI費は、GitHub Actions が `ANTHROPIC_API_KEY` で呼んだ API の応答の使用量を台帳(`costs`)に記録したもの(実測。約$3.4〜3.8)。支払いは API の前払い(約$22、11-22)。Claude Code のセッションは、アカウントのログインで動き、別の計測。ただし、API前払いの残高と台帳の合計の一致は、Console を見ていないため未確認。
@@ -36,6 +36,7 @@
 
 ## 4. 原資料の索引
 - 比較試験の原因分析: `docs/research/knowledge_ablation_cause_analysis_2026-11-26.md`。第2回(方式A/B/C/D): `experiments/ablation/2026-11-26-round2/`。マーケ学習の計画: `docs/research/marketing_learning_plan_2026-11-26.md`。市場実験の準備: `experiments/ablation/2026-11-26/MARKET_PREP.md`、`experiments/plans/D1_digital_checklist.json`
+- **世界の商取引データ調査(第1報)**: `docs/research/commerce_data_survey_2026-11-26.md`(指定動画の分析、KSInsights・openBIGdata・Agentic Income Trackerの取得可否と品質、KSサンプルの分析、ココナラ4出品の確認、事業機会)。動画の解析全文: `docs/research/commerce_video_ct5RIWHrqLU/`。再利用コード: `commerce_research/`(`profile_csv.py`、`ks_analysis.py`)。
 - 能力の試験記録: `docs/CAPABILITY_LOG.md`。知識の個別監査: `docs/research/knowledge_audit_2026-11-26.md`。比較試験(事前登録・出力・評価・集計): `experiments/ablation/2026-11-26/`
 - プロジェクト前史(11-18〜11-24)と、会話の原文への行き方・セッションID: `docs/HISTORY_2026-11-18_to_11-24.md`
 - 方針・原則: `CLAUDE.md` / `docs/MANAGEMENT_PRINCIPLES.md` / `docs/DECISIONS.md` / `docs/SESSION_PROTOCOL.md`
@@ -71,6 +72,10 @@
 - 承認待ち: `claude/epic-albattani-qohzgb` の main への反映(PR 1本。`funny-allen` は取り込み済みなので別PRは不要)。予算の引き上げ(研究費2,000円→、サブスクの扱い)。サロンの安全方針(女性専用にするか)・撮影と出演の同意。初回公開、外部へのアウトリーチ、新規契約。
 - **OAuth の残課題・注意**(OAuthセッションの全文とツールログで確認。11-26): ①アプリは「本番環境」だが、Googleの正式な「検証」は未提出で、ログイン時に「未確認アプリ」警告が出る(新規ユーザー上限100人。オーナー1人なので現状問題なし)。②**新しいリフレッシュトークンが7日で失効しないかは未実証**(約12/2以降に `cmd=check` で確認)。③同意画面の「本番環境」・Search Consoleの所有権・古いクライアントシークレットの削除は、**画面を見たAIの記述が根拠で、独立したログはない**(その後の `check` 成功が、削除の影響がないことを間接的に示す)。④Mac の `~/Downloads` に、使用中のクライアントシークレットを含むJSONが残っている(削除・保管の判断は未実施)。⑤認証コードが1度チャットに貼られた(単一用途・使用済み)。以後、コード・長い文字列が写る画面は貼らない。⑥Search Consoleの操作で、AIがオーナーの個人のメインGoogleアカウントを使った(パスワードはオーナーが入力)。以後、個人アカウントの操作はオーナーの明示の許可を得る。⑦公開ページ(`oauth/`)に事業用の連絡先メールが載っている(オーナー承認済み)。⑧`yt-measure cmd=check` の成功実行: 45646208619(15:32)・45724961378(23:55)・45725655099(00:01、UTC換算の日時はActions画面参照)。
 - 未完了: 台帳の保存を追記専用に変更した `yt-measure.yml` を、Actionsで実行して確認すること(手動実行 `cmd=check` で足りる。mainへの反映は承認待ち)、`snapshot` による知識DBの定期バックアップ、予算ガードのコード、知識DBの企画接続、実験カード1サイクルの実行、OAuthアプリの「検証」(Googleの正式審査)は未提出(オーナー1人の利用なので現状問題なし)。
+
+## 6b. 11-26 商取引データ調査の残課題
+- **63万件のデータは未取得**(外部の有料商品とみられ、購入は承認事項。無料の代替は Web Robots の月次ダンプで、ホスト許可が必要)。他の主要市場(Gumroad・Etsy・BOOTH・note・Fiverr・Upwork・Udemy・Kindle・アプリストア・Product Hunt・itch.io ほか)は、ネットワーク規則で未到達=未確認。ココナラの動画の事例(10万円×3件)は未確認。
+- ネットワーク許可を追加済み: `openbigdata.org`、`agenticincometracker.com`、`coconala.com`(11-26。理由つき)。
 
 ## 7. 次の具体的な仕事(優先順位と理由。変更したら理由を `DECISIONS.md` に記録)
 注: (2)永続化のうち台帳の追記専用保存は実装済み(Actions実行で確認が残る)。残る最大の欠落は「知識が使われない」ことなので、4を先に進め、S1の準備を並行する。
