@@ -1,0 +1,6 @@
+date,week,kitsuke_bookings_or_enquiries,source_breakdown,google_review_count,google_rating,google_views_calls_routes,instagram_followers,instagram_profile_visits,note
+2026-11-25,baseline,2/month,unknown,4,4.8,unknown,719,unknown,baseline (experiments/baselines/salon_2026-11-25.json)
+2026-11-26,applied,,,,,,,,S1 approved; drafts being applied by owner/wife (fill the actual date)
+2026-12-03,week1,,,,,,,,
+2026-12-10,week2,,,,,,,,
+2026-12-17,week3-judge,,,,,,,,judge: increased/unchanged/unknown (target +3 vs baseline; hold if seasonal)
