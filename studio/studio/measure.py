@@ -68,13 +68,29 @@ def report(con):
     return "\n".join(lines)
 
 
+def register(con, plan_path):
+    """Register a plan. If the plan lists `knowledge_terms` and a knowledge DB exists, the matching knowledge is attached to the plan and its use is logged."""
+    import sqlite3
+    from . import knowledge
+    plan = json.loads(open(plan_path, encoding="utf-8").read())
+    terms, kb_path = plan.get("knowledge_terms") or [], knowledge.default_db_path()
+    if terms and kb_path:
+        kb = sqlite3.connect(str(kb_path))
+        kb.row_factory = sqlite3.Row
+        try:
+            return ex.register_with_knowledge(con, kb, {k: v for k, v in plan.items() if k != "knowledge_terms"}, terms)
+        finally:
+            kb.close()
+    return ex.create_from_file(con, plan_path)
+
+
 def main(argv=None):
     argv = argv or sys.argv[1:]
     con = ledger.connect()
     ex.init(con)
     cmd = argv[0] if argv else "report"
     if cmd == "register":
-        print(ex.create_from_file(con, argv[1]))
+        print(register(con, argv[1]))
     elif cmd == "publish":
         ex.mark_published(con, argv[1], argv[2], argv[3])
         print("ok")

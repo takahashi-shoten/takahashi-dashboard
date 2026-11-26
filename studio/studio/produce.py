@@ -210,12 +210,13 @@ def main(argv=None):
     ap.add_argument("--target-seconds", type=int, default=None, help="default 480 (long) / 50 (short)")
     ap.add_argument("--topic", default="", help="optional topic/angle hint passed to the script writer")
     ap.add_argument("--audience", default="40-60代の日本人男性")
+    ap.add_argument("--no-knowledge", action="store_true", help="do not consult the stored knowledge DB (default: consult and log the use)")
     ap.add_argument("--script-only", action="store_true", help="stop after the script and QA (no voice/image spend)")
     ap.add_argument("--style", default="photo", choices=["photo", "manga", "illustration", "history"], help="visual style of the generated images")
     a = ap.parse_args(argv)
     os.environ["STUDIO_VISUAL_STYLE"] = a.style
     con = ledger.connect(":memory:")
-    b = brief.make_brief(a.ytr_db, a.genre, a.lang, audience=a.audience)
+    b = brief.make_brief(a.ytr_db, a.genre, a.lang, audience=a.audience, use_knowledge=not a.no_knowledge)
     if a.topic:
         b["topic"] = a.topic
     pid = brief.create_project(con, b)

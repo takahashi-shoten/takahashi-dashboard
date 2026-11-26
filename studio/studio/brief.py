@@ -2,7 +2,7 @@
 import json
 import sqlite3
 
-from . import ledger
+from . import knowledge, ledger
 
 
 def competitor_patterns(ytr_db, genre, limit=15):
@@ -20,7 +20,20 @@ def competitor_patterns(ytr_db, genre, limit=15):
     return [dict(r) for r in rows]
 
 
-def make_brief(ytr_db, genre, lang, platform="youtube", audience=""):
+def consult_knowledge(genre, lang, kb_path=None):
+    """Relevant stored knowledge for this brief (logged as used). [] if there is no knowledge DB."""
+    kb_path = kb_path or knowledge.default_db_path()
+    if not kb_path:
+        return []
+    kb = sqlite3.connect(str(kb_path))
+    kb.row_factory = sqlite3.Row
+    try:
+        return knowledge.consult(kb, used_in=f"brief:{genre}:{lang}")
+    finally:
+        kb.close()
+
+
+def make_brief(ytr_db, genre, lang, platform="youtube", audience="", kb_path=None, use_knowledge=True):
     pats = competitor_patterns(ytr_db, genre)
     durs = sorted(p["duration_s"] for p in pats if p["format_class"] == "long" and p["duration_s"])
     return dict(
@@ -30,6 +43,9 @@ def make_brief(ytr_db, genre, lang, platform="youtube", audience=""):
         median_long_duration_s=durs[len(durs) // 2] if durs else None,
         evidence_note="Reference titles are measured hits (YouTube Data API). They show what viewers click, "
                       "NOT what to copy: the script must add an original angle.",
+        knowledge_used=consult_knowledge(genre, lang, kb_path) if use_knowledge else [],
+        knowledge_note="Stored knowledge, labelled by status/confidence. 'hypothesis'/'observed' items are NOT established know-how: use as ideas to test, "
+                       "respect each item's conditions, never copy surface content.",
     )
 
 

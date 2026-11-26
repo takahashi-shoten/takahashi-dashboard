@@ -117,3 +117,30 @@ def add_counterexample(con, knowledge_id, description, url=None):
     lst = json.loads(r[0] or "[]") + [dict(description=description, url=url, at=_now())]
     con.execute("UPDATE knowledge SET counterexamples_json=?, updated_at=? WHERE knowledge_id=?", (json.dumps(lst, ensure_ascii=False), _now(), knowledge_id))
     con.commit()
+
+DEFAULT_DB = None   # resolved lazily: <repo>/knowledge/marketing_knowledge.db (override with env STUDIO_KNOWLEDGE_DB)
+PRODUCTION_CATEGORIES = ("hook", "emotion", "action", "trust", "retention", "title", "funnel", "risk", "design_implication", "precedent_caution")
+
+
+def default_db_path():
+    import os
+    from pathlib import Path
+    p = os.environ.get("STUDIO_KNOWLEDGE_DB")
+    if p:
+        return Path(p) if p != "off" else None
+    d = Path(__file__).resolve().parent.parent.parent / "knowledge" / "marketing_knowledge.db"
+    return d if d.exists() else None
+
+
+def consult(con, used_in, task="production", categories=PRODUCTION_CATEGORIES, per_category=1, audience=None):
+    """Automatic lookup for planning/production by category (Japanese text is not word-split, so category is the reliable key). Strongest status/confidence first,
+    invalidated excluded. Every consulted item is logged in knowledge_uses with `used_in` so later results can promote/demote it. Returns compact dicts that carry status,
+    confidence, conditions and the number of counter-examples: hypotheses must stay labelled as hypotheses."""
+    out = []
+    for cat in categories:
+        for k in search(con, "", category=cat, audience=audience, limit=per_category):
+            con.execute("INSERT INTO knowledge_uses(knowledge_id,used_in,task,used_at) VALUES(?,?,?,?)", (k["knowledge_id"], used_in, task, _now()))
+            out.append(dict(knowledge_id=k["knowledge_id"], category=k["category"], content=k["content"], status=k["status"], confidence=k["confidence"],
+                            conditions=k["conditions"], counterexamples=len(json.loads(k["counterexamples_json"] or "[]")), source=k["source_url"]))
+    con.commit()
+    return out

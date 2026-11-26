@@ -24,5 +24,9 @@
  "channel_type": "google_maps_and_instagram_profile",
  "budget_cap_usd": 1.0,
  "success_condition": "3週間で、問い合わせ・予約が基準値より増える(基準値は現在の月2件。目安: 追加3件以上。サンプルが小さいので、判定は『増えた/変わらず/不明』の3段階)",
- "stop_condition": "3週間で変化なし、または1週間でもGoogleマップ・Instagramの規約・安全上の問題が出たら中止。判定保留: 季節要因(年末・年始)が大きい場合"
+ "stop_condition": "3週間で変化なし、または1週間でもGoogleマップ・Instagramの規約・安全上の問題が出たら中止。判定保留: 季節要因(年末・年始)が大きい場合",
+ "knowledge_terms": [
+  "受け皿",
+  "予約"
+ ]
 }
