@@ -25,6 +25,14 @@ PROMPTS = {
 }
 
 
+SIMPLE = {
+    1: "Subtle natural motion: the dresser's hands gently settle the bow at the back. Slow camera push-in. Keep everything else unchanged. 5 seconds, vertical 9:16.",
+    2: "Subtle natural motion: the dresser's hands lightly adjust the ribbon at the back. Slow camera push-in. Keep everything else unchanged. 5 seconds, vertical 9:16.",
+    3: "Very slow camera glide over the objects on the table with soft shifting light. Keep everything unchanged. 5 seconds, vertical 9:16.",
+    4: "Very slow camera push-in; the ribbon at the back sways slightly. Keep everything unchanged. 5 seconds, vertical 9:16.",
+}
+
+
 def load_image(name):
     return (ASSETS / name).read_bytes()
 
@@ -51,8 +59,8 @@ def one(n):
     out.mkdir(parents=True, exist_ok=True)
     b64 = base64.b64encode(load_image(NAMES[n - 1])).decode()
     hdr = {"x-goog-api-key": gemini.api_key(), "Content-Type": "application/json"}
-    for model in ["gemini-omni-1.1-flash", "gemini-omni-flash-preview"]:
-        for label, body in shapes(b64, PROMPTS[n]).items():
+    for model, prompt in [("gemini-omni-1.1-flash", PROMPTS[n]), ("gemini-omni-1.1-flash", SIMPLE[n]), ("gemini-omni-flash-preview", SIMPLE[n])]:
+        for label, body in list(shapes(b64, prompt).items())[:1]:
             t = time.time()
             r = requests.post(URL, json={"model": model, **body}, headers=hdr, timeout=900)
             print(f"{model} [{label}] HTTP {r.status_code} in {round(time.time() - t, 1)}s")
