@@ -16,12 +16,18 @@ JOBS = [
     ("kitsuke_4_finished_back.png", f"{STYLE} Finished look: a woman in a hakama standing in a doorway of a bright room, photographed from behind, the hakama ribbon neat and symmetrical, soft gray light."),
 ]
 
+FURISODE = [
+    ("kitsuke_f1_obi_hands.png", f"{STYLE} Close-up from behind: a kimono dresser's two hands shaping the large decorative obi bow on a young woman in a furisode (long-sleeved formal kimono) in muted gray-lavender with a subtle pattern; long sleeves hang beside her; charcoal and ivory obi."),
+    ("kitsuke_f2_back_view.png", f"{STYLE} A young woman in an elegant furisode seen from behind in a bright gray concrete room, long sleeves, a large obi bow, hair up with a small ornament; the dresser's hands lightly adjusting the obi at her back."),
+    ("kitsuke_f4_finished_back.png", f"{STYLE} Finished look: a woman in a furisode with long sleeves standing in a doorway of a calm modern room, photographed from behind, neat obi bow, soft gray light, face never visible."),
+]
 
-def main():
+
+def main(which="hakama"):
     out = Path(__file__).resolve().parent.parent / "work" / "gemini_live"
     out.mkdir(parents=True, exist_ok=True)
     rc = 0
-    for name, prompt in JOBS:
+    for name, prompt in (FURISODE if which == "furisode" else JOBS):
         g = visuals.GeminiImage(model="gemini-3.1-flash-image", style="photo")
         t = time.time()
         try:
@@ -33,4 +39,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1] if len(sys.argv) > 1 else "hakama"))
