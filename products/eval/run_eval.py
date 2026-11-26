@@ -8,7 +8,7 @@ def gem(prompt, model="gemini-3.8-flash"):
     return "".join(p.get("text","") for p in j["candidates"][0]["content"]["parts"] if not p.get("thought")), (u.get("promptTokenCount",0),u.get("candidatesTokenCount",0)+u.get("thoughtsTokenCount",0))
 def cla(prompt, model="claude-haiku-5-5"):
     r=requests.post("https://api.anthropic.com/v1/messages",headers={"x-api-key":A,"anthropic-version":"2023-06-01"},json={"model":model,"max_tokens":1500,"messages":[{"role":"user","content":prompt}]},timeout=120)
-    r.raise_for_status(); j=r.json(); return j["content"][0]["text"], (j["usage"]["input_tokens"],j["usage"]["output_tokens"])
+    r.raise_for_status(); j=r.json(); return "".join(b.get("text","") for b in j["content"] if b.get("type")=="text"), (j["usage"]["input_tokens"],j["usage"]["output_tokens"])
 GEN={"gemini":gem,"claude":cla}
 def retry(f,*a):
     for i in range(3):
