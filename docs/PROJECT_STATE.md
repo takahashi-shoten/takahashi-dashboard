@@ -30,11 +30,12 @@
 | 公開・測定(`youtube.py` `measure.py` `yt-measure.yml`) | 接続のみ実動作確認済み。アップロード・測定は模擬テストのみ | 上記Actionsログ |
 | 追記専用の保存と復元(`snapshot.py`) | 実動作確認済み(単体) | ワークフロー未接続 |
 | マーケティング文案生成(`marketing.py`) | 模擬テスト済み | — |
-| 知識DB→企画への自動接続 | **接続済み(11-26)**: `make_brief` が `knowledge.consult` で種類別に知識を引き、ラベル(状態・確信度・条件)つきで brief に載せて使用を記録。`measure register` は計画の `knowledge_terms` で知識を紐づけ。テスト合格(171件)。DBのコピーでS1→K18、S2→K14・K15を確認。**実際の制作・登録はまだ行っていない**。使用記録(`knowledge_uses`)は、Actions上で実行すると保存されない(実験台帳 `knowledge_used_json` と brief には残る)→ 使用記録の永続化は課題 | `studio/studio/knowledge.py`(`consult`)、`brief.py`、`measure.py`(`register`) |
+| 知識DB→企画への自動接続(11-26更新: **コード側の選択 `knowledge.relevant` に変更**。関連なしなら使わない。歴史ジャンルでは『関連なし』になり、以前の無条件投入を解消。再現率は低い=保守的) | **接続済み(11-26)**: `make_brief` が `knowledge.consult` で種類別に知識を引き、ラベル(状態・確信度・条件)つきで brief に載せて使用を記録。`measure register` は計画の `knowledge_terms` で知識を紐づけ。テスト合格(171件)。DBのコピーでS1→K18、S2→K14・K15を確認。**実際の制作・登録はまだ行っていない**。使用記録(`knowledge_uses`)は、Actions上で実行すると保存されない(実験台帳 `knowledge_used_json` と brief には残る)→ 使用記録の永続化は課題 | `studio/studio/knowledge.py`(`consult`)、`brief.py`、`measure.py`(`register`) |
 | 予算の強制 | 部分的(動画分析と調査の上限のみ) | — |
 | 経営判断エンジン、自律ループ、販売・顧客対応 | 未実装 | — |
 
 ## 4. 原資料の索引
+- 比較試験の原因分析: `docs/research/knowledge_ablation_cause_analysis_2026-11-26.md`。第2回(方式A/B/C/D): `experiments/ablation/2026-11-26-round2/`。マーケ学習の計画: `docs/research/marketing_learning_plan_2026-11-26.md`。市場実験の準備: `experiments/ablation/2026-11-26/MARKET_PREP.md`、`experiments/plans/D1_digital_checklist.json`
 - 能力の試験記録: `docs/CAPABILITY_LOG.md`。知識の個別監査: `docs/research/knowledge_audit_2026-11-26.md`。比較試験(事前登録・出力・評価・集計): `experiments/ablation/2026-11-26/`
 - プロジェクト前史(11-18〜11-24)と、会話の原文への行き方・セッションID: `docs/HISTORY_2026-11-18_to_11-24.md`
 - 方針・原則: `CLAUDE.md` / `docs/MANAGEMENT_PRINCIPLES.md` / `docs/DECISIONS.md` / `docs/SESSION_PROTOCOL.md`
@@ -76,5 +77,5 @@
 1. 引き継ぎ基盤(この文書群)の維持と独立検証 — チャットが変わるたびに能力が初期化されるのを防ぐ。
 2. 永続化: 台帳の追記専用保存(実装済み、Actions実行で確認が残る)、知識DBの定期バックアップ → 台帳・知識DBを失わない。
 3. 予算ガードのコード化 → 承認範囲の逸脱を防ぐ。
-4. 知識DB→企画の接続: コードは完了(11-26)。比較試験で、**19件を丸ごと渡す使い方は成果物を改善しなかった**。次: ①適用条件で絞った関連知識だけを渡す(`consult` に条件フィルタ)②関連知識3〜5件のBを3回以上生成して再比較(位置の入れ替えを事前登録に含める)③自己啓発以外の一次的な知識を増やす ④S1/S2を台帳に登録して市場で測る(採用案: `experiments/ablation/2026-11-26/ADOPTED_DRAFTS.md`、実行は承認後)。
+4. 知識の利用方式(11-26 第2回の暫定結果: **D(企画後の点検にだけ使う)が最も安定、B(企画前に丸ごと)が最も弱い。ただし評価者2名・ばらつき大**)。実運用の使用記録の永続化は**Actions実行で確認済み**(`studio-data/knowledge_uses.jsonl`)。S1・S2は台帳に登録済み(E-20261126-01・02。実行は承認後)。D1(デジタル商品)の実験カード作成済み(未登録)。次(旧): ①適用条件で絞った関連知識だけを渡す(`consult` に条件フィルタ)②関連知識3〜5件のBを3回以上生成して再比較(位置の入れ替えを事前登録に含める)③自己啓発以外の一次的な知識を増やす ④S1/S2を台帳に登録して市場で測る(採用案: `experiments/ablation/2026-11-26/ADOPTED_DRAFTS.md`、実行は承認後)。
 5. 実験S1(サロンの受け皿の整備)の実行準備: 文案(Googleマップ・Instagram・予約導線)をAIが作り、反映はオーナー/奥さん。AI費用はほぼ0円で、予約数という市場データが最も早く取れる。

@@ -7,7 +7,8 @@
 2. `docs/PROJECT_STATE.md`(現在地・索引・次の仕事)と `docs/DECISIONS.md`(有効な指示と変更の経緯)を読む。
 3. ブランチを確認する: `git fetch` して `main` / `claude/funny-allen-4qkj7d` / 自分の作業ブランチ / 最新コミットを比べ、未統合の成果がないか見る。マージはオーナーの承認が必要。
 4. 前回の終了時点を確認する: `PROJECT_STATE.md` の「未完了」と、直近の `docs/SESSION_LOG.md` の末尾。
-5. これからやる仕事に関連する過去の知識・成果を引く: 知識DBは `knowledge.for_task(con, task, context, used_in=…)`(使用が記録される)。実験は `experiments/plans/`、分析は `docs/research/`。
+4b. Actionsで記録された知識使用を取り込む: `git fetch origin studio-data && git show origin/studio-data:knowledge_uses.jsonl > /tmp/ku.jsonl && (cd studio && python -m studio.knowledge import-uses ../knowledge/marketing_knowledge.db /tmp/ku.jsonl)`(重複は入らない)。
+5. これからやる仕事に関連する過去の知識・成果を引く(**関連する知識は `knowledge.relevant(...)` で選ぶ。『関連なし』も有効な結果**): 知識DBは `knowledge.for_task(con, task, context, used_in=…)`(使用が記録される)。実験は `experiments/plans/`、分析は `docs/research/`。
 6. 重複確認: 同じ調査・開発・検証が既にないかを、索引と `git log --oneline` で確認してから着手する。再検証が必要なら、過去の検証で何が不足していたかを先に書く。
 7. 予算と承認範囲を確認する(`CLAUDE.md` の予算決定。研究・学習API費 2,000円、残りは未承認)。
 8. 最も収益化に寄与する仕事を選び、理由を記録して、承認済み範囲で着手する。
