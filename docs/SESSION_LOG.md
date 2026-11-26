@@ -6,3 +6,4 @@
 - 実測した事実: `measure check` は Actions run 45725655099 のログで analytics: ok。`yt-measure` は6回すべて success(うち2回が定期実行・OAuth前、4回が手動)。実験台帳は `studio-data` ブランチに存在し(11-25に作成)、保存は強制pushで履歴を残さない。
 - 費用: 0円(追加API呼び出しなし)。
 - 未完了・次回: 下記の検証結果、`snapshot` のワークフロー接続、予算ガード、知識DB→企画の接続、S1の準備。
+- 追記(OAuthセッションの全文を、別エージェントが724イベント読み、ツールログとも照合): check は3回すべて success。Secrets は計6件(YT_OAUTH_* 3つは本番公開後に取り直し)。上記の残課題・承認の根拠を `PROJECT_STATE.md` と `DECISIONS.md` に反映した。
