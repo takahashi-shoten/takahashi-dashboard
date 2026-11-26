@@ -3,9 +3,12 @@ preferences and the pre-registered verdict. Usage: python3 analyze_results.py"""
 import json
 from pathlib import Path
 H = Path(__file__).parent
-bm = json.load(open(H / "blind_map.json"))
+import sys
+MAP = sys.argv[1] if len(sys.argv) > 1 else "blind_map.json"
+NAMES = tuple(sys.argv[2:]) or ("E1", "E2")
+bm = json.load(open(H / MAP))
 crit = [f"C{i}" for i in range(1, 9)]
-ev = {n: json.load(open(H / "eval" / f"{n}.json")) for n in ("E1", "E2") if (H / "eval" / f"{n}.json").exists()}
+ev = {n: json.load(open(H / "eval" / f"{n}.json")) for n in NAMES if (H / "eval" / f"{n}.json").exists()}
 rows, wins = [], {}
 for t in ("T1", "T2", "T3", "T4"):
     for n, e in ev.items():
