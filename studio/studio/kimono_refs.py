@@ -46,30 +46,56 @@ FORM = """You are annotating a photo for a structural survey of Japanese women's
 No prose."""
 
 
+CATEGORIES = ["Category:Furisode", "Category:Hakama", "Category:Obi", "Category:Obi (sash)", "Category:Kimono", "Category:Women in kimono", "Category:Women wearing kimono",
+              "Category:Coming of Age Day in Japan", "Category:Seijin no Hi", "Category:Graduation in Japan", "Category:Japanese graduation ceremonies", "Category:Kitsuke",
+              "Category:Hakama (women)", "Category:Kimono in Japan", "Category:Weddings in Japan"]
+
+
+def _get(s, params, tries=4):
+    for k in range(tries):
+        r = s.get(API, params=params, timeout=60)
+        if r.status_code == 200:
+            return r.json()
+        print("wiki status", r.status_code, "retry", k, flush=True)
+        time.sleep(2 * (k + 1))
+    return None
+
+
+def _collect(pages, q, seen, out):
+    added = 0
+    for pg in (pages or {}).values():
+        ii = (pg.get("imageinfo") or [{}])[0]
+        if pg["title"] in seen or ii.get("mime") not in ("image/jpeg", "image/png") or not ii.get("thumburl"):
+            continue
+        seen.add(pg["title"])
+        em = ii.get("extmetadata", {})
+        out.append(dict(title=pg["title"], thumb=ii["thumburl"], page=ii.get("descriptionurl"), query=q,
+                        license=(em.get("LicenseShortName") or {}).get("value"), artist_present=bool(em.get("Artist"))))
+        added += 1
+    return added
+
+
 def search_files(n):
     s = requests.Session(); s.headers["User-Agent"] = UA
     seen, out = set(), []
-    for q in QUERIES:
-        cont = {}
-        while len(out) < n * 2:   # collect extra: many will be irrelevant
-            p = {"action": "query", "format": "json", "generator": "search", "gsrsearch": q, "gsrnamespace": 6, "gsrlimit": 50,
-                 "prop": "imageinfo", "iiprop": "url|mime|extmetadata", "iiurlwidth": 640, **cont}
-            r = s.get(API, params=p, timeout=60)
-            if r.status_code != 200:
+    base = {"action": "query", "format": "json", "prop": "imageinfo", "iiprop": "url|mime|extmetadata", "iiurlwidth": 640}
+    jobs = [("cat:" + c, {"generator": "categorymembers", "gcmtitle": c, "gcmtype": "file", "gcmlimit": 50}) for c in CATEGORIES]
+    jobs += [("q:" + q, {"generator": "search", "gsrsearch": q, "gsrnamespace": 6, "gsrlimit": 50}) for q in QUERIES]
+    for label, gp in jobs:
+        cont, added, pages_read = {}, 0, 0
+        while len(out) < n * 2 and pages_read < 12:
+            j = _get(s, {**base, **gp, **cont})
+            if not j:
                 break
-            j = r.json()
-            for pg in (j.get("query", {}).get("pages", {}) or {}).values():
-                ii = (pg.get("imageinfo") or [{}])[0]
-                if pg["title"] in seen or ii.get("mime") not in ("image/jpeg", "image/png") or not ii.get("thumburl"):
-                    continue
-                seen.add(pg["title"])
-                em = ii.get("extmetadata", {})
-                out.append(dict(title=pg["title"], thumb=ii["thumburl"], page=ii.get("descriptionurl"), query=q,
-                                license=(em.get("LicenseShortName") or {}).get("value"), artist_present=bool(em.get("Artist"))))
-            if "continue" not in j or len(out) >= n * 2:
+            added += _collect(j.get("query", {}).get("pages"), label, seen, out)
+            pages_read += 1
+            if "continue" not in j:
                 break
-            cont = j["continue"]; time.sleep(0.5)
-        time.sleep(0.5)
+            cont = j["continue"]; time.sleep(0.6)
+        print(f"source {label}: +{added}", flush=True)
+        time.sleep(0.6)
+        if len(out) >= n * 2:
+            break
     return out[: n * 2]
 
 
