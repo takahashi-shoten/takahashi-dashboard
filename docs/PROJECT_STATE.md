@@ -25,7 +25,7 @@
 | 調査DB(168,763本・3,790ch、1日2回収集) | 実運用確認済み | `yt-research.yml`、`docs/research/ytr_audit_2026-11-25/AUDIT.md`。直近3か月の断面で、時系列・失敗事例は弱い |
 | 制作パイプライン(台本・2社QA・画像・音声・編集・サムネ) | 実動作確認済み | 試作T1〜T5・E1(未公開)。`docs/CHATGPT_HANDOVER_2026-11-24.md` |
 | 動画の映像+音声の分析 | 実動作確認済み(自社動画の短い区間で条件付き合格) | `docs/REPORT_2026-11-24_gemini_video_analysis_and_marketing_learning.md`、`docs/research/vu_verification_2026-11-24/` |
-| 知識DB(SQLite、`studio/studio/knowledge.py`) | 実装済み | `knowledge/marketing_knowledge.db`、バックアップ `knowledge/snapshots/` |
+| 知識DB(SQLite、`studio/studio/knowledge.py`) | 実装済み。**企画への利用で成果物が良くなるかは、予備評価で示されなかった**(`docs/CAPABILITY_LOG.md`、`experiments/ablation/2026-11-26/RESULTS.md`)。個別監査: `docs/research/knowledge_audit_2026-11-26.md` | `knowledge/marketing_knowledge.db`、バックアップ `knowledge/snapshots/` |
 | 実験台帳(チャネル非依存、`experiments.py`) | 実装済み | `experiments/plans/`、`studio-data` ブランチ。保存は追記専用に変更済み(11-26、ローカル模擬のみ確認。Actionsでの実行は未確認。mainに入るまで定期実行には反映されない) |
 | 公開・測定(`youtube.py` `measure.py` `yt-measure.yml`) | 接続のみ実動作確認済み。アップロード・測定は模擬テストのみ | 上記Actionsログ |
 | 追記専用の保存と復元(`snapshot.py`) | 実動作確認済み(単体) | ワークフロー未接続 |
@@ -35,6 +35,7 @@
 | 経営判断エンジン、自律ループ、販売・顧客対応 | 未実装 | — |
 
 ## 4. 原資料の索引
+- 能力の試験記録: `docs/CAPABILITY_LOG.md`。知識の個別監査: `docs/research/knowledge_audit_2026-11-26.md`。比較試験(事前登録・出力・評価・集計): `experiments/ablation/2026-11-26/`
 - プロジェクト前史(11-18〜11-24)と、会話の原文への行き方・セッションID: `docs/HISTORY_2026-11-18_to_11-24.md`
 - 方針・原則: `CLAUDE.md` / `docs/MANAGEMENT_PRINCIPLES.md` / `docs/DECISIONS.md` / `docs/SESSION_PROTOCOL.md`
 - 全作業の報告: `docs/CHATGPT_HANDOVER_2026-11-24.md`(制作・調査・失敗と学び)、`docs/REPORT_2026-11-24_...`(動画解析とマーケ学習)、`docs/REPORT_FOR_CHATGPT_2026-11-25_overall.md`、`docs/AUDIT_REPORT_2026-11-25.md`(現状監査)、`docs/INTEGRATED_REPORT_2026-11-25.md`(統合指示への対応・21項目の検証・経路比較)、`docs/REPORT_FOR_CHATGPT_2026-11-26.md`
@@ -75,5 +76,5 @@
 1. 引き継ぎ基盤(この文書群)の維持と独立検証 — チャットが変わるたびに能力が初期化されるのを防ぐ。
 2. 永続化: 台帳の追記専用保存(実装済み、Actions実行で確認が残る)、知識DBの定期バックアップ → 台帳・知識DBを失わない。
 3. 予算ガードのコード化 → 承認範囲の逸脱を防ぐ。
-4. 知識DB→企画の接続: コードは完了(11-26)。残り: ①S1/S2を実際に台帳へ登録して使用を記録 ②制作時の使用記録の永続化 ③使った知識の結果(市場結果)で `record_outcome` する運用。
+4. 知識DB→企画の接続: コードは完了(11-26)。比較試験で、**19件を丸ごと渡す使い方は成果物を改善しなかった**。次: ①適用条件で絞った関連知識だけを渡す(`consult` に条件フィルタ)②関連知識3〜5件のBを3回以上生成して再比較(位置の入れ替えを事前登録に含める)③自己啓発以外の一次的な知識を増やす ④S1/S2を台帳に登録して市場で測る(採用案: `experiments/ablation/2026-11-26/ADOPTED_DRAFTS.md`、実行は承認後)。
 5. 実験S1(サロンの受け皿の整備)の実行準備: 文案(Googleマップ・Instagram・予約導線)をAIが作り、反映はオーナー/奥さん。AI費用はほぼ0円で、予約数という市場データが最も早く取れる。
