@@ -1,0 +1,43 @@
+{
+ "_note": "Numbers only, no names (public repo). Source: wife's survey rounds 1-3 (self-report) + owner's screenshots 2026-11-25. Prices per menu differ: use per-menu tracking in S1.",
+ "taken_at": "2026-11-26",
+ "survey_questions_answered": 21,
+ "spare_bookings_per_month": 20,
+ "current_kitsuke_bookings_per_month": 2,
+ "minutes_per_person": 30,
+ "price_jpy": {
+  "shichigosan": 5500,
+  "hakama_graduation": 12000,
+  "furisode_seijin": 14000,
+  "hotpepper_yukata_hair_set": 7700
+ },
+ "videos_per_week": 1,
+ "goal_primary": "increase bookings",
+ "teaching_forms_selected": [
+  "in_person_class",
+  "online_course",
+  "promotion_content"
+ ],
+ "target_customers_selected_r1": [
+  "shichigosan",
+  "graduation",
+  "yukata",
+  "wedding_outing"
+ ],
+ "seijin_not_selected_r1": true,
+ "online_booking_for_kitsuke": "unknown",
+ "line_official": "unknown",
+ "women_only": "unknown",
+ "face_ok": true,
+ "exterior_not_shown_ok": true,
+ "unanswered_priority": [
+  "dec_jan_fill_rate",
+  "menu_of_current_2_bookings",
+  "referral_repeat_share",
+  "max_per_day_and_furisode_minutes",
+  "usp",
+  "ad_budget_time",
+  "target_increase",
+  "women_only"
+ ]
+}
