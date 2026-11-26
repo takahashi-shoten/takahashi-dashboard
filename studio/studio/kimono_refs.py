@@ -19,7 +19,8 @@ from . import gemini
 
 API = "https://commons.wikimedia.org/w/api.php"
 UA = "kimono-reference-survey/0.1 (non-commercial research; stores analysis results only)"
-QUERIES = ["hakama graduation", "women hakama back", "furisode", "furisode back obi", "seijin shiki furisode", "coming of age day kimono",
+QUERIES = ["furisode obi back", "kimono obi from behind", "hakama back view women", "obi knot back kimono", "japanese woman kimono rear view", "obi musubi back view",
+           "hakama graduation", "women hakama back", "furisode", "furisode back obi", "seijin shiki furisode", "coming of age day kimono",
            "kimono back view obi", "obi musubi", "bunko musubi", "fukura suzume", "tateya musubi", "graduation ceremony Japan hakama", "kitsuke",
            "Japanese women kimono standing back", "hanhaba obi", "nishaku sode", "university graduation Japan kimono hakama"]
 MODEL = "gemini-3.8-flash"
@@ -81,7 +82,12 @@ def analyse(item, sess, lock, usage):
             return None
         body = {"contents": [{"parts": [{"text": FORM}, {"inlineData": {"mimeType": r.headers.get("content-type", "image/jpeg").split(";")[0], "data": base64.b64encode(r.content).decode()}}]}],
                 "generationConfig": {"responseMimeType": "application/json", "temperature": 0}}
-        resp = gemini.generate_content(MODEL, body)
+        try:
+            body["generationConfig"]["thinkingConfig"] = {"thinkingBudget": 0}   # no hidden reasoning tokens: cheaper
+            resp = gemini.generate_content(MODEL, body)
+        except gemini.GeminiError:
+            body["generationConfig"].pop("thinkingConfig", None)
+            resp = gemini.generate_content(MODEL, body)
         u = gemini.usage(resp)
         with lock:
             usage["tokens"] += u["input_tokens"] + u["output_tokens"] + u["thought_tokens"]; usage["in"] += u["input_tokens"]; usage["out"] += u["output_tokens"] + u["thought_tokens"]
