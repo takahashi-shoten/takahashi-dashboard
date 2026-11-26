@@ -2,6 +2,8 @@
 
 This repository is an AI-run revenue business (YouTube first). **Read `docs/MANAGEMENT_PRINCIPLES.md` first**; it is the permanent operating principle.
 
+**Session continuity (permanent rule, owner directive 2026-11-26): this is NOT a new project each chat.** Before any work read, in this order: this file -> `docs/MANAGEMENT_PRINCIPLES.md` -> `docs/PROJECT_STATE.md` (current state + index to all source material) -> `docs/DECISIONS.md` (currently valid owner directives and why they changed) -> `docs/SESSION_PROTOCOL.md` (start/end procedure) -> the tail of `docs/SESSION_LOG.md`. Do not repeat research, development or verification that already exists; do not ask the owner to re-explain. Save results as you go and update these files at the end of every session.
+
 Key rules (details in that file):
 - The goal is a self-running loop of experiments -> publish -> measure -> diagnose -> improve, not "a great video" or "one viral hit".
 - Plan from human desires with evidence (competitor URLs, dates, views, subscriber counts; unverified = "未確認"); the AI chooses and justifies the plan, the owner is not asked to judge scripts.
@@ -44,3 +46,9 @@ Key rules (details in that file):
 - Do not count research, mock tests or AI self-evaluation as market experiments. Do not publish an existing prototype just because it exists. Do not report continuous work after a session ends unless a mechanism actually runs without the session.
 - Budget: monthly cap 30,000 JPY. The directive's split (research/precedents 8,000; production 7,000; experiments/sales 5,000; automation/maintenance 5,000; reserve 5,000) is a **provisional proposal, not an approval**; the 2,000 JPY research/learning API cap recorded above stays in force until the owner approves a change. Whether AI subscriptions count inside the 30,000 JPY is unknown: ask the owner. Enforce budgets in code where possible.
 - Roadmap (provisional, re-order with reasons): 11/25-27 safe foundation; 11/28-12/4 first real market response; 12/5-12/12 autonomous improvement loop; 12/13-12/20 prototype proof. 12/20 is a checkpoint for a market-connected prototype, not a revenue deadline.
+
+## Directive of 2026-11-26 (permanent): complete inheritance of all past work, knowledge and results
+- Past chats, directives, reports (own, ChatGPT, Gemini), logs, branches, DBs, artifacts, failures, budgets and pending work are business assets and must be reused. Re-doing solved work, re-fetching stored analyses with the API, or asking the owner for the same explanation is prohibited. Unavailable sources must be reported as unavailable (never as confirmed) with where/how to get them.
+- Knowledge only counts when used: planning/production must look up the knowledge DB (`knowledge.for_task`, which logs the use), record which knowledge was used, why, how it was applied and the result, and keep/modify/reject it. Unverified hypotheses are never treated as established know-how.
+- Persistent memory uses the existing assets (CLAUDE.md, MANAGEMENT_PRINCIPLES, `docs/PROJECT_STATE.md`, `docs/DECISIONS.md`, `docs/SESSION_LOG.md`, knowledge DB, experiment registry, `snapshot.py`); do not build a parallel system and do not stuff everything into this file. Secrets and identifying personal/shop data never go into this public repository.
+- Handover must be verified by an independent agent without the chat history. Approvals, budget (research/learning API 2,000 JPY) and information-control rules in force remain unchanged.

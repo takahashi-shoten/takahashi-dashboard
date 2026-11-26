@@ -1,0 +1,67 @@
+# プロジェクトの現在地と原資料の索引(生きた文書。作業のたびに更新する)
+
+最終更新: 2026-11-26 / 更新者: Claude Code(セッション継承作業) / 公開リポジトリのため、個人情報・秘密・店舗が特定できる情報は書かない。
+使い方: 新しいセッションは、まず `CLAUDE.md` → この文書 → `docs/SESSION_PROTOCOL.md` の順に読む。詳細は下の索引から原資料へ。会話の履歴を最初から読み直す必要はない。
+表記: [実測]=ログ・データで確認 / [報告]=オーナー申告 / [推定] / [未確認]。状態は6段階(未実装 / 実装済み / 模擬テスト済み / 実動作確認済み / 実運用確認済み / 市場成果確認済み)。完成率は出さない。
+
+## 1. 目的と経営思想(変わらない部分)
+- 目的: AIが市場・顧客・成功/失敗事例を学び、収益機会を発見し、商品・サービスを企画し、マーケティング・集客・販売・利益測定・改善を自律で回し、継続利益を生む**仕組み**を作る。YouTubeや動画制作そのものが目的ではない。媒体・商品・人物・AIに固執しない。
+- 経済目標: 5年後の純資産1億円(深い目的は経済的・時間的自由)。1年がかりの構築。月100万円は通過点。2026-12-20 は「実測データがそろった一通りの試験」の最初の区切りで、収益の期限ではない。人間の労働・管理時間も評価指標(目標: オーナーの介入 1日1時間程度)。
+- 中核能力: マーケティングとセールスコピー。他者が何年もかけた試行錯誤(成功・失敗・停滞・転換点)の短縮。1つの制作物から多方向の訴求・販売を考える。制作物の価値と販売方法の問題を分けて考える。AI・既存技術・通常プログラムを適材適所で使う。AIの稼働量ではなく経済的成果と能力の向上で評価する。
+- 本文: `docs/MANAGEMENT_PRINCIPLES.md`、`CLAUDE.md`(2026-11-24 / 11-25 / 11-26 の指示)。最新の有効な指示と変更の経緯は `docs/DECISIONS.md`。
+
+## 2. 現在の事実(2026-11-26)
+- 市場成果: 公開動画0本、顧客0、売上0円、利益0円。市場実験の実行0件。[実測]
+- 実運用で動いているもの: 調査データの自動収集(1日2回)。それ以外の輪は閉じていない。
+- YouTube OAuth: Secrets 3つ登録・同意画面「本番」・`measure check` で token ok / scopes_missing [] / analytics ok を、**Actions のログ(run 45725655099、2026-11-26 00:01)で確認**。[実測] 状態: 実動作確認済み(接続のみ)。動画0本のため、アップロード・測定の実績はない。
+- 知識DB: 19件(11-24: 内田チャンネル由来13件、11-26: 保存済み結果から6件追加)。`knowledge_uses`(使用記録)は0件=**企画に一度も使われていない**。
+- 予算: 月3万円。研究・学習用API費の上限 **2,000円**(承認済み)。残り3,000円は未承認。累計の推定: 約4,000円(Gemini 約3,300 + Claude 約510〜570)。研究・検証分は約224円+Shorts視聴約34円。AIサブスクが月3万円に含まれるかは未確認。
+
+## 3. 能力の状態(6段階)
+| 能力 | 状態 | 根拠・原資料 |
+|---|---|---|
+| 調査DB(168,763本・3,790ch、1日2回収集) | 実運用確認済み | `yt-research.yml`、`docs/research/ytr_audit_2026-11-25/AUDIT.md`。直近3か月の断面で、時系列・失敗事例は弱い |
+| 制作パイプライン(台本・2社QA・画像・音声・編集・サムネ) | 実動作確認済み | 試作T1〜T5・E1(未公開)。`docs/CHATGPT_HANDOVER_2026-11-24.md` |
+| 動画の映像+音声の分析 | 実動作確認済み(自社動画の短い区間で条件付き合格) | `docs/REPORT_2026-11-24_gemini_video_analysis_and_marketing_learning.md`、`docs/research/vu_verification_2026-11-24/` |
+| 知識DB(SQLite、`studio/studio/knowledge.py`) | 実装済み | `knowledge/marketing_knowledge.db`、バックアップ `knowledge/snapshots/` |
+| 実験台帳(チャネル非依存、`experiments.py`) | 実装済み | `experiments/plans/`、`studio-data` ブランチ(Actionsが強制pushで保存) |
+| 公開・測定(`youtube.py` `measure.py` `yt-measure.yml`) | 接続のみ実動作確認済み。アップロード・測定は模擬テストのみ | 上記Actionsログ |
+| 追記専用の保存と復元(`snapshot.py`) | 実動作確認済み(単体) | ワークフロー未接続 |
+| マーケティング文案生成(`marketing.py`) | 模擬テスト済み | — |
+| 知識DB→企画への自動接続 | 実装済みの関数あり、呼び出しコード0件 | `knowledge.for_task` |
+| 予算の強制 | 部分的(動画分析と調査の上限のみ) | — |
+| 経営判断エンジン、自律ループ、販売・顧客対応 | 未実装 | — |
+
+## 4. 原資料の索引
+- 方針・原則: `CLAUDE.md` / `docs/MANAGEMENT_PRINCIPLES.md` / `docs/DECISIONS.md` / `docs/SESSION_PROTOCOL.md`
+- 全作業の報告: `docs/CHATGPT_HANDOVER_2026-11-24.md`(制作・調査・失敗と学び)、`docs/REPORT_2026-11-24_...`(動画解析とマーケ学習)、`docs/REPORT_FOR_CHATGPT_2026-11-25_overall.md`、`docs/AUDIT_REPORT_2026-11-25.md`(現状監査)、`docs/INTEGRATED_REPORT_2026-11-25.md`(統合指示への対応・21項目の検証・経路比較)、`docs/REPORT_FOR_CHATGPT_2026-11-26.md`
+- 内田博史チャンネルの分析(6本の原文・サムネ・全動画の数字): `docs/research/uchida_analysis_2026-11-24/`(研究対象の一例。今後の優先対象ではない)
+- Shorts20本の視聴: `docs/research/shorts_watch_2026-11-25/`(SUMMARY.md と1本ずつの原文)
+- 調査DBの監査・再現できる分析: `docs/research/ytr_audit_2026-11-25/`(`yt_research/audit_db.py`、`analyses_2026-11-25.py`)
+- 先行事例: `docs/research/precedents_2026-11-25.md`(一次資料はProject Vendのみ。Felixは二次)、`docs/research/ai_autonomous_businesses_2026-11-24.md`
+- 収益機会の比較: `docs/research/revenue_opportunities_v0_2026-11-25.md`
+- 実験計画: `experiments/plans/E1〜E3.json`(YouTube)、`S1_salon_receiving_surface.json`・`S2_salon_real_footage_short.json`(サロン)。基準値: `experiments/baselines/salon_2026-11-25.json`(匿名)
+- アンケート(奥さんの店): `docs/survey/`(回答の生データと読み取りツール)
+- OAuth: `tools/yt_oauth_local.py`、`yt_research/docs/oauth_setup_pc_2026-11-23.md`、`oauth/`(公開ページ)
+- ブランチ: `main`(PR #17〜#19まで)/ `claude/funny-allen-4qkj7d`(11-25までの作業。mainにない約30コミット)/ `claude/epic-albattani-qohzgb`(上記2つを統合した最新。**未マージ**)/ `exp-E-20261124-01`(E1の成果物)/ `ytr-data`(調査DB)/ `studio-data`(実験台帳)/ `studio-output`(直近の制作物。上書きされる)/ `studio-samples` `voice-samples` `title-anatomy-reports` `visual-style-reports`(各レポート)
+- 実行: `key-check.yml`(診断・制作・動画解析のハブ。`task=produce|vugt|vudiag|vustab|vumk|vubatch|vustats|vushorts|…`)、`yt-research.yml`、`yt-measure.yml`(`cmd=check`)
+
+## 5. 過去の主な失敗と解決(再発防止)
+- 動画解析の初回不合格 → 原因は判定基準の誤り(音声ぶんがVIDEOに混ざる)。再現性テストで条件付き合格。再検証が必要なのは、長尺・他言語・他モデルのとき。
+- E1の初回QAでWeb検索上限により事実確認0件 → 4場面ずつ分割して再実行。E1の7件の表現は未確認のまま(公開前に弱める修正が必要)。
+- Gemini TTS の429 → 原因はモデルごとの1日100回上限。予備モデルへの切替とキャッシュ。
+- OAuth: プログラムの引数渡し忘れ(31c158c で修正)、同意画面「テスト中」ではトークンが7日で失効 → 「本番」に公開(ホームページとプライバシーポリシーを公開、Search Consoleでドメイン確認)。
+- アンケート: 長すぎる / リンクの公開設定 / 非公開の壁 → 要点だけの短い版を、LINEで送れる形に。
+- 私(Claude)の判断ミス: YouTube だけに話を狭める / 人に操作を丸投げする / 見ていないものを分析済みと扱う / 売れている型を外して独自性を優先する。
+
+## 6. 未完了・保留・承認待ち
+- **承認待ち(最優先)**: 公開リポジトリに店舗の防犯情報があること → 対処 A(非公開化)/ B(AI事業を別の非公開リポジトリに分離。推奨)/ C(文書から削除)。選択はオーナー。詳細は `docs/INTEGRATED_REPORT_2026-11-25.md` 第10章。
+- 承認待ち: `claude/epic-albattani-qohzgb`(または `funny-allen`)の main への反映(PR)。予算の引き上げ(研究費2,000円→、サブスクの扱い)。サロンの安全方針(女性専用にするか)・撮影と出演の同意。初回公開、外部へのアウトリーチ、新規契約。
+- 未完了: `snapshot` のワークフロー接続(`yt-measure.yml` は `studio-data` へ強制pushで保存している)、予算ガードのコード、知識DBの企画接続、実験カード1サイクルの実行、OAuthアプリの「検証」(Googleの正式審査)は未提出(オーナー1人の利用なので現状問題なし)。
+
+## 7. 次の具体的な仕事(優先順位と理由。変更したら理由を `DECISIONS.md` に記録)
+1. 引き継ぎ基盤(この文書群)の維持と独立検証 — チャットが変わるたびに能力が初期化されるのを防ぐ。
+2. 永続化: `snapshot` の接続(履歴を残さない強制pushをやめる)→ 台帳・知識DBを失わない。
+3. 予算ガードのコード化 → 承認範囲の逸脱を防ぐ。
+4. 知識DB→企画の接続(`knowledge.for_task` を `brief.py` / `produce.py` から呼び、使用を記録)→ 「知識が次の判断に使われる」輪を閉じる。
+5. 実験S1(サロンの受け皿の整備)の実行準備: 文案(Googleマップ・Instagram・予約導線)をAIが作り、反映はオーナー/奥さん。AI費用はほぼ0円で、予約数という市場データが最も早く取れる。
