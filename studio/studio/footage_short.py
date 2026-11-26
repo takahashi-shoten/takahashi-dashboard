@@ -24,6 +24,14 @@ def _prep(clip, i, tmp, keep_audio):
     """Trim, speed-change and cover-crop one clip to 1080x1920 @30fps."""
     start, end, speed = float(clip.get("start", 0)), clip.get("end"), float(clip.get("speed", 1.0))
     out = tmp / f"c{i:02d}.mp4"
+    if Path(str(clip["path"])).suffix.lower() in (".png", ".jpg", ".jpeg"):   # still image -> slow push-in
+        dur = float(clip.get("seconds", 2.5))
+        n = max(1, round(dur * 30))
+        vf = (f"scale={W * 2}:{H * 2}:force_original_aspect_ratio=increase,crop={W * 2}:{H * 2},"
+              f"zoompan=z='1+{float(clip.get('zoom', 0.08))}*on/{n}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s={W}x{H}:fps=30,format=yuv420p")
+        _run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-framerate", "30", "-t", f"{dur}", "-i", str(clip["path"]), "-vf", vf,
+              "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-r", "30", str(out)])
+        return out
     vf = f"setpts=PTS/{speed},scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps=30,format=yuv420p"
     cmd = ["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{start}"]
     if end is not None:
@@ -37,7 +45,7 @@ def _prep(clip, i, tmp, keep_audio):
 
 def _cta_clip(text, seconds, tmp):
     out = tmp / "cta.mp4"
-    _run(["ffmpeg", "-y", "-loglevel", "error", "-f", "lavfi", "-i", f"color=c=0x14532d:s={W}x{H}:r=30:d={seconds}",
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-f", "lavfi", "-i", f"color=c=0x2f3237:s={W}x{H}:r=30:d={seconds}",
           "-c:v", "libx264", "-pix_fmt", "yuv420p", str(out)])
     return out
 
@@ -58,12 +66,15 @@ def build(spec):
         lst = tmp / "list.txt"
         lst.write_text("".join(f"file '{p}'\n" for p in parts))
         events = [(float(x["at"]), float(x["at"]) + float(x["dur"]), x["text"]) for x in spec.get("telops", [])]
+        top_texts = [x["text"] for x in spec.get("telops", []) if x.get("style") == "top"]
         if cta:
             events.append((body, total, cta))
         ass = tmp / "short.ass"
         text = make_short_ass(events, "IPAGothic", font_px=84)
         if cta:   # closing card: centred and larger (ASS override tags; make_short_ass escapes braces itself)
             text = text.replace(f",,0,0,0,,{cta}", f",,0,0,0,,{{\\an5\\fs96}}{cta}")
+        for tt in top_texts:   # small label at the top (e.g. "image video, AI-generated")
+            text = text.replace(f",,0,0,0,,{tt}", f",,0,0,0,,{{\\an8\\fs44}}{tt}")
         ass.write_text(text, "utf-8")
         vf = f"subtitles={ass.name}:fontsdir={FONTS_DIR},format=yuv420p"
         enc = ["-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-movflags", "+faststart"]
