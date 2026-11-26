@@ -1,0 +1,1319 @@
+{
+ "definitions": {
+  "views": "latest snapshot",
+  "mature": "age >= 14 days",
+  "hit": ">= 50,000 views (existing pipeline threshold)",
+  "small": "current subs < 100,000",
+  "new": "channel age <= 365 days",
+  "subs_note": "CURRENT subscribers, not subscribers at publication"
+ },
+ "n_videos": 168728,
+ "n_mature": 130925,
+ "A_small_new_channel_hits": {
+  "n_videos": 10010,
+  "n_channels": 704,
+  "by_genre": [
+   [
+    "history",
+    1236
+   ],
+   [
+    "biology_nature",
+    998
+   ],
+   [
+    "travel_culture",
+    622
+   ],
+   [
+    "cozy_life",
+    581
+   ],
+   [
+    "gaming_lore",
+    566
+   ],
+   [
+    "comparison_data",
+    417
+   ],
+   [
+    "space",
+    330
+   ],
+   [
+    "ai_film",
+    327
+   ],
+   [
+    "aviation_military",
+    310
+   ],
+   [
+    "trivia",
+    285
+   ],
+   [
+    "health_body",
+    280
+   ],
+   [
+    "science",
+    273
+   ],
+   [
+    "scifi_story",
+    268
+   ],
+   [
+    "diy_craft",
+    266
+   ],
+   [
+    "drama_story",
+    256
+   ]
+  ],
+  "by_lang": [
+   [
+    "en",
+    3601
+   ],
+   [
+    "ja",
+    3369
+   ],
+   [
+    "en-US",
+    1400
+   ],
+   [
+    "hi",
+    413
+   ],
+   [
+    "zh-Hant",
+    174
+   ],
+   [
+    "ko",
+    173
+   ],
+   [
+    "de",
+    125
+   ],
+   [
+    "id",
+    116
+   ]
+  ],
+  "by_format": [
+   [
+    "short_likely",
+    4286
+   ],
+   [
+    "ambiguous",
+    3343
+   ],
+   [
+    "long",
+    2379
+   ],
+   [
+    "live_or_upcoming",
+    2
+   ]
+  ],
+  "top": [
+   {
+    "url": "https://www.youtube.com/watch?v=tWzD8N58q90",
+    "title": "Be Careful On The Bus🚨🚌 | Wheels on the Bus Safety Song | Police Chase",
+    "channel": "Play Learn Replay - Kids YT",
+    "genre": "kids_edu",
+    "lang": "en",
+    "views": 100218988,
+    "age_days": 81,
+    "subs_now": 31300,
+    "channel_age_days": 332,
+    "format": "long"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=KnasDA1kFug",
+    "title": "1 to 20 Counting || kids learning #shorts #kidslearning #counting",
+    "channel": "Gyanu kids World",
+    "genre": "kids_edu",
+    "lang": "hi",
+    "views": 90396044,
+    "age_days": 54,
+    "subs_now": 45200,
+    "channel_age_days": 265,
+    "format": "short_likely"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=mGRppzF6AsY",
+    "title": "#農機作業 #全機械化收穫花生 #想致富先種地",
+    "channel": "uydshGADCV",
+    "genre": "cozy_life",
+    "lang": "zh-Hant",
+    "views": 67706134,
+    "age_days": 84,
+    "subs_now": 76700,
+    "channel_age_days": 213,
+    "format": "short_likely"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=sgMGV7MrUDg",
+    "title": "Who Put Yellow Spots on My Tooth! Toothbrushing Animation for Kids #br",
+    "channel": "MeTimeStudio-MTS",
+    "genre": "kids_edu",
+    "lang": "en-US",
+    "views": 48055283,
+    "age_days": 31,
+    "subs_now": 23300,
+    "channel_age_days": 61,
+    "format": "short_likely"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=cE9-SVIQ7sY",
+    "title": "Lion Trusts a Tiny Oxpecker Bird | Nature's Little Doctor | #shorts  #",
+    "channel": "WildLife Uncovered",
+    "genre": "history",
+    "lang": "en-US",
+    "views": 47044856,
+    "age_days": 45,
+    "subs_now": 30300,
+    "channel_age_days": 288,
+    "format": "short_likely"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=XjMYouDEr0k",
+    "title": "Abandoned Bus Makeover! 😱 6 Sisters Turn Scrap Bus into Amazing Tiny H",
+    "channel": "Mannu ki kahani ",
+    "genre": "diy_craft",
+    "lang": "hi",
+    "views": 45014513,
+    "age_days": 41,
+    "subs_now": 72300,
+    "channel_age_days": 89,
+    "format": "long"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=N4jB87mZGX8",
+    "title": "Watch how an old, discarded dumpster is completely transformed into a ",
+    "channel": "@SherryKerr",
+    "genre": "diy_craft",
+    "lang": "en",
+    "views": 40316904,
+    "age_days": 34,
+    "subs_now": 86800,
+    "channel_age_days": 37,
+    "format": "ambiguous"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=Uf3_0dDcLuQ",
+    "title": "Hippo Trusts a Tiny Oxpecker Bird | Amazing Wildlife Moment #shorts #y",
+    "channel": "WildLife Uncovered",
+    "genre": "history",
+    "lang": "en-US",
+    "views": 37980833,
+    "age_days": 47,
+    "subs_now": 30300,
+    "channel_age_days": 288,
+    "format": "short_likely"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=fUN56NRXWGM",
+    "title": "From Tiny Seeds to a Dream Custard Apple Orchard 🍈🌱 | Harvest, Sell & ",
+    "channel": "Ghibli Tales",
+    "genre": "cozy_life",
+    "lang": "en",
+    "views": 34765450,
+    "age_days": 19,
+    "subs_now": 65000,
+    "channel_age_days": 20,
+    "format": "ambiguous"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=GAOB-9rNdNQ",
+    "title": "They Turned CACTUS Into a Luxury Handbag?! 😱 | Factory Process #howits",
+    "channel": "oddly made ",
+    "genre": "asmr_process",
+    "lang": "en",
+    "views": 29364314,
+    "age_days": 71,
+    "subs_now": 59200,
+    "channel_age_days": 73,
+    "format": "ambiguous"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=EynDN_WYKBc",
+    "title": "Old MacDonald safari animales | Canciones de animales para niños | Ban",
+    "channel": "Bang Bang Monkey - Español",
+    "genre": "history",
+    "lang": "es",
+    "views": 29147436,
+    "age_days": 63,
+    "subs_now": 26400,
+    "channel_age_days": 221,
+    "format": "long"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=1WMNZO2234Y",
+    "title": "12 Cute Tiny Kitchen Set Diy | How to Make Miniature Mitti Bartan🍶All ",
+    "channel": "artist guddu",
+    "genre": "diy_craft",
+    "lang": "hi",
+    "views": 28870984,
+    "age_days": 61,
+    "subs_now": 86700,
+    "channel_age_days": 185,
+    "format": "long"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=lafU81yRWhY",
+    "title": "Compartir es cuidar | Amabilidad, amistad y buenos modales | Bang Bang",
+    "channel": "Bang Bang Monkey - Español",
+    "genre": "history",
+    "lang": "es",
+    "views": 28237996,
+    "age_days": 43,
+    "subs_now": 26400,
+    "channel_age_days": 221,
+    "format": "ambiguous"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=RmkupdCcaRk",
+    "title": "Top 5 Physics Experiments That Look Like Magic 🤯⚡",
+    "channel": "Asif Learning Hub",
+    "genre": "history",
+    "lang": "en",
+    "views": 28148893,
+    "age_days": 47,
+    "subs_now": 34900,
+    "channel_age_days": 134,
+    "format": "short_likely"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=xIzQI-cqbyc",
+    "title": "Amazing Animals You Won't Believe Exist! 🐍🐊🐒 | Incredible Wildlife Mom",
+    "channel": "MKZY",
+    "genre": "history",
+    "lang": "en",
+    "views": 27967060,
+    "age_days": 15,
+    "subs_now": 26800,
+    "channel_age_days": 18,
+    "format": "short_likely"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=jJ4jUUk7JlU",
+    "title": "Fun Learning for Kids | Educational Videos for Toddlers & Preschoolers",
+    "channel": "Moo & Momo Kids Tv",
+    "genre": "kids_edu",
+    "lang": "en",
+    "views": 27825971,
+    "age_days": 34,
+    "subs_now": 26400,
+    "channel_age_days": 75,
+    "format": "short_likely"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=u78TmSb4JyA",
+    "title": "Building a tiny house for my puppy 🐶 #doghouse #diy",
+    "channel": "BuildVerse",
+    "genre": "diy_craft",
+    "lang": "en",
+    "views": 27170238,
+    "age_days": 34,
+    "subs_now": 27000,
+    "channel_age_days": 65,
+    "format": "short_likely"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=HOTjt8YJq2s",
+    "title": "12 Cute Tiny Kitchen Set Diy | How to Make Miniature Mitti Bartan🍶All ",
+    "channel": "artist guddu",
+    "genre": "diy_craft",
+    "lang": "hi",
+    "views": 27133830,
+    "age_days": 65,
+    "subs_now": 86700,
+    "channel_age_days": 185,
+    "format": "long"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=ZM7TCNXUj6Y",
+    "title": "Ranking The Funniest Animal Moment 🤣🤣 #funny #animals #trending #viral",
+    "channel": "DB EditZ",
+    "genre": "history",
+    "lang": "en",
+    "views": 27037364,
+    "age_days": 46,
+    "subs_now": 31600,
+    "channel_age_days": 114,
+    "format": "short_likely"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=XHwfjmEEvzU",
+    "title": "Next Stop: Mars! 👨‍🚀#space #science",
+    "channel": "sci sky",
+    "genre": "history",
+    "lang": "en",
+    "views": 24887015,
+    "age_days": 85,
+    "subs_now": 30200,
+    "channel_age_days": 146,
+    "format": "short_likely"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=DKclPiHUkgo",
+    "title": "Wonderful sounds of incredible birds around nature 🍀🌷 #birds #animals ",
+    "channel": "Echoes of Nature",
+    "genre": "history",
+    "lang": "en",
+    "views": 24872534,
+    "age_days": 42,
+    "subs_now": 43500,
+    "channel_age_days": 63,
+    "format": "short_likely"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=KecyKU_dGO4",
+    "title": "Giant Crab Sticky Rice 🦀 | Cozy Village Cooking",
+    "channel": "Novellea Tales",
+    "genre": "cozy_life",
+    "lang": "en",
+    "views": 24810714,
+    "age_days": 91,
+    "subs_now": 92100,
+    "channel_age_days": 122,
+    "format": "short_likely"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=G_ZdvyccHc8",
+    "title": "What Really Happens Inside Your Body After You Take Antibiotics? 💊🦠#Yo",
+    "channel": "SyncNexis Anatomy ",
+    "genre": "health_body",
+    "lang": "en",
+    "views": 23643914,
+    "age_days": 93,
+    "subs_now": 47000,
+    "channel_age_days": 146,
+    "format": "short_likely"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=6hsB3NN9yts",
+    "title": "DIY Mini Bamboo Cabin with Fireplace 🔥 #diy #shorts",
+    "channel": "CREATIONS AIDI",
+    "genre": "diy_craft",
+    "lang": "en",
+    "views": 23410195,
+    "age_days": 56,
+    "subs_now": 24500,
+    "channel_age_days": 306,
+    "format": "short_likely"
+   },
+   {
+    "url": "https://www.youtube.com/watch?v=6SDuStkFbrE",
+    "title": "How a Ditch in a Field Becomes a Trench",
+    "channel": "Marshal Iron",
+    "genre": "aviation_military",
+    "lang": "en-US",
+    "views": 22912853,
+    "age_days": 34,
+    "subs_now": 23800,
+    "channel_age_days": 271,
+    "format": "ambiguous"
+   }
+  ]
+ },
+ "A2_hits_from_channels_younger_than_120_days": {
+  "n_videos": 3457,
+  "n_channels": 314,
+  "by_genre": [
+   [
+    "history",
+    474
+   ],
+   [
+    "cozy_life",
+    331
+   ],
+   [
+    "travel_culture",
+    280
+   ],
+   [
+    "comparison_data",
+    221
+   ],
+   [
+    "scifi_story",
+    207
+   ],
+   [
+    "science",
+    185
+   ],
+   [
+    "aviation_military",
+    161
+   ],
+   [
+    "biology_nature",
+    129
+   ],
+   [
+    "ai_film",
+    124
+   ],
+   [
+    "drama_story",
+    106
+   ]
+  ]
+ },
+ "B_within_channel_outliers": {
+  "n_channels": 2218,
+  "ratio_quantiles": {
+   "0.25": 10.2,
+   "0.5": 32.7,
+   "0.75": 129.3,
+   "0.9": 471.9,
+   "0.99": 4282.4
+  },
+  "share_channels_top_ge_10x_median": 0.753,
+  "top": [
+   {
+    "channel": "Skulive Digital",
+    "genre": "science",
+    "n": 33,
+    "median": 8,
+    "top_views": 1267938,
+    "ratio": 158492.2,
+    "top_url": "https://www.youtube.com/watch?v=FNkVhuhKRXQ",
+    "top_title": "From Underground Water Drilling to Your Home | 3D Animated E"
+   },
+   {
+    "channel": "Gyanu kids World",
+    "genre": "kids_edu",
+    "n": 180,
+    "median": 1536.0,
+    "top_views": 90396044,
+    "ratio": 58851.6,
+    "top_url": "https://www.youtube.com/watch?v=KnasDA1kFug",
+    "top_title": "1 to 20 Counting || kids learning #shorts #kidslearning #cou"
+   },
+   {
+    "channel": "Induction Academy - MedJee",
+    "genre": "math_logic",
+    "n": 164,
+    "median": 243.5,
+    "top_views": 5683555,
+    "ratio": 23341.1,
+    "top_url": "https://www.youtube.com/watch?v=dZdltjCfZJY",
+    "top_title": "सिर्फ 10 sec में 99 की Table याद करें 😱 | Amazing Maths Tric"
+   },
+   {
+    "channel": "AI Tech 3.7 🚀",
+    "genre": "infrastructure",
+    "n": 145,
+    "median": 448,
+    "top_views": 8717228,
+    "ratio": 19458.1,
+    "top_url": "https://www.youtube.com/watch?v=rHk5j8d8yog",
+    "top_title": "How a Dam Generates Electricity💡| Hydroelectric Power Explai"
+   },
+   {
+    "channel": "Jeff Becker Mental Performance Coaching",
+    "genre": "sports_story",
+    "n": 199,
+    "median": 103,
+    "top_views": 1987068,
+    "ratio": 19291.9,
+    "top_url": "https://www.youtube.com/watch?v=5g7DL2UtvbA",
+    "top_title": "In ESPN’s documentary, Nick Saban explains how a sports psyc"
+   },
+   {
+    "channel": "TALEYE",
+    "genre": "aviation_military",
+    "n": 20,
+    "median": 291.0,
+    "top_views": 4476802,
+    "ratio": 15384.2,
+    "top_url": "https://www.youtube.com/watch?v=Szd5g7vt8R8",
+    "top_title": "The Last 77 Seconds of the Florida Learjet 60 Before The Cra"
+   },
+   {
+    "channel": "Play Learn Replay - Kids YT",
+    "genre": "kids_edu",
+    "n": 15,
+    "median": 6736,
+    "top_views": 100218988,
+    "ratio": 14878.1,
+    "top_url": "https://www.youtube.com/watch?v=tWzD8N58q90",
+    "top_title": "Be Careful On The Bus🚨🚌 | Wheels on the Bus Safety Song | Po"
+   },
+   {
+    "channel": "KD Mind",
+    "genre": "psychology",
+    "n": 64,
+    "median": 296.0,
+    "top_views": 4221788,
+    "ratio": 14262.8,
+    "top_url": "https://www.youtube.com/watch?v=nHd7_9pLMF4",
+    "top_title": "Psychology of People Who Always Push in Their Chairs When Le"
+   },
+   {
+    "channel": "You Might Wonder",
+    "genre": "science",
+    "n": 39,
+    "median": 110,
+    "top_views": 1451719,
+    "ratio": 13197.4,
+    "top_url": "https://www.youtube.com/watch?v=EVMsMiRv4Wc",
+    "top_title": "What Actually Caused the Nepal Flood? The Shocking Glacier C"
+   },
+   {
+    "channel": "The War Archives ",
+    "genre": "history",
+    "n": 19,
+    "median": 65,
+    "top_views": 675897,
+    "ratio": 10398.4,
+    "top_url": "https://www.youtube.com/watch?v=4sZqvCR4R88",
+    "top_title": "What 370,000 German POWs Saw Through the Windows of an Ameri"
+   },
+   {
+    "channel": "Asif Learning Hub",
+    "genre": "history",
+    "n": 31,
+    "median": 2853,
+    "top_views": 28148893,
+    "ratio": 9866.4,
+    "top_url": "https://www.youtube.com/watch?v=RmkupdCcaRk",
+    "top_title": "Top 5 Physics Experiments That Look Like Magic 🤯⚡"
+   },
+   {
+    "channel": "TITAN Industry",
+    "genre": "cars_machines",
+    "n": 155,
+    "median": 1106,
+    "top_views": 10340456,
+    "ratio": 9349.4,
+    "top_url": "https://www.youtube.com/watch?v=9E2owPXvA3U",
+    "top_title": "How Chicken Intestines Are Turned Into Ghee 🏭#HowItsMade #Gh"
+   },
+   {
+    "channel": "ToonZing Kids",
+    "genre": "kids_edu",
+    "n": 148,
+    "median": 1543.5,
+    "top_views": 11404399,
+    "ratio": 7388.7,
+    "top_url": "https://www.youtube.com/watch?v=A23NKiizDaE",
+    "top_title": "Good Habits for Kids 👟🌳 | Put On Your Shoes & Let’s Go Outsi"
+   },
+   {
+    "channel": " ABCDwithGanesha",
+    "genre": "kids_edu",
+    "n": 80,
+    "median": 2367.0,
+    "top_views": 15930203,
+    "ratio": 6730.1,
+    "top_url": "https://www.youtube.com/watch?v=L4uOplsJZBc",
+    "top_title": "Cute Baby Teaching ABCD | 3D Cartoon ABCD Learning for Kids "
+   },
+   {
+    "channel": "Paws & Wonders",
+    "genre": "biology_nature",
+    "n": 18,
+    "median": 424.5,
+    "top_views": 2601655,
+    "ratio": 6128.8,
+    "top_url": "https://www.youtube.com/watch?v=dQtKAN2yUSk",
+    "top_title": "Mom Falcon Returns With Food! Her Hungry Babies Can't Wait! "
+   }
+  ]
+ },
+ "C_genre_by_language": {
+  "note": "Genres/topics were selected by our own search design (see audit); a language with few videos may simply have had fewer queries. Not a supply-gap proof.",
+  "rows": [
+   {
+    "genre": "history",
+    "ja": {
+     "videos": 4656,
+     "channels": 335,
+     "median_views": 29325.0,
+     "hit_rate": 0.399
+    },
+    "en": {
+     "videos": 10621,
+     "channels": 323,
+     "median_views": 95714,
+     "hit_rate": 0.606
+    }
+   },
+   {
+    "genre": "biology_nature",
+    "ja": {
+     "videos": 2723,
+     "channels": 56,
+     "median_views": 27566,
+     "hit_rate": 0.353
+    },
+    "en": {
+     "videos": 3087,
+     "channels": 60,
+     "median_views": 28391,
+     "hit_rate": 0.383
+    }
+   },
+   {
+    "genre": "gaming_lore",
+    "ja": {
+     "videos": 1821,
+     "channels": 30,
+     "median_views": 246825,
+     "hit_rate": 0.757
+    },
+    "en": {
+     "videos": 2573,
+     "channels": 55,
+     "median_views": 206498,
+     "hit_rate": 0.775
+    }
+   },
+   {
+    "genre": "aviation_military",
+    "ja": {
+     "videos": 0,
+     "channels": 0,
+     "median_views": null,
+     "hit_rate": null
+    },
+    "en": {
+     "videos": 4209,
+     "channels": 103,
+     "median_views": 38530,
+     "hit_rate": 0.444
+    }
+   },
+   {
+    "genre": "cooking",
+    "ja": {
+     "videos": 2396,
+     "channels": 60,
+     "median_views": 78832.5,
+     "hit_rate": 0.577
+    },
+    "en": {
+     "videos": 1570,
+     "channels": 35,
+     "median_views": 89867.5,
+     "hit_rate": 0.613
+    }
+   },
+   {
+    "genre": "trivia",
+    "ja": {
+     "videos": 3291,
+     "channels": 52,
+     "median_views": 27896,
+     "hit_rate": 0.364
+    },
+    "en": {
+     "videos": 1,
+     "channels": 1,
+     "median_views": 160119,
+     "hit_rate": 1.0
+    }
+   },
+   {
+    "genre": "sleep_health",
+    "ja": {
+     "videos": 2833,
+     "channels": 36,
+     "median_views": 68471,
+     "hit_rate": 0.558
+    },
+    "en": {
+     "videos": 41,
+     "channels": 2,
+     "median_views": 30401,
+     "hit_rate": 0.244
+    }
+   },
+   {
+    "genre": "comparison_data",
+    "ja": {
+     "videos": 3,
+     "channels": 3,
+     "median_views": 21973,
+     "hit_rate": 0.333
+    },
+    "en": {
+     "videos": 2843,
+     "channels": 84,
+     "median_views": 78829,
+     "hit_rate": 0.584
+    }
+   },
+   {
+    "genre": "infrastructure",
+    "ja": {
+     "videos": 372,
+     "channels": 11,
+     "median_views": 11877.0,
+     "hit_rate": 0.263
+    },
+    "en": {
+     "videos": 2353,
+     "channels": 56,
+     "median_views": 6025,
+     "hit_rate": 0.249
+    }
+   },
+   {
+    "genre": "travel_culture",
+    "ja": {
+     "videos": 1523,
+     "channels": 24,
+     "median_views": 79473,
+     "hit_rate": 0.595
+    },
+    "en": {
+     "videos": 1091,
+     "channels": 36,
+     "median_views": 46400,
+     "hit_rate": 0.478
+    }
+   },
+   {
+    "genre": "horror_mystery",
+    "ja": {
+     "videos": 1456,
+     "channels": 26,
+     "median_views": 135604.0,
+     "hit_rate": 0.694
+    },
+    "en": {
+     "videos": 1142,
+     "channels": 45,
+     "median_views": 45866.5,
+     "hit_rate": 0.485
+    }
+   },
+   {
+    "genre": "ai_film",
+    "ja": {
+     "videos": 1243,
+     "channels": 44,
+     "median_views": 63491,
+     "hit_rate": 0.545
+    },
+    "en": {
+     "videos": 1339,
+     "channels": 57,
+     "median_views": 42981,
+     "hit_rate": 0.463
+    }
+   },
+   {
+    "genre": "space",
+    "ja": {
+     "videos": 1014,
+     "channels": 23,
+     "median_views": 190243.0,
+     "hit_rate": 0.778
+    },
+    "en": {
+     "videos": 1550,
+     "channels": 34,
+     "median_views": 69209.5,
+     "hit_rate": 0.562
+    }
+   },
+   {
+    "genre": "ai_news_tools",
+    "ja": {
+     "videos": 999,
+     "channels": 30,
+     "median_views": 26330,
+     "hit_rate": 0.4
+    },
+    "en": {
+     "videos": 1530,
+     "channels": 34,
+     "median_views": 38025.0,
+     "hit_rate": 0.449
+    }
+   },
+   {
+    "genre": "language_learning",
+    "ja": {
+     "videos": 601,
+     "channels": 25,
+     "median_views": 15120,
+     "hit_rate": 0.296
+    },
+    "en": {
+     "videos": 1867,
+     "channels": 39,
+     "median_views": 17180,
+     "hit_rate": 0.341
+    }
+   },
+   {
+    "genre": null,
+    "ja": {
+     "videos": 838,
+     "channels": 585,
+     "median_views": 688.0,
+     "hit_rate": 0.045
+    },
+    "en": {
+     "videos": 1612,
+     "channels": 1149,
+     "median_views": 928.5,
+     "hit_rate": 0.12
+    }
+   },
+   {
+    "genre": "cozy_life",
+    "ja": {
+     "videos": 330,
+     "channels": 10,
+     "median_views": 20927.5,
+     "hit_rate": 0.421
+    },
+    "en": {
+     "videos": 2115,
+     "channels": 61,
+     "median_views": 60491,
+     "hit_rate": 0.533
+    }
+   },
+   {
+    "genre": "asset_building",
+    "ja": {
+     "videos": 2260,
+     "channels": 57,
+     "median_views": 106120.0,
+     "hit_rate": 0.669
+    },
+    "en": {
+     "videos": 122,
+     "channels": 8,
+     "median_views": 272988.5,
+     "hit_rate": 0.713
+    }
+   },
+   {
+    "genre": "health_body",
+    "ja": {
+     "videos": 1120,
+     "channels": 14,
+     "median_views": 28552.0,
+     "hit_rate": 0.372
+    },
+    "en": {
+     "videos": 1216,
+     "channels": 34,
+     "median_views": 17990.5,
+     "hit_rate": 0.345
+    }
+   },
+   {
+    "genre": "psychology",
+    "ja": {
+     "videos": 778,
+     "channels": 27,
+     "median_views": 27879.0,
+     "hit_rate": 0.316
+    },
+    "en": {
+     "videos": 1523,
+     "channels": 32,
+     "median_views": 28561,
+     "hit_rate": 0.425
+    }
+   },
+   {
+    "genre": "diy_craft",
+    "ja": {
+     "videos": 0,
+     "channels": 0,
+     "median_views": null,
+     "hit_rate": null
+    },
+    "en": {
+     "videos": 2253,
+     "channels": 68,
+     "median_views": 43284,
+     "hit_rate": 0.465
+    }
+   },
+   {
+    "genre": "science",
+    "ja": {
+     "videos": 728,
+     "channels": 23,
+     "median_views": 87918.5,
+     "hit_rate": 0.602
+    },
+    "en": {
+     "videos": 1505,
+     "channels": 49,
+     "median_views": 13572,
+     "hit_rate": 0.304
+    }
+   },
+   {
+    "genre": "kids_edu",
+    "ja": {
+     "videos": 0,
+     "channels": 0,
+     "median_views": null,
+     "hit_rate": null
+    },
+    "en": {
+     "videos": 1925,
+     "channels": 28,
+     "median_views": 235384,
+     "hit_rate": 0.702
+    }
+   },
+   {
+    "genre": "relationships_dating",
+    "ja": {
+     "videos": 1271,
+     "channels": 57,
+     "median_views": 21187,
+     "hit_rate": 0.311
+    },
+    "en": {
+     "videos": 572,
+     "channels": 35,
+     "median_views": 9468.0,
+     "hit_rate": 0.145
+    }
+   },
+   {
+    "genre": "drama_story",
+    "ja": {
+     "videos": 656,
+     "channels": 13,
+     "median_views": 84808.5,
+     "hit_rate": 0.799
+    },
+    "en": {
+     "videos": 1180,
+     "channels": 24,
+     "median_views": 164707.0,
+     "hit_rate": 0.682
+    }
+   },
+   {
+    "genre": "mens_sexual_health",
+    "ja": {
+     "videos": 0,
+     "channels": 0,
+     "median_views": null,
+     "hit_rate": null
+    },
+    "en": {
+     "videos": 1691,
+     "channels": 65,
+     "median_views": 20121,
+     "hit_rate": 0.31
+    }
+   },
+   {
+    "genre": "economics",
+    "ja": {
+     "videos": 1549,
+     "channels": 35,
+     "median_views": 41043,
+     "hit_rate": 0.478
+    },
+    "en": {
+     "videos": 129,
+     "channels": 30,
+     "median_views": 5752,
+     "hit_rate": 0.295
+    }
+   },
+   {
+    "genre": "cars_machines",
+    "ja": {
+     "videos": 0,
+     "channels": 0,
+     "median_views": null,
+     "hit_rate": null
+    },
+    "en": {
+     "videos": 1546,
+     "channels": 23,
+     "median_views": 21510.5,
+     "hit_rate": 0.307
+    }
+   },
+   {
+    "genre": "maps_geo",
+    "ja": {
+     "videos": 472,
+     "channels": 23,
+     "median_views": 26026.5,
+     "hit_rate": 0.407
+    },
+    "en": {
+     "videos": 964,
+     "channels": 29,
+     "median_views": 37380.0,
+     "hit_rate": 0.449
+    }
+   },
+   {
+    "genre": "religion_myth",
+    "ja": {
+     "videos": 558,
+     "channels": 25,
+     "median_views": 21098.0,
+     "hit_rate": 0.384
+    },
+    "en": {
+     "videos": 846,
+     "channels": 22,
+     "median_views": 48690.5,
+     "hit_rate": 0.493
+    }
+   }
+  ]
+ },
+ "C2_candidates_en_stronger_than_ja": [
+  {
+   "genre": "history",
+   "en_hit": 0.606,
+   "ja_hit": 0.399,
+   "en_median": 95714,
+   "ja_median": 29325.0,
+   "ja_channels": 335,
+   "en_channels": 323
+  },
+  {
+   "genre": "cozy_life",
+   "en_hit": 0.533,
+   "ja_hit": 0.421,
+   "en_median": 60491,
+   "ja_median": 20927.5,
+   "ja_channels": 10,
+   "en_channels": 61
+  },
+  {
+   "genre": "psychology",
+   "en_hit": 0.425,
+   "ja_hit": 0.316,
+   "en_median": 28561,
+   "ja_median": 27879.0,
+   "ja_channels": 27,
+   "en_channels": 32
+  },
+  {
+   "genre": "religion_myth",
+   "en_hit": 0.493,
+   "ja_hit": 0.384,
+   "en_median": 48690.5,
+   "ja_median": 21098.0,
+   "ja_channels": 25,
+   "en_channels": 22
+  },
+  {
+   "genre": null,
+   "en_hit": 0.12,
+   "ja_hit": 0.045,
+   "en_median": 928.5,
+   "ja_median": 688.0,
+   "ja_channels": 585,
+   "en_channels": 1149
+  },
+  {
+   "genre": "ai_news_tools",
+   "en_hit": 0.449,
+   "ja_hit": 0.4,
+   "en_median": 38025.0,
+   "ja_median": 26330,
+   "ja_channels": 30,
+   "en_channels": 34
+  },
+  {
+   "genre": "language_learning",
+   "en_hit": 0.341,
+   "ja_hit": 0.296,
+   "en_median": 17180,
+   "ja_median": 15120,
+   "ja_channels": 25,
+   "en_channels": 39
+  },
+  {
+   "genre": "maps_geo",
+   "en_hit": 0.449,
+   "ja_hit": 0.407,
+   "en_median": 37380.0,
+   "ja_median": 26026.5,
+   "ja_channels": 23,
+   "en_channels": 29
+  },
+  {
+   "genre": "cooking",
+   "en_hit": 0.613,
+   "ja_hit": 0.577,
+   "en_median": 89867.5,
+   "ja_median": 78832.5,
+   "ja_channels": 60,
+   "en_channels": 35
+  },
+  {
+   "genre": "biology_nature",
+   "en_hit": 0.383,
+   "ja_hit": 0.353,
+   "en_median": 28391,
+   "ja_median": 27566,
+   "ja_channels": 56,
+   "en_channels": 60
+  }
+ ],
+ "E_monetisation_signals_in_descriptions": {
+  "note": "keyword presence in descriptions only; says nothing about revenue; descriptions missing for ~16% of videos",
+  "by_channel_size": {
+   "small_new": {
+    "videos": 34790,
+    "affiliate_or_store": 374,
+    "sponsorship_or_business": 83,
+    "email_list_or_line": 134,
+    "course_membership_or_product": 293,
+    "affiliate_or_store_pct": 1.1,
+    "email_list_or_line_pct": 0.4,
+    "course_membership_or_product_pct": 0.8,
+    "sponsorship_or_business_pct": 0.2
+   },
+   "small": {
+    "videos": 31613,
+    "affiliate_or_store": 809,
+    "email_list_or_line": 343,
+    "sponsorship_or_business": 315,
+    "course_membership_or_product": 292,
+    "affiliate_or_store_pct": 2.6,
+    "email_list_or_line_pct": 1.1,
+    "course_membership_or_product_pct": 0.9,
+    "sponsorship_or_business_pct": 1.0
+   },
+   "large": {
+    "videos": 61918,
+    "affiliate_or_store": 3209,
+    "course_membership_or_product": 2724,
+    "sponsorship_or_business": 2441,
+    "email_list_or_line": 1331,
+    "affiliate_or_store_pct": 5.2,
+    "email_list_or_line_pct": 2.1,
+    "course_membership_or_product_pct": 4.4,
+    "sponsorship_or_business_pct": 3.9
+   },
+   "unknown": {
+    "videos": 2604,
+    "sponsorship_or_business": 29,
+    "email_list_or_line": 22,
+    "affiliate_or_store": 47,
+    "course_membership_or_product": 38,
+    "affiliate_or_store_pct": 1.8,
+    "email_list_or_line_pct": 0.8,
+    "course_membership_or_product_pct": 1.5,
+    "sponsorship_or_business_pct": 1.1
+   }
+  }
+ },
+ "E2_link_presence_hit_vs_nonhit": {
+  "affiliate_or_store": {
+   "hit_pct": 4.4,
+   "nonhit_pct": 2.5
+  },
+  "email_list_or_line": {
+   "hit_pct": 1.7,
+   "nonhit_pct": 1.2
+  },
+  "course_membership_or_product": {
+   "hit_pct": 3.8,
+   "nonhit_pct": 1.4
+  },
+  "sponsorship_or_business": {
+   "hit_pct": 2.8,
+   "nonhit_pct": 1.6
+  },
+  "n_hit": 62239,
+  "n_nonhit": 68686
+ },
+ "F_replicable_channels_by_genre": [
+  [
+   "history",
+   221
+  ],
+  [
+   "cooking",
+   66
+  ],
+  [
+   "gaming_lore",
+   57
+  ],
+  [
+   "aviation_military",
+   56
+  ],
+  [
+   "ai_film",
+   54
+  ],
+  [
+   "cozy_life",
+   51
+  ],
+  [
+   "horror_mystery",
+   50
+  ],
+  [
+   "indonesia_misc",
+   49
+  ],
+  [
+   "biology_nature",
+   48
+  ],
+  [
+   "diy_craft",
+   45
+  ],
+  [
+   "asset_building",
+   44
+  ],
+  [
+   "science",
+   41
+  ],
+  [
+   "ai_news_tools",
+   40
+  ],
+  [
+   "drama_story",
+   37
+  ],
+  [
+   "comparison_data",
+   36
+  ]
+ ]
+}

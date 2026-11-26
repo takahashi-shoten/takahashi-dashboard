@@ -1,0 +1,45 @@
+{
+ "_note": "Baseline numbers for experiments S1/S2. Numbers only: no salon name, address or personal names (this repository is public). Source: owner's screenshots on 2026-11-25 (Instagram profile, Google search panel, Hot Pepper Beauty salon page) and the owner's survey answers.",
+ "taken_at": "2026-11-25T19:08+09:00",
+ "instagram": {
+  "followers": 719,
+  "following": 907,
+  "bio_has_service_description": false,
+  "bio_has_booking_pointer": true,
+  "grid_sample_posts_seen": 6,
+  "grid_sample_posts_showing_hair_or_kitsuke_work": 1,
+  "grid_sample_posts_showing_kitsuke": 0,
+  "booking_link_destination": "hot_pepper_beauty"
+ },
+ "google_maps": {
+  "rating": 4.8,
+  "review_count": 4,
+  "category_label_shown": "apartment complex (appears wrong for a hair salon)",
+  "address_shown_publicly": true,
+  "main_photo": "blurry exterior-type photo"
+ },
+ "hot_pepper_beauty": {
+  "listed": true,
+  "rating": 5.0,
+  "review_count": 8,
+  "stylists_listed": 3,
+  "online_booking_button": true,
+  "listing_fee": "unknown",
+  "menus_seen": [
+   "cut+full colour (from 11,770 JPY)",
+   "cut+retouch (10,120 JPY)",
+   "yukata kitsuke + hair set (7,700 JPY)"
+  ],
+  "kitsuke_menus_listed": 1,
+  "kitsuke_menu_online_bookable": false,
+  "kitsuke_menu_note": "listed as not bookable online; phone enquiry"
+ },
+ "business": {
+  "kitsuke_bookings_per_month": 2,
+  "kitsuke_price_jpy": 5500,
+  "spare_capacity_per_month": 20,
+  "bookings_source_breakdown": "unknown",
+  "most_recent_booking_source": "friend via LINE (n=1)"
+ },
+ "funnel_observed": "Instagram profile -> booking link -> Hot Pepper Beauty -> only the yukata kitsuke menu exists and it is not bookable online (phone enquiry). Google Maps: phone / route; website link destination unknown. Most recent booking came from a friend via LINE (n=1)."
+}

@@ -31,8 +31,22 @@ CREATE TABLE IF NOT EXISTS experiment_analysis(
 """
 
 
+NEUTRAL_COLUMNS = {      # channel-neutral fields added to the existing registry (idempotent ALTER TABLE; old rows keep working)
+    "market": "TEXT", "channel_type": "TEXT", "knowledge_used_json": "TEXT", "budget_cap_usd": "REAL", "success_condition": "TEXT", "stop_condition": "TEXT"}
+DDL_BUSINESS = """
+CREATE TABLE IF NOT EXISTS experiment_business(
+  experiment_id TEXT, observed_at TEXT, revenue_usd REAL, variable_cost_usd REAL, fixed_cost_alloc_usd REAL, human_minutes REAL,
+  metrics_json TEXT, source TEXT, PRIMARY KEY(experiment_id, observed_at));
+"""
+
+
 def init(con):
     con.executescript(DDL)
+    con.executescript(DDL_BUSINESS)
+    have = {r[1] for r in con.execute("PRAGMA table_info(experiments)")}
+    for col, typ in NEUTRAL_COLUMNS.items():
+        if col not in have:
+            con.execute(f"ALTER TABLE experiments ADD COLUMN {col} {typ}")
     con.commit()
 
 
@@ -60,8 +74,64 @@ def create_experiment(con, plan, parent_id=None, changed_factor=None):
                 (eid, "planned", plan["hypothesis"], plan.get("audience", ""), plan.get("desire", ""),
                  json.dumps({k: plan[k] for k in PLAN_FIELDS}, ensure_ascii=False), plan.get("title"), plan.get("thumbnail_text"),
                  plan.get("structure"), plan.get("length_s"), json.dumps(plan.get("tools", []), ensure_ascii=False), parent_id, changed_factor, _now()))
+    con.execute("UPDATE experiments SET market=?, channel_type=?, knowledge_used_json=?, budget_cap_usd=?, success_condition=?, stop_condition=? WHERE experiment_id=?",
+                (plan.get("market"), plan.get("channel_type"), json.dumps(plan.get("knowledge_used", []), ensure_ascii=False), plan.get("budget_cap_usd"),
+                 plan.get("success_condition"), plan.get("stop_condition"), eid))
     con.commit()
     return eid
+
+
+def plan_with_knowledge(kb, plan, keywords, limit=5):
+    """Consult the knowledge DB for a plan (keywords: list of search terms; Japanese text is not word-split, so pass explicit terms). Returns a COPY of the plan with
+    'knowledge_used' = [{knowledge_id, status, confidence, reason}]. Invalidated knowledge is never returned. Records nothing yet (see register_with_knowledge)."""
+    from . import knowledge
+    found = knowledge.search(kb, " ".join(keywords), limit=limit)
+    used = [dict(knowledge_id=k["knowledge_id"], status=k["status"], confidence=k["confidence"], reason="matched terms: " + ", ".join(t for t in keywords if t.lower() in (k["content"] or "").lower())[:200]) for k in found]
+    return dict(plan, knowledge_used=used)
+
+
+def register_with_knowledge(con, kb, plan, keywords, **kw):
+    """Create an experiment whose plan carries the knowledge it used, and write that use (knowledge id -> experiment id) into the knowledge DB for traceability."""
+    from datetime import datetime, timezone
+    p = plan_with_knowledge(kb, plan, keywords)
+    eid = create_experiment(con, p, **kw)
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    for u in p["knowledge_used"]:
+        kb.execute("INSERT INTO knowledge_uses(knowledge_id,used_in,task,used_at) VALUES(?,?,?,?)", (u["knowledge_id"], eid, "planning", now))
+    kb.commit()
+    return eid
+
+
+def record_business(con, eid, revenue_usd=None, variable_cost_usd=None, fixed_cost_alloc_usd=None, human_minutes=None, metrics=None, source=""):
+    """Channel-neutral outcome of an experiment (any monetisation path). None = 未取得. Profit is derived, never entered by hand."""
+    init(con)
+    con.execute("INSERT OR REPLACE INTO experiment_business VALUES(?,?,?,?,?,?,?,?)",
+                (eid, _now(), revenue_usd, variable_cost_usd, fixed_cost_alloc_usd, human_minutes, json.dumps(metrics or {}, ensure_ascii=False), source))
+    con.commit()
+
+
+def profit_summary(con):
+    """Revenue, costs and profit per experiment: production cost (ledger) + variable + allocated fixed costs. Missing figures are reported as 未取得, not as zero."""
+    init(con)
+    out = []
+    for e in con.execute("SELECT experiment_id, market, channel_type, cost_usd, budget_cap_usd FROM experiments ORDER BY experiment_id"):
+        b = con.execute("SELECT SUM(revenue_usd), SUM(variable_cost_usd), SUM(fixed_cost_alloc_usd), SUM(human_minutes) FROM experiment_business WHERE experiment_id=?", (e["experiment_id"],)).fetchone()
+        rev, var, fix, mins = b
+        cost = (e["cost_usd"] or 0) + (var or 0) + (fix or 0)
+        out.append(dict(experiment_id=e["experiment_id"], market=e["market"], channel_type=e["channel_type"], revenue_usd=rev if rev is not None else "未取得",
+                        total_cost_usd=round(cost, 4), profit_usd=round(rev - cost, 4) if rev is not None else "未取得", human_minutes=mins if mins is not None else "未取得",
+                        over_budget=bool(e["budget_cap_usd"] is not None and cost > e["budget_cap_usd"])))
+    return out
+
+
+def settle_knowledge(con, kb, eid, outcome, detail="", market_result=False):
+    """After measuring: feed the result back to every knowledge item the plan used (promotes / demotes with the existing rules)."""
+    from . import knowledge
+    row = con.execute("SELECT knowledge_used_json FROM experiments WHERE experiment_id=?", (eid,)).fetchone()
+    ids = [u["knowledge_id"] for u in json.loads((row[0] if row else None) or "[]")]
+    for kid in ids:
+        knowledge.record_outcome(kb, kid, eid, outcome, detail, market_result=market_result)
+    return ids
 
 
 def create_from_file(con, path, **kw):

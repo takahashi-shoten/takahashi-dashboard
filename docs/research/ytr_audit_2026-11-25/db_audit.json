@@ -1,0 +1,1297 @@
+{
+ "rows": {
+  "runs": 14,
+  "api_calls": 12847,
+  "errors": 1,
+  "channels": 3790,
+  "channel_snapshots": 6368,
+  "videos": 168763,
+  "video_snapshots": 197632,
+  "topics": 274,
+  "search_runs": 224,
+  "discoveries": 6438,
+  "hypotheses": 248,
+  "hypothesis_log": 316,
+  "seed_cases": 10,
+  "date_samples": 3169,
+  "channel_metrics": 3721
+ },
+ "runs": [
+  {
+   "run_id": 1,
+   "started_at": "2026-11-21T05:18:12Z",
+   "status": "ok",
+   "units_used": 42
+  },
+  {
+   "run_id": 2,
+   "started_at": "2026-11-21T05:18:59Z",
+   "status": "ok",
+   "units_used": 0
+  },
+  {
+   "run_id": 3,
+   "started_at": "2026-11-21T08:46:37Z",
+   "status": "ok",
+   "units_used": 7138
+  },
+  {
+   "run_id": 4,
+   "started_at": "2026-11-21T16:12:03Z",
+   "status": "ok",
+   "units_used": 1318
+  },
+  {
+   "run_id": 5,
+   "started_at": "2026-11-22T08:38:21Z",
+   "status": "ok",
+   "units_used": 8997
+  },
+  {
+   "run_id": 6,
+   "started_at": "2026-11-22T16:19:30Z",
+   "status": "ok",
+   "units_used": 313
+  },
+  {
+   "run_id": 7,
+   "started_at": "2026-11-22T19:44:19Z",
+   "status": "ok",
+   "units_used": 50
+  },
+  {
+   "run_id": 8,
+   "started_at": "2026-11-23T08:23:28Z",
+   "status": "ok",
+   "units_used": 8499
+  },
+  {
+   "run_id": 9,
+   "started_at": "2026-11-23T08:34:06Z",
+   "status": "ok",
+   "units_used": 50
+  },
+  {
+   "run_id": 10,
+   "started_at": "2026-11-23T20:17:43Z",
+   "status": "ok",
+   "units_used": 50
+  },
+  {
+   "run_id": 11,
+   "started_at": "2026-11-23T23:57:03Z",
+   "status": "ok",
+   "units_used": 50
+  },
+  {
+   "run_id": 12,
+   "started_at": "2026-11-24T08:13:03Z",
+   "status": "ok",
+   "units_used": 6837
+  },
+  {
+   "run_id": 13,
+   "started_at": "2026-11-24T19:32:10Z",
+   "status": "ok",
+   "units_used": 1629
+  },
+  {
+   "run_id": 14,
+   "started_at": "2026-11-24T22:29:57Z",
+   "status": "ok",
+   "units_used": 50
+  }
+ ],
+ "videos_first_seen_range": [
+  "2026-11-21T05:18:12Z",
+  "2026-11-24T19:32:40Z"
+ ],
+ "videos_last_fetched_range": [
+  "2026-11-21T05:18:13Z",
+  "2026-11-24T22:29:58Z"
+ ],
+ "published_range": [
+  "2026-08-23T09:00:05Z",
+  "2026-11-24T13:59:37Z"
+ ],
+ "video_snapshot_dates": [
+  [
+   "2026-11-21",
+   44818
+  ],
+  [
+   "2026-11-22",
+   63557
+  ],
+  [
+   "2026-11-23",
+   57868
+  ],
+  [
+   "2026-11-24",
+   31389
+  ]
+ ],
+ "channel_snapshot_dates": [
+  [
+   "2026-11-21",
+   1545
+  ],
+  [
+   "2026-11-22",
+   2073
+  ],
+  [
+   "2026-11-23",
+   1587
+  ],
+  [
+   "2026-11-24",
+   1163
+  ]
+ ],
+ "videos_missing_pct": {
+  "channel_id": 0.0,
+  "title": 0.0,
+  "description": 16.4,
+  "published_at": 0.0,
+  "duration_s": 0.0,
+  "format_class": 0.0,
+  "category_id": 0.0,
+  "default_language": 0.0,
+  "default_audio_language": 35.0,
+  "tags_json": 0.0,
+  "synthetic_media": 100.0,
+  "unavailable_at": 100.0
+ },
+ "channels_missing_pct": {
+  "title": 0.0,
+  "country": 19.6,
+  "channel_published_at": 0.0,
+  "default_language": 92.3,
+  "last_audited_at": 32.0
+ },
+ "videos_without_channel_row": 2559,
+ "videos_without_snapshot": 3,
+ "dup_titles_same_channel": 1510,
+ "unavailable_videos": 32,
+ "video_snapshots_per_video": [
+  [
+   1,
+   152291
+  ],
+  [
+   2,
+   8190
+  ],
+  [
+   3,
+   4573
+  ],
+  [
+   4,
+   3288
+  ],
+  [
+   5,
+   418
+  ]
+ ],
+ "channel_snapshots_per_channel": [
+  [
+   2,
+   2578
+  ],
+  [
+   1,
+   1212
+  ]
+ ],
+ "channels_with_ge2_snapshots": 2578,
+ "subscribers_at_publication_available": "NO: only snapshots observed on collection dates exist; subscriber count at the video's publication date is not stored",
+ "format_class": [
+  [
+   "short_likely",
+   64526
+  ],
+  [
+   "long",
+   52667
+  ],
+  [
+   "ambiguous",
+   51335
+  ],
+  [
+   "live_or_upcoming",
+   207
+  ],
+  [
+   "unknown",
+   28
+  ]
+ ],
+ "videos_by_published_year": [
+  [
+   "2026",
+   168763
+  ]
+ ],
+ "videos_by_lang": [
+  [
+   "en",
+   59528
+  ],
+  [
+   "ja",
+   47414
+  ],
+  [
+   "en-US",
+   19093
+  ],
+  [
+   "hi",
+   12660
+  ],
+  [
+   "id",
+   3442
+  ],
+  [
+   "fr",
+   2968
+  ],
+  [
+   "zh-Hant",
+   2692
+  ],
+  [
+   "en-GB",
+   2394
+  ],
+  [
+   "es",
+   2251
+  ],
+  [
+   "zh",
+   1994
+  ],
+  [
+   "en-IN",
+   1880
+  ],
+  [
+   "de",
+   1870
+  ]
+ ],
+ "channels_by_country": [
+  [
+   "JP",
+   1037
+  ],
+  [
+   "US",
+   771
+  ],
+  [
+   "(none)",
+   744
+  ],
+  [
+   "IN",
+   462
+  ],
+  [
+   "GB",
+   98
+  ],
+  [
+   "PK",
+   64
+  ],
+  [
+   "ID",
+   56
+  ],
+  [
+   "FR",
+   54
+  ],
+  [
+   "KR",
+   49
+  ],
+  [
+   "CA",
+   47
+  ],
+  [
+   "DE",
+   39
+  ],
+  [
+   "ES",
+   31
+  ]
+ ],
+ "channels_by_genre": [
+  [
+   "history",
+   850,
+   366
+  ],
+  [
+   "biology_nature",
+   130,
+   99
+  ],
+  [
+   "relationships_dating",
+   114,
+   31
+  ],
+  [
+   "ai_film",
+   108,
+   92
+  ],
+  [
+   "aviation_military",
+   107,
+   91
+  ],
+  [
+   "cozy_life",
+   106,
+   86
+  ],
+  [
+   "cooking",
+   103,
+   84
+  ],
+  [
+   "science",
+   99,
+   82
+  ],
+  [
+   "comparison_data",
+   96,
+   64
+  ],
+  [
+   "infrastructure",
+   94,
+   49
+  ],
+  [
+   "mens_sexual_health",
+   89,
+   31
+  ],
+  [
+   "scifi_story",
+   86,
+   63
+  ],
+  [
+   "gaming_lore",
+   86,
+   77
+  ],
+  [
+   "horror_mystery",
+   84,
+   79
+  ],
+  [
+   "personal_finance",
+   80,
+   33
+  ],
+  [
+   "diy_craft",
+   78,
+   78
+  ],
+  [
+   "economics",
+   76,
+   28
+  ],
+  [
+   "ai_news_tools",
+   74,
+   70
+  ],
+  [
+   "travel_culture",
+   71,
+   39
+  ],
+  [
+   "tech_explain",
+   68,
+   11
+  ],
+  [
+   "asset_building",
+   66,
+   56
+  ],
+  [
+   "maps_geo",
+   65,
+   47
+  ],
+  [
+   "psychology",
+   62,
+   48
+  ],
+  [
+   "space",
+   61,
+   60
+  ],
+  [
+   "language_learning",
+   61,
+   55
+  ],
+  [
+   "indonesia_misc",
+   55,
+   55
+  ],
+  [
+   "grooming_men",
+   55,
+   9
+  ],
+  [
+   "religion_myth",
+   54,
+   51
+  ],
+  [
+   "fr_misc",
+   54,
+   45
+  ],
+  [
+   "health_body",
+   53,
+   39
+  ],
+  [
+   "trivia",
+   52,
+   45
+  ],
+  [
+   "midlife_men",
+   48,
+   10
+  ],
+  [
+   "drama_story",
+   45,
+   44
+  ],
+  [
+   "sports_story",
+   41,
+   15
+  ],
+  [
+   "sleep_health",
+   41,
+   26
+  ],
+  [
+   "math_logic",
+   40,
+   18
+  ],
+  [
+   "korea_misc",
+   33,
+   31
+  ],
+  [
+   "kids_edu",
+   31,
+   28
+  ],
+  [
+   "side_income",
+   29,
+   3
+  ],
+  [
+   "philosophy",
+   26,
+   10
+  ],
+  [
+   "true_crime",
+   25,
+   21
+  ],
+  [
+   "cars_machines",
+   24,
+   21
+  ],
+  [
+   "aga_hair",
+   24,
+   4
+  ],
+  [
+   "relaxing_visual",
+   21,
+   13
+  ],
+  [
+   "asmr_process",
+   20,
+   16
+  ],
+  [
+   "de_misc",
+   19,
+   16
+  ],
+  [
+   "sex_trivia_edu",
+   9,
+   9
+  ],
+  [
+   null,
+   8,
+   8
+  ]
+ ],
+ "topics_by_genre_lang": [
+  [
+   "history",
+   "ja",
+   29
+  ],
+  [
+   "indonesia_misc",
+   "id",
+   22
+  ],
+  [
+   "asset_building",
+   "ja",
+   17
+  ],
+  [
+   "drama_story",
+   "ja",
+   11
+  ],
+  [
+   "drama_story",
+   "en",
+   9
+  ],
+  [
+   "history",
+   "en",
+   9
+  ],
+  [
+   "maps_geo",
+   "en",
+   7
+  ],
+  [
+   "sex_trivia_edu",
+   "ja",
+   7
+  ],
+  [
+   "true_crime",
+   "en",
+   7
+  ],
+  [
+   "aviation_military",
+   "en",
+   6
+  ],
+  [
+   "cozy_life",
+   "en",
+   6
+  ],
+  [
+   "travel_culture",
+   "ja",
+   6
+  ],
+  [
+   "ai_film",
+   "en",
+   5
+  ],
+  [
+   "horror_mystery",
+   "en",
+   5
+  ],
+  [
+   "mens_sexual_health",
+   "ja",
+   5
+  ],
+  [
+   "sex_trivia_edu",
+   "en",
+   5
+  ],
+  [
+   "cooking",
+   "ja",
+   4
+  ],
+  [
+   "gaming_lore",
+   "en",
+   4
+  ],
+  [
+   "relationships_dating",
+   "ja",
+   4
+  ],
+  [
+   "religion_myth",
+   "en",
+   4
+  ],
+  [
+   "scifi_story",
+   "en",
+   4
+  ],
+  [
+   "trivia",
+   "ja",
+   4
+  ],
+  [
+   "comparison_data",
+   "en",
+   3
+  ],
+  [
+   "diy_craft",
+   "en",
+   3
+  ],
+  [
+   "gaming_lore",
+   "ja",
+   3
+  ]
+ ],
+ "search_modes": [
+  [
+   "date",
+   75,
+   3268,
+   2845,
+   0
+  ],
+  [
+   "top",
+   149,
+   6438,
+   5550,
+   4479
+  ]
+ ],
+ "discovery_times_seen": [
+  [
+   1,
+   6438
+  ]
+ ],
+ "channels_audited": 2578,
+ "channel_metrics_flags": {
+  "is_new": 1350,
+  "is_small": 2509,
+  "replicable": 1404,
+  "declared_synthetic": 0,
+  "subs_hidden": 0
+ },
+ "subscribers_quantiles": [
+  0,
+  203000000
+ ],
+ "seed_cases": [
+  [
+   "kiqiQzn12rc",
+   "The Curious Stick: Roman army camp",
+   "4.16M-4.30M",
+   "views=4,396,188 published=2026-10-10 age_days=41 channel='The Curious Stick' subs_now=12300"
+  ],
+  [
+   "fRQL6LEjwFg",
+   "GoDocs: Saudi Arabia water",
+   "6.77M",
+   "views=7,724,212 published=2026-10-11 age_days=41 channel='GoDocs' subs_now=76200"
+  ],
+  [
+   "q2E23sEfMIo",
+   "Paper Borders: Roman Empire",
+   "318K",
+   "views=348,815 published=2026-10-04 age_days=48 channel='Paper Borders' subs_now=447"
+  ],
+  [
+   "8l-dxq3zwhs",
+   "SimplyTold: why humans wear clothes",
+   "324K",
+   "views=325,052 published=2026-10-14 age_days=38 channel='SimplyTold' subs_now=945"
+  ],
+  [
+   "BZkPquCm6v8",
+   "Causality: world after WW3",
+   "4.586M",
+   "views=8,897,218 published=2026-11-11 age_days=10 channel='Causality' subs_now=84700"
+  ],
+  [
+   "c2n4WUniQfE",
+   "Phantom Expedition: crow language",
+   "739K",
+   "views=849,765 published=2026-11-09 age_days=11 channel='Phantom Expedition' subs_now=44300"
+  ],
+  [
+   "BQ6SjJ_VzoQ",
+   "Vicky Qubes: bride cooking",
+   "1.006M",
+   "views=2,088,955 published=2026-11-14 age_days=7 channel='Vicky Qubes' subs_now=93500"
+  ],
+  [
+   "95EGhuiNAIk",
+   "Cozy Village Tales: small rural house",
+   "170.47M",
+   "views=174,794,260 published=2026-09-09 age_days=73 channel='Cozy Village Tales' subs_now=369000"
+  ],
+  [
+   "qT4MQLhUt2k",
+   "Colin@NYC: helping AI short",
+   "2.68M",
+   "views=3,048,425 published=2026-11-06 age_days=15 channel='Colin@NYC' subs_now=16800"
+  ],
+  [
+   "TlrjGqHhplc",
+   "Lumz Cinema: protecting alien child",
+   "14.1M",
+   "views=14,977,144 published=2026-10-02 age_days=49 channel='Lumz Cinema' subs_now=102000"
+  ]
+ ],
+ "hypotheses_by_status": [
+  [
+   "aga_hair",
+   "insufficient_data",
+   3
+  ],
+  [
+   "aga_hair",
+   "refuted",
+   1
+  ],
+  [
+   "ai_film",
+   "insufficient_data",
+   7
+  ],
+  [
+   "ai_film",
+   "supported",
+   4
+  ],
+  [
+   "ai_news_tools",
+   "refuted",
+   2
+  ],
+  [
+   "ai_news_tools",
+   "supported",
+   2
+  ],
+  [
+   "asmr_process",
+   "insufficient_data",
+   1
+  ],
+  [
+   "asmr_process",
+   "refuted",
+   2
+  ],
+  [
+   "asmr_process",
+   "supported",
+   1
+  ],
+  [
+   "asset_building",
+   "insufficient_data",
+   1
+  ],
+  [
+   "asset_building",
+   "supported",
+   4
+  ],
+  [
+   "aviation_military",
+   "insufficient_data",
+   4
+  ],
+  [
+   "aviation_military",
+   "supported",
+   3
+  ],
+  [
+   "biology_nature",
+   "insufficient_data",
+   1
+  ],
+  [
+   "biology_nature",
+   "supported",
+   4
+  ],
+  [
+   "cars_machines",
+   "insufficient_data",
+   1
+  ],
+  [
+   "cars_machines",
+   "supported",
+   3
+  ],
+  [
+   "comparison_data",
+   "insufficient_data",
+   1
+  ],
+  [
+   "comparison_data",
+   "refuted",
+   1
+  ],
+  [
+   "comparison_data",
+   "supported",
+   3
+  ],
+  [
+   "cooking",
+   "insufficient_data",
+   4
+  ],
+  [
+   "cooking",
+   "supported",
+   4
+  ],
+  [
+   "cozy_life",
+   "insufficient_data",
+   1
+  ],
+  [
+   "cozy_life",
+   "supported",
+   6
+  ],
+  [
+   "de_misc",
+   "insufficient_data",
+   1
+  ],
+  [
+   "de_misc",
+   "refuted",
+   1
+  ],
+  [
+   "de_misc",
+   "supported",
+   2
+  ],
+  [
+   "diy_craft",
+   "insufficient_data",
+   1
+  ],
+  [
+   "diy_craft",
+   "supported",
+   4
+  ],
+  [
+   "drama_story",
+   "insufficient_data",
+   9
+  ],
+  [
+   "drama_story",
+   "supported",
+   4
+  ],
+  [
+   "economics",
+   "refuted",
+   2
+  ],
+  [
+   "economics",
+   "supported",
+   2
+  ],
+  [
+   "fr_misc",
+   "insufficient_data",
+   2
+  ],
+  [
+   "fr_misc",
+   "supported",
+   3
+  ],
+  [
+   "gaming_lore",
+   "insufficient_data",
+   8
+  ],
+  [
+   "gaming_lore",
+   "supported",
+   3
+  ],
+  [
+   "grooming_men",
+   "refuted",
+   3
+  ],
+  [
+   "grooming_men",
+   "supported",
+   1
+  ],
+  [
+   "health_body",
+   "insufficient_data",
+   1
+  ],
+  [
+   "health_body",
+   "supported",
+   3
+  ],
+  [
+   "history",
+   "insufficient_data",
+   1
+  ],
+  [
+   "history",
+   "supported",
+   4
+  ],
+  [
+   "horror_mystery",
+   "refuted",
+   3
+  ],
+  [
+   "horror_mystery",
+   "supported",
+   2
+  ],
+  [
+   "indonesia_misc",
+   "insufficient_data",
+   4
+  ],
+  [
+   "indonesia_misc",
+   "supported",
+   3
+  ],
+  [
+   "infrastructure",
+   "supported",
+   4
+  ],
+  [
+   "kids_edu",
+   "insufficient_data",
+   2
+  ],
+  [
+   "kids_edu",
+   "refuted",
+   1
+  ],
+  [
+   "kids_edu",
+   "supported",
+   2
+  ],
+  [
+   "korea_misc",
+   "insufficient_data",
+   1
+  ],
+  [
+   "korea_misc",
+   "refuted",
+   1
+  ],
+  [
+   "korea_misc",
+   "supported",
+   2
+  ],
+  [
+   "language_learning",
+   "refuted",
+   2
+  ],
+  [
+   "language_learning",
+   "supported",
+   2
+  ],
+  [
+   "maps_geo",
+   "insufficient_data",
+   3
+  ],
+  [
+   "maps_geo",
+   "supported",
+   4
+  ],
+  [
+   "math_logic",
+   "refuted",
+   2
+  ],
+  [
+   "math_logic",
+   "supported",
+   2
+  ],
+  [
+   "mens_sexual_health",
+   "refuted",
+   2
+  ],
+  [
+   "mens_sexual_health",
+   "supported",
+   2
+  ],
+  [
+   "midlife_men",
+   "refuted",
+   3
+  ],
+  [
+   "midlife_men",
+   "supported",
+   1
+  ],
+  [
+   "personal_finance",
+   "refuted",
+   2
+  ],
+  [
+   "personal_finance",
+   "supported",
+   2
+  ],
+  [
+   "philosophy",
+   "insufficient_data",
+   1
+  ],
+  [
+   "philosophy",
+   "refuted",
+   3
+  ],
+  [
+   "psychology",
+   "refuted",
+   1
+  ],
+  [
+   "psychology",
+   "supported",
+   3
+  ],
+  [
+   "relationships_dating",
+   "insufficient_data",
+   1
+  ],
+  [
+   "relationships_dating",
+   "supported",
+   4
+  ],
+  [
+   "relaxing_visual",
+   "insufficient_data",
+   1
+  ],
+  [
+   "relaxing_visual",
+   "refuted",
+   2
+  ],
+  [
+   "relaxing_visual",
+   "supported",
+   1
+  ],
+  [
+   "religion_myth",
+   "insufficient_data",
+   3
+  ],
+  [
+   "religion_myth",
+   "supported",
+   3
+  ],
+  [
+   "science",
+   "supported",
+   4
+  ],
+  [
+   "scifi_story",
+   "insufficient_data",
+   1
+  ],
+  [
+   "scifi_story",
+   "refuted",
+   1
+  ],
+  [
+   "scifi_story",
+   "supported",
+   3
+  ],
+  [
+   "sex_trivia_edu",
+   "insufficient_data",
+   1
+  ],
+  [
+   "sex_trivia_edu",
+   "refuted",
+   3
+  ],
+  [
+   "side_income",
+   "insufficient_data",
+   4
+  ],
+  [
+   "sleep_health",
+   "refuted",
+   1
+  ],
+  [
+   "sleep_health",
+   "supported",
+   3
+  ],
+  [
+   "space",
+   "refuted",
+   1
+  ],
+  [
+   "space",
+   "supported",
+   3
+  ],
+  [
+   "sports_story",
+   "insufficient_data",
+   1
+  ],
+  [
+   "sports_story",
+   "supported",
+   3
+  ],
+  [
+   "tech_explain",
+   "refuted",
+   2
+  ],
+  [
+   "tech_explain",
+   "supported",
+   2
+  ],
+  [
+   "travel_culture",
+   "insufficient_data",
+   6
+  ],
+  [
+   "travel_culture",
+   "supported",
+   3
+  ],
+  [
+   "trivia",
+   "refuted",
+   2
+  ],
+  [
+   "trivia",
+   "supported",
+   4
+  ],
+  [
+   "true_crime",
+   "insufficient_data",
+   3
+  ],
+  [
+   "true_crime",
+   "supported",
+   3
+  ]
+ ]
+}

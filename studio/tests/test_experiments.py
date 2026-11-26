@@ -70,3 +70,32 @@ def test_early_drop_off_is_only_suspected_and_names_missing_data(tmp_path):
     assert any("retention curve" in m for m in d["missing_data"])
     ex.save_analysis(con, t, "7d", d)
     assert ex.spend_summary(con)["analyzed"] == 1
+
+
+def test_experiment_uses_knowledge_and_feeds_results_back(tmp_path):
+    from studio import knowledge as kbm
+    con = ledger.connect(tmp_path / "e.sqlite")
+    kb = ledger.connect(tmp_path / "k.sqlite")
+    kbm.init(kb)
+    k1 = kbm.add(kb, "action", "make the first action tiny: one minute a day", "https://y/1", "08:50", confidence=0.5)
+    kbm.add(kb, "cta", "free newsletter offer at the end", "https://y/2")
+    eid = ex.register_with_knowledge(con, kb, plan(market="small salons", channel_type="landing_page", budget_cap_usd=10.0, success_condition="3 enquiries", stop_condition="0 after 7d"),
+                                     ["tiny", "minute"])
+    row = con.execute("SELECT market, channel_type, knowledge_used_json, budget_cap_usd FROM experiments WHERE experiment_id=?", (eid,)).fetchone()
+    assert row["market"] == "small salons" and row["budget_cap_usd"] == 10.0 and f'"knowledge_id": {k1}' in row["knowledge_used_json"]
+    assert kb.execute("SELECT used_in FROM knowledge_uses WHERE knowledge_id=?", (k1,)).fetchone()[0] == eid
+    assert ex.settle_knowledge(con, kb, eid, "worked", "3 enquiries", market_result=True) == [k1]
+    assert kb.execute("SELECT confidence FROM knowledge WHERE knowledge_id=?", (k1,)).fetchone()[0] > 0.5
+    # channel-neutral money: unknown stays unknown, profit is derived, budget overrun is flagged
+    assert ex.profit_summary(con)[0]["profit_usd"] == "未取得"
+    ex.record_business(con, eid, revenue_usd=12.0, variable_cost_usd=7.0, human_minutes=30)
+    s = ex.profit_summary(con)[0]
+    assert s["profit_usd"] == 5.0 and s["over_budget"] is False
+    ex.record_business(con, eid, revenue_usd=12.0, variable_cost_usd=70.0)
+    assert ex.profit_summary(con)[0]["over_budget"] is True
+
+
+def test_old_registry_rows_still_work_after_the_neutral_columns_are_added(tmp_path):
+    con = ledger.connect(tmp_path / "e.sqlite")
+    eid = ex.create_experiment(con, plan())
+    assert ex.profit_summary(con)[0]["experiment_id"] == eid

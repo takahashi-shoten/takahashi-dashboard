@@ -173,6 +173,43 @@ def channel_info(session=None):
     return _get(f"{API}/channels", {"part": "snippet,statistics", "mine": "true"}, session, "channel_info")
 
 
+REQUIRED_SCOPES = ("https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtube", "https://www.googleapis.com/auth/yt-analytics.readonly")
+
+
+def connection_check(session=None, today=None):
+    """One-shot health check of the OAuth setup. Returns a dict; never contains a secret or a token. Each step is reported separately so a failure is located."""
+    from datetime import date, timedelta
+    out = {"secrets_present": {k: bool(os.environ.get(k, "").strip()) for k in ("YT_OAUTH_CLIENT_ID", "YT_OAUTH_CLIENT_SECRET", "YT_OAUTH_REFRESH_TOKEN")}}
+    try:
+        tok = access_token(session)
+    except NotConnected as e:
+        out["token"] = f"not connected: {e}"
+        return out
+    except YouTubeError as e:
+        out["token"] = f"failed: {e}"
+        return out
+    out["token"] = "ok"
+    try:
+        r = (session or requests).get("https://oauth2.googleapis.com/tokeninfo", params={"access_token": tok}, timeout=30)
+        granted = set((r.json().get("scope") or "").split()) if r.status_code == 200 else set()
+        out["scopes_missing"] = [x for x in REQUIRED_SCOPES if x not in granted] if granted else "unknown (tokeninfo unavailable)"
+    except (requests.RequestException, ValueError):
+        out["scopes_missing"] = "unknown (tokeninfo unavailable)"
+    try:
+        items = channel_info(session).get("items", [])
+        out["channel"] = {"title": items[0]["snippet"]["title"], "id": items[0]["id"], "subscribers": items[0]["statistics"].get("subscriberCount"),
+                          "videos": items[0]["statistics"].get("videoCount")} if items else "no channel returned for this account (wrong account?)"
+    except YouTubeError as e:
+        out["channel"] = f"failed: {e}"
+    try:
+        d = today or date.today()
+        j = _get("https://youtubeanalytics.googleapis.com/v2/reports", {"ids": "channel==MINE", "startDate": (d - timedelta(days=7)).isoformat(), "endDate": d.isoformat(), "metrics": "views"}, session, "analytics_check")
+        out["analytics"] = "ok" if "rows" in j or "columnHeaders" in j else "unexpected response"
+    except YouTubeError as e:
+        out["analytics"] = f"failed: {e}"
+    return out
+
+
 def video_stats(ids, session=None):
     ids = list(ids)
     out = {}

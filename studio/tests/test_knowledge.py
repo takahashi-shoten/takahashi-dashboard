@@ -42,3 +42,15 @@ def test_for_task_records_which_knowledge_was_used(tmp_path):
     k = kb.add(c, "hook", "open with a scene, not a greeting")
     assert kb.for_task(c, "write opening hook", used_in="E-3")[0]["knowledge_id"] == k
     assert c.execute("SELECT used_in, task FROM knowledge_uses").fetchone()[:] == ("E-3", "write opening hook")
+
+
+def test_second_market_success_on_validated_knowledge_becomes_repeat_validated(tmp_path):
+    c = con(tmp_path)
+    k = kb.add(c, "title", "specific numbers in the title", confidence=0.5)
+    for _ in range(2):
+        kb.record_outcome(c, k, "E1", "worked", market_result=True)
+    assert c.execute("SELECT status FROM knowledge WHERE knowledge_id=?", (k,)).fetchone()[0] == "market_validated"
+    kb.record_outcome(c, k, "E2", "worked", market_result=True)
+    assert c.execute("SELECT status FROM knowledge WHERE knowledge_id=?", (k,)).fetchone()[0] == "repeat_validated"
+    kb.record_outcome(c, k, "E3", "failed", market_result=True)
+    assert c.execute("SELECT status FROM knowledge WHERE knowledge_id=?", (k,)).fetchone()[0] in ("repeat_validated", "invalidated")

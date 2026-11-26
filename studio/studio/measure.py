@@ -78,6 +78,8 @@ def main(argv=None):
     elif cmd == "publish":
         ex.mark_published(con, argv[1], argv[2], argv[3])
         print("ok")
+    elif cmd == "check":
+        print(json.dumps(youtube.connection_check(), ensure_ascii=False, indent=1))
     elif cmd == "run":
         print(json.dumps(run_once(con), ensure_ascii=False, indent=1))
     else:
