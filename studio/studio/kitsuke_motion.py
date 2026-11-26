@@ -13,7 +13,7 @@ from .video_probe import find_video
 
 URL = "https://generativelanguage.googleapis.com/v1beta/interactions"
 NAMES = {"1": "kitsuke_1_obi_hands.jpg", "2": "kitsuke_2_back_view.jpg", "3": "kitsuke_3_accessories.jpg", "4": "kitsuke_4_finished_back.jpg",
-         "bf1a": "kitsuke_b_f1a.jpg", "bf2b": "kitsuke_b_f2b.jpg", "f1": "kitsuke_f1_obi_hands.jpg", "f2": "kitsuke_f2_back_view.jpg", "f4": "kitsuke_f4_finished_back.jpg"}
+         "bf1a": "kitsuke_b_f1a.jpg", "bf2b": "kitsuke_b_f2b.jpg", "bf1b": "kitsuke_b_f1b.jpg", "f1": "kitsuke_f1_obi_hands.jpg", "f2": "kitsuke_f2_back_view.jpg", "f4": "kitsuke_f4_finished_back.jpg"}
 ASSETS = Path(__file__).resolve().parent.parent / "assets" / "kitsuke_demo"
 KEEP = ("Keep the scene, garment, colours, framing and the shape of every ribbon and bow exactly as in the image; no morphing, no sudden shape changes. "
         "Fabric behaves like real stiff silk with natural weight: it folds, settles and recovers slowly under gravity, with a subtle sheen. "
@@ -26,7 +26,9 @@ PROMPTS = {
 }
 
 
+CAMERA_ONLY = "Very slow camera push-in only. Nothing in the scene moves. Keep everything unchanged. 5 seconds, vertical 9:16."
 SIMPLE = {
+    "bf1b": "Subtle natural motion: the dresser's hands gently settle the layered obi wings at the back, once, slowly. Slow camera push-in. Keep everything else unchanged. 5 seconds, vertical 9:16.",
     "bf1a": "Subtle natural motion: the dresser's hands gently shape and settle the layered obi wings at the back, once, slowly. Slow camera push-in. Keep everything else unchanged. 5 seconds, vertical 9:16.",
     "bf2b": "Very slow camera push-in only. The woman and the obi stay perfectly still; the fabric does not move. Keep everything unchanged. 5 seconds, vertical 9:16.",
     "f1": "Subtle natural motion: the dresser's hands gently shape the obi bow at the back. Slow camera push-in. Keep everything else unchanged. 5 seconds, vertical 9:16.",
@@ -64,7 +66,7 @@ def one(n):
     out.mkdir(parents=True, exist_ok=True)
     b64 = base64.b64encode(load_image(NAMES[n])).decode()
     hdr = {"x-goog-api-key": gemini.api_key(), "Content-Type": "application/json"}
-    for model, prompt in [("gemini-omni-1.1-flash", PROMPTS.get(n) or SIMPLE[n]), ("gemini-omni-1.1-flash", SIMPLE[n]), ("gemini-omni-flash-preview", SIMPLE[n])]:
+    for model, prompt in [("gemini-omni-1.1-flash", PROMPTS.get(n) or SIMPLE[n]), ("gemini-omni-1.1-flash", SIMPLE[n]), ("gemini-omni-flash-preview", SIMPLE[n]), ("gemini-omni-1.1-flash", CAMERA_ONLY)]:
         for label, body in list(shapes(b64, prompt).items())[:1]:
             t = time.time()
             r = requests.post(URL, json={"model": model, **body}, headers=hdr, timeout=900)
