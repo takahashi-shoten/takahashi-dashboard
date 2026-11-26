@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       task:
-        description: "keys (default) | gemini | imagecompare | ttscompare | ttsvariants | produce"
+        description: "keys (default) | prompteval | gemini | imagecompare | ttscompare | ttsvariants | produce"
         default: "keys"
       genre:
         description: "produce: ytr genre id"
@@ -197,3 +197,23 @@ jobs:
           git init -q -b studio-output && git config user.name ytr-bot && git config user.email ytr-bot@users.noreply.github.com
           git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
           git add -A && git commit -qm "studio output $(date -u +%FT%TZ)" && git push -q --force origin HEAD:studio-output
+
+  prompteval:
+    if: github.event.inputs.task == 'prompteval'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - name: Run A/B prompt evaluation (products/eval/PREREGISTRATION.md)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python products/eval/run_eval.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: products/eval/out/results.json
