@@ -20,21 +20,29 @@ def competitor_patterns(ytr_db, genre, limit=15):
     return [dict(r) for r in rows]
 
 
-def consult_knowledge(genre, lang, kb_path=None):
-    """Relevant stored knowledge for this brief (logged as used). [] if there is no knowledge DB."""
+def _brief_keywords(genre, audience, topic=""):
+    import re
+    text = " ".join([genre.replace("_", " "), audience or "", topic or ""])
+    return [t for t in re.split(r"[\s、,/・]+", text) if len(t) >= 2]
+
+
+def consult_knowledge(genre, lang, kb_path=None, audience="", topic="", task_type="content_plan"):
+    """Relevant stored knowledge for this brief, selected by code (category + non-generic keyword match + do-not-apply rules). 'No relevant knowledge' is a valid result:
+    returns ([], reason). Selection is NOT logged as a use (log_use when the planner applies it)."""
     kb_path = kb_path or knowledge.default_db_path()
     if not kb_path:
-        return []
+        return [], "no knowledge DB"
     kb = sqlite3.connect(str(kb_path))
     kb.row_factory = sqlite3.Row
     try:
-        return knowledge.consult(kb, used_in=f"brief:{genre}:{lang}")
+        return knowledge.relevant(kb, _brief_keywords(genre, audience, topic), task_type)
     finally:
         kb.close()
 
 
-def make_brief(ytr_db, genre, lang, platform="youtube", audience="", kb_path=None, use_knowledge=True):
+def make_brief(ytr_db, genre, lang, platform="youtube", audience="", kb_path=None, use_knowledge=True, topic=""):
     pats = competitor_patterns(ytr_db, genre)
+    kn, kn_reason = consult_knowledge(genre, lang, kb_path, audience, topic) if use_knowledge else ([], "knowledge disabled")
     durs = sorted(p["duration_s"] for p in pats if p["format_class"] == "long" and p["duration_s"])
     return dict(
         genre=genre, lang=lang, platform=platform, audience=audience,
@@ -43,7 +51,7 @@ def make_brief(ytr_db, genre, lang, platform="youtube", audience="", kb_path=Non
         median_long_duration_s=durs[len(durs) // 2] if durs else None,
         evidence_note="Reference titles are measured hits (YouTube Data API). They show what viewers click, "
                       "NOT what to copy: the script must add an original angle.",
-        knowledge_used=consult_knowledge(genre, lang, kb_path) if use_knowledge else [],
+        knowledge_used=kn, knowledge_selection=kn_reason,
         knowledge_note="Stored knowledge, labelled by status/confidence. 'hypothesis'/'observed' items are NOT established know-how: use as ideas to test, "
                        "respect each item's conditions, never copy surface content.",
     )

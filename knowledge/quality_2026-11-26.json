@@ -1,0 +1,156 @@
+{
+ "1": {
+  "psychology": "不全感(頑張っても報われない)を、常識の否定で一度ほどいて関心を引く",
+  "do_not_apply": "医療,健康効果,金融,投資,必ず,保証",
+  "transfer_notes": "商品ページの見出し・ショート冒頭で『簡単/努力不要』を言う場合も、事実の範囲で。誇大表現にしない",
+  "generality": "mid",
+  "evidence_check": "語句照合で6本中5本に該当(2026-11-26)。反例1件(記録済み)",
+  "counterexample_search": "partial(反例1件。体系的な探索は未実施)"
+ },
+ "2": {
+  "psychology": "自責を減らして、行動への心理的ブレーキを下げる",
+  "do_not_apply": "事故,過失,謝罪,クレーム,返金,損害",
+  "transfer_notes": "購入前の不安(使わないかも・間違えるかも)に『能力でなく順番/仕組みの問題』と言い換える。別業界の販売コピーで1例(比較試験T3のB)で評価された",
+  "generality": "high",
+  "evidence_check": "分析原文に3本以上の記載。語句照合は未実施",
+  "counterexample_search": "not_done"
+ },
+ "3": {
+  "psychology": "着手障壁を、最初の一歩を極小化して下げる",
+  "do_not_apply": "購入障壁,購入判断,価格,比較検討",
+  "transfer_notes": "習慣・手続き型の商品の『使い始め』の設計に使う。**購入の障壁(無料との比較・使わない疑い)の分析には使わない**(比較試験T3で、これを使って購入障壁の洞察が弱くなった)",
+  "generality": "high",
+  "evidence_check": "広い語で6本中5本、『1分』の語は3/6本(2026-11-26)",
+  "counterexample_search": "not_done"
+ },
+ "4": {
+  "content": "海外の研究者・著者・YouTuberの知見を、出典(実名)を明示して日本語に再構成し、権威を借りる。語句照合で、実名の海外人物が出るのは6本中5本(r-G2ryyJIbc は該当名なし。別の名前の可能性は未確認)。",
+  "psychology": "権威の借用で信頼を補う",
+  "do_not_apply": "税務,医療,法律,誤認,実績なし",
+  "transfer_notes": "小規模店舗では、地元の実績・口コミ件数(件数も併記)を『出典』にする。実績のない権威を作らない",
+  "generality": "mid",
+  "evidence_check": "修正済み: 『6本中6本』→『6本中5本(語句照合)』",
+  "counterexample_search": "not_done"
+ },
+ "5": {
+  "psychology": "売り込み感を下げて警戒を解く",
+  "do_not_apply": "",
+  "transfer_notes": "『合わない方は不要です』型の一文を、販売ページの反論処理に",
+  "generality": "mid",
+  "evidence_check": "原文の記載(3本)。語句照合は未実施",
+  "counterexample_search": "not_done"
+ },
+ "6": {
+  "psychology": "視覚の単調さによる離脱を防ぐ",
+  "do_not_apply": "ショート,short,リール,静止画",
+  "transfer_notes": "なし(音声中心の長尺向け)",
+  "generality": "low",
+  "evidence_check": "原文の記載(4本)。未再確認",
+  "counterexample_search": "not_done"
+ },
+ "7": {
+  "psychology": "登録・購入の前に、中間のゴール(無料の見本・メルマガ)で関係を作る",
+  "do_not_apply": "",
+  "transfer_notes": "サロン: LINE/予約ページ、デジタル商品: 無料サンプル→有料。販売先がある事業が前提",
+  "generality": "high",
+  "evidence_check": "『メルマガ』が6/6本の分析原文に複数回(各5回以上)(2026-11-26)",
+  "counterexample_search": "not_done"
+ },
+ "8": {
+  "psychology": "キャラと内容のギャップによる関心(効果は推測)",
+  "do_not_apply": "顔出し,店主出演,実写",
+  "transfer_notes": "なし",
+  "generality": "low",
+  "evidence_check": "効果は動画から観察できず推測と明記",
+  "counterexample_search": "not_done"
+ },
+ "9": {
+  "psychology": "具体的な変化・損失・数字による一目の理解",
+  "do_not_apply": "",
+  "transfer_notes": "販売ページの見出し・タイトルで試す(仮説)",
+  "generality": "mid",
+  "evidence_check": "n=6。チャンネル全体では数字ありなし差が小さい(62,358 vs 44,342)",
+  "counterexample_search": "partial(反例1件)"
+ },
+ "10": {
+  "psychology": "不快・属性への断定による離脱と規約リスク",
+  "do_not_apply": "",
+  "transfer_notes": "全市場の表現チェック(誇大・属性・俗語)",
+  "generality": "mid",
+  "evidence_check": "1本の分析原文。未再確認",
+  "counterexample_search": "not_done"
+ },
+ "11": {
+  "psychology": "納得→共感→小さな行動→継続の流れ(オーナーの観察)",
+  "do_not_apply": "",
+  "transfer_notes": "顧客の旅の設計の参考",
+  "generality": "mid",
+  "evidence_check": "AI分析と大半が一致。最後の2点は未確認",
+  "counterexample_search": "not_done"
+ },
+ "12": {
+  "content": "実測: 長尺(15分以上)437本の再生数は中央値48,071、四分位26,637〜91,566。上位4本(1,105,021/794,119/749,780/741,952)は中央値の約15〜23倍の外れ値で、残り多数は中央値付近。年別の中央値は2024年35,750→2025年51,468→2026年53,914。",
+  "psychology": "なし(統計)",
+  "do_not_apply": "サロン,美容,着付け,商品,デジタル",
+  "transfer_notes": "『平均でなく中央値で見る・外れ値1本を成功の根拠にしない』という手順として使う。数値自体は他市場に使わない",
+  "generality": "low",
+  "evidence_check": "CSVから再計算して一致(2026-11-26)。四分位上限は 91,454→91,566 に修正",
+  "counterexample_search": "not_applicable"
+ },
+ "13": {
+  "psychology": "なし(推測)",
+  "do_not_apply": "サロン,美容,着付け,商品,デジタル,広告",
+  "transfer_notes": "使わない(流入元データなしの推測)",
+  "generality": "low",
+  "evidence_check": "流入元データなし。仮説",
+  "counterexample_search": "not_done"
+ },
+ "14": {
+  "psychology": "他者映像は再現できない。自作・実写に絞る",
+  "do_not_apply": "",
+  "transfer_notes": "『再現できる型』を探す前提の確認",
+  "generality": "mid",
+  "evidence_check": "標本20本の原文、AIの出どころ判断を含む",
+  "counterexample_search": "not_done"
+ },
+ "15": {
+  "psychology": "実写の実用・体験は、他者映像でなくても見られる可能性(仮説)",
+  "do_not_apply": "",
+  "transfer_notes": "S2で検証",
+  "generality": "mid",
+  "evidence_check": "K14からの解釈。市場検証0",
+  "counterexample_search": "not_done"
+ },
+ "16": {
+  "psychology": "なし(運営設計)",
+  "do_not_apply": "",
+  "transfer_notes": "承認ゲート・予算ガード・独立検証・記憶の道具。業務の設計原則",
+  "generality": "high",
+  "evidence_check": "一次資料(第1・2期)の本文で確認",
+  "counterexample_search": "not_applicable"
+ },
+ "17": {
+  "psychology": "自己申告の数字への過信を避ける",
+  "do_not_apply": "",
+  "transfer_notes": "他事例を根拠にする前の信頼性ラベル(一次/二次/自己申告)",
+  "generality": "high",
+  "evidence_check": "二次情報6件のURL。一次未確認",
+  "counterexample_search": "not_applicable"
+ },
+ "18": {
+  "psychology": "関心を持っても予約できないと離脱する",
+  "do_not_apply": "",
+  "transfer_notes": "他の小規模店舗の受け皿点検リスト(最終地点で目的のメニューが選べて申し込めるか)",
+  "generality": "mid",
+  "evidence_check": "匿名の基準値(n=1)",
+  "counterexample_search": "not_done"
+ },
+ "19": {
+  "psychology": "なし(技術)",
+  "do_not_apply": "マーケ,企画,販売,顧客",
+  "transfer_notes": "使わない",
+  "generality": "low",
+  "evidence_check": "診断の生応答で確認",
+  "counterexample_search": "not_applicable"
+ }
+}

@@ -71,6 +71,8 @@ jobs:
             git fetch -q --depth=50 origin studio-data && git checkout -q -B studio-data FETCH_HEAD
           fi
           gzip -n -c "$STUDIO_DB" > experiments.sqlite.gz
+          # knowledge-use log: this run's knowledge DB lives only in the runner, so its uses are appended (de-duplicated) to knowledge_uses.jsonl on the registry branch
+          (cd "$GITHUB_WORKSPACE/studio" && python -m studio.knowledge export-uses ../knowledge/marketing_knowledge.db /tmp/sd/knowledge_uses.jsonl) || echo "knowledge-use export skipped"
           git add -A
           if git diff --cached --quiet; then echo "registry unchanged: nothing to save"; exit 0; fi
           git commit -qm "experiment registry $(date -u +%FT%TZ)"

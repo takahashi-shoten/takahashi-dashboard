@@ -2,6 +2,7 @@
 measured market results. AI-observed single-source findings start as 'observed' with capped confidence; only market results can make them 'market_validated'."""
 import json
 import re
+import sqlite3
 from datetime import datetime, timezone
 
 # observed fact -> hypothesis -> supported_multi_case (several external cases) -> tested_internal -> market_validated (own market experiment) -> repeat_validated (repeated) ; invalidated = rejected/corrected
@@ -168,7 +169,7 @@ def _row_text(r):
     return " ".join(str(r[k] or "") for k in ("content", "conditions", "audience", "market", "success_factors", "evidence")).lower()
 
 
-def relevant(con, keywords, task_type=None, min_hits=2, limit=5, min_confidence=0.2):
+def relevant(con, keywords, task_type=None, min_hits=2, limit=5, min_confidence=0.2, include_general=False):
     """Code-side selection (no LLM). Returns (items, reason). A knowledge row is returned only if (a) its category fits the task type, (b) at least `min_hits` distinct NON-generic
     keywords occur in its text (content/conditions/audience/market/evidence) - or 1 hit for a 'high' generality row, (c) no keyword occurs in its do_not_apply text, (d) it is
     not invalidated and confidence >= min_confidence. 'No relevant knowledge' is a valid result: items=[] and a reason. The use is NOT logged here (call log_use when applied)."""
@@ -187,7 +188,8 @@ def relevant(con, keywords, task_type=None, min_hits=2, limit=5, min_confidence=
             continue
         hits = sorted({k for k in kws if k in txt})
         need = 1 if (r["generality"] or "") == "high" else min_hits
-        if len(hits) >= need and hits:
+        general_ok = include_general and (r["generality"] or "") == "high"      # revision/expression stage: principles of high generality may apply without keyword overlap
+        if (len(hits) >= need and hits) or general_ok:
             scored.append((len(hits), (r["confidence"] or 0), dict(r), hits))
     scored.sort(key=lambda x: (-x[0], -x[1]))
     items = []
@@ -268,3 +270,26 @@ def apply_quality(con, entries, reason="quality review 2026-11-26"):
             if c in f:
                 con.execute(f"UPDATE knowledge SET {c}=?, updated_at=? WHERE knowledge_id=?", (f[c], _now(), int(kid)))
     con.commit()
+
+
+def main(argv=None):
+    """CLI: python -m studio.knowledge export-uses DB JSONL | import-uses DB JSONL | checklist DB"""
+    import sys
+    a = argv or sys.argv[1:]
+    if len(a) >= 2 and a[0] in ("export-uses", "import-uses", "checklist"):
+        con = sqlite3.connect(a[1])
+        con.row_factory = sqlite3.Row
+        if a[0] == "export-uses":
+            print(export_uses(con, a[2]))
+        elif a[0] == "import-uses":
+            print(import_uses(con, a[2]))
+        else:
+            print(json.dumps(quality_checklist(con), ensure_ascii=False, indent=1))
+        return 0
+    print(main.__doc__)
+    return 2
+
+
+if __name__ == "__main__":
+    import sys
+    sys.exit(main())

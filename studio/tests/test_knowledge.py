@@ -81,22 +81,66 @@ def test_consult_logs_use_and_skips_invalidated(tmp_path):
     assert len(uses) == 2 and all(u["used_in"] == "brief:test" for u in uses)
 
 
-def test_brief_carries_labelled_knowledge_and_can_be_switched_off(tmp_path):
+def _ytr(tmp_path):
     import sqlite3
-    from studio import brief
     db = tmp_path / "ytr.sqlite"
     c = sqlite3.connect(db)
     c.executescript("""CREATE TABLE videos(video_id, title, channel_id, duration_s, format_class, published_at, category_id);
     CREATE TABLE video_snapshots(video_id, observed_at, view_count); CREATE TABLE channels(channel_id, title);
     CREATE TABLE discoveries(video_id, topic_id); CREATE TABLE topics(topic_id, genre);""")
     c.commit()
-    con = _kb(tmp_path)
+    return db
+
+
+def test_brief_selects_by_code_and_allows_no_relevant_knowledge(tmp_path):
+    import sqlite3
+    from studio import brief, knowledge as k
+    db = _ytr(tmp_path)
+    con = sqlite3.connect(tmp_path / "k.sqlite"); con.row_factory = sqlite3.Row
+    a = k.add(con, "funnel", "小規模サロンの予約導線が途中で切れている", conditions="美容サロン", confidence=0.4, status="observed")
+    b = k.add(con, "hook", "自己啓発の冒頭で常識を否定する", conditions="不全感のある層", confidence=0.5, status="observed")
+    c = k.add(con, "funnel", "サロンの導線(医療の話は除く)", confidence=0.5, status="observed")
+    k.apply_quality(con, {a: dict(generality="mid"), b: dict(generality="mid"), c: dict(generality="mid", do_not_apply="医療")})
     con.close()
-    b = brief.make_brief(str(db), "g", "ja", kb_path=tmp_path / "k.sqlite")
-    assert [k["category"] for k in b["knowledge_used"]] == ["hook", "trust"] and "NOT established" in b["knowledge_note"]
-    assert brief.make_brief(str(db), "g", "ja", kb_path=tmp_path / "k.sqlite", use_knowledge=False)["knowledge_used"] == []
-    n = sqlite3.connect(tmp_path / "k.sqlite").execute("SELECT COUNT(*) FROM knowledge_uses").fetchone()[0]
-    assert n == 2    # the switched-off call logged nothing
+    # relevant: the salon funnel entry is selected; the self-help hook is not (no keyword overlap); logging nothing
+    got = brief.make_brief(str(db), "salon", "ja", kb_path=tmp_path / "k.sqlite", audience="美容サロン 予約")
+    ids = [x["knowledge_id"] for x in got["knowledge_used"]]
+    assert a in ids and b not in ids
+    # a history brief finds nothing relevant: valid result, no forced knowledge
+    h = brief.make_brief(str(db), "history", "ja", kb_path=tmp_path / "k.sqlite", audience="歴史好き")
+    assert h["knowledge_used"] == [] and "no relevant knowledge" in h["knowledge_selection"]
+    assert brief.make_brief(str(db), "salon", "ja", kb_path=tmp_path / "k.sqlite", audience="美容サロン 予約", use_knowledge=False)["knowledge_used"] == []
+    assert sqlite3.connect(tmp_path / "k.sqlite").execute("SELECT COUNT(*) FROM knowledge_uses").fetchone()[0] == 0   # selection alone is not a use
+
+
+def test_do_not_apply_blocks_and_general_principles_need_flag(tmp_path):
+    import sqlite3
+    from studio import knowledge as k
+    con = sqlite3.connect(tmp_path / "k.sqlite"); con.row_factory = sqlite3.Row
+    g = k.add(con, "emotion", "責任の外在化で罪悪感を下げる", confidence=0.5, status="observed")
+    x = k.add(con, "action", "着手障壁を極小化する", confidence=0.5, status="observed")
+    k.apply_quality(con, {g: dict(generality="high"), x: dict(generality="high", do_not_apply="購入障壁")})
+    items, why = k.relevant(con, ["個人事業主", "デジタル商品"], "copy")
+    assert items == [] and "no relevant knowledge" in why                       # no keyword overlap -> nothing forced
+    items, _ = k.relevant(con, ["個人事業主", "デジタル商品"], "copy", include_general=True)
+    assert [i["knowledge_id"] for i in items] == [g, x]                          # expression stage may use general principles
+    items, _ = k.relevant(con, ["個人事業主", "購入障壁"], "copy", include_general=True)
+    assert [i["knowledge_id"] for i in items] == [g]                             # do_not_apply blocks the misuse found in the A/B test
+
+
+def test_uses_export_import_roundtrip_is_idempotent(tmp_path):
+    import sqlite3
+    from studio import knowledge as k
+    a = sqlite3.connect(tmp_path / "a.sqlite"); a.row_factory = sqlite3.Row
+    kid = k.add(a, "hook", "x", confidence=0.4, status="observed")
+    k.log_use(a, kid, "exp:E-1", task="planning")
+    k.log_use(a, kid, "exp:E-2", task="applied", outcome="inconclusive", detail="d")
+    f = tmp_path / "uses.jsonl"
+    assert k.export_uses(a, f) == 2 and k.export_uses(a, f) == 0                  # append-only, de-duplicated
+    b = sqlite3.connect(tmp_path / "b.sqlite"); b.row_factory = sqlite3.Row
+    k.init(b)
+    assert k.import_uses(b, f) == 2 and k.import_uses(b, f) == 0
+    assert b.execute("SELECT COUNT(*) FROM knowledge_uses").fetchone()[0] == 2
 
 
 def test_register_attaches_knowledge_when_terms_given(tmp_path, monkeypatch):
