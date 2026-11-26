@@ -61,10 +61,17 @@ jobs:
             check)    python -m studio.measure check ;;
             run)      python -m studio.measure run && python -m studio.measure report ;;
           esac
-      - name: Save the registry (only if it changed)
+      - name: Save the registry (append-only history; only if it changed)
         run: |
           [ -f "$STUDIO_DB" ] || exit 0
-          rm -rf /tmp/sd && mkdir /tmp/sd && gzip -c "$STUDIO_DB" > /tmp/sd/experiments.sqlite.gz
-          cd /tmp/sd && git init -q -b studio-data && git config user.name ytr-bot && git config user.email ytr-bot@users.noreply.github.com
+          rm -rf /tmp/sd && mkdir /tmp/sd && cd /tmp/sd
+          git init -q -b studio-data && git config user.name ytr-bot && git config user.email ytr-bot@users.noreply.github.com
           git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
-          git add -A && git commit -qm "experiment registry $(date -u +%FT%TZ)" && git push -q --force origin HEAD:studio-data
+          if git ls-remote --exit-code --heads origin studio-data >/dev/null 2>&1; then
+            git fetch -q --depth=50 origin studio-data && git checkout -q -B studio-data FETCH_HEAD
+          fi
+          gzip -n -c "$STUDIO_DB" > experiments.sqlite.gz
+          git add -A
+          if git diff --cached --quiet; then echo "registry unchanged: nothing to save"; exit 0; fi
+          git commit -qm "experiment registry $(date -u +%FT%TZ)"
+          git push -q origin HEAD:studio-data

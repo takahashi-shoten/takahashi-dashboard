@@ -24,7 +24,7 @@
 | 制作パイプライン(台本・2社QA・画像・音声・編集・サムネ) | 実動作確認済み | 試作T1〜T5・E1(未公開)。`docs/CHATGPT_HANDOVER_2026-11-24.md` |
 | 動画の映像+音声の分析 | 実動作確認済み(自社動画の短い区間で条件付き合格) | `docs/REPORT_2026-11-24_gemini_video_analysis_and_marketing_learning.md`、`docs/research/vu_verification_2026-11-24/` |
 | 知識DB(SQLite、`studio/studio/knowledge.py`) | 実装済み | `knowledge/marketing_knowledge.db`、バックアップ `knowledge/snapshots/` |
-| 実験台帳(チャネル非依存、`experiments.py`) | 実装済み | `experiments/plans/`、`studio-data` ブランチ(Actionsが強制pushで保存) |
+| 実験台帳(チャネル非依存、`experiments.py`) | 実装済み | `experiments/plans/`、`studio-data` ブランチ。保存は追記専用に変更済み(11-26、ローカル模擬のみ確認。Actionsでの実行は未確認。mainに入るまで定期実行には反映されない) |
 | 公開・測定(`youtube.py` `measure.py` `yt-measure.yml`) | 接続のみ実動作確認済み。アップロード・測定は模擬テストのみ | 上記Actionsログ |
 | 追記専用の保存と復元(`snapshot.py`) | 実動作確認済み(単体) | ワークフロー未接続 |
 | マーケティング文案生成(`marketing.py`) | 模擬テスト済み | — |
@@ -57,11 +57,11 @@
 ## 6. 未完了・保留・承認待ち
 - **承認待ち(最優先)**: 公開リポジトリに店舗の防犯情報があること → 対処 A(非公開化)/ B(AI事業を別の非公開リポジトリに分離。推奨)/ C(文書から削除)。選択はオーナー。詳細は `docs/INTEGRATED_REPORT_2026-11-25.md` 第10章。
 - 承認待ち: `claude/epic-albattani-qohzgb`(または `funny-allen`)の main への反映(PR)。予算の引き上げ(研究費2,000円→、サブスクの扱い)。サロンの安全方針(女性専用にするか)・撮影と出演の同意。初回公開、外部へのアウトリーチ、新規契約。
-- 未完了: `snapshot` のワークフロー接続(`yt-measure.yml` は `studio-data` へ強制pushで保存している)、予算ガードのコード、知識DBの企画接続、実験カード1サイクルの実行、OAuthアプリの「検証」(Googleの正式審査)は未提出(オーナー1人の利用なので現状問題なし)。
+- 未完了: 台帳の保存を追記専用に変更した `yt-measure.yml` を、Actionsで実行して確認すること(手動実行 `cmd=check` で足りる。mainへの反映は承認待ち)、`snapshot` による知識DBの定期バックアップ、予算ガードのコード、知識DBの企画接続、実験カード1サイクルの実行、OAuthアプリの「検証」(Googleの正式審査)は未提出(オーナー1人の利用なので現状問題なし)。
 
 ## 7. 次の具体的な仕事(優先順位と理由。変更したら理由を `DECISIONS.md` に記録)
 1. 引き継ぎ基盤(この文書群)の維持と独立検証 — チャットが変わるたびに能力が初期化されるのを防ぐ。
-2. 永続化: `snapshot` の接続(履歴を残さない強制pushをやめる)→ 台帳・知識DBを失わない。
+2. 永続化: 台帳の追記専用保存(実装済み、Actions実行で確認が残る)、知識DBの定期バックアップ → 台帳・知識DBを失わない。
 3. 予算ガードのコード化 → 承認範囲の逸脱を防ぐ。
 4. 知識DB→企画の接続(`knowledge.for_task` を `brief.py` / `produce.py` から呼び、使用を記録)→ 「知識が次の判断に使われる」輪を閉じる。
 5. 実験S1(サロンの受け皿の整備)の実行準備: 文案(Googleマップ・Instagram・予約導線)をAIが作り、反映はオーナー/奥さん。AI費用はほぼ0円で、予約数という市場データが最も早く取れる。
