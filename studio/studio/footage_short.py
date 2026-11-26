@@ -63,6 +63,11 @@ def build(spec):
             raise ValueError(f"short is {total:.1f}s; limit {MAX_SECONDS:.0f}s")
         if cta:
             parts.append(_cta_clip(cta, cta_s, tmp))
+        xf = float(spec.get("xfade", 0))   # crossfade seconds between scenes (0 = hard cuts)
+        durs = [probe_duration(p) for p in parts]
+        if xf > 0:
+            total = sum(durs) - (len(parts) - 1) * xf
+            body = (total - cta_s + xf) if cta else total   # CTA text starts once its fade-in has finished
         lst = tmp / "list.txt"
         lst.write_text("".join(f"file '{p}'\n" for p in parts))
         events = [(float(x["at"]), float(x["at"]) + float(x["dur"]), x["text"]) for x in spec.get("telops", [])]
@@ -79,7 +84,18 @@ def build(spec):
         vf = f"subtitles={ass.name}:fontsdir={FONTS_DIR},format=yuv420p"
         enc = ["-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-movflags", "+faststart"]
         audio = ["-c:a", "aac", "-b:a", "128k"] if keep_audio else ["-an"]
-        _run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(lst), "-vf", vf, *enc, *audio, str(out)], cwd=tmp)
+        if xf > 0 and len(parts) > 1:
+            ins = [x for p in parts for x in ("-i", str(p))]
+            chain, last, acc = [], "[0:v]", durs[0]
+            for k in range(1, len(parts)):
+                off = acc - k * xf
+                lab = f"[x{k}]"
+                chain.append(f"{last}[{k}:v]xfade=transition=fade:duration={xf}:offset={off:.3f}{lab}")
+                last, acc = lab, acc + durs[k]
+            fc = ";".join(chain) + f";{last}{vf}[o]"
+            _run(["ffmpeg", "-y", "-loglevel", "error", *ins, "-filter_complex", fc, "-map", "[o]", *enc, "-an", str(out)], cwd=tmp)
+        else:
+            _run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(lst), "-vf", vf, *enc, *audio, str(out)], cwd=tmp)
     return out
 
 
