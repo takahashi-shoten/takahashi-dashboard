@@ -42,9 +42,9 @@ REAL = [
 ]
 
 # Owner-liked obi shape (Commons "Kimono backshot by sth", checked by eye from the owner's screenshot): bold, voluminous, LAYERED wings flowing diagonally from the left shoulder to the right, asymmetric.
-ACCENT_FACTS = ("Accurate furisode in charcoal and gray tones with a subtle pattern and long sleeves; the ONLY accent colour is the obi: a bold, voluminous brocade obi in vermilion, deep red and gold "
-                "tied in a modern layered style with several overlapping wings that sweep diagonally upward from the left shoulder to the right (asymmetric, like a tateya-style knot with layers), "
-                "a soft silk obi-age scarf along the top edge of the knot; a small hair ornament in red and ivory.")
+ACCENT_FACTS = ("Accurate furisode in charcoal and light-gray tones with a subtle tone-on-tone pattern and long sleeves; the whole scene is gray; the ONLY accent colour is GOLD, and it appears only in the obi: "
+                "a bold, voluminous charcoal-and-silver brocade obi with gold thread highlights, tied in a modern layered style with several overlapping wings that sweep diagonally upward from the left shoulder to the right "
+                "(asymmetric, like a tateya-style knot with layers); a soft gray-ivory silk obi-age scarf along the top edge of the knot; a small gold-and-ivory hair ornament. NO red, NO orange, NO vermilion anywhere.")
 ACCENT = [
     ("kitsuke_b_f1a.png", f"{STYLE} {ACCENT_FACTS} Close-up from behind at shoulder-to-waist height: only the dresser's hands (face not in frame) lifting and shaping one of the layered wings."),
     ("kitsuke_b_f1b.png", f"{STYLE} {ACCENT_FACTS} Close-up from behind at shoulder-to-waist height: only the dresser's hands (face not in frame) lifting and shaping one of the layered wings."),
