@@ -6,13 +6,14 @@ from pathlib import Path
 
 from . import visuals
 
-STYLE = ("Photorealistic editorial photograph, vertical 9:16, soft natural window light, bright clean Japanese home salon interior, "
-         "shallow depth of field, no text, no logos, no watermark. No person's face is visible.")
+STYLE = ("Modern minimalist editorial photograph, vertical 9:16, gray-toned colour palette (concrete gray walls, charcoal and light-gray surfaces, "
+         "muted desaturated colours with at most one subtle accent), soft diffused light, clean contemporary Japanese salon interior, "
+         "shallow depth of field, calm and refined mood, no text, no logos, no watermark. No person's face is visible.")
 JOBS = [
-    ("kitsuke_1_obi_hands.png", f"{STYLE} Close-up of a kimono dresser's two hands tying the back bow of a hakama obi on a young woman in a graduation hakama (burgundy hakama, patterned furisode sleeve), shot from behind at waist height."),
-    ("kitsuke_2_back_view.png", f"{STYLE} A young woman in a graduation hakama seen from behind in a bright room, the dresser's hands adjusting the large ribbon at her back, long dark hair pinned up."),
-    ("kitsuke_3_accessories.png", f"{STYLE} Flat-lay on a wooden table: folded kimono, date-jime cords, obi-ita, himo ties, tabi socks and hair ornaments neatly arranged, soft morning light, top-down view."),
-    ("kitsuke_4_finished_back.png", f"{STYLE} Finished look: a woman in a hakama standing in a doorway of a bright room, photographed from behind, the hakama ribbon neat and symmetrical, warm light."),
+    ("kitsuke_1_obi_hands.png", f"{STYLE} Close-up of a kimono dresser's two hands tying the back bow of a hakama obi on a young woman in a graduation hakama (charcoal-gray hakama, light-gray kimono with a subtle pattern), shot from behind at waist height."),
+    ("kitsuke_2_back_view.png", f"{STYLE} A young woman in a graduation hakama seen from behind in a bright room, the dresser's hands adjusting the large ribbon at her back, dark hair pinned up neatly."),
+    ("kitsuke_3_accessories.png", f"{STYLE} Flat-lay on a wooden table: folded kimono, date-jime cords, obi-ita, himo ties, tabi socks and hair ornaments neatly arranged on a gray stone or concrete table, all in gray, white and charcoal tones with one muted accent colour, top-down view."),
+    ("kitsuke_4_finished_back.png", f"{STYLE} Finished look: a woman in a hakama standing in a doorway of a bright room, photographed from behind, the hakama ribbon neat and symmetrical, soft gray light."),
 ]
 
 
