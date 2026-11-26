@@ -14,7 +14,11 @@ def retry(f,*a):
     for i in range(3):
         try: return f(*a)
         except Exception as e:
-            err=str(e)[:200]; time.sleep(5)
+            err=str(e)[:200]
+            try: err+=" | "+e.response.text[:300]
+            except Exception: pass
+            if i==2: print("ERR",getattr(f,"__name__","?"),err,flush=True)
+            time.sleep(5)
     return "[ERROR] "+err,(0,0)
 reviews=json.load(open("products/p1_review_reply/testcases.json",encoding="utf-8"))
 body=open("products/p1_review_reply/prompt.md",encoding="utf-8").read().split("## プロンプト本文\n",1)[1]
