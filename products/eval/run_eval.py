@@ -1,4 +1,6 @@
 import json, os, random, re, sys, time, requests
+from concurrent.futures import ThreadPoolExecutor
+POOL=ThreadPoolExecutor(8)
 G=os.environ["GEMINI_API_KEY"]; A=os.environ.get("ANTHROPIC_API_KEY","")
 def gem(prompt, model="gemini-3.8-flash"):
     r=requests.post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",headers={"x-goog-api-key":G},json={"contents":[{"parts":[{"text":prompt}]}]},timeout=120)
@@ -43,17 +45,21 @@ def judge(kind,gen_family,x,y,ctx):
 rng=random.Random(20261126); R=[]; cost={"gemini":[0,0],"claude":[0,0]}
 def gen(fam,p):
     t,u=retry(GEN[fam],p); cost[fam][0]+=u[0]; cost[fam][1]+=u[1]; return t
+jobs=[]
 for fam,runs in (("gemini",3),("claude",1)):
     for run in range(runs):
-        for c in reviews:
-            a=gen(fam,p1_A(c["text"])); b=gen(fam,p1_B(c["text"]))
-            R.append(dict(kind="p1",fam=fam,run=run,id=c["id"],A=a,B=b,chkA=chk_p1(c,a),chkB=chk_p1(c,b),ctx=f"星{c['stars']}: {c['text']}"))
-        for i,m in enumerate(memos):
-            a=gen(fam,p3_A(m)); b=gen(fam,p3_B(m))
-            R.append(dict(kind="p3",fam=fam,run=run,id=f"m{i}",A=a,B=b,chkA=chk_p3(i,a),chkB=chk_p3(i,b),ctx=m))
-for r in R:
-    swap=rng.random()<0.5; x,y=(r["B"],r["A"]) if swap else (r["A"],r["B"])
+        for c in reviews: jobs.append(("p1",fam,run,c["id"],p1_A(c["text"]),p1_B(c["text"]),c))
+        for i,m in enumerate(memos): jobs.append(("p3",fam,run,f"m{i}",p3_A(m),p3_B(m),i))
+def do(j):
+    kind,fam,run,id_,pa,pb,x=j; a=gen(fam,pa); b=gen(fam,pb)
+    if kind=="p1": return dict(kind=kind,fam=fam,run=run,id=id_,A=a,B=b,chkA=chk_p1(x,a),chkB=chk_p1(x,b),ctx=f"星{x['stars']}: {x['text']}")
+    return dict(kind=kind,fam=fam,run=run,id=id_,A=a,B=b,chkA=chk_p3(x,a),chkB=chk_p3(x,b),ctx=memos[x])
+R=list(POOL.map(do,jobs)); print("generated",len(R),flush=True)
+swaps=[rng.random()<0.5 for _ in R]
+def dj(t):
+    r,swap=t; x,y=(r["B"],r["A"]) if swap else (r["A"],r["B"])
     v=judge(r["kind"],r["fam"],x,y,r["ctx"]); r["judge"]="tie" if v=="tie" else ("B" if (v=="X")==swap else "A"); r["swap"]=swap
+list(POOL.map(dj,zip(R,swaps)))
 def rate(rows,k): 
     t=[v for r in rows for v in r[k].values()]; 
     return round(100*sum(t)/len(t),1) if t else None
