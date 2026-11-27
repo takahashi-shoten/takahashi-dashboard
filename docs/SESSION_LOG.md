@@ -93,3 +93,6 @@
 
 ## 2026-11-27 美容業界SNS事業の分離
 オーナー指示: P4を独立プロジェクトに。実施(非破壊・文書のみ): `docs/projects/README.md`(索引・共通ルール)、`docs/projects/beauty_sns/`(HANDOVER=完全な引き継ぎ、SEPARATION=分離案、START_PROMPT=新セッションの最初の文、RETURN_TO_PARENT=還元記録、TASKS)、`docs/BUDGET_LEDGER.md`(全プロジェクト合計の予算台帳)。方針は `CLAUDE.md` 第8節と `DECISIONS.md`。未実施(承認待ち): 非公開リポジトリの作成、ワークフローの分離、PRのmainへのマージ、子セッションの開始。
+
+## 2026-11-27 親: 世界の他市場 第2回
+ココナラ6分野44件(文字起こし・翻訳・パワポ・SEO記事・EC商品ページ・YouTube編集)の販売件数を、`commerce_research/coconala_listing_probe.py`(低頻度、3秒間隔)で取得し、Web検索(Upwork 2026、AI電話応対、AI UGC広告、Gumroad/Etsyの収入、訪日客の多言語)と合わせて、9項目で比較。結論: 上位の少数に売れが集中。最優先の次の一歩は、専門分野の議事録(A)の技術検証。費用0円(読み取り・検索のみ)。
