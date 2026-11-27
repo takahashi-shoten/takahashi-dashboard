@@ -4,7 +4,9 @@ Deterministic ffmpeg only (no API calls, no cost). Reuses edit._run / edit.make_
 (original audio is dropped unless keep_audio=True; add licensed BGM in Instagram if wanted).
 
 spec (JSON/dict):
-  {"clips": [{"path": "a.mp4", "start": 0, "end": 8, "speed": 1.0}, ...],
+  {"clips": [{"path": "a.mp4", "start": 0, "end": 8, "speed": 1.0}, ...],   (images also allowed: {"path": "x.png", "seconds": 3})
+   "telop_margin_v": 480, "telop_margin_l": 60, "telop_margin_r": 180, "telop_px": 72,   # keep telop lines <= 11 full-width characters   # Instagram Reels UI covers the bottom ~20% and the right edge: keep telops above/inside this safe zone
+   "cover_at": 1.5, "caption": "post text + hashtags",   # optional: writes <out>.cover.jpg and <out>.caption.txt
    "telops": [{"at": 0.0, "dur": 3.0, "text": "..."}],        # times are on the OUTPUT timeline
    "cta": "ご予約はDMかお電話へ", "cta_seconds": 2.5, "out": "short.mp4"}
 Usage: python -m studio.footage_short spec.json
@@ -64,6 +66,8 @@ def build(spec):
         if cta:
             parts.append(_cta_clip(cta, cta_s, tmp))
         xf = float(spec.get("xfade", 0))   # crossfade seconds between scenes (0 = hard cuts)
+        if keep_audio and xf > 0:
+            raise ValueError("keep_audio needs xfade=0 (crossfades are silent; add licensed music in Instagram instead)")
         durs = [probe_duration(p) for p in parts]
         if xf > 0:
             total = sum(durs) - (len(parts) - 1) * xf
@@ -75,15 +79,17 @@ def build(spec):
         if cta:
             events.append((body, total, cta))
         ass = tmp / "short.ass"
-        text = make_short_ass(events, "IPAGothic", font_px=84)
+        text = make_short_ass(events, "IPAGothic", font_px=int(spec.get("telop_px", 72)))
+        mv, ml, mr = int(spec.get("telop_margin_v", 480)), int(spec.get("telop_margin_l", 60)), int(spec.get("telop_margin_r", 180))
+        text = text.replace(f",70,70,{H // 6},1", f",{ml},{mr},{mv},1")   # right margin 180 px keeps telops clear of the like/comment/share icons   # default style: keep clear of the Reels UI (bottom caption block, right-hand icons)
         if cta:   # closing card: centred and larger (ASS override tags; make_short_ass escapes braces itself)
-            text = text.replace(f",,0,0,0,,{cta}", f",,0,0,0,,{{\\an5\\fs96}}{cta}")
+            text = text.replace(f",,0,0,0,,{cta}", f",,0,0,0,,{{\\an5\\pos(470,960)\\q2\\fs80}}{cta}")
         for tt in top_texts:   # small label at the top (e.g. "image video, AI-generated")
             text = text.replace(f",,0,0,0,,{tt}", f",,0,0,0,,{{\\an8\\fs44}}{tt}")
         ass.write_text(text, "utf-8")
         vf = f"subtitles={ass.name}:fontsdir={FONTS_DIR},format=yuv420p"
         enc = ["-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-movflags", "+faststart"]
-        audio = ["-c:a", "aac", "-b:a", "128k"] if keep_audio else ["-an"]
+        audio = ["-af", "loudnorm=I=-16:TP=-1.5:LRA=11", "-c:a", "aac", "-b:a", "128k"] if keep_audio else ["-an"]
         if xf > 0 and len(parts) > 1:
             ins = [x for p in parts for x in ("-i", str(p))]
             chain, last, acc = [], "[0:v]", durs[0]
@@ -96,6 +102,10 @@ def build(spec):
             _run(["ffmpeg", "-y", "-loglevel", "error", *ins, "-filter_complex", fc, "-map", "[o]", *enc, "-an", str(out)], cwd=tmp)
         else:
             _run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(lst), "-vf", vf, *enc, *audio, str(out)], cwd=tmp)
+    if spec.get("cover_at") is not None:   # cover frame for the Reels cover picker
+        _run(["ffmpeg", "-y", "-loglevel", "error", "-ss", str(spec["cover_at"]), "-i", str(out), "-frames:v", "1", "-q:v", "2", str(out.with_suffix(".cover.jpg"))])
+    if spec.get("caption"):
+        out.with_suffix(".caption.txt").write_text(str(spec["caption"]), "utf-8")
     return out
 
 

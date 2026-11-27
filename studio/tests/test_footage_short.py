@@ -31,3 +31,11 @@ def test_too_long_is_rejected(tmp_path):
     _clip(tmp_path / "a.mp4", 1080, 1920, 3)
     with pytest.raises(ValueError):
         footage_short.build({"clips": [{"path": str(tmp_path / "a.mp4"), "start": 0, "end": 3, "speed": 0.04}], "cta": "x", "out": str(tmp_path / "o.mp4")})
+
+
+def test_telops_use_safe_zone_cover_and_caption(tmp_path):
+    _clip(tmp_path / "a.mp4", 1080, 1920, 4)
+    out = footage_short.build({"clips": [{"path": str(tmp_path / "a.mp4"), "start": 0, "end": 3}], "telops": [{"at": 0.2, "dur": 2, "text": "手元だけ"}],
+                               "cta": "ご予約はDMへ", "cta_seconds": 1.5, "out": str(tmp_path / "o.mp4"), "cover_at": 1.0, "caption": "テスト #着付け"})
+    assert out.with_suffix(".cover.jpg").exists()
+    assert out.with_suffix(".caption.txt").read_text(encoding="utf-8") == "テスト #着付け"
