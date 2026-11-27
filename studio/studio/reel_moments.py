@@ -41,7 +41,32 @@ def clean_moments(data):
     return kept, dropped
 
 
+def iso_seconds(d):
+    m = re.fullmatch(r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?", d or "")
+    return int(m.group(1) or 0) * 3600 + int(m.group(2) or 0) * 60 + int(m.group(3) or 0) if m else 0
+
+
+def search_long(query, min_minutes=15):
+    """List public YouTube videos of at least min_minutes for a query (official Data API, needs YOUTUBE_API_KEY). Prints id, minutes, views, title."""
+    import os
+    import requests
+    key = os.environ["YOUTUBE_API_KEY"]
+    r = requests.get("https://www.googleapis.com/youtube/v3/search", params=dict(part="snippet", q=query, type="video", videoDuration="long", maxResults=25, regionCode="JP", relevanceLanguage="ja", key=key), timeout=60).json()
+    ids = [i["id"]["videoId"] for i in r.get("items", [])]
+    v = requests.get("https://www.googleapis.com/youtube/v3/videos", params=dict(part="contentDetails,statistics,snippet", id=",".join(ids), key=key), timeout=60).json()
+    rows = []
+    for it in v.get("items", []):
+        sec = iso_seconds(it["contentDetails"]["duration"])
+        if sec >= min_minutes * 60:
+            rows.append((sec, it["id"], it["statistics"].get("viewCount"), it["snippet"]["channelTitle"], it["snippet"]["title"]))
+    for sec, vid, views, ch, title in sorted(rows, reverse=True):
+        print("LONGVIDEO", vid, round(sec / 60, 1), "min", "views", views, "|", ch, "|", title[:70])
+    print("LONGVIDEO_COUNT", len(rows), "query", query)
+
+
 def main():
+    if sys.argv[1] == "search":
+        return search_long(sys.argv[2] if len(sys.argv) > 2 else "着付け")
     video, model = sys.argv[1], (sys.argv[2] if len(sys.argv) > 2 else "gemini-3.5-flash-lite")
     res = video_analysis.analyze(video, model, prompt=PROMPT, max_out=8000)
     kept, dropped = clean_moments(res["json"])
