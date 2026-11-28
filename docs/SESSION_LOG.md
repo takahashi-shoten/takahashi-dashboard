@@ -104,3 +104,6 @@
 
 ## 2026-11-28 第3のプロジェクトの新設
 オーナー指示(CLAUDE.md 第9指示)。既存構造を確認(親・子・docs/research・commerce_research・studio・key-check.yml)のうえ、`docs/projects/global_demand/` に README・CANDIDATES・OPPORTUNITY_HANDOFF・START_PROMPT を作成。新セッションを起動し、最初の実調査(`CANDIDATES.md` の次の作業)に入らせる。既存データ・コードは移動・複製せず参照。
+
+## 2026-11-28 需要研究(第3プロジェクト) 初回セッション
+サンドボックスの許可外ホストは全て403。Actions(`demand-probe.yml`、自ブランチpushで起動)から公開API/ページの到達性を測定し、Apple有料アプリ1,188行とSteam売れ筋を取得(費用0円)。結果と判定は `docs/projects/global_demand/CANDIDATES.md` の更新履歴。C-11を追加(保留)。未取得: 日・韓・伯・印のApple RSS、各ソースの規約確認。承認事項の実行なし。
