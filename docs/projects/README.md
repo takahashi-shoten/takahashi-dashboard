@@ -9,3 +9,5 @@
 - 共通技術(`studio/`、`yt_research/`、`knowledge/`、`.github/workflows/`)は、重複開発せず再利用する。共通技術の変更は、親のテストを通す。
 - 子で得た知識・実績・失敗・技術改善は、親に還元する(`docs/projects/beauty_sns/RETURN_TO_PARENT.md` に記録し、知識DBへ)。
 - 顧客情報・店舗が特定できる情報・撮影素材は、公開リポジトリに入れない(`SEPARATION.md` の段階2で、非公開の置き場を用意)。
+
+- 子セッションの開始: 2026-11-28(session_015qHeRAtiUF6hSmpjXFFQzD)。最初の報告(現在地・未承認事項・次の作業を3行ずつ)を待つ。
