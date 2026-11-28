@@ -1,0 +1,67 @@
+{
+ "results": {
+  "clean": {
+   "cer": 0.033,
+   "key_terms": "12/12",
+   "key_terms_missing": [],
+   "facts": "14/14",
+   "facts_missing": [],
+   "speaker_labels": 3,
+   "minutes_decisions": "5/5",
+   "minutes_decisions_missing": [],
+   "minutes_actions": "2/3",
+   "unsupported_numbers": [
+    "3%",
+    "3ヶ月"
+   ],
+   "open_issue_mentions_inspection": true,
+   "minutes_ok": true
+  },
+  "noisy": {
+   "cer": 0.0751,
+   "key_terms": "11/12",
+   "key_terms_missing": [
+    "建ぺい率"
+   ],
+   "facts": "14/14",
+   "facts_missing": [],
+   "speaker_labels": 3,
+   "minutes_decisions": "5/5",
+   "minutes_decisions_missing": [],
+   "minutes_actions": "2/3",
+   "unsupported_numbers": [
+    "3%",
+    "3ヶ月"
+   ],
+   "open_issue_mentions_inspection": true,
+   "minutes_ok": true
+  },
+  "phone": {
+   "cer": 0.033,
+   "key_terms": "11/12",
+   "key_terms_missing": [
+    "建ぺい率"
+   ],
+   "facts": "14/14",
+   "facts_missing": [],
+   "speaker_labels": 3,
+   "minutes_decisions": "5/5",
+   "minutes_decisions_missing": [],
+   "minutes_actions": "2/3",
+   "unsupported_numbers": [
+    "200%",
+    "3%",
+    "60%"
+   ],
+   "open_issue_mentions_inspection": true,
+   "minutes_ok": true
+  }
+ },
+ "usage": {
+  "in": 13851,
+  "out": 2663
+ },
+ "model": "gemini-3.8-flash",
+ "tts": "gemini-3.8-flash-tts",
+ "audio_seconds": 162.0
+}
