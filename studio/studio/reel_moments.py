@@ -64,7 +64,35 @@ def search_long(query, min_minutes=15):
     print("LONGVIDEO_COUNT", len(rows), "query", query)
 
 
+VERIFY_PROMPT = """Watch ONLY this short clip (frames and audio). Claimed content: "{claim}"
+Return JSON: {{"matches": bool (does the clip really show the claimed content), "observed": str (what you actually see, 1-2 sentences),
+ "starts_clean": bool (does it start at the beginning of an action, not mid-motion), "ends_clean": bool (does it end after the action finished),
+ "speech_heard": bool, "speech_quote_ja": str (first spoken sentence you hear, max 25 chars, empty if none), "confidence": number 0-1}}"""
+
+
+def verify(video, model):
+    """Self-consistency check (NOT independent ground truth): re-analyse each picked moment's own time range and ask whether the claim holds.
+    Also probes audio understanding by asking for a spoken quote (independent of the token-count report)."""
+    first = video_analysis.analyze(video, model, prompt=PROMPT, max_out=8000)
+    kept, _ = clean_moments(first["json"])
+    rows, cost = [], first["cost_usd"] or 0
+    for m in kept:
+        a, b = mmss(m["start"]), mmss(m["end"])
+        r = video_analysis.analyze(video, model, prompt=VERIFY_PROMPT.format(claim=m.get("what_is_seen", "")), start=f"{a}s", end=f"{b}s", max_out=1500)
+        cost += r["cost_usd"] or 0
+        j = r["json"] or {}
+        rows.append(dict(start=m["start"], end=m["end"], type=m.get("type"), claim=m.get("what_is_seen"), verdict=j, tokens=r["usage"]["by_modality"]))
+        print("VERIFY", m["start"], m["end"], m.get("type"), "| matches", j.get("matches"), "| clean", j.get("starts_clean"), j.get("ends_clean"), "| speech", j.get("speech_heard"), "|", (j.get("speech_quote_ja") or "")[:30], "| tok", r["usage"]["by_modality"])
+    n_ok = sum(1 for r in rows if (r["verdict"] or {}).get("matches"))
+    print("VERIFY_SUMMARY", video, "moments", len(rows), "matches", n_ok, "total_cost_usd", round(cost, 4))
+    out = Path(__file__).resolve().parent.parent / "work" / "gemini_live"
+    out.mkdir(parents=True, exist_ok=True)
+    (out / f"reelverify_{re.sub(r'[^A-Za-z0-9_-]', '', video)[:20]}_{model}.json").write_text(json.dumps(rows, ensure_ascii=False, indent=1), encoding="utf-8")
+
+
 def main():
+    if sys.argv[1] == "verify":
+        return verify(sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else "gemini-3.5-flash-lite")
     if sys.argv[1] == "search":
         return search_long(sys.argv[2] if len(sys.argv) > 2 else "着付け")
     video, model = sys.argv[1], (sys.argv[2] if len(sys.argv) > 2 else "gemini-3.5-flash-lite")
