@@ -1,6 +1,9 @@
 name: demand-probe
 on:
   workflow_dispatch:
+  push:
+    branches: [claude/demand-research]
+    paths: [commerce_research/demand_probe.py]
 permissions:
   contents: write
 jobs:

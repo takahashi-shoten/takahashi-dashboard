@@ -83,3 +83,4 @@ for cc in ["jp","us"]:
     else: print("steam", cc, s)
 json.dump(st, open(f"{OUT}/steam_top_sellers.json", "w"), ensure_ascii=False, indent=1)
 print("steam", len(st))
+# run 1
