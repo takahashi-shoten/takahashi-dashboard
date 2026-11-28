@@ -1,0 +1,182 @@
+[
+ {
+  "cc": "jp",
+  "id": 3681610,
+  "name": "DRAGON QUEST MONSTERS: The Withered World",
+  "final_price": 770000,
+  "currency": "JPY",
+  "discount": 0,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "jp",
+  "id": 1091500,
+  "name": "Cyberpunk 2077",
+  "final_price": 263300,
+  "currency": "JPY",
+  "discount": 70,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "jp",
+  "id": 5527800,
+  "name": "No Asteroids",
+  "final_price": 92000,
+  "currency": "JPY",
+  "discount": 20,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "jp",
+  "id": 32470,
+  "name": "Cyberpunk 2077: Ultimate Edition",
+  "final_price": 480000,
+  "currency": "JPY",
+  "discount": 60,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "jp",
+  "id": 2052410,
+  "name": "WITCH ON THE HOLY NIGHT",
+  "final_price": 330000,
+  "currency": "JPY",
+  "discount": 50,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "jp",
+  "id": 2947440,
+  "name": "SILENT HILL f",
+  "final_price": 240200,
+  "currency": "JPY",
+  "discount": 72,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "jp",
+  "id": 3681610,
+  "name": "DRAGON QUEST MONSTERS: The Withered World",
+  "final_price": 770000,
+  "currency": "JPY",
+  "discount": 0,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "jp",
+  "id": 2138330,
+  "name": "Cyberpunk 2077: Phantom Liberty",
+  "final_price": 258500,
+  "currency": "JPY",
+  "discount": 40,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "jp",
+  "id": 3240220,
+  "name": "Grand Theft Auto V Enhanced",
+  "final_price": 285100,
+  "currency": "JPY",
+  "discount": 56,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "jp",
+  "id": 3240220,
+  "name": "Grand Theft Auto V Enhanced",
+  "final_price": 285100,
+  "currency": "JPY",
+  "discount": 56,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "us",
+  "id": 1675200,
+  "name": "Steam Deck",
+  "final_price": 39900,
+  "currency": "USD",
+  "discount": 0,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "us",
+  "id": 1675200,
+  "name": "Steam Deck",
+  "final_price": 39900,
+  "currency": "USD",
+  "discount": 0,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "us",
+  "id": 1091500,
+  "name": "Cyberpunk 2077",
+  "final_price": 1799,
+  "currency": "USD",
+  "discount": 70,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "us",
+  "id": 4165910,
+  "name": "Steam Machine",
+  "final_price": 104900,
+  "currency": "USD",
+  "discount": 0,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "us",
+  "id": 4165910,
+  "name": "Steam Machine",
+  "final_price": 104900,
+  "currency": "USD",
+  "discount": 0,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "us",
+  "id": 32470,
+  "name": "Cyberpunk 2077: Ultimate Edition",
+  "final_price": 3310,
+  "currency": "USD",
+  "discount": 60,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "us",
+  "id": 2138330,
+  "name": "Cyberpunk 2077: Phantom Liberty",
+  "final_price": 1799,
+  "currency": "USD",
+  "discount": 40,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "us",
+  "id": 4435490,
+  "name": "Call of Duty®: Modern Warfare® 4",
+  "final_price": 5949,
+  "currency": "USD",
+  "discount": 15,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "us",
+  "id": 1624417,
+  "name": "Warhammer 40,000: Dawn of War IV Commander Edition",
+  "final_price": 8099,
+  "currency": "USD",
+  "discount": 10,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ },
+ {
+  "cc": "us",
+  "id": 4165890,
+  "name": "Steam Frame",
+  "final_price": 105900,
+  "currency": "USD",
+  "discount": 0,
+  "observed_at": "2026-11-28T04:13:03.208571Z"
+ }
+]

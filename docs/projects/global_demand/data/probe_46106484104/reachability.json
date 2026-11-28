@@ -1,0 +1,120 @@
+{
+ "observed_at": "2026-11-28T04:13:03.208571Z",
+ "reach": {
+  "apple_rss": {
+   "url": "https://rss.applemarketingtools.com/api/v2/jp/apps/top-paid/10/apps.json",
+   "status": 0,
+   "bytes": 28
+  },
+  "itunes_lookup": {
+   "url": "https://itunes.apple.com/lookup?id=284882215&country=jp",
+   "status": 200,
+   "bytes": 10274
+  },
+  "steam_featured": {
+   "url": "https://store.steampowered.com/api/featuredcategories?cc=jp",
+   "status": 200,
+   "bytes": 48963
+  },
+  "steam_appdetails": {
+   "url": "https://store.steampowered.com/api/appdetails?appids=730&cc=jp",
+   "status": 200,
+   "bytes": 18790
+  },
+  "webrobots_ks": {
+   "url": "https://webrobots.io/kickstarter-datasets/",
+   "status": 200,
+   "bytes": 88233
+  },
+  "gumroad_discover": {
+   "url": "https://gumroad.com/discover",
+   "status": 200,
+   "bytes": 122625
+  },
+  "booth_home": {
+   "url": "https://booth.pm/ja",
+   "status": 200,
+   "bytes": 202128
+  },
+  "itch_topsellers": {
+   "url": "https://itch.io/games/top-sellers",
+   "status": 200,
+   "bytes": 98544
+  },
+  "udemy_api": {
+   "url": "https://www.udemy.com/api-2.0/courses/?page_size=2",
+   "status": 403,
+   "bytes": 0
+  },
+  "producthunt": {
+   "url": "https://www.producthunt.com/",
+   "status": 403,
+   "bytes": 0
+  },
+  "etsy": {
+   "url": "https://www.etsy.com/",
+   "status": 403,
+   "bytes": 0
+  },
+  "note_com": {
+   "url": "https://note.com/",
+   "status": 200,
+   "bytes": 107326
+  },
+  "hn_api": {
+   "url": "https://hacker-news.firebaseio.com/v0/topstories.json",
+   "status": 200,
+   "bytes": 4501
+  },
+  "reddit_json": {
+   "url": "https://www.reddit.com/r/Entrepreneur/top.json?limit=2&t=week",
+   "status": 403,
+   "bytes": 0
+  },
+  "gtrends_rss_jp": {
+   "url": "https://trends.google.com/trending/rss?geo=JP",
+   "status": 200,
+   "bytes": 22122
+  },
+  "wiki_pageviews": {
+   "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/ja.wikipedia/all-access/2026/11/27",
+   "status": 200,
+   "bytes": 54184
+  },
+  "hf_amazon_reviews": {
+   "url": "https://huggingface.co/datasets/McAuley-Lab/Amazon-Reviews-2023/resolve/main/README.md",
+   "status": 200,
+   "bytes": 30343
+  },
+  "estat": {
+   "url": "https://www.e-stat.go.jp/",
+   "status": 200,
+   "bytes": 150784
+  },
+  "worldbank_api": {
+   "url": "https://api.worldbank.org/v2/country/JP/indicator/NY.GDP.PCAP.CD?format=json&per_page=2",
+   "status": 200,
+   "bytes": 523
+  },
+  "chrome_webstore": {
+   "url": "https://chromewebstore.google.com/",
+   "status": 200,
+   "bytes": 1157521
+  },
+  "kindle_jp_ranking": {
+   "url": "https://www.amazon.co.jp/gp/bestsellers/digital-text",
+   "status": 200,
+   "bytes": 3869
+  },
+  "fiverr": {
+   "url": "https://www.fiverr.com/",
+   "status": 200,
+   "bytes": 1771348
+  },
+  "lancers": {
+   "url": "https://www.lancers.jp/",
+   "status": 405,
+   "bytes": 0
+  }
+ }
+}
