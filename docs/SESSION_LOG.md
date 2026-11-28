@@ -101,3 +101,6 @@
 - 子(美容SNS)のClaudeセッションを開始(session_015qHeRAtiUF6hSmpjXFFQzD。START_PROMPT+複利の原則)。
 - 議事録(専門分野の文字起こし+要約)を、合成音声3条件で検証(結果は `opportunity_ranking_2026-11-26.md` 末尾)。重要: 本物の誤りは未検出、話者名の対応が課題、実会議は未検証。費用は約5〜10円(推定)。
 - 次: 無料の代替(Gemini直接利用等)との差を調べる。差が小さければ、Aは主力にしない。
+
+## 2026-11-28 第3のプロジェクトの新設
+オーナー指示(CLAUDE.md 第9指示)。既存構造を確認(親・子・docs/research・commerce_research・studio・key-check.yml)のうえ、`docs/projects/global_demand/` に README・CANDIDATES・OPPORTUNITY_HANDOFF・START_PROMPT を作成。新セッションを起動し、最初の実調査(`CANDIDATES.md` の次の作業)に入らせる。既存データ・コードは移動・複製せず参照。

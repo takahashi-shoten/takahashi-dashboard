@@ -107,3 +107,7 @@
 ## 6h. 11-28 親: 議事録の技術検証(`opportunity_ranking_2026-11-26.md` 末尾)
 - 合成音声での実測: 金額・日付 14/14、専門用語 11〜12/12、決定事項 5/5、文字誤り率 3〜8%。本物の誤りは未検出(採点の表記ゆれのみ)。限界: 話者名の対応、実際の会議の音声は未検証。出品・営業は承認待ち。
 - 子プロジェクトのClaudeセッション(session_015qHeRAtiUF6hSmpjXFFQzD)を、11-28に開始(START_PROMPT、複利の原則を含む)。
+
+## 6i. 11-28 第3のプロジェクト新設(`docs/projects/global_demand/`)
+- 新設: Global Demand & AI Business Research。候補台帳 `CANDIDATES.md`(初期10件、判定4段階、網羅状況の表)、`OPPORTUNITY_HANDOFF.md`、`START_PROMPT.md`。親の調査資産(opportunity_ranking、commerce_data、議事録の検証)を出発点として参照(複製しない)。
+- 親の役割: 渡された商機の商業実験、測定、自律ループ、予算管理。結果は `CANDIDATES.md` に返す。
