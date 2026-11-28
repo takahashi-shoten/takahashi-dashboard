@@ -48,4 +48,4 @@
 1. 3店の相手と、提案の実施(営業にあたる)。
 2. 受け渡し方法(動画をどう受け取るか。非公開の経路が必要。顧客素材は公開リポジトリに入れない)。
 3. 段階2(非公開リポジトリ)の作成時期 = 顧客素材が来る前。
-4. 計画書 `experiments/plans/P4_reel_editing_monthly.json` に、別商品(確定申告・note/BOOTH等)の文面が混在。登録前に修正が必要(`audience_and_desire`、`evidence_of_desire`、`room_for_individual_ai`、`differentiation`、`what_this_tests`、`knowledge_terms`、`tools`)。
+4. 計画書 `P4_reel_editing_monthly.json` の混在文面は修正済み(11-28)。台帳への登録は承認後。
